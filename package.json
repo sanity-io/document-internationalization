@@ -6,7 +6,6 @@
     "lib/"
   ],
   "scripts": {
-    "prepublishOnly": "sanity-check",
     "build": "run-p build:*",
     "build:type": "tsc",
     "build:input": "rollup -c src/input/rollup.config.js",
