@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "keywords": [
     "sanity",
@@ -14,6 +14,7 @@
   ],
   "files": [
     "lib/",
+    "doc/",
     "sanity.json"
   ],
   "scripts": {
