@@ -1,7 +1,12 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
+  "author": {
+    "name": "Liam Martens",
+    "email": "hi@liammartens.com",
+    "url": "https://liammartens.com"
+  },
   "keywords": [
     "sanity",
     "cms",
@@ -17,6 +22,14 @@
     "doc/",
     "sanity.json"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LiamMartens/sanity-plugin-intl-input"
+  },
+  "bugs": {
+    "email": "hi@liammartens.com",
+    "url": "https://github.com/LiamMartens/sanity-plugin-intl-input/issues"
+  },
   "scripts": {
     "build": "run-p build:*",
     "build:type": "tsc",

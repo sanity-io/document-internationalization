@@ -3,12 +3,12 @@
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
 This definitely works, but makes the UI very clunky as you get more fields that require translations.  
 
-![Default Solution](doc/img/default-solution.gif)  
+![Default Solution](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/default-solution.gif)  
 
 ## With intl-plugin
 With the intl plugin you will get a cleaner UI for creating translatable documents as the translation is managed across multiple fields.  
 
-![Intl Plugin](doc/img/intl-plugin.gif)
+![Intl Plugin](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)
 
 ## How to use
 1. Install the plugin using `npm` or `yarn`  
