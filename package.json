@@ -1,34 +1,43 @@
 {
-  "name": "sanity-intl-input",
+  "name": "sanity-plugin-intl-input",
   "version": "0.0.1",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/types/index.d.ts",
   "license": "MIT",
   "files": [
     "lib/"
   ],
   "scripts": {
+    "prepublishOnly": "sanity-check",
     "build": "run-p build:*",
-    "build:compile": "rollup -c",
     "build:type": "tsc",
-    "watch": "run-p watch:*",
-    "watch:compile": "yarn build:compile -w",
-    "watch:type": "yarn build:type -w"
+    "build:input": "rollup -c src/input/rollup.config.js",
+    "build:resolver": "rollup -c src/resolver/rollup.config.js",
+    "watch": "run-p \"build:* -- -w\""
   },
   "devDependencies": {
+    "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
     "@sanity/check": "^0.142.6",
+    "@sanity/form-builder": "^0.142.7",
+    "@types/react": "^16.9.5",
+    "node-sass": "^4.12.0",
     "npm-run-all": "^4.1.5",
+    "postcss": "^7.0.18",
+    "react": "^16.10.2",
     "rollup": "^1.23.1",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-cleaner": "^1.0.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "typescript": "^3.6.4"
+  },
+  "peerDependencies": {
+    "@sanity/form-builder": "^0.0.0",
+    "react": "^16.0.0"
   }
 }

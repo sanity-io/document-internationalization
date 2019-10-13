@@ -1,1 +1,1 @@
-export const a = 'Liam';
+/** Silence is golden */

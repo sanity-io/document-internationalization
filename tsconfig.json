@@ -1,17 +1,18 @@
 {
     "compilerOptions": {
       "module": "esnext",
-      "declaration": true,
       "noImplicitAny": false,
       "removeComments": true,
-      "outDir": "./lib/types",
       "noLib": false,
+      "skipLibCheck": true,
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "allowSyntheticDefaultImports": true,
+      "declaration": true,
       "emitDeclarationOnly": true,
+      "outDir": "./lib",
       "moduleResolution": "node",
-      "target": "es6",
+      "target": "es5",
       "jsx": "react",
       "lib": [
         "es2017.object",
@@ -22,6 +23,7 @@
       ]
     },
     "include": [
+      ".d.ts",
         "./src"
     ],
     "exclude": [
