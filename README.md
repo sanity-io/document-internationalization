@@ -11,8 +11,9 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 ![Intl Plugin](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)
 
 ## How to use
-1. Install the plugin using `npm` or `yarn`  
+1. Install the plugin using `npm`, `yarn` or the sanity cli
 `yarn add sanity-plugin-intl-input`
+`sanity install intl-input`
 2. Add the plugin in the `sanity.json` of your project
 ```
 {
@@ -42,5 +43,18 @@ export default {
         },
         fields: []
     }]
+}
+```
+
+## Resulting data structure
+Your resulting object will not look much different than before apart from the fact that it will now group it's content within the langauge keys. eg:
+```
+{
+  "en": {
+    "...": "..."
+  },
+  "fr": {
+    "...": "...
+  }
 }
 ```
