@@ -32,6 +32,9 @@ module.exports = {
                 path.join(process.cwd(), 'lib')
             ],
         }))
-    ].filter(Boolean)
+    ].filter(Boolean),
+    external: [
+        'part:@sanity/base/client'
+    ]
 };
 
