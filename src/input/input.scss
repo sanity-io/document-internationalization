@@ -1,4 +1,16 @@
+$color-primary: #156dff !default;
+$color-light: #fff !default;
+$color-gray: rgba(23, 23, 23, 0.1) !default;
+$color-warning: #ffbf48 !default;
+
 .root {
+}
+
+.loading {
+    padding: 40px 10px;
+    text-align: center;
+    background-color: $color-gray;
+    border-radius: 4px;
 }
 
 .switch {
@@ -10,16 +22,16 @@
 .language {
     padding: 5px 10px;
     font-size: 14px;
-    border: 1px solid #156dff;
+    border: 1px solid $color-primary;
     border-right-width: 0;
-    color: #156dff;
+    color: $color-primary;
     outline: 0;
     cursor: pointer;
-    background: #fff;
+    background: $color-light;
 
     &:disabled {
-        color: #fff;
-        background: #156dff;
+        color: $color-light;
+        background: $color-primary;
     }
 
     &:first-child {
@@ -31,5 +43,22 @@
         border-right-width: 1px;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
+    }
+}
+
+.missing {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 2px solid darken($color-warning, 20%);
+    border-radius: 4px;
+    background-color: $color-warning;
+    color: darken($color-warning, 30%);
+
+    .entry {
+        margin: 0 0 5px 0;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }

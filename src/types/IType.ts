@@ -10,6 +10,11 @@ export interface IType {
     options: {
         i18n?: boolean;
         languages?: (string | ILanguageObject)[] | ILanguageQuery;
+        css?: (classNames: Record<string, string>) => string;
+        messages?: {
+            loading?: string;
+            missingTranslations?: string;
+        };
         [key: string]: any;
     };
 }

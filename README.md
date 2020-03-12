@@ -39,7 +39,12 @@ export default {
         type: 'object',
         options: {
             i18n: true, // enables localization
-            languages: ['..', '..', ...] // <-- eg. ['en', 'nl']
+            languages: ['..', '..', ...], // <-- eg. ['en', 'nl']
+            css: (classNames) => ``, // (OPTIONAL) function to apply additional CSS for theming purposes. The classNames argument is an object with the css module classnames.
+            messages: { // (OPTIONAL) You can pass a messages object to override the default messsages shown
+              loading: 'Loading languages...',
+              missingTranslations: 'Missing translations message...',
+            },
         },
         fields: []
     }]
