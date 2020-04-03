@@ -82,6 +82,7 @@ export default {
 ```
 
 ## Resulting data structure
+### Intl object input
 Your resulting object will not look much different than before apart from the fact that it will now group it's content within the langauge keys. eg:
 ```json
 {
@@ -93,6 +94,10 @@ Your resulting object will not look much different than before apart from the fa
   }
 }
 ```
+
+### Document wide translations
+Each document will have a new property called `__i18n_lang` which contains the name of the language of this document.
+Secondly, the id will also contain a suffix as follows `xxx-xxx-xx__i18n_{lang}`.
 
 ## Advanced languages
 You can also pass a language objects or a GROQ query to the languages option for more advanced language handling.
