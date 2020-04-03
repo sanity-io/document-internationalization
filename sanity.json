@@ -21,6 +21,10 @@
         "path": "structure/index.js"
       },
       {
+        "implements": "part:@sanity/base/document-actions/resolver", 
+        "path": "actions/index.js" 
+      },
+      {
         "name": "part:@sanity/form-builder/input/i18n",
         "description": "i18n input"
       },

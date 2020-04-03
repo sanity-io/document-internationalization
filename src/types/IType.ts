@@ -1,5 +1,4 @@
-import { ILanguageQuery } from './ILanguageQuery';
-import { ILanguageObject } from './ILanguageObject';
+import { TLanguagesOption } from './TLanguagesOption';
 
 export interface IType {
     name: string;
@@ -8,8 +7,9 @@ export interface IType {
     type: string;
     fields: any[];
     options: {
+        base?: string;
         i18n?: boolean;
-        languages?: (string | ILanguageObject)[] | ILanguageQuery;
+        languages?: TLanguagesOption;
         css?: (classNames: Record<string, string>) => string;
         messages?: {
             loading?: string;

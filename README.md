@@ -6,11 +6,15 @@ This definitely works, but makes the UI very clunky as you get more fields that 
 ![Default Solution](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/default-solution.gif)  
 
 ## With intl-plugin
-With the intl plugin you will get a cleaner UI for creating translatable documents as the translation is managed across multiple fields.  
+With the intl plugin you will get a cleaner UI for creating translatable documents as the translation is managed across multiple fields and it is even possible to manage document wide translations.  
 
-![Intl Plugin](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)
+### Simple translated object field
+![Intl Plugin Input](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)  
 
-## How to use
+### Document wide translation
+![Intl Plugin Document Translation](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin-document.gif)  
+
+## How to install
 1. Install the plugin using `npm`, `yarn` or the sanity cli
 `yarn add sanity-plugin-intl-input`
 `sanity install intl-input`
@@ -27,8 +31,11 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
   ]
 }
 ```
-3. Enable translations for your object type field which will contain all the translatable fields in your document type.  
-```
+
+## How to use
+### Intl object input
+Enable translations for your object type field which will contain all the translatable fields in your document type.  
+```javascript
 export default {
     type: 'document',
     name: '...',
@@ -39,6 +46,7 @@ export default {
         type: 'object',
         options: {
             i18n: true, // enables localization
+            base: '', // (OPTIONAL) id of the base language (if not passed the first one is considered base language)
             languages: ['..', '..', ...], // <-- eg. ['en', 'nl']
             css: (classNames) => ``, // (OPTIONAL) function to apply additional CSS for theming purposes. The classNames argument is an object with the css module classnames.
             messages: { // (OPTIONAL) You can pass a messages object to override the default messsages shown
@@ -51,15 +59,37 @@ export default {
 }
 ```
 
+### Intl for complete document
+You can simply enable translations for your document type using the `i18n` parameter.
+```javascript
+export default {
+    type: 'document',
+    name: '...',
+    title: '...',
+    i18n: {
+      base: '', // (OPTIONAL) id of the base language (if not passed the first one is considered base language)
+      languages: ['..', '..', ...], // <-- eg. ['en', 'nl']
+      messages: { // (OPTIONAL) You can pass a messages object to override the default messsages shown
+        loading: 'Loading languages...',
+        missing: 'Missing',
+        draft: 'Draft',
+        publishing: 'Publishing...',
+        publish: 'Publish'
+      },
+    },
+    fields: []
+}
+```
+
 ## Resulting data structure
 Your resulting object will not look much different than before apart from the fact that it will now group it's content within the langauge keys. eg:
-```
+```json
 {
   "en": {
     "...": "..."
   },
   "fr": {
-    "...": "...
+    "...": "..."
   }
 }
 ```

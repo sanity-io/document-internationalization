@@ -1,9 +1,9 @@
 import defaultResolve from 'part:@sanity/base/document-badges';
-import { LangaugeBadge } from './LanguageBadge'
-import { IBadgeProps } from './IBadgeProps';
+import { LanguageBadge } from './LanguageBadge'
+import { IResolverProps } from '../types';
 
-const resolver = (props: IBadgeProps) => {
-    return [...defaultResolve(props), LangaugeBadge];
+const resolver = (props: IResolverProps) => {
+    return [...defaultResolve(props), LanguageBadge];
 }
 
 export default resolver;

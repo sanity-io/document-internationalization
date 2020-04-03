@@ -1,9 +1,15 @@
-import { IBadgeProps } from './IBadgeProps';
+import { IResolverProps } from '../types';
+import { getLanguageFromId } from '../utils';
 
-export const LangaugeBadge = (props: IBadgeProps) => {
-    return {
-        label: 'Hello',
-        title: 'Hello I am a custom document badge',
-        color: 'success'
-    };
+export const LanguageBadge = (props: IResolverProps) => {
+    const doc = props.draft || props.published;
+    const idLang = getLanguageFromId(props.id);
+    if ((doc && doc.__i18n_lang) || idLang) {
+        return {
+            label: (doc && doc.__i18n_lang) || idLang,
+            color: 'success',
+        };
+    }
+
+    return null;
 };

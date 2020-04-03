@@ -6,10 +6,10 @@ import styles from './input.scss';
 import PatchEvent, { setIfMissing, unset, set } from '@sanity/form-builder/lib/PatchEvent';
 import Field from '@sanity/form-builder/lib/inputs/ObjectInput/Field';
 import { IType } from '../types/IType';
-import client from 'part:@sanity/base/client'
 import { ILanguageQuery } from '../types/ILanguageQuery';
 import { ILanguageObject } from '../types/ILanguageObject';
 import { Tlanguage } from '../types/TLanguage';
+import { getBaseLanguage, getSanityClient, getLanguagesFromOption } from '../utils';
 
 interface IField {
     name: string;
@@ -44,19 +44,18 @@ class Input extends React.PureComponent<IProps, IState> {
         languages: [],
     }
 
-    private get client(): import('@sanity/client').SanityClient {
-        return client;
-    }
-
     private get missingTranslations() {
-        const { currentLanguage, languages } = this.state;
-        const { type: { fields }, value } = this.props;
+        const { languages } = this.state;
+        const { type: { options }, value } = this.props;
         if (languages.length === 0) return [];
         const existingValues = (() => {
-            const l = languages[0];
-            const slug = createSlug(l.name);
-            const v = (value && value[slug]) || {};
-            return Object.keys(v).filter(k => !!v[k]);
+            const l = getBaseLanguage(languages, options.base);
+            if (l) {
+                const slug = createSlug(l.name);
+                const v = (value && value[slug]) || {};
+                return Object.keys(v).filter(k => !!v[k]);
+            }
+            return [];
         })();
         return languages.filter((l, index) => {
             if (index === 0) return false;
@@ -101,9 +100,9 @@ class Input extends React.PureComponent<IProps, IState> {
                     const valueTypeName = value && value._type
                     const schemaTypeName = type.name
                     if (valueTypeName && schemaTypeName === 'object') {
-                    event = event.prepend(unset(['_type']))
+                        event = event.prepend(unset(['_type']))
                     } else if (schemaTypeName !== 'object' && valueTypeName !== schemaTypeName) {
-                    event = event.prepend(set(schemaTypeName, ['_type']))
+                        event = event.prepend(set(schemaTypeName, ['_type']))
                     }
                 }
             }
@@ -115,13 +114,6 @@ class Input extends React.PureComponent<IProps, IState> {
         this.setState({
             currentLanguage: lang,
         });
-    }
-
-    private normalizeLanguagesList = (langauges: Tlanguage[]): ILanguageObject[] => {
-        return langauges.map(l => {
-            if (typeof l === 'string') return { title: l, name: l };
-            return l;
-        })
     }
 
     public renderField = (field: IField) => {
@@ -150,19 +142,10 @@ class Input extends React.PureComponent<IProps, IState> {
     public loadLanguages = async () => {
         const { type: { options } } = this.props;
         this.setState({ fetchingLanguages: true });
-        const languages: IState['languages'] = this.normalizeLanguagesList(Array.isArray(options.languages) ? options.languages : await (async () => {
-            const q = options.languages as ILanguageQuery;
-            const r = await this.client.fetch(q.query);
-            const value = q.value;
-            if (typeof value === 'string') return r.map(l => get(l, value));
-            return r.map(l => ({
-                name: get(l, value.name),
-                title: get(l, value.title),
-            }));
-        })());
+        const languages: IState['languages'] = await getLanguagesFromOption(options.languages);
         this.setState({
             languages,
-            currentLanguage: languages[0],
+            currentLanguage: getBaseLanguage(languages, options.base),
             fetchingLanguages: false,
         });
     }
@@ -189,7 +172,7 @@ class Input extends React.PureComponent<IProps, IState> {
                 <div className={styles.root}>
                     {fetchingLanguages ? (
                         <div className={styles.loading}>
-                            <p className={styles.message}>{(options.messages && options.messages.loading) ? options.messages.loading : 'Fetching languages...'}</p>
+                            <p className={styles.message}>{options.messages?.loading || 'Fetching languages...'}</p>
                         </div>
                     ) : (
                         <>
@@ -207,7 +190,7 @@ class Input extends React.PureComponent<IProps, IState> {
                             </div>
                             {(hasLanguages && hasMissingTranslations) && (
                                 <div className={styles.missing}>
-                                    <p className={styles.entry}>{(options.messages && options.messages.missingTranslations) ? options.messages.missingTranslations : 'Following languages are missing some translations compared to the base language'} ({languages[0].title})</p>
+                                    <p className={styles.entry}>{options?.messages?.missingTranslations ||'Following languages are missing some translations compared to the base language'} ({getBaseLanguage(languages, options.base).title})</p>
                                     <p className={styles.entry}><strong>{this.missingTranslations.map(l => l.title).join(', ')}</strong></p>
                                 </div>
                             )}

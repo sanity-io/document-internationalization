@@ -48,7 +48,11 @@ module.exports = (name) => {
         external: [
             'part:@sanity/base/client',
             'part:@sanity/base/document-badges',
-            'part:@sanity/base/schema'
+            'part:@sanity/base/schema',
+            'part:@sanity/base/datastore/document',
+            'part:@sanity/base/document-actions',
+            '@sanity/desk-tool/lib/pane/PaneItem',
+            '@sanity/state-router/lib/components/StateLink'
         ]
     };
 };
