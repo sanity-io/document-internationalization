@@ -13,7 +13,7 @@
       "allowSyntheticDefaultImports": true,
       "moduleResolution": "node",
       "allowJs": true,
-      "target": "esnext",
+      "target": "es2015",
       "jsx": "react",
       "rootDir": "./src",
       "lib": [
