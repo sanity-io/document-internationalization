@@ -1,3 +1,4 @@
+import 'regenerator-runtime';
 import { IResolverProps, Ti18nSchema } from '../types';
 import defaultResolve, { PublishAction } from 'part:@sanity/base/document-actions'
 import { PublishWithi18nAction } from './PublishWithi18nAction';
