@@ -1,4 +1,6 @@
 # Intl plugin for Sanity
+[![npm version](https://img.shields.io/npm/v/sanity-plugin-intl-input.svg?style=flat)](https://www.npmjs.com/package/sanity-plugin-intl-input)
+
 ## Default solution
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
 This definitely works, but makes the UI very clunky as you get more fields that require translations.  
