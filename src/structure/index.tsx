@@ -1,3 +1,4 @@
+import 'regenerator-runtime';
 import { StructureBuilder as S } from '@sanity/structure';
 import { IDefaultDocumentNodeStructureProps } from './IDefaultDocumentNodeStructureProps';
 import { Ti18nSchema } from '../types';

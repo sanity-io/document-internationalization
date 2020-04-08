@@ -1,6 +1,5 @@
 import 'regenerator-runtime';
 import * as React from 'react';
-import get from 'lodash.get';
 import slugify from 'slugify';
 import styles from './input.scss';
 import PatchEvent, { setIfMissing, unset, set } from '@sanity/form-builder/lib/PatchEvent';
