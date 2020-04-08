@@ -1,4 +1,36 @@
 # Intl plugin for Sanity
+## What is this branch?
+This is to solve a problem where you have conflicting desk structures.
+### How to implement
+```javascript
+const {
+    default: defaultStructure,
+    getDefaultDocumentNode,
+    getDocumentNodeViewsForSchemaType,
+    getFilteredDocumentTypeListItems
+} = require('sanity-plugin-intl-input/lib/structure');
+
+// simpy re-exporting
+module.exports.getDefaultDocumentNode = getDefaultDocumentNode;
+module.exports.default = defaultStructure;
+
+// or manual implementation
+module.exports.getDefaultDocumentNode = (props) => {
+    if (props.schemaType === 'myschema') {
+        return S.document().views(getDocumentNodeViewsForSchemaType(props.schemaType));
+    }
+    return S.document();
+};
+
+module.exports.default = () => {
+    const items = getFilteredDocumentTypeListItems();
+    return S.list()
+        .id('__root__')
+        .title('Content')
+        .items(items);
+}
+```
+
 ## Default solution
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
 This definitely works, but makes the UI very clunky as you get more fields that require translations.  
