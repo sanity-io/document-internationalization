@@ -1,4 +1,6 @@
 # Intl plugin for Sanity
+[![npm version](https://img.shields.io/npm/v/sanity-plugin-intl-input.svg?style=flat)](https://www.npmjs.com/package/sanity-plugin-intl-input)
+
 ## What is this branch?
 This is to solve a problem where you have conflicting desk structures.
 ### How to implement
