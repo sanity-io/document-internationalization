@@ -104,6 +104,36 @@ Your resulting object will not look much different than before apart from the fa
 Each document will have a new property called `__i18n_lang` (you can customize this by setting the `fieldNames.lang` property in the `i18n` settings object) which contains the name of the language of this document.
 Secondly, the id will also contain a suffix as follows `xxx-xxx-xx__i18n_{lang}`.
 
+#### GraphQL support
+To make the field available in GraphQL you will need to add the language field in your own schemas so the sanity CLI can consume it.
+Secondly, you will have to update the language field name to one that does not contain underscores.
+
+In the document wide i18n setup:
+```javascript
+const schema = {
+  i18n: {
+    fieldNames: {
+      lang: 'lang' // (for example)
+    }
+  }
+};
+```
+
+In your own schema, add the following
+```javascript
+const schema = {
+  fields: [
+    {
+      name: 'lang',
+      type: 'string',
+      hidden: true
+    }
+  ]
+}
+```
+
+This way the GraphQL deployment will consider the `lang` property as part of your structure.
+
 ## Advanced languages
 You can also pass a language objects or a GROQ query to the languages option for more advanced language handling.
 
@@ -131,3 +161,4 @@ languages: {
   }
 }
 ```
+
