@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IResolverProps, Ti18nSchema } from '../types';
 import { useDocumentOperation } from '@sanity/react-hooks';
-import { getSchema, getLanguagesFromOption, getBaseLanguage, getLanguageFromId } from '../utils';
+import { getSchema, getLanguagesFromOption, getBaseLanguage, getLanguageFromId, getLangFieldNameFromSchema } from '../utils';
 
 interface IUseDocumentOperationResult {
     patch: any;
@@ -24,10 +24,11 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
             : (schema.i18n?.messages?.publish || 'Publish'),
         onHandle: async () => {
             setPublishing(true);
+            const fieldName = getLangFieldNameFromSchema(schema);
             const langs = await getLanguagesFromOption(schema.i18n.languages);
             const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, schema.i18n.base).name;
             patch.execute([
-                { set: { __i18n_lang: languageId } }
+                { set: { [fieldName]: languageId } }
             ]);
             publish.execute();
             props.onComplete();

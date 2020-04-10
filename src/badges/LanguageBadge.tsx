@@ -1,12 +1,13 @@
 import { IResolverProps } from '../types';
-import { getLanguageFromId } from '../utils';
+import { getLanguageFromId, getSchema, getLangFieldNameFromSchema } from '../utils';
 
 export const LanguageBadge = (props: IResolverProps) => {
     const doc = props.draft || props.published;
     const idLang = getLanguageFromId(props.id);
-    if ((doc && doc.__i18n_lang) || idLang) {
+    const fieldName = getLangFieldNameFromSchema(getSchema(props.type));
+    if ((doc && doc[fieldName]) || idLang) {
         return {
-            label: (doc && doc.__i18n_lang) || idLang,
+            label: (doc && doc[fieldName]) || idLang,
             color: 'success',
         };
     }

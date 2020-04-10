@@ -78,6 +78,9 @@ export default {
         publishing: 'Publishing...',
         publish: 'Publish'
       },
+      fieldName: { // (OPTIONAL) You can update the field name(s) the plugin injects
+        lang: '__i18n_lang'
+      }
     },
     fields: []
 }
@@ -98,7 +101,7 @@ Your resulting object will not look much different than before apart from the fa
 ```
 
 ### Document wide translations
-Each document will have a new property called `__i18n_lang` which contains the name of the language of this document.
+Each document will have a new property called `__i18n_lang` (you can customize this by setting the `fieldNames.lang` property in the `i18n` settings object) which contains the name of the language of this document.
 Secondly, the id will also contain a suffix as follows `xxx-xxx-xx__i18n_{lang}`.
 
 ## Advanced languages

@@ -5,3 +5,4 @@ export * from './getLanguagesFromOption';
 export * from './getSchema';
 export * from './getLanguageFromId';
 export * from './getAllSchemas';
+export * from './getLangFieldNameFromSchema';
