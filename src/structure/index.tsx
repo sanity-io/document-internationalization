@@ -14,19 +14,23 @@ const hasIcon = (schemaType?: SchemaType | string): boolean => {
     return Boolean(schemaType.icon)
 }
 
+export const getDocumentNodeViewsForSchemaType = (type: string) => {
+    const schema: Ti18nSchema = getSchema(type);
+    return [
+        S.view.form(),
+        S.view.component(TranslationsComponentFactory(schema)).title('Translations')
+    ];
+}
+
 export const getDefaultDocumentNode = (props: IDefaultDocumentNodeStructureProps) => {
     const schema: Ti18nSchema = getSchema(props.schemaType);
     if (schema && schema.i18n) {
-        return S.document().views([
-            S.view.form(),
-            S.view.component(TranslationsComponentFactory(schema)).title('Translations')
-        ])
+        return S.document().views(getDocumentNodeViewsForSchemaType(props.schemaType));
     }
     return S.document();
 };
 
-
-export default () => {
+export const getDocumentTypes = () => {
     const listItemsWithouti18n: ListItemBuilder[] = [];
     const listItemsWithi18n = S.documentTypeListItems().filter(l => {
         const schemaType = l.getSchemaType();
@@ -34,14 +38,18 @@ export default () => {
         if (!hasi18n) listItemsWithouti18n.push(l);
         return hasi18n;
     });
+    return {
+        withoutI18n: listItemsWithouti18n,
+        withI18n: listItemsWithi18n,
+    };
+};
 
-    if (listItemsWithi18n.length === 0) {
-        return S.defaults();
-    }
+export const getFilteredDocumentTypeListItems = () => {
+    const types = getDocumentTypes();
 
     const items = [
-        ...listItemsWithouti18n,
-        ...listItemsWithi18n.map(l => (
+        ...types.withoutI18n,
+        ...types.withI18n.map(l => (
             l.child(
                 S.documentList()
                     .id(l.getId())
@@ -55,6 +63,14 @@ export default () => {
         )),
     ];
 
+    return items;
+};
+
+export default () => {
+    const types = getDocumentTypes();
+    if (types.withI18n.length === 0) return S.defaults();
+
+    const items = getFilteredDocumentTypeListItems();
     return S.list()
         .id('__root__')
         .title('Content')

@@ -33,6 +33,35 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
   ]
 }
 ```
+3. The plugin has a custom desk structure to hide translated documents from the main view. You need to manually implement this as follows
+```javascript
+const {
+    default: defaultStructure,
+    getDefaultDocumentNode,
+    getDocumentNodeViewsForSchemaType,
+    getFilteredDocumentTypeListItems
+} = require('sanity-plugin-intl-input/lib/structure');
+
+// simpy re-exporting
+module.exports.getDefaultDocumentNode = getDefaultDocumentNode;
+module.exports.default = defaultStructure;
+
+// or manual implementation
+module.exports.getDefaultDocumentNode = (props) => {
+    if (props.schemaType === 'myschema') {
+        return S.document().views(getDocumentNodeViewsForSchemaType(props.schemaType));
+    }
+    return S.document();
+};
+
+module.exports.default = () => {
+    const items = getFilteredDocumentTypeListItems();
+    return S.list()
+        .id('__root__')
+        .title('Content')
+        .items(items);
+}
+```
 
 ## How to use
 ### Intl object input
