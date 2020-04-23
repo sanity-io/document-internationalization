@@ -1,7 +1,7 @@
 # CHANGELOG
 ## v4.0.0
 **Breaking Change**
-Implementing the desk structure now has to be done manually.
+Implementing the desk structure now has to be done manually. 
 
 ## v3.1.0
 Added the `fieldNames` option to change the names of the fields the plugin automatically injects.

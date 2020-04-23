@@ -33,6 +33,7 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
   ]
 }
 ```
+
 3. The plugin has a custom desk structure to hide translated documents from the main view. You need to manually implement this as follows
 ```javascript
 const {
