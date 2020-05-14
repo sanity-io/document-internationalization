@@ -35,33 +35,44 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 ```
 
 3. The plugin has a custom desk structure to hide translated documents from the main view. You need to manually implement this as follows
+Add the part in `sanity.json`
+```
+{
+  ...
+  "parts": [
+    ...
+    {
+      "name": "part:@sanity/desk-tool/structure",
+      "path": "./deskStructure.js"
+    }
+  ]
+  ...
+}
+```
+
+Implement the structure
 ```javascript
-const {
-    default: defaultStructure,
-    getDefaultDocumentNode,
-    getDocumentNodeViewsForSchemaType,
-    getFilteredDocumentTypeListItems
-} = require('sanity-plugin-intl-input/lib/structure');
+import * as Structure from 'sanity-plugin-intl-input/lib/structure';
 
 // simpy re-exporting
-module.exports.getDefaultDocumentNode = getDefaultDocumentNode;
-module.exports.default = defaultStructure;
+export const getDefaultDocumentNode = Structure.getDefaultDocumentNode;
+export default Structure.default;
 
 // or manual implementation
-module.exports.getDefaultDocumentNode = (props) => {
+export const getDefaultDocumentNode = (props) => {
     if (props.schemaType === 'myschema') {
-        return S.document().views(getDocumentNodeViewsForSchemaType(props.schemaType));
+        return S.document().views(Structure.getDocumentNodeViewsForSchemaType(props.schemaType));
     }
     return S.document();
 };
 
-module.exports.default = () => {
-    const items = getFilteredDocumentTypeListItems();
-    return S.list()
-        .id('__root__')
-        .title('Content')
-        .items(items);
-}
+export default () => {
+  const items = Structure.getFilteredDocumentTypeListItems();
+  return S.list()
+      .id('__root__')
+      .title('Content')
+      .items(items);
+};
 ```
 
 ## How to use
