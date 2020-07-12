@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './TranslationLink.scss';
-import StateLink from '@sanity/state-router/lib/components/StateLink';
+import IntentLink from '@sanity/state-router/lib/components/IntentLink';
 import classnames from 'classnames';
 import { ILanguageObject, Ti18nSchema } from '../../types';
 import { getSanityClient, getLangFieldNameFromSchema } from '../../utils';
@@ -34,15 +34,9 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
     }, [lang.name]);
 
     return (
-        <StateLink
-            replace={false}
-            toIndex={false}
-            state={{
-                panes: [
-                    [{ id: schema.name }],
-                    [{ id: translatedDocId }]
-                ]
-            }}
+        <IntentLink
+            intent="edit"
+            params={{id: translatedDocId, type: schema.name}}
             className={classnames({
                 [styles.entry]: true,
                 [styles.disabled]: existing === null,
@@ -80,6 +74,6 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
                 )
             )}
 
-        </StateLink>
+        </IntentLink>
     );
 }
