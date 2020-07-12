@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## v4.0.1
+Updated `StateLink` with `IntentLink` to better support custom desk structures. (thanks to @p10e)
+
 ## v4.0.0
 **Breaking Change**
 Implementing the desk structure now has to be done manually. 
