@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ManagementTab.scss';
+import styles from './MaintenanceTab.scss';
 import schemas from 'part:@sanity/base/schema';
 import classNames from 'classnames';
 import { getConfig, getSanityClient, getLanguageFromId, makeObjectKey, getSchema } from '../../utils';
