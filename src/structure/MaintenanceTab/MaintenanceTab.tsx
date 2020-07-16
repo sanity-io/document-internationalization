@@ -139,7 +139,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
       >
         <div className={styles.schemaselect}>
           <select onChange={this.onSchemaTypeChange} value={selectedSchema}>
-            <option selected disabled value="">{config.messages?.translationsManagement?.selectSchemaPlaceholder}</option>
+            <option selected disabled value="">{config.messages?.translationsMaintenance?.selectSchemaPlaceholder}</option>
             {this.i18nSchemas.map(s => (
               <option key={s.name} value={s.name}>
                 {s.title}
@@ -153,21 +153,21 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
             className={styles.dashboard}
           >
             <div className={styles.entry}>
-              <p>{info.missingLanguageField.length} {config?.messages?.translationsManagement?.missingLanguageField}</p>
+              <p>{info.missingLanguageField.length} {config?.messages?.translationsMaintenance?.missingLanguageField}</p>
               {(info.missingLanguageField.length > 0) && (
-                <button onClick={this.fixLanguageFields}>{config?.messages?.translationsManagement?.fix}</button>
+                <button onClick={this.fixLanguageFields}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
             <div className={styles.entry}>
-              <p>{info.missingDocumentRefs.length} {config?.messages?.translationsManagement?.missingDocumentRefs}</p>
+              <p>{info.missingDocumentRefs.length} {config?.messages?.translationsMaintenance?.missingDocumentRefs}</p>
               {(info.missingDocumentRefs.length > 0) && (
-                <button onClick={this.fixTranslationRefs}>{config?.messages?.translationsManagement?.fix}</button>
+                <button onClick={this.fixTranslationRefs}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
             <div className={styles.entry}>
-              <p>{info.orphanDocuments.length} {config?.messages?.translationsManagement?.orphanDocuments}</p>
+              <p>{info.orphanDocuments.length} {config?.messages?.translationsMaintenance?.orphanDocuments}</p>
               {(info.orphanDocuments.length > 0) && (
-                <button onClick={this.fixOrphanedDocuments}>{config?.messages?.translationsManagement?.fix}</button>
+                <button onClick={this.fixOrphanedDocuments}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
           </div>
