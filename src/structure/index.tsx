@@ -45,6 +45,18 @@ export const getDocumentTypes = () => {
   };
 };
 
+export const getMaintenanceListItem = () => {
+  const config = getConfig();
+  return S.listItem()
+  .id('__i18n_translations_maintenance_tab')
+  .title(config.messages.translationsMaintenance?.title)
+  .child(
+    S.component(MaintenanceTab)
+      .title(config.messages.translationsMaintenance?.title)
+      .id('__i18n_translations_maintenance_tab')
+  );
+};
+
 export const getFilteredDocumentTypeListItems = () => {
   const config = getConfig();
   const types = getDocumentTypes();
@@ -66,16 +78,7 @@ export const getFilteredDocumentTypeListItems = () => {
   ];
 
   if (config.withTranslationsMaintenance) {
-    items.splice(0, 0, (
-      S.listItem()
-      .id('__i18n_translations_maintenance_tab')
-      .title(config.messages.translationsMaintenance?.title)
-      .child(
-        S.component(MaintenanceTab)
-          .title(config.messages.translationsMaintenance?.title)
-          .id('__i18n_translations_maintenance_tab')
-      )
-    ));
+    items.splice(0, 0, getMaintenanceListItem());
   }
 
   return items;
@@ -92,4 +95,3 @@ export default () => {
     .items(items)
     .showIcons(items.some(item => hasIcon(item.getSchemaType())));
 }
-
