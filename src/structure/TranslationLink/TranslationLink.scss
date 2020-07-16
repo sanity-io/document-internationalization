@@ -1,65 +1,62 @@
-$color-primary: #156dff !default;
-$color-primary-light: rgba(36, 163, 227, 0.15) !default;
-$color-light: #fff !default;
-$color-dark: #000 !default;
-$color-warning: #ffbf48 !default;
+@import "../../scss/colors";
 
 .entry {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
 
-    &:hover {
-        background-color: $color-primary-light;
+  &:hover {
+    background-color: rgba(color(curious-blue), 0.15);
+  }
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.2;
+  }
+
+  &.selected {
+    pointer-events: none;
+    background-color: color(blue-ribbon);
+
+    .title {
+      color: color(white);
     }
-
-    &.disabled {
-        pointer-events: none;
-        opacity: .2;
-    }
-
-    &.selected {
-        pointer-events: none;
-        background-color: $color-primary;
-
-        .title {
-            color: $color-light;
-        }
-    }
+  }
 }
 
 .flag {
-    margin-right: 1rem;
-    width: 1.5rem;
-    height: 1.5rem;
+  margin-right: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
 
-    &.error {
-        background-color: $color-dark;
-        height: 1.2rem;
-        opacity: .2;
-    }
+  &.error {
+    background-color: color(black);
+    height: 1.2rem;
+    opacity: 0.2;
+  }
 }
 
 .title {
-    margin: 0;
-    font-size: 1em;
-    font-weight: 400;
-    line-height: 2.5em;
-    color: $color-dark;
+  margin: 0;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 2.5em;
+  color: color(black);
 }
 
-.missing, .draft {
-    margin: 0 0 0 auto;
-    font-size: 1em;
-    font-weight: 700;
-    line-height: 2.5em;
-    color: $color-warning;
+.missing,
+.draft {
+  margin: 0 0 0 auto;
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 2.5em;
+  color: color(yellow-orange);
 }
 
 .draft {
-    color: $color-dark;
-    opacity: .2;
+  color: color(black);
+  opacity: 0.2;
 }

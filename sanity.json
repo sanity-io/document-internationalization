@@ -1,29 +1,28 @@
 {
-    "paths": {
-      "source": "./src",
-      "compiled": "./lib"
+  "paths": {
+    "source": "./src",
+    "compiled": "./lib"
+  },
+  "parts": [
+    {
+      "implements": "part:@sanity/form-builder/input-resolver",
+      "path": "resolver/index.js"
     },
-    "parts": [
-      {
-        "implements": "part:@sanity/form-builder/input-resolver",
-        "path": "resolver/index.js"
-      },
-      {
-        "implements": "part:@sanity/form-builder/input/i18n",
-        "path": "input/index.js"
-      },
-      {
-        "implements": "part:@sanity/base/document-badges/resolver",
-        "path": "badges/index.js"
-      },
-      {
-        "implements": "part:@sanity/base/document-actions/resolver", 
-        "path": "actions/index.js" 
-      },
-      {
-        "name": "part:@sanity/form-builder/input/i18n",
-        "description": "i18n input"
-      }
-    ]
-  }
-  
+    {
+      "implements": "part:@sanity/form-builder/input/i18n",
+      "path": "input/index.js"
+    },
+    {
+      "implements": "part:@sanity/base/document-badges/resolver",
+      "path": "badges/index.js"
+    },
+    {
+      "implements": "part:@sanity/base/document-actions/resolver",
+      "path": "actions/index.js"
+    },
+    {
+      "name": "part:@sanity/form-builder/input/i18n",
+      "description": "i18n input"
+    }
+  ]
+}

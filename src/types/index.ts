@@ -6,3 +6,5 @@ export * from './IResolverProps';
 export * from './TLanguagesOption';
 export * from './TSchema';
 export * from './Ti18nSchema';
+export * from './Ti18nConfig';
+export * from './TMessagesConfig';
