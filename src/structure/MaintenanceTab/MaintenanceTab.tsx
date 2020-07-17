@@ -67,15 +67,21 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
 
   protected fixOldIdDocuments = async () => {
     this.setState({ pending: true });
+    const { selectedSchema } = this.state;
     const oldIdDocuments = this.oldIdDocuments;
     await Promise.all(oldIdDocuments.map(async d => {
       const baseId = getBaseIdFromId(d._id);
       const lang = getLanguageFromId(d._id);
-      await this._sanityClient.patch(d._id).set({
+      const transaction = this._sanityClient.transaction()
+      transaction.createIfNotExists({
+        ...d,
         _id: buildDocId(baseId, lang),
-      }).commit();
+        _type: selectedSchema,
+      });
+      transaction.delete(d._id);
+      await transaction.commit();
     }));
-    this.fetchInformation();
+    this.fixTranslationRefs();
   }
 
   protected fixLanguageFields = async () => {
@@ -174,7 +180,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
             <div className={styles.entry}>
               <p>{info.oldIdStructure.length} {config?.messages?.translationsMaintenance?.oldIdStructure}</p>
               {(info.oldIdStructure.length > 0) && (
-                <button onClick={this.fixLanguageFields}>{config?.messages?.translationsMaintenance?.fix}</button>
+                <button onClick={this.fixOldIdDocuments}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
             <div className={styles.entry}>
