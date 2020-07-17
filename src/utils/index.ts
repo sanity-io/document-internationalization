@@ -9,5 +9,3 @@ export * from './getLanguageFromId';
 export * from './getBaseIdFromId';
 export * from './getAllSchemas';
 export * from './makeObjectKey';
-export * from './getLangFieldNameFromSchema';
-export * from './getReferencesFieldNameFromSchema';

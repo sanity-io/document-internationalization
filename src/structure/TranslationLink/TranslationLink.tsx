@@ -3,7 +3,7 @@ import styles from './TranslationLink.scss';
 import IntentLink from '@sanity/state-router/lib/components/IntentLink';
 import classnames from 'classnames';
 import { ILanguageObject, Ti18nSchema } from '../../types';
-import { getSanityClient, getLangFieldNameFromSchema, getConfig, buildDocId } from '../../utils';
+import { getSanityClient, getConfig, buildDocId } from '../../utils';
 import { SanityFlag } from '../SanityFlag';
 import { SanityDocument } from '@sanity/client';
 
@@ -12,7 +12,7 @@ interface IProps {
   index: number;
   schema: Ti18nSchema;
   lang: ILanguageObject;
-  currentLanguage: string;
+  currentLanguage: string | null;
   baseDocument?: any;
 }
 
@@ -48,7 +48,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
       })}
       onClick={(props) => {
         if (existing === undefined) {
-          const fieldName = getLangFieldNameFromSchema(schema);
+          const fieldName = config.fieldNames.lang;
           getSanityClient().createIfNotExists({
             ...(baseDocument ? baseDocument : {}),
             _id: `drafts.${translatedDocId}`,

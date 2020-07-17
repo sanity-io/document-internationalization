@@ -1,15 +1,23 @@
 import config from 'config:intl-input';
 import { getSchema } from './getSchema';
-import { Ti18nSchema, Ti18nConfig } from '../types';
+import { Ti18nSchema, Ti18nConfig, TLanguagesOption, TMessagesConfig, TFieldNamesConfig } from '../types';
 
-export function getConfig(type?: string | Ti18nSchema): Ti18nConfig & {
+export function getConfig(type?: string | Ti18nSchema): {
+  base?: string;
+  fieldNames: Required<TFieldNamesConfig>,
+  languages: TLanguagesOption;
+  messages: Required<TMessagesConfig>;
+} & {
   withTranslationsMaintenance: boolean;
 } {
-  const schema = type
-    ? (typeof type === 'string' ? getSchema<Ti18nSchema>(type)?.i18n : type.i18n)
-    : null;
+  const schema = (() => {
+    const schema = type
+      ?  (typeof type === 'string' ? getSchema<Ti18nSchema>(type)?.i18n : type.i18n)
+      : false
+    if (typeof schema !== 'boolean') return schema;
+    return {}
+  })();
   const cfg = config;
-  if (typeof schema === 'boolean') return { withTranslationsMaintenance: true };
   return {
     base: schema?.base || cfg?.base,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance === false ? false : true,
@@ -17,7 +25,7 @@ export function getConfig(type?: string | Ti18nSchema): Ti18nConfig & {
       lang: schema?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
       references: schema?.fieldNames?.references || cfg?.fieldNames?.references || '__i18n_refs',
     },
-    languages: schema?.languages || cfg?.languages,
+    languages: schema?.languages || cfg?.languages || [],
     messages: {
       publishing: schema?.messages?.publishing || cfg?.messages?.publishing || 'Publishing...',
       publish: schema?.messages?.publish || cfg?.messages?.publish || 'Publish',

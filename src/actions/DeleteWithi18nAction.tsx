@@ -40,7 +40,7 @@ export const DeleteWithi18nAction = (props: IResolverProps) => {
           published={props.published}
           onCancel={() => {
             setConfirmDialogOpen(false);
-            props.onComplete();
+            props.onComplete && props.onComplete();
           }}
           onConfirm={async () => {
             setIsDeleting(true);
@@ -52,7 +52,7 @@ export const DeleteWithi18nAction = (props: IResolverProps) => {
             const transaction = client.transaction();
             translatedDocuments.forEach(doc => transaction.delete(doc._id));
             await transaction.commit();
-            props.onComplete();
+            props.onComplete && props.onComplete();
           }}
         />
       )

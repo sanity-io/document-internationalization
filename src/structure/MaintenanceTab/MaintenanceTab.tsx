@@ -8,13 +8,7 @@ import { SanityDocument } from '@sanity/client';
 import { Ti18nSchema } from '../../types';
 import { I18nPrefix } from '../../constants';
 
-type Ti18nDocument = SanityDocument & {
-  __i18n_lang?: string;
-  __i18n_refs?: Record<string, {
-    _id: string;
-    _type: 'reference';
-  }>;
-};
+type Ti18nDocument = SanityDocument<any>;
 
 interface IProps {
 }
@@ -38,16 +32,19 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
   public get translatedDocuments() { return this.state.documents.filter(d => d._id.startsWith(I18nPrefix)); }
   public get oldIdDocuments() { return this.state.documents.filter(d => d._id.includes('__i18n_')); }
   public get documentsSummaryInformation() {
-    const { documents } = this.state;
+    const { documents, selectedSchema } = this.state;
+    const config = getConfig(selectedSchema);
     const basedocuments = this.baseDocuments;
     const translateddocuments = this.translatedDocuments;
     const oldiddocuments = this.oldIdDocuments;
+    const refsFieldName = config.fieldNames?.references;
+    const langFieldName = config.fieldNames?.lang;
     return {
       oldIdStructure: oldiddocuments,
-      missingLanguageField: documents.filter(d => !d.__i18n_lang),
+      missingLanguageField: documents.filter(d => !d[langFieldName]),
       missingDocumentRefs: basedocuments.filter((d) => {
         const docs = translateddocuments.filter(dx => getBaseIdFromId(dx._id) === d._id);
-        const refsCount = Object.keys(d.__i18n_refs || {}).length;
+        const refsCount = Object.keys(d[refsFieldName] || {}).length;
         return refsCount != docs.length;
       }),
       orphanDocuments: translateddocuments.filter(d => {
@@ -86,6 +83,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
       await this._sanityClient.patch(baseId)
       .setIfMissing({ [refsFieldName]: [] })
       .append(refsFieldName, [{
+        _key: newId,
         lang: lang,
         ref: {
           _type: 'reference',
@@ -98,13 +96,13 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
 
   protected fixLanguageFields = async () => {
     this.setState({ pending: true });
-    const { documents } = this.state;
-    const config = getConfig();
+    const { documents, selectedSchema } = this.state;
+    const config = getConfig(selectedSchema);
     const langFieldName = config.fieldNames?.lang;
     await Promise.all(documents.map(async d => {
       const schema = getSchema<Ti18nSchema>(d._type);
       const base = ((typeof schema.i18n === 'object') ? schema.i18n.base : undefined) || config.base;
-      if (!d.__i18n_lang) {
+      if (!d[langFieldName]) {
         const language = getLanguageFromId(d._id) || base;
         await this._sanityClient.patch(d._id, {
           set: {
@@ -118,18 +116,20 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
 
   protected fixTranslationRefs = async () => {
     this.setState({ pending: true });
-    const config = getConfig();
+    const { selectedSchema } = this.state;
+    const config = getConfig(selectedSchema);
     const refsFieldName = config.fieldNames.references;
     const translatedDocuments = this.translatedDocuments;
     await Promise.all(this.baseDocuments.map(async d => {
       const docs = translatedDocuments.filter(dx => dx._id.startsWith(d._id));
-      const refsCount = Object.keys(d.__i18n_refs || {}).length;
+      const refsCount = Object.keys(d[refsFieldName] || {}).length;
       if (refsCount != docs.length) {
         await this._sanityClient.patch(d._id, {
           set: {
             [refsFieldName]: translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
               return {
+                _key: doc._id,
                 lang,
                 ref: {
                   _type: 'reference',

@@ -8,15 +8,11 @@ import {
   getLanguagesFromOption,
   getBaseLanguage,
   getLanguageFromId,
-  getLangFieldNameFromSchema,
   getBaseIdFromId,
-  getReferencesFieldNameFromSchema,
   getSanityClient,
-  makeObjectKey,
   getConfig,
   buildDocId,
 } from '../utils';
-import { I18nPrefix } from '../constants';
 
 export const PublishWithi18nAction = (props: IResolverProps) => {
   const schema: Ti18nSchema = getSchema(props.type);
@@ -41,10 +37,10 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
     onHandle: async () => {
       setPublishing(true);
       const client = getSanityClient();
-      const fieldName = getLangFieldNameFromSchema(schema);
-      const refsFieldName = getReferencesFieldNameFromSchema(schema);
+      const fieldName = config.fieldNames.lang;
+      const refsFieldName = config.fieldNames.references;
       const langs = await getLanguagesFromOption(config.languages);
-      const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base).name;
+      const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base)?.name;
 
       await client.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
       await client.patch(props.id, { set: { [fieldName]: languageId } }).commit();
@@ -60,6 +56,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
             [refsFieldName]: translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
               return {
+                _key: doc._id,
                 lang,
                 ref: {
                   _type: 'reference',
@@ -71,7 +68,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
         }).commit();
       }
 
-      props.onComplete();
+      props.onComplete && props.onComplete();
     }
   };
 }

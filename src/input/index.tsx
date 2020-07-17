@@ -110,7 +110,7 @@ class Input extends React.PureComponent<IProps, IState> {
           }
         }
       }
-      onChange(event);
+      onChange && onChange(event);
     }
   }
 
@@ -123,7 +123,7 @@ class Input extends React.PureComponent<IProps, IState> {
   public renderField = (field: IField) => {
     const { currentLanguage } = this.state;
     const { type, value, markers, readOnly, focusPath, onFocus, onBlur, filterField } = this.props
-    if (!filterField(type, field) || field.type.hidden || !currentLanguage) return null;
+    if (!(filterField && filterField(type, field)) || field.type.hidden || !currentLanguage) return null;
     const slug = createSlug(currentLanguage.name);
     const fieldValue = value && value[slug] && value[slug][field.name]
     return (
@@ -197,7 +197,7 @@ class Input extends React.PureComponent<IProps, IState> {
                 </div>
                 {(hasLanguages && hasMissingTranslations) && (
                   <div className={styles.missing}>
-                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages?.missingTranslations} ({baseLanguage.title})</p>
+                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages?.missingTranslations} ({baseLanguage?.title})</p>
                     <p className={styles.entry}><strong>{this.missingTranslations.map(l => l.title).join(', ')}</strong></p>
                   </div>
                 )}

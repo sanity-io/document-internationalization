@@ -8,4 +8,5 @@ export * from './TSchema';
 export * from './Ti18nSchema';
 export * from './Ti18nConfig';
 export * from './TMessagesConfig';
+export * from './TFieldNamesConfig';
 export * from './IUseDocumentOperationResult';
