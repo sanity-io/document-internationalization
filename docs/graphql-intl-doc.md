@@ -15,6 +15,19 @@ const schema = {
 
 2. We need to add them as actual fields in the schema
 ```javascript
+const i18n_refs_object = {
+  name: 'i18n_refs',
+  type: 'object',
+  fields: [{
+    type: 'string',
+    name: 'lang'
+  }, {
+    type: 'reference',
+    name: 'ref',
+    to: [{ type: 'homepage' }]
+  }]
+};
+
 const schema = {
   type: 'schema',
   fields: [
@@ -28,15 +41,7 @@ const schema = {
       type: 'array',
       hidden: true,
       of: [{
-        type: 'object',
-        fields: [{
-          type: 'string',
-          name: 'lang'
-        }, {
-          type: 'reference',
-          name: 'ref',
-          to: [{ type: 'schema' }]
-        }]
+        type: 'i18n_refs_object',
       }]
     }
   ]

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import moment from 'moment';
-import { SanityDocument } from '@sanity/client';
+import moment, { lang } from 'moment';
+import { SanityDocument, Patch } from '@sanity/client';
 import { IResolverProps, Ti18nSchema, IUseDocumentOperationResult } from '../types';
 import { useDocumentOperation, useSyncState } from '@sanity/react-hooks';
 import {
@@ -43,7 +43,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base)?.name;
 
       await client.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
-      await client.patch(props.id, { set: { [fieldName]: languageId } }).commit();
+      await client.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } }).commit();
       publish.execute();
 
       const translatedDocuments = await client.fetch<SanityDocument[]>('*[_id in path($path)]', {
