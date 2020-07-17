@@ -4,7 +4,6 @@ import { IDefaultDocumentNodeStructureProps } from '../IDefaultDocumentNodeStruc
 import { ILanguageObject, Ti18nSchema } from '../../types';
 import { getLanguagesFromOption, getBaseLanguage, getSanityClient, getConfig, getBaseIdFromId, getLanguageFromId } from '../../utils';
 import { TranslationLink } from '../TranslationLink';
-import { I18nPrefix } from '../../constants';
 
 export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDefaultDocumentNodeStructureProps) => {
   const config = getConfig(schema);
@@ -29,7 +28,7 @@ export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDe
   if (pending) {
     return (
       <div className={styles.loading}>
-        {config.messages.loading}
+        {config.messages?.loading}
       </div>
     );
   }

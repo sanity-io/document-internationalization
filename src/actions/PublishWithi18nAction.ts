@@ -36,8 +36,8 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       || publish.disabled
       || syncState.isSyncing,
     label: publishing
-      ? config.messages.publishing
-      : config.messages.publish,
+      ? config.messages?.publishing
+      : config.messages?.publish,
     onHandle: async () => {
       setPublishing(true);
       const client = getSanityClient();

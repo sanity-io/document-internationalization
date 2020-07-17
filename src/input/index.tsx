@@ -179,7 +179,7 @@ class Input extends React.PureComponent<IProps, IState> {
         <div className={styles.root}>
           {fetchingLanguages ? (
             <div className={styles.loading}>
-              <p className={styles.message}>{options.messages?.loading || config.messages.loading}</p>
+              <p className={styles.message}>{options.messages?.loading || config.messages?.loading}</p>
             </div>
           ) : (
               <>
@@ -197,7 +197,7 @@ class Input extends React.PureComponent<IProps, IState> {
                 </div>
                 {(hasLanguages && hasMissingTranslations) && (
                   <div className={styles.missing}>
-                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages.missingTranslations} ({baseLanguage.title})</p>
+                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages?.missingTranslations} ({baseLanguage.title})</p>
                     <p className={styles.entry}><strong>{this.missingTranslations.map(l => l.title).join(', ')}</strong></p>
                   </div>
                 )}

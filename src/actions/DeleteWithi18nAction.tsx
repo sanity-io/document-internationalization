@@ -28,7 +28,7 @@ export const DeleteWithi18nAction = (props: IResolverProps) => {
     icon: TrashIcon,
     disabled: Boolean(deleteOp.disabled),
     title: (deleteOp.disabled && DISABLED_REASON_TITLE[deleteOp.disabled]) || '',
-    label: isDeleting ? config.messages.deleteAll?.deleting : config.messages.deleteAll?.buttonTitle,
+    label: isDeleting ? config.messages?.deleteAll?.deleting : config.messages?.deleteAll?.buttonTitle,
     onHandle: () => { setConfirmDialogOpen(true); },
     dialog: isConfirmDialogOpen && {
       type: 'legacy',

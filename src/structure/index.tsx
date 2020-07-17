@@ -49,7 +49,7 @@ export const getDocumentTypes = () => {
 export const getMaintenanceTabComponent = () => {
   const config = getConfig();
   return S.component(MaintenanceTab)
-    .title(config.messages.translationsMaintenance?.title)
+    .title(config.messages?.translationsMaintenance?.title)
     .id(`__i18n_translations_maintenance_tab`);
 }
 
@@ -57,7 +57,7 @@ export const getMaintenanceListItem = () => {
   const config = getConfig();
   return S.listItem()
   .id(`__i18n_translations_maintenance_tab`)
-  .title(config.messages.translationsMaintenance?.title)
+  .title(config.messages?.translationsMaintenance?.title)
   .child(getMaintenanceTabComponent());
 };
 

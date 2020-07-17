@@ -71,10 +71,10 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
         {lang.title}
       </h2>
       {!existing ? (
-        <p className={styles.missing}>{config.messages.missing}</p>
+        <p className={styles.missing}>{config.messages?.missing}</p>
       ) : (
           existing && existing._id.startsWith('drafts.') && (
-            <p className={styles.draft}>{config.messages.draft}</p>
+            <p className={styles.draft}>{config.messages?.draft}</p>
           )
         )}
 
