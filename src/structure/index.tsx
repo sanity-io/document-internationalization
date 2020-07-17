@@ -7,7 +7,7 @@ import { TranslationsComponentFactory } from './TranslationsComponentFactory';
 import { getSchema, getConfig } from '../utils';
 import { SchemaType } from '@sanity/structure/lib/parts/Schema';
 import { MaintenanceTab } from './MaintenanceTab';
-import { I18nDelimiter } from '../constants';
+import { I18nPrefix } from '../constants';
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
@@ -49,12 +49,12 @@ export const getDocumentTypes = () => {
 export const getMaintenanceListItem = () => {
   const config = getConfig();
   return S.listItem()
-  .id(`${I18nDelimiter}translations_maintenance_tab`)
+  .id(`__i18n_translations_maintenance_tab`)
   .title(config.messages.translationsMaintenance?.title)
   .child(
     S.component(MaintenanceTab)
       .title(config.messages.translationsMaintenance?.title)
-      .id(`${I18nDelimiter}translations_maintenance_tab`)
+      .id(`__i18n_translations_maintenance_tab`)
   );
 };
 
@@ -69,9 +69,10 @@ export const getFilteredDocumentTypeListItems = () => {
         S.documentList()
           .id(l.getId())
           .title(l.getTitle())
-          .filter('!(_id match $id) && _type == $type')
+          .filter('!(_id in path($path)) && !(_id in path($drafts)) && _type == $type')
           .params({
-            id: `*${I18nDelimiter}*`,
+            path: `${I18nPrefix}.**`,
+            drafts: 'drafts.**',
             type: l.getId()
           })
       )

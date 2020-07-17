@@ -1,4 +1,5 @@
 export * from './getConfig';
+export * from './buildDocId';
 export * from './normalizeLanguageList';
 export * from './getBaseLanguage';
 export * from './getSanityClient';

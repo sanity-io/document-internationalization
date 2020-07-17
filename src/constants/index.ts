@@ -1,2 +1,2 @@
 export * from './LanguageCultures';
-export * from './I18nDelimiter';
+export * from './I18nPrefix';

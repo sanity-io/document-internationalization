@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './MaintenanceTab.scss';
 import schemas from 'part:@sanity/base/schema';
 import classNames from 'classnames';
-import { getConfig, getSanityClient, getLanguageFromId, makeObjectKey, getSchema } from '../../utils';
+import { getConfig, getSanityClient, getLanguageFromId, makeObjectKey, getSchema, getBaseIdFromId, buildDocId } from '../../utils';
 import { ChevronDown } from './ChevronDown';
 import { SanityDocument } from '@sanity/client';
 import { Ti18nSchema } from '../../types';
-import { I18nDelimiter } from '../../constants';
+import { I18nPrefix } from '../../constants';
 
 type Ti18nDocument = SanityDocument & {
   __i18n_lang?: string;
@@ -34,21 +34,24 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
   }
 
   public get i18nSchemas() { return schemas._original.types.filter(s => !!s.i18n); }
-  public get baseDocuments() { return this.state.documents.filter(d => !d._id.includes(I18nDelimiter)); }
-  public get translatedDocuments() { return this.state.documents.filter(d => d._id.includes(I18nDelimiter)); }
+  public get baseDocuments() { return this.state.documents.filter(d => !d._id.startsWith(I18nPrefix)); }
+  public get translatedDocuments() { return this.state.documents.filter(d => d._id.startsWith(I18nPrefix)); }
+  public get oldIdDocuments() { return this.state.documents.filter(d => d._id.includes('__i18n_')); }
   public get documentsSummaryInformation() {
     const { documents } = this.state;
     const basedocuments = this.baseDocuments;
     const translateddocuments = this.translatedDocuments;
+    const oldiddocuments = this.oldIdDocuments;
     return {
+      oldIdStructure: oldiddocuments,
       missingLanguageField: documents.filter(d => !d.__i18n_lang),
       missingDocumentRefs: basedocuments.filter((d) => {
-        const docs = translateddocuments.filter(dx => dx._id.startsWith(d._id));
+        const docs = translateddocuments.filter(dx => getBaseIdFromId(dx._id) === d._id);
         const refsCount = Object.keys(d.__i18n_refs || {}).length;
         return refsCount != docs.length;
       }),
       orphanDocuments: translateddocuments.filter(d => {
-        const base = basedocuments.find(doc => d._id.startsWith(doc._id));
+        const base = basedocuments.find(doc => getBaseIdFromId(d._id) === doc._id);
         if (base) return false;
         return true;
       })
@@ -60,6 +63,19 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     this.setState({ pending: true });
     const result = await this._sanityClient.fetch<Ti18nDocument[]>('*[_type == $type]', { type: selectedSchema });
     this.setState({ pending: false, documents: result });
+  }
+
+  protected fixOldIdDocuments = async () => {
+    this.setState({ pending: true });
+    const oldIdDocuments = this.oldIdDocuments;
+    await Promise.all(oldIdDocuments.map(async d => {
+      const baseId = getBaseIdFromId(d._id);
+      const lang = getLanguageFromId(d._id);
+      await this._sanityClient.patch(d._id).set({
+        _id: buildDocId(baseId, lang),
+      }).commit();
+    }));
+    this.fetchInformation();
   }
 
   protected fixLanguageFields = async () => {
@@ -93,13 +109,15 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
       if (refsCount != docs.length) {
         await this._sanityClient.patch(d._id, {
           set: {
-            [refsFieldName]: translatedDocuments.reduce((acc, doc) => {
+            [refsFieldName]: translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
-              acc[makeObjectKey(lang)] = {
-                _type: 'reference',
-                _ref: doc._id,
+              return {
+                lang,
+                ref: {
+                  _type: 'reference',
+                  _ref: doc._id,
+                }
               };
-              return acc;
             }, {})
           },
         }).commit();
@@ -153,6 +171,12 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
           <div
             className={styles.dashboard}
           >
+            <div className={styles.entry}>
+              <p>{info.oldIdStructure.length} {config?.messages?.translationsMaintenance?.oldIdStructure}</p>
+              {(info.oldIdStructure.length > 0) && (
+                <button onClick={this.fixLanguageFields}>{config?.messages?.translationsMaintenance?.fix}</button>
+              )}
+            </div>
             <div className={styles.entry}>
               <p>{info.missingLanguageField.length} {config?.messages?.translationsMaintenance?.missingLanguageField}</p>
               {(info.missingLanguageField.length > 0) && (

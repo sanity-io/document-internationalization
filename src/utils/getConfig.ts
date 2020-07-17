@@ -31,6 +31,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<Ti18nConfig> & 
       translationsMaintenance: {
         title: schema?.messages?.translationsMaintenance?.title || cfg?.messages?.translationsMaintenance?.title || 'Translation Maintenance',
         selectSchemaPlaceholder: cfg?.messages?.translationsMaintenance?.selectSchemaPlaceholder || 'Select schema type',
+        oldIdStructure: cfg?.messages?.translationsMaintenance?.oldIdStructure || 'document(s) are using the old ID structure',
         missingLanguageField: cfg?.messages?.translationsMaintenance?.missingLanguageField || 'document(s) are missing the language field',
         missingDocumentRefs: cfg?.messages?.translationsMaintenance?.missingDocumentRefs || 'document(s) have missing translation references',
         orphanDocuments: cfg?.messages?.translationsMaintenance?.orphanDocuments || 'orphaned translation document(s)',
