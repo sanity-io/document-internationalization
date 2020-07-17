@@ -43,12 +43,19 @@ class Input extends React.PureComponent<IProps, IState> {
     languages: [],
   }
 
+  private get baseLanguage() {
+    const { type: { type, options } } = this.props;
+    const config = getConfig(type);
+    const { languages } = this.state;
+    return getBaseLanguage(languages, options.base || config.base);
+  }
+
   private get missingTranslations() {
     const { languages } = this.state;
     const { type: { options }, value } = this.props;
     if (languages.length === 0) return [];
     const existingValues = (() => {
-      const l = getBaseLanguage(languages, options.base);
+      const l = this.baseLanguage;
       if (l) {
         const slug = createSlug(l.name);
         const v = (value && value[slug]) || {};
@@ -139,12 +146,13 @@ class Input extends React.PureComponent<IProps, IState> {
   }
 
   public loadLanguages = async () => {
-    const { type: { options } } = this.props;
+    const { type: { type, options } } = this.props;
+    const config = getConfig(type);
     this.setState({ fetchingLanguages: true });
-    const languages: IState['languages'] = await getLanguagesFromOption(options.languages);
+    const languages: IState['languages'] = await getLanguagesFromOption(options.languages || config.languages);
     this.setState({
       languages,
-      currentLanguage: getBaseLanguage(languages, options.base),
+      currentLanguage: this.baseLanguage,
       fetchingLanguages: false,
     });
   }
@@ -157,10 +165,10 @@ class Input extends React.PureComponent<IProps, IState> {
   }
 
   public render() {
-    const config = getConfig();
     const { currentLanguage, languages, fetchingLanguages } = this.state;
     const { type } = this.props;
     const { fields, options } = type;
+    const config = getConfig(type.type);
     const hasLanguages = languages.length > 0;
     const hasMissingTranslations = this.missingTranslations.length > 0;
 
