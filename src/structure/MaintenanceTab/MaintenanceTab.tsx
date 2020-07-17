@@ -68,20 +68,32 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
   protected fixOldIdDocuments = async () => {
     this.setState({ pending: true });
     const { selectedSchema } = this.state;
+    const config = getConfig();
+    const refsFieldName = config.fieldNames.references;
     const oldIdDocuments = this.oldIdDocuments;
     await Promise.all(oldIdDocuments.map(async d => {
       const baseId = getBaseIdFromId(d._id);
       const lang = getLanguageFromId(d._id);
+      const newId = buildDocId(baseId, lang);
       const transaction = this._sanityClient.transaction()
       transaction.createIfNotExists({
         ...d,
-        _id: buildDocId(baseId, lang),
+        _id: newId,
         _type: selectedSchema,
       });
       transaction.delete(d._id);
       await transaction.commit();
+      await this._sanityClient.patch(baseId)
+      .setIfMissing({ [refsFieldName]: [] })
+      .append(refsFieldName, [{
+        lang: lang,
+        ref: {
+          _type: 'reference',
+          _ref: newId,
+        }
+      }]).commit();
     }));
-    this.fixTranslationRefs();
+    await this.fetchInformation();
   }
 
   protected fixLanguageFields = async () => {
