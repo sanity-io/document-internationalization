@@ -6,6 +6,7 @@ import { IResolverProps, IUseDocumentOperationResult } from '../types';
 import { getConfig, getSanityClient, getBaseIdFromId } from '../utils';
 import { useDocumentOperation } from '@sanity/react-hooks';
 import { SanityDocument } from '@sanity/client';
+import { I18nDelimiter } from '../constants';
 
 /**
  * This code is mostly taken from the defualt DeleteAction provided by Sanity
@@ -46,7 +47,7 @@ export const DeleteWithi18nAction = (props: IResolverProps) => {
             setConfirmDialogOpen(false);
             deleteOp.execute();
             const translatedDocuments = await client.fetch<SanityDocument[]>('*[_id match $id]', {
-              id: [...baseDocumentId.split('-').map((id, index) => index === 0 ? `${id}*` : `*${id}*`), '*__i18n_*'],
+              id: [...baseDocumentId.split('-').map((id, index) => index === 0 ? `${id}*` : `*${id}*`), `*${I18nDelimiter}*`],
             });
             const transaction = client.transaction();
             translatedDocuments.forEach(doc => transaction.delete(doc._id));

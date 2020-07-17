@@ -6,6 +6,7 @@ import { ILanguageObject, Ti18nSchema } from '../../types';
 import { getSanityClient, getLangFieldNameFromSchema, getConfig } from '../../utils';
 import { SanityFlag } from '../SanityFlag';
 import { SanityDocument } from '@sanity/client';
+import { I18nDelimiter } from '../../constants';
 
 interface IProps {
   docId: string;
@@ -22,7 +23,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
   const [existing, setExisting] = React.useState<null | SanityDocument>(null);
   const nameSplit = lang.name.split(/[_-]/);
   const country = (nameSplit.length > 1 ? nameSplit[1] : nameSplit[0]).toLowerCase();
-  const translatedDocId = (config.base ? lang.name === config.base : index === 0) ? docId : `${docId}__i18n_${lang.name}`;
+  const translatedDocId = (config.base ? lang.name === config.base : index === 0) ? docId : `${docId}${I18nDelimiter}${lang.name}`;
 
   React.useEffect(() => {
     getSanityClient().fetch('*[_id == $id || _id == $draftId]', {

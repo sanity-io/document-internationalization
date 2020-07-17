@@ -15,6 +15,7 @@ import {
   makeObjectKey,
   getConfig,
 } from '../utils';
+import { I18nDelimiter } from '../constants';
 
 export const PublishWithi18nAction = (props: IResolverProps) => {
   const schema: Ti18nSchema = getSchema(props.type);
@@ -49,7 +50,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       publish.execute();
 
       const translatedDocuments = await client.fetch<SanityDocument[]>('*[_id match $id]', {
-        id: [...baseDocumentId.split('-').map((id, index) => index === 0 ? `${id}*` : `*${id}*`), '*__i18n_*'],
+        id: [...baseDocumentId.split('-').map((id, index) => index === 0 ? `${id}*` : `*${id}*`), `*${I18nDelimiter}*`],
       });
       if (translatedDocuments.length > 0) {
         await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });

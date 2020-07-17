@@ -6,6 +6,7 @@ import { getConfig, getSanityClient, getLanguageFromId, makeObjectKey, getSchema
 import { ChevronDown } from './ChevronDown';
 import { SanityDocument } from '@sanity/client';
 import { Ti18nSchema } from '../../types';
+import { I18nDelimiter } from '../../constants';
 
 type Ti18nDocument = SanityDocument & {
   __i18n_lang?: string;
@@ -33,8 +34,8 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
   }
 
   public get i18nSchemas() { return schemas._original.types.filter(s => !!s.i18n); }
-  public get baseDocuments() { return this.state.documents.filter(d => !/__i18n_.+$/.test(d._id)); }
-  public get translatedDocuments() { return this.state.documents.filter(d => /__i18n_.+$/.test(d._id)); }
+  public get baseDocuments() { return this.state.documents.filter(d => !d._id.includes(I18nDelimiter)); }
+  public get translatedDocuments() { return this.state.documents.filter(d => d._id.includes(I18nDelimiter)); }
   public get documentsSummaryInformation() {
     const { documents } = this.state;
     const basedocuments = this.baseDocuments;

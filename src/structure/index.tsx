@@ -7,6 +7,7 @@ import { TranslationsComponentFactory } from './TranslationsComponentFactory';
 import { getSchema, getConfig } from '../utils';
 import { SchemaType } from '@sanity/structure/lib/parts/Schema';
 import { MaintenanceTab } from './MaintenanceTab';
+import { I18nDelimiter } from '../constants';
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
@@ -48,12 +49,12 @@ export const getDocumentTypes = () => {
 export const getMaintenanceListItem = () => {
   const config = getConfig();
   return S.listItem()
-  .id('__i18n_translations_maintenance_tab')
+  .id(`${I18nDelimiter}translations_maintenance_tab`)
   .title(config.messages.translationsMaintenance?.title)
   .child(
     S.component(MaintenanceTab)
       .title(config.messages.translationsMaintenance?.title)
-      .id('__i18n_translations_maintenance_tab')
+      .id(`${I18nDelimiter}translations_maintenance_tab`)
   );
 };
 
@@ -70,7 +71,7 @@ export const getFilteredDocumentTypeListItems = () => {
           .title(l.getTitle())
           .filter('!(_id match $id) && _type == $type')
           .params({
-            id: '*__i18n_*',
+            id: `*${I18nDelimiter}*`,
             type: l.getId()
           })
       )

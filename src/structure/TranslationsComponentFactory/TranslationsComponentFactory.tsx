@@ -4,6 +4,7 @@ import { IDefaultDocumentNodeStructureProps } from '../IDefaultDocumentNodeStruc
 import { ILanguageObject, Ti18nSchema } from '../../types';
 import { getLanguagesFromOption, getBaseLanguage, getSanityClient, getConfig } from '../../utils';
 import { TranslationLink } from '../TranslationLink';
+import { I18nDelimiter } from '../../constants';
 
 export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDefaultDocumentNodeStructureProps) => {
   const config = getConfig(schema);
@@ -16,7 +17,7 @@ export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDe
       (async () => {
         setPending(true);
         const langs = await getLanguagesFromOption(config.languages);
-        const doc = await getSanityClient().fetch('*[_id == $id]', { id: props.documentId.split('__i18n_')[0] });
+        const doc = await getSanityClient().fetch('*[_id == $id]', { id: props.documentId.split(I18nDelimiter)[0] });
         if (doc && doc.length > 0) setBaseDocument(doc[0]);
         setLanguages(langs);
         setPending(false);
@@ -33,7 +34,7 @@ export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDe
     );
   }
 
-  const docIdSplit = props.documentId.split('__i18n_');
+  const docIdSplit = props.documentId.split(I18nDelimiter);
   const docId = docIdSplit[0];
   const baseLanguage = getBaseLanguage(languages, config.base);
   const currentLanguage = docIdSplit.length > 1 ? docIdSplit[1] : (baseLanguage ? baseLanguage.name : null);
