@@ -2,11 +2,8 @@
 [![npm version](https://img.shields.io/npm/v/sanity-plugin-intl-input.svg?style=flat)](https://www.npmjs.com/package/sanity-plugin-intl-input)
 
 ## !! Breaking Change for V5
-<div style="background: #FFDA79; color: #000; padding: 10px; border-radius: 4px;">
-  The ID structure for translated documents has changed. Your queries against Sanity will continue to work until you use the maintenance tab (new in V5) to update the ID structure.
-  The change was made to improve the querying structure and to make better use of GROQ. The new structure looks as follows `i18n.{baselanguage-document-id}.{language}`. This means you could query all translations for a document as follows `*[_id in path("i18n.{baselanguage-document-id}.*")]`. This vastly improves the querying experience.
-</div>
-<br />
+**The ID structure for translated documents has changed. Your queries against Sanity will continue to work until you use the maintenance tab (new in V5) to update the ID structure.
+The change was made to improve the querying structure and to make better use of GROQ. The new structure looks as follows `i18n.{baselanguage-document-id}.{language}`. This means you could query all translations for a document as follows `*[_id in path("i18n.{baselanguage-document-id}.*")]`. This vastly improves the querying experience.**
 
 ## Default solution
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
