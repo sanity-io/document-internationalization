@@ -1,5 +1,5 @@
-export type TSchema<T = any> = {
+export type TSchema<T = any> = T & {
     name: string;
     title: string;
     fields: any[];
-} & T;
+};

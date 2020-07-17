@@ -1,0 +1,17 @@
+$colors: (
+  blue-ribbon: #156dff,
+  curious-blue: #24a3e3,
+  white: #ffffff,
+  black: #000000,
+  yellow-orange: #ffbf48,
+  cod-gray: #171717,
+  heather: #bdc6d4,
+);
+@function color($color) {
+  @if map-has-key($colors, $color) {
+    $c: map-get($colors, $color);
+    @return $c;
+  }
+  @warn "Unknown color #{$color}";
+  @return null;
+}
