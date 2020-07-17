@@ -91,6 +91,7 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "lodash.get": "^4.4.2",
+    "moment": "^2.27.0",
     "regenerator-runtime": "^0.13.3",
     "slugify": "^1.4.0"
   }

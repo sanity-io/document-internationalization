@@ -56,7 +56,8 @@ module.exports = (name) => {
       'part:@sanity/base/document-actions',
       '@sanity/desk-tool/lib/pane/PaneItem',
       '@sanity/desk-tool/structure-builder',
-      '@sanity/state-router/lib/components/IntentLink'
+      '@sanity/state-router/lib/components/IntentLink',
+      '@sanity/desk-tool/lib/components/ConfirmDelete'
     ]
   };
 };

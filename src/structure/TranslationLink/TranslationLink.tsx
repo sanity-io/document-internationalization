@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { ILanguageObject, Ti18nSchema } from '../../types';
 import { getSanityClient, getLangFieldNameFromSchema, getConfig } from '../../utils';
 import { SanityFlag } from '../SanityFlag';
+import { SanityDocument } from '@sanity/client';
 
 interface IProps {
   docId: string;
@@ -18,7 +19,7 @@ interface IProps {
 export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index, schema, lang, currentLanguage, baseDocument }) => {
   const config = getConfig(schema);
   const [imageOk, setImageOk] = React.useState(true)
-  const [existing, setExisting] = React.useState<null | any>(null);
+  const [existing, setExisting] = React.useState<null | SanityDocument>(null);
   const nameSplit = lang.name.split(/[_-]/);
   const country = (nameSplit.length > 1 ? nameSplit[1] : nameSplit[0]).toLowerCase();
   const translatedDocId = (config.base ? lang.name === config.base : index === 0) ? docId : `${docId}__i18n_${lang.name}`;
@@ -31,6 +32,8 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
       const existing = r.find(r => r._id === translatedDocId);
       if (existing) setExisting(existing);
       else setExisting(r.find(r => r._id === `drafts.${translatedDocId}`));
+    }).catch(err => {
+      console.error(err);
     });
   }, [lang.name]);
 
@@ -67,7 +70,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({ docId, index,
       <h2 className={styles.title}>
         {lang.title}
       </h2>
-      {existing === undefined ? (
+      {!existing ? (
         <p className={styles.missing}>{config.messages.missing}</p>
       ) : (
           existing && existing._id.startsWith('drafts.') && (

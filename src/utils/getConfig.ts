@@ -23,6 +23,11 @@ export function getConfig(type?: string | Ti18nSchema): Required<Ti18nConfig> & 
       loading: schema?.messages?.loading || cfg?.messages?.loading || 'Loading languages...',
       draft: schema?.messages?.draft || cfg?.messages?.draft || 'Draft',
       missingTranslations: schema?.messages?.missingTranslations || cfg?.messages?.missingTranslations || 'Following languages are missing some translations compared to the base language',
+      missing: schema?.messages?.missing || cfg?.messages?.missing || 'Missing',
+      deleteAll: {
+        buttonTitle: schema?.messages?.deleteAll?.buttonTitle || cfg?.messages?.deleteAll?.buttonTitle || 'Delete (incl. translations)',
+        deleting: schema?.messages?.deleteAll?.deleting || cfg?.messages?.deleteAll?.deleting || 'Deleting...'
+      },
       translationsMaintenance: {
         title: schema?.messages?.translationsMaintenance?.title || cfg?.messages?.translationsMaintenance?.title || 'Translation Maintenance',
         selectSchemaPlaceholder: cfg?.messages?.translationsMaintenance?.selectSchemaPlaceholder || 'Select schema type',

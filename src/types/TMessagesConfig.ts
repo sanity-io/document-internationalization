@@ -5,6 +5,10 @@ export type TMessagesConfig = {
   missing?: string;
   draft?: string;
   missingTranslations?: string;
+  deleteAll?: {
+    buttonTitle?: string;
+    deleting?: string;
+  };
   translationsMaintenance?: {
     title?: string;
     selectSchemaPlaceholder?: string;
