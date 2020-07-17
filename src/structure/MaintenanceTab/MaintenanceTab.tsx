@@ -121,7 +121,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     const refsFieldName = config.fieldNames.references;
     const translatedDocuments = this.translatedDocuments;
     await Promise.all(this.baseDocuments.map(async d => {
-      const docs = translatedDocuments.filter(dx => dx._id.startsWith(d._id));
+      const docs = translatedDocuments.filter(dx => getBaseIdFromId(dx._id) === d._id);
       const refsCount = Object.keys(d[refsFieldName] || {}).length;
       if (refsCount != docs.length) {
         await this._sanityClient.patch(d._id, {
