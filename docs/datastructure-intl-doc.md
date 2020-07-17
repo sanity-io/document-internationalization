@@ -16,12 +16,15 @@ There are 3 aspects to the document wide translation
 {
   "_id": "document-id",
   "_type": "document-type",
-  "__i18n_lang": "en_US"
-  "__i18n_refs": {
-    "nl_NL": {
-      "_type": "reference",
-      "_id": "i18n.document-id.nl_NL"
+  "__i18n_lang": "en_US",
+  "__i18n_refs": [
+    {
+      "lang": "nl_NL",
+      "ref": {
+        "_type": "reference",
+        "_id": "i18n.document-id.nl_NL"
+      }
     }
-  }
+  ]
 }
 ```
