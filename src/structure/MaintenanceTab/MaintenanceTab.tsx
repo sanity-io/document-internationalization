@@ -103,7 +103,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     const langFieldName = config.fieldNames?.lang;
     await Promise.all(documents.map(async d => {
       const schema = getSchema<Ti18nSchema>(d._type);
-      const base = schema.i18n.base || config.base;
+      const base = ((typeof schema.i18n === 'object') ? schema.i18n.base : undefined) || config.base;
       if (!d.__i18n_lang) {
         const language = getLanguageFromId(d._id) || base;
         await this._sanityClient.patch(d._id, {

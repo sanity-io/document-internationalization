@@ -22,6 +22,7 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 |![Intl Plugin Input](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)|![Intl Plugin Document Translation](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin-document.gif)|
 
 ### Documentation
+0. [V4 to V5 migration guide](docs/v4-v5-migration.md)
 1. [Installation Instructions](docs/installation.md)
 2. [General Configuration](docs/general-configuration.md)
 3. How to use
@@ -30,5 +31,6 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 4. Datastructure
     - [Intl object input](docs/datastructure-intl-object.md)
     - [Document wide translation](docs/datastructure-intl-doc.md)
-5. [GraphQL support](docs/graphql-intl-doc.md)
-6. [Advanced languages](docs/advanced-languages.md)
+5. [Translation Maintenance](docs/translation-maintenance.md)
+6. [GraphQL support](docs/graphql-intl-doc.md)
+7. [Advanced languages](docs/advanced-languages.md)

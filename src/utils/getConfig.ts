@@ -2,13 +2,14 @@ import config from 'config:intl-input';
 import { getSchema } from './getSchema';
 import { Ti18nSchema, Ti18nConfig } from '../types';
 
-export function getConfig(type?: string | Ti18nSchema): Required<Ti18nConfig> & {
+export function getConfig(type?: string | Ti18nSchema): Ti18nConfig & {
   withTranslationsMaintenance: boolean;
 } {
   const schema = type
     ? (typeof type === 'string' ? getSchema<Ti18nSchema>(type)?.i18n : type.i18n)
     : null;
   const cfg = config;
+  if (typeof schema === 'boolean') return { withTranslationsMaintenance: true };
   return {
     base: schema?.base || cfg?.base,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance === false ? false : true,

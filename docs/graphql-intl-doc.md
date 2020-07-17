@@ -25,18 +25,22 @@ const schema = {
     },
     {
       name: 'i18n_refs',
-      type: 'object',
+      type: 'array',
       hidden: true,
-      fields: [{
-        name: 'nl_NL',
-        type: 'reference',
-        to: [{ type: 'schema' }]
-      }, {
-        ... // we need one field per language
+      of: [{
+        type: 'object',
+        fields: [{
+          type: 'string',
+          name: 'lang'
+        }, {
+          type: 'reference',
+          name: 'ref',
+          to: [{ type: 'schema' }]
+        }]
       }]
     }
   ]
 }
 ```
 
-This way the GraphQL deployment will consider the `i18n_lang` and `i18n_refs` properties as part of your structure.
+This way the GraphQL deployment will consider the `i18n_lang` and `i18n_refs` properties as part of your structure and you will be able to query by them.
