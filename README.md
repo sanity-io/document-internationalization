@@ -23,11 +23,12 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 
 ### Documentation
 1. [Installation Instructions](docs/installation.md)
-2. How to use
+2. [General Configuration](docs/general-configuration.md)
+3. How to use
     - [Intl object input](docs/usage-intl-object.md)
     - [Document wide translation](docs/usage-intl-doc.md)
-3. Datastructure
+4. Datastructure
     - [Intl object input](docs/datastructure-intl-object.md)
     - [Document wide translation](docs/datastructure-intl-doc.md)
-4. [GraphQL support](docs/graphql-intl-doc.md)
-5. [Advanced languages](docs/advanced-languages.md)
+5. [GraphQL support](docs/graphql-intl-doc.md)
+6. [Advanced languages](docs/advanced-languages.md)

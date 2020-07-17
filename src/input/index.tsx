@@ -5,10 +5,8 @@ import styles from './input.scss';
 import PatchEvent, { setIfMissing, unset, set } from '@sanity/form-builder/lib/PatchEvent';
 import Field from '@sanity/form-builder/lib/inputs/ObjectInput/Field';
 import { IType } from '../types/IType';
-import { ILanguageQuery } from '../types/ILanguageQuery';
 import { ILanguageObject } from '../types/ILanguageObject';
-import { Tlanguage } from '../types/TLanguage';
-import { getBaseLanguage, getSanityClient, getLanguagesFromOption, getConfig } from '../utils';
+import { getBaseLanguage, getLanguagesFromOption, getConfig } from '../utils';
 
 interface IField {
   name: string;
@@ -43,19 +41,19 @@ class Input extends React.PureComponent<IProps, IState> {
     languages: [],
   }
 
-  private get baseLanguage() {
+  private getBaseLanguage(langs: ILanguageObject[] = []) {
     const { type: { type, options } } = this.props;
     const config = getConfig(type);
     const { languages } = this.state;
-    return getBaseLanguage(languages, options.base || config.base);
+    return getBaseLanguage(langs || languages, options.base || config.base);
   }
 
   private get missingTranslations() {
     const { languages } = this.state;
-    const { type: { options }, value } = this.props;
+    const { value } = this.props;
     if (languages.length === 0) return [];
     const existingValues = (() => {
-      const l = this.baseLanguage;
+      const l = this.getBaseLanguage();
       if (l) {
         const slug = createSlug(l.name);
         const v = (value && value[slug]) || {};
@@ -152,7 +150,7 @@ class Input extends React.PureComponent<IProps, IState> {
     const languages: IState['languages'] = await getLanguagesFromOption(options.languages || config.languages);
     this.setState({
       languages,
-      currentLanguage: this.baseLanguage,
+      currentLanguage: this.getBaseLanguage(languages),
       fetchingLanguages: false,
     });
   }
@@ -169,6 +167,7 @@ class Input extends React.PureComponent<IProps, IState> {
     const { type } = this.props;
     const { fields, options } = type;
     const config = getConfig(type.type);
+    const baseLanguage = this.getBaseLanguage();
     const hasLanguages = languages.length > 0;
     const hasMissingTranslations = this.missingTranslations.length > 0;
 
@@ -189,7 +188,7 @@ class Input extends React.PureComponent<IProps, IState> {
                     <button
                       key={lang.name}
                       className={styles.language}
-                      disabled={lang.name === currentLanguage.name}
+                      disabled={lang.name === currentLanguage?.name}
                       onClick={() => this.onSelectLanguage(lang)}
                     >
                       {lang.title}
@@ -198,7 +197,7 @@ class Input extends React.PureComponent<IProps, IState> {
                 </div>
                 {(hasLanguages && hasMissingTranslations) && (
                   <div className={styles.missing}>
-                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages.missingTranslations} ({getBaseLanguage(languages, options.base).title})</p>
+                    <p className={styles.entry}>{options?.messages?.missingTranslations || config.messages.missingTranslations} ({baseLanguage.title})</p>
                     <p className={styles.entry}><strong>{this.missingTranslations.map(l => l.title).join(', ')}</strong></p>
                   </div>
                 )}

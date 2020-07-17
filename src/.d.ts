@@ -1,14 +1,8 @@
 declare module 'part:@sanity/*';
 
-declare module 'config:sanity' {
-  const config: {
-    config?: {
-      plugins?: {
-        'intl-input'?: import('./types').Ti18nConfig & {
-          withTranslationsMaintenance?: boolean;
-        }
-      }
-    }
+declare module 'config:intl-input' {
+  const config: import('./types').Ti18nConfig & {
+    withTranslationsMaintenance?: boolean;
   };
   export default config;
 }

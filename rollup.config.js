@@ -48,7 +48,7 @@ module.exports = (name) => {
       }))
     ].filter(Boolean),
     external: [
-      'config:sanity',
+      'config:intl-input',
       'part:@sanity/base/client',
       'part:@sanity/base/document-badges',
       'part:@sanity/base/schema',
