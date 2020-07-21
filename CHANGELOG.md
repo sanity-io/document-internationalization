@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v5.0.`
+* Improved installation instructions
+
 ## v5.0.0
 **Breaking Change**
 * From V5 on the translated document ID's will change to the following structure `i18n.base-id.lang`.
