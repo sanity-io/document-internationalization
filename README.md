@@ -9,14 +9,14 @@ The change was made to improve the querying structure and to make better use of 
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
 This definitely works, but makes the UI very clunky as you get more fields that require translations.  
 
-![Default Solution](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/default-solution.gif)  
+![Default Solution](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/docs/img/default-solution.gif)  
 
 ## With intl-plugin
 With the intl plugin you will get a cleaner UI for creating translatable documents as the translation is managed across multiple fields and it is even possible to manage document wide translations.  
 
 | Simple translated object field | Document wide translation |
 |-|-|
-|![Intl Plugin Input](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin.gif)|![Intl Plugin Document Translation](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/doc/img/intl-plugin-document.gif)|
+|![Intl Plugin Input](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/docs/img/intl-plugin.gif)|![Intl Plugin Document Translation](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/docs/img/intl-plugin-document.gif)|
 
 ### Documentation
 0. [V4 to V5 migration guide](docs/v4-v5-migration.md)
