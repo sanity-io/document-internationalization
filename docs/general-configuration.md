@@ -1,5 +1,5 @@
 # General Configuration
-To configure the plugin you can add a file called `intl-input.json` in your studio's `config` folder. If you need specific configuration you can keep in mind, any global config can be overriden per schema.  
+To configure the plugin you can customieze the config file called `intl-input.json` in your studio's `config` folder. If you need specific configuration you can keep in mind, any global config can be overriden per schema.  
 
 Below are all available configuration options.
 * `base`: This is the ID of the base/default language (if not specified the first language is used)

@@ -55,3 +55,6 @@ export default () => {
       .items(items);
 };
 ```
+
+4. Add the configuration file in your studio's config folder. It should be called `intl-input.json` and needs to be an empty object `{}`.
+Additional configuration options can be found on the [configuration page](./general-configuration.md)
