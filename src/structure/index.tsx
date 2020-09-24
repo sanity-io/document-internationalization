@@ -75,7 +75,7 @@ export const getFilteredDocumentTypeListItems = () => {
           .filter('!(_id in path($path)) && !(_id in path($drafts)) && _type == $type')
           .params({
             path: `${I18nPrefix}.**`,
-            drafts: 'drafts.**',
+            drafts: `drafts.${I18nPrefix}.**`,
             type: l.getId()
           })
       )

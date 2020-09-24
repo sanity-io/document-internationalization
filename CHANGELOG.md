@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## v5.0.2
-* Added `config.dist.json` 
+* Added `config.dist.json`
+* Updated document list filter to include root drafts
 
 ## v5.0.1
 * Improved installation instructions
