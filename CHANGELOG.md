@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## v5.0.`
+## v5.0.2
+* Added `config.dist.json` 
+
+## v5.0.1
 * Improved installation instructions
 
 ## v5.0.0
