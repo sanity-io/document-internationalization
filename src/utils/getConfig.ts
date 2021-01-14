@@ -1,7 +1,7 @@
 import config from 'config:intl-input';
 import { getSchema } from './getSchema';
 import { Ti18nSchema, Ti18nConfig, TLanguagesOption, TMessagesConfig, TFieldNamesConfig } from '../types';
-import { ReferenceBehavior } from '../constants';
+import { IdStructure, ReferenceBehavior } from '../constants';
 
 export function getConfig(type?: string | Ti18nSchema): Required<{
   [K in keyof Ti18nConfig]: Required<Ti18nConfig[K]>
@@ -18,6 +18,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
   const cfg = config;
   return {
     base: schema?.base || cfg?.base || '',
+    idStructure: cfg.idStructure || IdStructure.SUBPATH,
     referenceBehavior: ReferenceBehavior.HARD,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance === false ? false : true,
     fieldNames: {
@@ -39,7 +40,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
       translationsMaintenance: {
         title: schema?.messages?.translationsMaintenance?.title || cfg?.messages?.translationsMaintenance?.title || 'Translation Maintenance',
         selectSchemaPlaceholder: cfg?.messages?.translationsMaintenance?.selectSchemaPlaceholder || 'Select schema type',
-        oldIdStructure: cfg?.messages?.translationsMaintenance?.oldIdStructure || 'document(s) are using the old ID structure',
+        idStructureMismatch: cfg?.messages?.translationsMaintenance?.idStructureMismatch || 'document(s) with mismatched ID structures',
         missingLanguageField: cfg?.messages?.translationsMaintenance?.missingLanguageField || 'document(s) are missing the language field',
         missingDocumentRefs: cfg?.messages?.translationsMaintenance?.missingDocumentRefs || 'document(s) have missing translation references',
         orphanDocuments: cfg?.messages?.translationsMaintenance?.orphanDocuments || 'orphaned translation document(s)',

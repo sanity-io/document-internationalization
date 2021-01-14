@@ -8,4 +8,5 @@ export * from './getSchema';
 export * from './getLanguageFromId';
 export * from './getBaseIdFromId';
 export * from './getAllSchemas';
+export * from './getTranslationsForId';
 export * from './makeObjectKey';

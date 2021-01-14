@@ -1,5 +1,8 @@
 {
   "name": "nodejs",
   "image": "node:14-stretch",
-  "remoteUser": "node"
+"remoteUser": "node",
+"extensions": [
+	"eamodio.gitlens"
+]
 }

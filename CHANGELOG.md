@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## v5.0.4
-* Added `referenceBehavior` setting
+* Added `referenceBehavior` setting (allowing users to choose whether they want references from the parent document, to the translationss)
+* Added `idStructure` setting (allowing users to choose between subpath IDs and delimiter IDss)
 
 ## v5.0.3
 * Updated document list filter to include root drafts

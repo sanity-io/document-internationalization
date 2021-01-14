@@ -6,7 +6,7 @@ import { getConfig, getSanityClient, getLanguageFromId, getSchema, getBaseIdFrom
 import { ChevronDown } from './ChevronDown';
 import { SanityDocument } from '@sanity/client';
 import { ITranslationRef, Ti18nSchema } from '../../types';
-import { I18nPrefix, ReferenceBehavior } from '../../constants';
+import { I18nDelimiter, I18nPrefix, IdStructure, ReferenceBehavior } from '../../constants';
 
 type Ti18nDocument = SanityDocument<any>;
 
@@ -28,19 +28,30 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
   }
 
   public get i18nSchemas() { return schemas._original.types.filter(s => !!s.i18n); }
-  public get baseDocuments() { return this.state.documents.filter(d => !d._id.startsWith(I18nPrefix)); }
-  public get translatedDocuments() { return this.state.documents.filter(d => d._id.startsWith(I18nPrefix)); }
-  public get oldIdDocuments() { return this.state.documents.filter(d => d._id.includes('__i18n_')); }
+  public get baseDocuments() {
+    const config = getConfig();
+    if (config.idStructure === IdStructure.DELIMITER) return this.state.documents.filter(d => !d._id.includes(I18nDelimiter));
+    return this.state.documents.filter(d => !d._id.startsWith(I18nPrefix));
+  }
+  public get translatedDocuments() {
+    const config = getConfig();
+    if (config.idStructure === IdStructure.DELIMITER) return this.state.documents.filter(d => d._id.includes(I18nDelimiter));
+    return this.state.documents.filter(d => d._id.startsWith(I18nPrefix));
+  }
+  public get idStructureMismatchDocuments() {
+    const config = getConfig();
+    if (config.idStructure === IdStructure.DELIMITER) return this.state.documents.filter(d => d._id.startsWith(I18nPrefix));
+    return this.state.documents.filter(d => d._id.includes(I18nDelimiter));
+  }
   public get documentsSummaryInformation() {
     const { documents, selectedSchema } = this.state;
     const config = getConfig(selectedSchema);
     const basedocuments = this.baseDocuments;
     const translateddocuments = this.translatedDocuments;
-    const oldiddocuments = this.oldIdDocuments;
     const refsFieldName = config.fieldNames?.references;
     const langFieldName = config.fieldNames?.lang;
     return {
-      oldIdStructure: oldiddocuments,
+      idStructureMismatch: this.idStructureMismatchDocuments,
       missingLanguageField: documents.filter(d => !d[langFieldName]),
       missingDocumentRefs: basedocuments.filter((d) => {
         const docs = translateddocuments.filter(dx => getBaseIdFromId(dx._id) === d._id);
@@ -53,7 +64,7 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
         return true;
       }),
       referenceBehaviorMismatch: basedocuments.filter(doc => {
-        const refs: Record<string, { _key: string; lang: string; ref: ITranslationRef }> = doc[refsFieldName] || {};
+        const refs: Record<string, ITranslationRef> = doc[refsFieldName] || {};
         if (config.referenceBehavior === ReferenceBehavior.DISABLED) return Object.keys(refs).length > 0;
         if (config.referenceBehavior === ReferenceBehavior.WEAK) return Object.values(refs).some(r => !r.ref._weak);
         return Object.values(refs).some(r => !!r.ref._weak);
@@ -68,17 +79,26 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     this.setState({ pending: false, documents: result });
   }
 
-  protected fixOldIdDocuments = async () => {
+  protected fixIdStructureMismatchDocuments = async () => {
     this.setState({ pending: true });
     const { selectedSchema } = this.state;
     const config = getConfig();
     const refsFieldName = config.fieldNames.references;
-    const oldIdDocuments = this.oldIdDocuments;
-    await Promise.all(oldIdDocuments.map(async d => {
+    const idStructureMismatchDocuments = this.idStructureMismatchDocuments;
+
+    // remove old refs
+    await Promise.all(Array.from(new Set(idStructureMismatchDocuments.map(d => getBaseIdFromId(d._id)))).map(async id => {
+      await this._sanityClient.patch(id).set({
+        [refsFieldName]: []
+      }).commit();
+    }));
+
+    // create new document ids
+    await Promise.all(idStructureMismatchDocuments.map(async d => {
       const baseId = getBaseIdFromId(d._id);
       const lang = getLanguageFromId(d._id);
       const newId = buildDocId(baseId, lang);
-      const transaction = this._sanityClient.transaction()
+      const transaction = this._sanityClient.transaction();
       transaction.createIfNotExists({
         ...d,
         _id: newId,
@@ -86,18 +106,20 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
       });
       transaction.delete(d._id);
       await transaction.commit();
+
+      // update base document refsFieldName
       if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
         await this._sanityClient.patch(baseId)
-        .setIfMissing({ [refsFieldName]: [] })
-        .append(refsFieldName, [{
-          _key: newId,
-          lang: lang,
-          ref: {
-            _type: 'reference',
-            _ref: newId,
-            _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
-          }
-        }]).commit();
+          .setIfMissing({ [refsFieldName]: [] })
+          .append(refsFieldName, [{
+            _key: newId,
+            lang: lang,
+            ref: {
+              _type: 'reference',
+              _ref: newId,
+              _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
+            }
+          }]).commit();
       }
     }));
     await this.fetchInformation();
@@ -225,9 +247,9 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
             className={styles.dashboard}
           >
             <div className={styles.entry}>
-              <p>{info.oldIdStructure.length} {config?.messages?.translationsMaintenance?.oldIdStructure}</p>
-              {(info.oldIdStructure.length > 0) && (
-                <button onClick={this.fixOldIdDocuments}>{config?.messages?.translationsMaintenance?.fix}</button>
+              <p>{info.idStructureMismatch.length} {config?.messages?.translationsMaintenance?.idStructureMismatch}</p>
+              {(info.idStructureMismatch.length > 0) && (
+                <button onClick={this.fixIdStructureMismatchDocuments}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
             <div className={styles.entry}>

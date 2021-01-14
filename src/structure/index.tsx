@@ -7,7 +7,8 @@ import { TranslationsComponentFactory } from './TranslationsComponentFactory';
 import { getSchema, getConfig } from '../utils';
 import { SchemaType } from '@sanity/structure/lib/parts/Schema';
 import { MaintenanceTab } from './MaintenanceTab';
-import { I18nPrefix } from '../constants';
+import { I18nDelimiter, I18nPrefix, IdStructure } from '../constants';
+import { DocumentListBuilder } from '@sanity/structure/lib/DocumentList';
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
@@ -65,19 +66,28 @@ export const getFilteredDocumentTypeListItems = () => {
   const config = getConfig();
   const types = getDocumentTypes();
 
+  const filterFns = {
+    [IdStructure.SUBPATH]: (list: ListItemBuilder, doc: DocumentListBuilder) => (
+      doc.filter('!(_id in path($path)) && !(_id in path($drafts)) && _type == $type')
+        .params({
+          path: `${I18nPrefix}.**`,
+          drafts: `drafts.${I18nPrefix}.**`,
+          type: list.getId()
+        })
+    ),
+    [IdStructure.DELIMITER]: (list: ListItemBuilder, doc: DocumentListBuilder) => (
+      doc.filter('!(_id match $id) && _type == $type')
+        .params({
+          id: `*${I18nDelimiter}*`,
+          type: list.getId()
+        })
+    )
+  };
   const items = [
     ...types.withoutI18n,
     ...types.withI18n.map(l => (
       l.child(
-        S.documentList()
-          .id(l.getId() || '')
-          .title(l.getTitle() || '')
-          .filter('!(_id in path($path)) && !(_id in path($drafts)) && _type == $type')
-          .params({
-            path: `${I18nPrefix}.**`,
-            drafts: `drafts.${I18nPrefix}.**`,
-            type: l.getId()
-          })
+        filterFns[config.idStructure](l, S.documentList().id(l.getId() || '').title(l.getTitle() || ''))
       )
     )),
   ];

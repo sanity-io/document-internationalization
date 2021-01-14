@@ -3,7 +3,7 @@ import defaultResolve, { DeleteAction } from 'part:@sanity/base/document-actions
 import ConfirmDelete from '@sanity/desk-tool/lib/components/ConfirmDelete';
 import TrashIcon from 'part:@sanity/base/trash-icon'
 import { IResolverProps, IUseDocumentOperationResult } from '../types';
-import { getConfig, getSanityClient, getBaseIdFromId, buildDocId } from '../utils';
+import { getConfig, getSanityClient, getBaseIdFromId, buildDocId, getTranslationsFor } from '../utils';
 import { useDocumentOperation } from '@sanity/react-hooks';
 import { SanityDocument } from '@sanity/client';
 import { I18nPrefix } from '../constants';
@@ -46,9 +46,7 @@ export const DeleteWithi18nAction = (props: IResolverProps) => {
             setIsDeleting(true);
             setConfirmDialogOpen(false);
             deleteOp.execute();
-            const translatedDocuments = await client.fetch<SanityDocument[]>('*[_id in path($path)]', {
-              path: buildDocId(baseDocumentId, '*')
-            });
+            const translatedDocuments = await getTranslationsFor(baseDocumentId);
             const transaction = client.transaction();
             translatedDocuments.forEach(doc => transaction.delete(doc._id));
             await transaction.commit();

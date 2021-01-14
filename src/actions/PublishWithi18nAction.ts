@@ -12,6 +12,7 @@ import {
   getSanityClient,
   getConfig,
   buildDocId,
+  getTranslationsFor,
 } from '../utils';
 import { ReferenceBehavior } from '../constants';
 
@@ -47,9 +48,8 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       await client.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } }).commit();
       publish.execute();
 
-      const translatedDocuments = await client.fetch<SanityDocument[]>('*[_id in path($path)]', {
-        path: buildDocId(baseDocumentId, '*')
-      });
+      const translatedDocuments = await getTranslationsFor(baseDocumentId);
+      console.log('doc', translatedDocuments)
       if (translatedDocuments.length > 0) {
         await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
         await client.patch(baseDocumentId, {

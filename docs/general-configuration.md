@@ -24,8 +24,9 @@ Below are all available configuration options.
   * `translationsMaintenance`
       * `title`: Defaults to `Translation Maintenance`
       * `selectSchemaPlaceholder`: Defaults to `Select schema type`
-      * `oldIdStructure`: Defaults to `document(s) are using the old ID structure`
+      * `idStructureMismatch`: Defaults to `document(s) with mismatched ID structures`
       * `missingLanguageField`: Defaults to `document(s) are missing the language field`
       * `missingDocumentRefs`: Defaults to `document(s) have missing translation references`
       * `orphanDocuments`: Defaults to `orphaned translation document(s)`
+      * `referenceBehaviorMismatch`: Defaults to `document(s) with mismatched reference behaviors`
       * `fix`: Defaults to `Fix`

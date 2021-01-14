@@ -12,7 +12,7 @@ export type TMessagesConfig = {
   translationsMaintenance?: {
     title?: string;
     selectSchemaPlaceholder?: string;
-    oldIdStructure?: string;
+    idStructureMismatch?: string;
     missingLanguageField?: string;
     missingDocumentRefs?: string;
     orphanDocuments?: string;

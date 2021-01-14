@@ -39,10 +39,11 @@ export default {
         translationsMaintenance: {
           title: 'Translation Maintenance',
           selectSchemaPlaceholder: 'Select schema type',
-          oldIdStructure: 'document(s) are using the old ID structure',
+          idStructureMismatch: 'document(s) with mismatched ID structures',
           missingLanguageField: 'document(s) are missing the language field',
           missingDocumentRefs: 'document(s) have missing translation references',
           orphanDocuments: 'orphaned translation document(s)',
+          referenceBehaviorMismatch: 'document(s) with mismatched reference behaviors',
           fix: 'Fix'
         }
       },
