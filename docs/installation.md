@@ -31,7 +31,7 @@ Add the part in `sanity.json`
 }
 ```
 
-Implement the structure
+Implement the structure by creating a file called `deskStructure.js` in the root of your Sanity project and adding the code below (either default implementation or manual implementation). If you want to read more about the structure builder, please refer to the [Sanity documentation](https://www.sanity.io/guides/getting-started-with-structure-builder)
 ```javascript
 import * as Structure from 'sanity-plugin-intl-input/lib/structure';
 
