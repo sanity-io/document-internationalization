@@ -16,6 +16,7 @@ export type TMessagesConfig = {
     missingLanguageField?: string;
     missingDocumentRefs?: string;
     orphanDocuments?: string;
+    referenceBehaviorMismatch?: string;
     fix?: string;
   };
 };

@@ -20,3 +20,8 @@ declare module '*.scss' {
     const c: { [key: string]: string; };
     export = c;
 }
+
+declare module '*.css' {
+  const c: { [key: string]: string; };
+  export = c;
+}

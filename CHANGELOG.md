@@ -1,8 +1,13 @@
 # CHANGELOG
 
+## v5.0.4
+* Added `referenceBehavior` setting
+
+## v5.0.3
+* Updated document list filter to include root drafts
+
 ## v5.0.2
 * Added `config.dist.json`
-* Updated document list filter to include root drafts
 
 ## v5.0.1
 * Improved installation instructions

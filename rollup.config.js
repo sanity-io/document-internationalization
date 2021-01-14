@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const babel = require('rollup-plugin-babel');
 const cleaner = require('rollup-plugin-cleaner');
 const external = require('rollup-plugin-peer-deps-external');
 const postcss = require('rollup-plugin-postcss');
 const commonjs = require('@rollup/plugin-commonjs');
-const resolve = require('@rollup/plugin-node-resolve');
+const { babel } = require('@rollup/plugin-babel');
+const { nodeResolve: resolve } = require('@rollup/plugin-node-resolve');
 const { ifProd } = require('./utils/env');
 
 const srcPath = (...p) => path.resolve.apply(undefined, [__dirname, 'src', ...p].filter(Boolean));
@@ -18,7 +18,7 @@ module.exports = (name) => {
     output: [{
       dir: libPath(name),
       format: 'cjs',
-      sourceMap: true
+      sourcemap: true
     }],
     plugins: [
       external(),
@@ -27,6 +27,7 @@ module.exports = (name) => {
           camelCase: true,
           generateScopedName: '[hash:base64]',
         },
+        autoModules: false,
         minimize: false,
         extensions: ['.css', '.scss']
       }),
@@ -36,7 +37,7 @@ module.exports = (name) => {
       babel({
         exclude: '**/node_modules/**',
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
-        runtimeHelpers: true,
+        babelHelpers: 'runtime'
       }),
       commonjs({
         include: 'node_modules/**'
@@ -48,6 +49,7 @@ module.exports = (name) => {
       }))
     ].filter(Boolean),
     external: [
+      /@babel\/runtime/,
       'config:intl-input',
       'part:@sanity/base/client',
       'part:@sanity/base/document-badges',

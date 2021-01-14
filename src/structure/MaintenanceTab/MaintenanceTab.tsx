@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './MaintenanceTab.scss';
 import schemas from 'part:@sanity/base/schema';
 import classNames from 'classnames';
-import { getConfig, getSanityClient, getLanguageFromId, makeObjectKey, getSchema, getBaseIdFromId, buildDocId } from '../../utils';
+import { getConfig, getSanityClient, getLanguageFromId, getSchema, getBaseIdFromId, buildDocId } from '../../utils';
 import { ChevronDown } from './ChevronDown';
 import { SanityDocument } from '@sanity/client';
-import { Ti18nSchema } from '../../types';
-import { I18nPrefix } from '../../constants';
+import { ITranslationRef, Ti18nSchema } from '../../types';
+import { I18nPrefix, ReferenceBehavior } from '../../constants';
 
 type Ti18nDocument = SanityDocument<any>;
 
@@ -51,6 +51,12 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
         const base = basedocuments.find(doc => getBaseIdFromId(d._id) === doc._id);
         if (base) return false;
         return true;
+      }),
+      referenceBehaviorMismatch: basedocuments.filter(doc => {
+        const refs: Record<string, { _key: string; lang: string; ref: ITranslationRef }> = doc[refsFieldName] || {};
+        if (config.referenceBehavior === ReferenceBehavior.DISABLED) return Object.keys(refs).length > 0;
+        if (config.referenceBehavior === ReferenceBehavior.WEAK) return Object.values(refs).some(r => !r.ref._weak);
+        return Object.values(refs).some(r => !!r.ref._weak);
       })
     };
   }
@@ -80,16 +86,19 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
       });
       transaction.delete(d._id);
       await transaction.commit();
-      await this._sanityClient.patch(baseId)
-      .setIfMissing({ [refsFieldName]: [] })
-      .append(refsFieldName, [{
-        _key: newId,
-        lang: lang,
-        ref: {
-          _type: 'reference',
-          _ref: newId,
-        }
-      }]).commit();
+      if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
+        await this._sanityClient.patch(baseId)
+        .setIfMissing({ [refsFieldName]: [] })
+        .append(refsFieldName, [{
+          _key: newId,
+          lang: lang,
+          ref: {
+            _type: 'reference',
+            _ref: newId,
+            _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
+          }
+        }]).commit();
+      }
     }));
     await this.fetchInformation();
   }
@@ -123,23 +132,22 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     await Promise.all(this.baseDocuments.map(async d => {
       const docs = translatedDocuments.filter(dx => getBaseIdFromId(dx._id) === d._id);
       const refsCount = Object.keys(d[refsFieldName] || {}).length;
-      if (refsCount != docs.length) {
-        await this._sanityClient.patch(d._id, {
-          set: {
-            [refsFieldName]: translatedDocuments.map((doc) => {
-              const lang = getLanguageFromId(doc._id);
-              return {
-                _key: doc._id,
-                lang,
-                ref: {
-                  _type: 'reference',
-                  _ref: doc._id,
-                }
-              };
-            }, {})
-          },
-        }).commit();
-      }
+      await this._sanityClient.patch(d._id, {
+        set: {
+          [refsFieldName]: (refsCount != docs.length && config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
+            const lang = getLanguageFromId(doc._id);
+            return {
+              _key: doc._id,
+              lang,
+              ref: {
+                _type: 'reference',
+                _ref: doc._id,
+                _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
+              }
+            };
+          }, {}) : []
+        },
+      }).commit();
     }));
     this.fetchInformation();
   }
@@ -150,6 +158,33 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
     await Promise.all(this.translatedDocuments.map(async d => {
       const base = basedocuments.find(doc => d._id.startsWith(doc._id));
       if (!base) await this._sanityClient.delete(d._id);
+    }));
+    this.fetchInformation();
+  }
+
+  protected fixReferenceBehaviorMismatch = async () => {
+    this.setState({ pending: true });
+    const { selectedSchema } = this.state;
+    const config = getConfig(selectedSchema);
+    const refsFieldName = config.fieldNames.references;
+    const translatedDocuments = this.translatedDocuments;
+    await Promise.all(this.baseDocuments.map(async d => {
+      await this._sanityClient.patch(d._id, {
+        set: {
+          [refsFieldName]: (config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
+            const lang = getLanguageFromId(doc._id);
+            return {
+              _key: doc._id,
+              lang,
+              ref: {
+                _type: 'reference',
+                _ref: doc._id,
+                _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
+              }
+            };
+          }, {}) : []
+        },
+      }).commit();
     }));
     this.fetchInformation();
   }
@@ -211,6 +246,12 @@ export class MaintenanceTab extends React.Component<IProps, IState> {
               <p>{info.orphanDocuments.length} {config?.messages?.translationsMaintenance?.orphanDocuments}</p>
               {(info.orphanDocuments.length > 0) && (
                 <button onClick={this.fixOrphanedDocuments}>{config?.messages?.translationsMaintenance?.fix}</button>
+              )}
+            </div>
+            <div className={styles.entry}>
+              <p>{info.referenceBehaviorMismatch.length} {config?.messages?.translationsMaintenance?.referenceBehaviorMismatch}</p>
+              {(info.referenceBehaviorMismatch.length > 0) && (
+                <button onClick={this.fixReferenceBehaviorMismatch}>{config?.messages?.translationsMaintenance?.fix}</button>
               )}
             </div>
           </div>

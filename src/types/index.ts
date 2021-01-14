@@ -10,3 +10,4 @@ export * from './Ti18nConfig';
 export * from './TMessagesConfig';
 export * from './TFieldNamesConfig';
 export * from './IUseDocumentOperationResult';
+export * from './ITranslationRef';

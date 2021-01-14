@@ -20,6 +20,7 @@ interface IProps {
   markers?: any[];
   readOnly?: boolean;
   focusPath?: any[];
+  presence?: any[]; /* should be FormFieldPresence[] */
   onChange?: (...args: any[]) => any;
   onFocus: (...args: any[]) => any;
   onBlur: (...args: any[]) => any;
@@ -122,12 +123,13 @@ class Input extends React.PureComponent<IProps, IState> {
 
   public renderField = (field: IField) => {
     const { currentLanguage } = this.state;
-    const { type, value, markers, readOnly, focusPath, onFocus, onBlur, filterField } = this.props
+    const { type, value, markers, readOnly, focusPath, onFocus, onBlur, filterField, presence } = this.props
     if (!(filterField && filterField(type, field)) || field.type.hidden || !currentLanguage) return null;
     const slug = createSlug(currentLanguage.name);
     const fieldValue = value && value[slug] && value[slug][field.name]
     return (
       <Field
+        presence={presence}
         key={`${currentLanguage}.${field.name}`}
         field={field}
         value={fieldValue}

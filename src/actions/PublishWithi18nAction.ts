@@ -13,12 +13,13 @@ import {
   getConfig,
   buildDocId,
 } from '../utils';
+import { ReferenceBehavior } from '../constants';
 
 export const PublishWithi18nAction = (props: IResolverProps) => {
   const schema: Ti18nSchema = getSchema(props.type);
   const config = getConfig(schema);
   const baseDocumentId = getBaseIdFromId(props.id);
-  const syncState = useSyncState(props.id, props.type);
+  const syncState = useSyncState(props.id);
   const { publish } = useDocumentOperation(props.id, props.type) as IUseDocumentOperationResult;
   const [publishing, setPublishing] = React.useState(false);
 
@@ -53,7 +54,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
         await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
         await client.patch(baseDocumentId, {
           set: {
-            [refsFieldName]: translatedDocuments.map((doc) => {
+            [refsFieldName]: (config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
               return {
                 _key: doc._id,
@@ -61,9 +62,10 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
                 ref: {
                   _type: 'reference',
                   _ref: doc._id,
+                  _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
                 }
               };
-            }, {})
+            }, {}) : []
           }
         }).commit();
       }

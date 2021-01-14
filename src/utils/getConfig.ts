@@ -1,13 +1,11 @@
 import config from 'config:intl-input';
 import { getSchema } from './getSchema';
 import { Ti18nSchema, Ti18nConfig, TLanguagesOption, TMessagesConfig, TFieldNamesConfig } from '../types';
+import { ReferenceBehavior } from '../constants';
 
-export function getConfig(type?: string | Ti18nSchema): {
-  base?: string;
-  fieldNames: Required<TFieldNamesConfig>,
-  languages: TLanguagesOption;
-  messages: Required<TMessagesConfig>;
-} & {
+export function getConfig(type?: string | Ti18nSchema): Required<{
+  [K in keyof Ti18nConfig]: Required<Ti18nConfig[K]>
+}> & {
   withTranslationsMaintenance: boolean;
 } {
   const schema = (() => {
@@ -19,7 +17,8 @@ export function getConfig(type?: string | Ti18nSchema): {
   })();
   const cfg = config;
   return {
-    base: schema?.base || cfg?.base,
+    base: schema?.base || cfg?.base || '',
+    referenceBehavior: ReferenceBehavior.HARD,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance === false ? false : true,
     fieldNames: {
       lang: schema?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
@@ -44,6 +43,7 @@ export function getConfig(type?: string | Ti18nSchema): {
         missingLanguageField: cfg?.messages?.translationsMaintenance?.missingLanguageField || 'document(s) are missing the language field',
         missingDocumentRefs: cfg?.messages?.translationsMaintenance?.missingDocumentRefs || 'document(s) have missing translation references',
         orphanDocuments: cfg?.messages?.translationsMaintenance?.orphanDocuments || 'orphaned translation document(s)',
+        referenceBehaviorMismatch: cfg?.messages?.translationsMaintenance?.referenceBehaviorMismatch || 'document(s) with mismatched reference behaviors',
         fix: cfg?.messages?.translationsMaintenance?.fix || 'Fix'
       }
     }
