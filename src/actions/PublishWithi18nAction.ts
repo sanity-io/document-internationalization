@@ -20,7 +20,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
   const schema: Ti18nSchema = getSchema(props.type);
   const config = getConfig(schema);
   const baseDocumentId = getBaseIdFromId(props.id);
-  const syncState = useSyncState(props.id);
+  const syncState = (useSyncState as any)(props.id, props.type); // typing does not accept type anymore - used to be required --> @TODO remove if possible
   const { publish } = useDocumentOperation(props.id, props.type) as IUseDocumentOperationResult;
   const [publishing, setPublishing] = React.useState(false);
 
