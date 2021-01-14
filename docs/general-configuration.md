@@ -7,6 +7,7 @@ Below are all available configuration options.
   * Simple list of language ID strings
   * List of language objects (containing `name` and `title`)
   * GROQ query option
+* `idStructure`: Can be `subpath` (default) or `delimiter`. This option defines how the translated documents are saved.
 * `referenceBehavior`: Can be `hard` (default), `weak` or `disabled`. This option defines how the translated documents are referenced in the parent document
 * `fieldNames`: This option configures the field names used for document wide translation
   * `lang`: The name of the language field (`__i18n_lang`)

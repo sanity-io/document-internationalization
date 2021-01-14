@@ -3,6 +3,7 @@
   "image": "node:14-stretch",
 "remoteUser": "node",
 "extensions": [
-	"eamodio.gitlens"
+	"eamodio.gitlens",
+	"yzhang.markdown-all-in-one"
 ]
 }
