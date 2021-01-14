@@ -85,11 +85,15 @@ export const getFilteredDocumentTypeListItems = () => {
   };
   const items = [
     ...types.withoutI18n,
-    ...types.withI18n.map(l => (
-      l.child(
-        filterFns[config.idStructure](l, S.documentList().id(l.getId() || '').title(l.getTitle() || ''))
+    ...types.withI18n.map(l => {
+      const schemaType = l.getSchemaType();
+      const schemaTypeName = typeof schemaType === 'string' ? schemaType : schemaType?.name;
+      return l.child(
+        filterFns[config.idStructure](l, S.documentList().id(l.getId() || '').title(l.getTitle() || '').menuItems([
+          ...((!!schemaTypeName) ? S.orderingMenuItemsForType(schemaTypeName) : [])
+        ]))
       )
-    )),
+    }),
   ];
 
   if (config.withTranslationsMaintenance) {
