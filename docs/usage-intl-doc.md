@@ -4,7 +4,7 @@ Following options can be passed in the `i18n` object if not set to `true` to sim
 * `base`: *OPTIONAL* Override the globally configured base language ID. If there is no base language ID configured at all, the first language in the list will be used.
 * `referenceBehavior`: Can be `hard` (default), `weak` or `disabled`. This option defines how the translated documents are referenced in the parent document
 * `languages`: *OPTIONAL* Override the globally configured languages option. If the languages aren't configured globally, this option is required.
-* `fieldName`
+* `fieldNames`
   * `lang`: *OPTIONAL* Override the globally configured language field name (defaults to `__i18n_lang`)
   * `references`: *OPTIONAL* Override the globally configured references field name (defaults to `__i18n_refs`)
 * `messages`: : Use this to override the default or globally configured messages. Following keys are relevant here:  
@@ -47,7 +47,7 @@ export default {
           fix: 'Fix'
         }
       },
-      fieldName: {
+      fieldNames: {
         lang: '__i18n_lang',
         references: '__i18n_refs'
       }
