@@ -5,6 +5,7 @@ export interface IType {
     hidden?: boolean;
     level: number;
     type: string;
+    jsonType: string;
     fields: any[];
     options: {
         base?: string;

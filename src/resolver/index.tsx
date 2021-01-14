@@ -3,7 +3,7 @@ import Input from '../input/index';
 
 export default function resolveInput(type: IType) {
     if (
-        type.name === 'object'
+        (type.name === 'object' || type.jsonType === 'object')
         && type.options
         && type.options.i18n === true
     ) {
