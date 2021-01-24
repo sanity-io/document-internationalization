@@ -49,7 +49,6 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       publish.execute();
 
       const translatedDocuments = await getTranslationsFor(baseDocumentId);
-      console.log('doc', translatedDocuments)
       if (translatedDocuments.length > 0) {
         await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
         await client.patch(baseDocumentId, {
