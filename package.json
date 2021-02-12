@@ -20,6 +20,7 @@
   "files": [
     "lib/",
     "doc/",
+    "config.dist.json",
     "sanity.json"
   ],
   "repository": {
