@@ -1,4 +1,6 @@
 # CHANGELOG
+## v5.0.6
+* Include `config.dist.json` in the `package.json` files property as it was missing from the npm package.
 
 ## v5.0.5
 * Fix `referenceBehavior` not accepting the user config
