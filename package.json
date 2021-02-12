@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "5.0.5",
+  "version": "5.0.6",
   "license": "MIT",
   "author": {
     "name": "Liam Martens",
@@ -20,6 +20,7 @@
   "files": [
     "lib/",
     "doc/",
+    "config.dist.json",
     "sanity.json"
   ],
   "repository": {
