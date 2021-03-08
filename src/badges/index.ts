@@ -7,3 +7,4 @@ const resolver = (props: IResolverProps) => {
 }
 
 export default resolver;
+export { LanguageBadge };
