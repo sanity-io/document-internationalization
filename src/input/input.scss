@@ -1,6 +1,10 @@
 @import "../scss/colors";
 
-.root {
+.fieldset {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .loading {
@@ -58,4 +62,10 @@
       margin-bottom: 0;
     }
   }
+}
+
+.fieldWrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-gap: 2em var(--medium-padding);
 }
