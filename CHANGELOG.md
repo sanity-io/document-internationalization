@@ -2,6 +2,7 @@
 
 ## v5.1.0
 * Updated the i18n input component to be in line with Sanity v2.x
+* Export `LanguageBadge` from badges
 
 ## v5.0.6
 * Include `config.dist.json` in the `package.json` files property as it was missing from the npm package.
