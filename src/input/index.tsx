@@ -3,7 +3,6 @@ import * as React from 'react';
 import slugify from 'slugify';
 import styles from './input.scss';
 import PatchEvent, { setIfMissing, unset, set } from '@sanity/form-builder/lib/PatchEvent';
-import isEmpty from '@sanity/form-builder/lib/utils/isEmpty';
 import Field from '@sanity/form-builder/lib/inputs/ObjectInput/Field';
 import { IType, IField, IFieldSet } from '../types/IType';
 import { ILanguageObject } from '../types/ILanguageObject';
@@ -92,13 +91,6 @@ class Input extends React.PureComponent<IProps, IState> {
         this.setState({
             currentLanguage: lang,
         });
-    }
-
-    private handleBlur = () => {
-        const { value, onChange } = this.props;
-        if (isEmpty(value) && onChange) {
-            onChange(PatchEvent.from(unset()));
-        }
     }
 
     private handleFieldChange = (fieldEvent: PatchEvent, field: IField) => {
