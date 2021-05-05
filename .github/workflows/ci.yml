@@ -19,6 +19,13 @@ jobs:
           path: |
             lib
       - uses: JS-DevTools/npm-publish@v1
+        if: ${{ github.ref == 'refs/heads/master' }}
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: 'public'
+      - uses: JS-DevTools/npm-publish@v1
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: 'public'
+          tag: 'beta'

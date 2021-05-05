@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v5.2.0
+* Fixed Intl object for Sanity v2.9.x
+
 ## v5.1.0
 * Updated the i18n input component to be in line with Sanity v2.x
 * Export `LanguageBadge` from badges
