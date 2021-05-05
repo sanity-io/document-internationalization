@@ -1,6 +1,6 @@
 import config from 'config:intl-input';
 import { getSchema } from './getSchema';
-import { Ti18nSchema, Ti18nConfig, TLanguagesOption, TMessagesConfig, TFieldNamesConfig } from '../types';
+import { Ti18nSchema, Ti18nConfig } from '../types';
 import { IdStructure, ReferenceBehavior } from '../constants';
 
 export function getConfig(type?: string | Ti18nSchema): Required<{
