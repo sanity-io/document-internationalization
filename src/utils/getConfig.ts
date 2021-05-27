@@ -45,6 +45,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
         missingDocumentRefs: cfg?.messages?.translationsMaintenance?.missingDocumentRefs || 'document(s) have missing translation references',
         orphanDocuments: cfg?.messages?.translationsMaintenance?.orphanDocuments || 'orphaned translation document(s)',
         referenceBehaviorMismatch: cfg?.messages?.translationsMaintenance?.referenceBehaviorMismatch || 'document(s) with mismatched reference behaviors',
+        baseLanguageMismatch: cfg?.messages?.translationsMaintenance?.baseLanguageMismatch || 'base document(s) with mismatched language field',
         fix: cfg?.messages?.translationsMaintenance?.fix || 'Fix'
       }
     }
