@@ -70,6 +70,7 @@ export const useDocumentsInformation = (schema: string) => {
 
   return {
     pending,
+    setPending,
     documents,
     baseDocuments,
     translatedDocuments,
