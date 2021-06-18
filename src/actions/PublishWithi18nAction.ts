@@ -1,7 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 import { IResolverProps, Ti18nSchema, IUseDocumentOperationResult } from '../types';
-import { useDocumentOperation, useSyncState } from '@sanity/react-hooks';
+import { useDocumentOperation, useSyncState, useValidationStatus } from '@sanity/react-hooks';
 import {
   getSchema,
   getLanguagesFromOption,
@@ -20,6 +20,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
   const config = getConfig(schema);
   const baseDocumentId = getBaseIdFromId(props.id);
   const syncState = (useSyncState as any)(props.id, props.type); // typing does not accept type anymore - used to be required --> @TODO remove if possible
+  const { isValidating, markers } = useValidationStatus(props.id, props.type);
   const { publish } = useDocumentOperation(props.id, props.type) as IUseDocumentOperationResult;
   const [publishing, setPublishing] = React.useState(false);
 
@@ -31,7 +32,9 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
     disabled:
       publishing
       || publish.disabled
-      || syncState.isSyncing,
+      || syncState.isSyncing
+      || isValidating
+      || markers.length > 0,
     label: publishing
       ? config.messages?.publishing
       : config.messages?.publish,

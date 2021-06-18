@@ -2040,6 +2040,19 @@
     fs-extra "^6.0.1"
     promise-props-recursive "^1.0.0"
 
+"@sanity/client@2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@sanity/client/-/client-2.11.0.tgz#42bd3451726f9dd5983814c010619112a0ae25ed"
+  integrity sha512-ruP1iUwItXcGrJQo8aLWibeeNbgbkCUosUu9Y/W1ZR4D1qrL+KN459HTh6+f+WJQz/puT2sCzGUX7qg+r187fw==
+  dependencies:
+    "@sanity/eventsource" "2.2.6"
+    "@sanity/generate-help-url" "2.2.6"
+    "@sanity/observable" "2.0.9"
+    deep-assign "^2.0.0"
+    get-it "^5.0.3"
+    make-error "^1.3.0"
+    object-assign "^4.1.1"
+
 "@sanity/client@2.8.0", "@sanity/client@^2.8.0":
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/@sanity/client/-/client-2.8.0.tgz#43e35937e4de0f75c0b6bf029fca0e598c8a04ed"
@@ -2070,6 +2083,11 @@
   version "2.0.15"
   resolved "https://registry.yarnpkg.com/@sanity/color/-/color-2.0.15.tgz#8eca79a13cae491f2321c29cf978e35f53e54d7f"
   integrity sha512-HN+S2H4wq5ZMJe/TmZPUByF6FqSyedYiDxV2YKWNyH4r/NbRvUlGnDe0caIFV0aVkRW+apLYoiqXDsr23kSrOQ==
+
+"@sanity/color@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@sanity/color/-/color-2.1.2.tgz#a5fd77d18d02e715809e2e99fd329f70611ee3ca"
+  integrity sha512-6WE14xdSWMPfWHGs9kzZyK3eCUVc37U94R4hpqTwMbAYyxvpq6KEEqWh3lsrqrxUk97MQCoWyzCpfGjMmOfpCw==
 
 "@sanity/data-aspects@2.2.6":
   version "2.2.6"
@@ -2300,13 +2318,24 @@
     slate "^0.58.4"
     styled-components "^5.0.0"
 
-"@sanity/react-hooks@2.10.0", "@sanity/react-hooks@^2.10.0":
+"@sanity/react-hooks@2.10.0":
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/@sanity/react-hooks/-/react-hooks-2.10.0.tgz#31c8db231780e7de3f2671ede9a73d8bb9e10bb6"
   integrity sha512-qPvUtQUGnrKQQT0+dDdo36tDfejpkjbApnGifpi+6ggt+/MUaHk3xC2ns/ENg9ttxcfzR+fXnk4gXx6+81+Lvw==
   dependencies:
     "@sanity/types" "2.10.0"
     lodash "^4.17.15"
+    rxjs "^6.5.3"
+    shallow-equals "^1.0.0"
+
+"@sanity/react-hooks@^2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@sanity/react-hooks/-/react-hooks-2.11.0.tgz#4dd69e595f108f8e7672395df29053311a099021"
+  integrity sha512-z0zv+XtuaSvSsuhyXs458BkEPqPoM4yXX7NerqFbxv2re82KxbLTUfZFpNxVX/Si2IA+7sYgNeqS9J1iJxzC5w==
+  dependencies:
+    "@sanity/types" "2.11.0"
+    lodash "^4.17.15"
+    react-rx "^1.0.0-beta.6"
     rxjs "^6.5.3"
     shallow-equals "^1.0.0"
 
@@ -2409,6 +2438,16 @@
   dependencies:
     "@sanity/client" "2.8.0"
     "@sanity/color" "^2.0.15"
+    "@types/react" "^17.0.0"
+    rxjs "^6.5.3"
+
+"@sanity/types@2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@sanity/types/-/types-2.11.0.tgz#5b9c9b75d6c5a40afc342038a0a529bd487adf81"
+  integrity sha512-nH4Jo+Yt1fpxaBayzQUnNZFcnNWOc4ykhh5g4vL+TzgTfy995MHvdNMY9nUv4UNWbnvIoVh4pCB4xlD68K1rcw==
+  dependencies:
+    "@sanity/client" "2.11.0"
+    "@sanity/color" "^2.1.2"
     "@types/react" "^17.0.0"
     rxjs "^6.5.3"
 
@@ -7859,6 +7898,13 @@ react-router@5.2.0, react-router@^5.1.0:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-rx@^1.0.0-beta.6:
+  version "1.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/react-rx/-/react-rx-1.0.0-beta.6.tgz#eb922d3aab4bb3ac0b89879807e06fdb17dcbeb5"
+  integrity sha512-r7Xnw8IxOGqbvA2HVCd1kodhYfBaQ+1TXIZA3TQmw8Nm1WInbw08J0EBYveuLnqMFe9ax2U28Fw6F0ALfwfoEg==
+  dependencies:
+    observable-callback "^1.0.1"
 
 react-sortable-hoc@^1.11.0:
   version "1.11.0"
