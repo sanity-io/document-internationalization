@@ -1,6 +1,5 @@
 import * as React from 'react';
-import moment, { lang } from 'moment';
-import { SanityDocument, Patch } from '@sanity/client';
+import moment from 'moment';
 import { IResolverProps, Ti18nSchema, IUseDocumentOperationResult } from '../types';
 import { useDocumentOperation, useSyncState } from '@sanity/react-hooks';
 import {
@@ -44,14 +43,17 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       const langs = await getLanguagesFromOption(config.languages);
       const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base)?.name;
 
-      await client.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
-      await client.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } }).commit();
+      const saveTransaction = client.transaction();
+      saveTransaction.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
+      saveTransaction.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } });
+      await saveTransaction.commit();
       publish.execute();
 
       const translatedDocuments = await getTranslationsFor(baseDocumentId);
       if (translatedDocuments.length > 0) {
-        await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
-        await client.patch(baseDocumentId, {
+        const basedocTransaction = client.transaction();
+        basedocTransaction.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
+        basedocTransaction.patch(baseDocumentId, {
           set: {
             [refsFieldName]: (config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
@@ -66,7 +68,8 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
               };
             }, {}) : []
           }
-        }).commit();
+        });
+        await basedocTransaction.commit();
       }
 
       props.onComplete && props.onComplete();
