@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "5.2.0-beta.2",
+  "version": "5.2.0-beta.3",
   "license": "MIT",
   "author": {
     "name": "Liam Martens",
@@ -59,7 +59,7 @@
     "@sanity/client": "^2.8.0",
     "@sanity/desk-tool": "^2.10.2",
     "@sanity/form-builder": "^2.10.2",
-    "@sanity/react-hooks": "^2.10.0",
+    "@sanity/react-hooks": "^2.11.0",
     "@sanity/structure": "^2.10.0",
     "@sanity/types": "^2.10.0",
     "@types/classnames": "^2.2.11",
