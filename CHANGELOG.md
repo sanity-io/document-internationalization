@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v5.2.0
+* Updated Publish with i18n with transactions to reduce webhook triggers
+* Implemented maintenance operation for fixing base language fields
+
 ## v5.1.0
 * Updated the i18n input component to be in line with Sanity v2.x
 * Export `LanguageBadge` from badges
