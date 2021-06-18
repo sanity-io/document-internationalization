@@ -24,7 +24,7 @@ export const useDocumentsInformation = (schema: string) => {
   const fetchInformation = React.useCallback(async (selectedSchema: string) => {
     setPending(true);
     const result = await sanityClientRef.current.fetch<Ti18nDocument[]>(
-      '*[_type == $type]',
+      `*[_type == $type && !(_id in path('drafts.**'))]`,
       { type: selectedSchema }
     );
     setDocuments(result);
