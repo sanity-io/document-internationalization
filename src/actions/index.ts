@@ -4,6 +4,7 @@ import defaultResolve, { PublishAction } from 'part:@sanity/base/document-action
 import { PublishWithi18nAction } from './PublishWithi18nAction';
 import { getSchema, getBaseIdFromId } from '../utils';
 import { DeleteWithi18nAction } from './DeleteWithi18nAction';
+import { DuplicateWithi18nAction } from './DuplicateWithi18nAction';
 
 export default (props: IResolverProps) => {
   const schema: Ti18nSchema = getSchema(props.type);
@@ -12,6 +13,7 @@ export default (props: IResolverProps) => {
     return (Action === PublishAction && isI18n) ? PublishWithi18nAction : Action;
   });
   if (isI18n && props.id == getBaseIdFromId(props.id)) {
+    actions.push(DuplicateWithi18nAction);
     actions.push(DeleteWithi18nAction);
   }
   return actions;

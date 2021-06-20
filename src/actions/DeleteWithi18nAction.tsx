@@ -1,12 +1,9 @@
 import React from 'react';
-import defaultResolve, { DeleteAction } from 'part:@sanity/base/document-actions'
 import ConfirmDelete from '@sanity/desk-tool/lib/components/ConfirmDelete';
 import TrashIcon from 'part:@sanity/base/trash-icon'
 import { IResolverProps, IUseDocumentOperationResult } from '../types';
-import { getConfig, getSanityClient, getBaseIdFromId, buildDocId, getTranslationsFor } from '../utils';
+import { getConfig, getSanityClient, getBaseIdFromId, getTranslationsFor } from '../utils';
 import { useDocumentOperation } from '@sanity/react-hooks';
-import { SanityDocument } from '@sanity/client';
-import { I18nPrefix } from '../constants';
 
 /**
  * This code is mostly taken from the defualt DeleteAction provided by Sanity
