@@ -37,6 +37,10 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
         buttonTitle: schema?.messages?.deleteAll?.buttonTitle || cfg?.messages?.deleteAll?.buttonTitle || 'Delete (incl. translations)',
         deleting: schema?.messages?.deleteAll?.deleting || cfg?.messages?.deleteAll?.deleting || 'Deleting...'
       },
+      duplicateAll: {
+        buttonTitle: schema?.messages?.duplicateAll?.buttonTitle || cfg?.messages?.duplicateAll?.buttonTitle || 'Duplicate (incl. translations)',
+        duplicating: schema?.messages?.duplicateAll?.duplicating || cfg?.messages?.duplicateAll?.duplicating || 'Duplicating...'
+      },
       translationsMaintenance: {
         title: schema?.messages?.translationsMaintenance?.title || cfg?.messages?.translationsMaintenance?.title || 'Translation Maintenance',
         selectSchemaPlaceholder: cfg?.messages?.translationsMaintenance?.selectSchemaPlaceholder || 'Select schema type',

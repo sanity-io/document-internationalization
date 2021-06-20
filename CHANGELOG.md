@@ -5,6 +5,7 @@
 * Implemented maintenance operation for fixing base language fields
 * [#46](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/46) Publish with i18n action now takes into account validation errors
 * [#25](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/25) The maintenance operations now exclude draft documents
+* [#30](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/30) Now includes `Duplicate (Incl. translations)` action
 
 ## v5.1.0
 * Updated the i18n input component to be in line with Sanity v2.x

@@ -10,7 +10,6 @@ import {
   getBaseIdFromId,
   getSanityClient,
   getConfig,
-  buildDocId,
   getTranslationsFor,
 } from '../utils';
 import { ReferenceBehavior } from '../constants';
