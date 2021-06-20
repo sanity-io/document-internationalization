@@ -1,4 +1,4 @@
-# Important configuration optionss
+# Important configuration options
 ## ID structure
 Deciding on which ID structure (`idStructure` key in `config.json`) to use should ideally be done at the start of your project. There are 2 options:
 | ID structure | Advantages                                       | Disadvantages                                                                                                                                                                                                           |
