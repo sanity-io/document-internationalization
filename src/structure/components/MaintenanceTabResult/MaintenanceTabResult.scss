@@ -1,0 +1,30 @@
+@import "../../../scss/colors";
+
+.entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  p {
+    margin: 0;
+  }
+
+  button {
+    cursor: pointer;
+    display: block;
+    padding: .5rem .8rem;
+    border: 0;
+    background: color(blue-ribbon);
+    border-radius: .2rem;
+    color: color(white);
+    border: .1rem solid color(blue-ribbon);
+
+    &:active {
+      background-color: lighten(color(blue-ribbon), 10%);
+    }
+  }
+}
+
+.entry + .entry {
+  margin-top: 1rem;
+}

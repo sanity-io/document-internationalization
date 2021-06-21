@@ -9,6 +9,10 @@ export type TMessagesConfig = {
     buttonTitle?: string;
     deleting?: string;
   };
+  duplicateAll?: {
+    buttonTitle?: string;
+    duplicating?: string;
+  };
   translationsMaintenance?: {
     title?: string;
     selectSchemaPlaceholder?: string;
@@ -17,6 +21,7 @@ export type TMessagesConfig = {
     missingDocumentRefs?: string;
     orphanDocuments?: string;
     referenceBehaviorMismatch?: string;
+    baseLanguageMismatch?: string;
     fix?: string;
   };
 };

@@ -36,6 +36,10 @@ export default {
           buttonTitle: 'Delete (incl. translations)',
           deleting: 'Deleting...',
         },
+        duplicateAll: {
+          buttonTitle: 'Duplicate (incl. translations)',
+          duplicating: 'Duplicating...',
+        },
         translationsMaintenance: {
           title: 'Translation Maintenance',
           selectSchemaPlaceholder: 'Select schema type',

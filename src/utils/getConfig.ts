@@ -37,6 +37,10 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
         buttonTitle: schema?.messages?.deleteAll?.buttonTitle || cfg?.messages?.deleteAll?.buttonTitle || 'Delete (incl. translations)',
         deleting: schema?.messages?.deleteAll?.deleting || cfg?.messages?.deleteAll?.deleting || 'Deleting...'
       },
+      duplicateAll: {
+        buttonTitle: schema?.messages?.duplicateAll?.buttonTitle || cfg?.messages?.duplicateAll?.buttonTitle || 'Duplicate (incl. translations)',
+        duplicating: schema?.messages?.duplicateAll?.duplicating || cfg?.messages?.duplicateAll?.duplicating || 'Duplicating...'
+      },
       translationsMaintenance: {
         title: schema?.messages?.translationsMaintenance?.title || cfg?.messages?.translationsMaintenance?.title || 'Translation Maintenance',
         selectSchemaPlaceholder: cfg?.messages?.translationsMaintenance?.selectSchemaPlaceholder || 'Select schema type',
@@ -45,6 +49,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
         missingDocumentRefs: cfg?.messages?.translationsMaintenance?.missingDocumentRefs || 'document(s) have missing translation references',
         orphanDocuments: cfg?.messages?.translationsMaintenance?.orphanDocuments || 'orphaned translation document(s)',
         referenceBehaviorMismatch: cfg?.messages?.translationsMaintenance?.referenceBehaviorMismatch || 'document(s) with mismatched reference behaviors',
+        baseLanguageMismatch: cfg?.messages?.translationsMaintenance?.baseLanguageMismatch || 'base document(s) with mismatched language field',
         fix: cfg?.messages?.translationsMaintenance?.fix || 'Fix'
       }
     }

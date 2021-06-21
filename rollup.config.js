@@ -57,6 +57,8 @@ module.exports = (name) => {
       'part:@sanity/base/datastore/document',
       'part:@sanity/base/document-actions',
       'part:@sanity/base/trash-icon',
+      'part:@sanity/base/content-copy-icon',
+      '@sanity/ui',
       '@sanity/desk-tool/lib/pane/PaneItem',
       '@sanity/desk-tool/structure-builder',
       '@sanity/state-router/lib/components/IntentLink',

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import moment, { lang } from 'moment';
-import { SanityDocument, Patch } from '@sanity/client';
+import moment from 'moment';
 import { IResolverProps, Ti18nSchema, IUseDocumentOperationResult } from '../types';
-import { useDocumentOperation, useSyncState } from '@sanity/react-hooks';
+import { useDocumentOperation, useSyncState, useValidationStatus } from '@sanity/react-hooks';
 import {
   getSchema,
   getLanguagesFromOption,
@@ -11,7 +10,6 @@ import {
   getBaseIdFromId,
   getSanityClient,
   getConfig,
-  buildDocId,
   getTranslationsFor,
 } from '../utils';
 import { ReferenceBehavior } from '../constants';
@@ -21,6 +19,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
   const config = getConfig(schema);
   const baseDocumentId = getBaseIdFromId(props.id);
   const syncState = (useSyncState as any)(props.id, props.type); // typing does not accept type anymore - used to be required --> @TODO remove if possible
+  const { isValidating, markers } = useValidationStatus(props.id, props.type);
   const { publish } = useDocumentOperation(props.id, props.type) as IUseDocumentOperationResult;
   const [publishing, setPublishing] = React.useState(false);
 
@@ -32,7 +31,9 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
     disabled:
       publishing
       || publish.disabled
-      || syncState.isSyncing,
+      || syncState.isSyncing
+      || isValidating
+      || markers.length > 0,
     label: publishing
       ? config.messages?.publishing
       : config.messages?.publish,
@@ -44,14 +45,17 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       const langs = await getLanguagesFromOption(config.languages);
       const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base)?.name;
 
-      await client.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
-      await client.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } }).commit();
+      const saveTransaction = client.transaction();
+      saveTransaction.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
+      saveTransaction.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } });
+      await saveTransaction.commit();
       publish.execute();
 
       const translatedDocuments = await getTranslationsFor(baseDocumentId);
       if (translatedDocuments.length > 0) {
-        await client.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
-        await client.patch(baseDocumentId, {
+        const basedocTransaction = client.transaction();
+        basedocTransaction.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
+        basedocTransaction.patch(baseDocumentId, {
           set: {
             [refsFieldName]: (config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
               const lang = getLanguageFromId(doc._id);
@@ -66,7 +70,8 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
               };
             }, {}) : []
           }
-        }).commit();
+        });
+        await basedocTransaction.commit();
       }
 
       props.onComplete && props.onComplete();

@@ -3,10 +3,10 @@ import { StructureBuilder as S } from '@sanity/structure';
 import { IDefaultDocumentNodeStructureProps } from './IDefaultDocumentNodeStructureProps';
 import { Ti18nSchema } from '../types';
 import { ListItemBuilder } from '@sanity/structure/lib/ListItem';
-import { TranslationsComponentFactory } from './TranslationsComponentFactory';
+import { TranslationsComponentFactory } from './components/TranslationsComponentFactory';
 import { getSchema, getConfig } from '../utils';
 import { SchemaType } from '@sanity/structure/lib/parts/Schema';
-import { MaintenanceTab } from './MaintenanceTab';
+import { MaintenanceTab } from './components/MaintenanceTab';
 import { I18nDelimiter, I18nPrefix, IdStructure } from '../constants';
 import { DocumentListBuilder } from '@sanity/structure/lib/DocumentList';
 

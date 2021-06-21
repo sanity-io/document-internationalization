@@ -7,6 +7,7 @@ export * from './TLanguagesOption';
 export * from './TSchema';
 export * from './Ti18nSchema';
 export * from './Ti18nConfig';
+export * from './Ti18nDocument';
 export * from './TMessagesConfig';
 export * from './TFieldNamesConfig';
 export * from './IUseDocumentOperationResult';

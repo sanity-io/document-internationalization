@@ -1,8 +1,15 @@
 import * as React from 'react';
 import styles from './TranslationsComponentFactory.scss';
-import { IDefaultDocumentNodeStructureProps } from '../IDefaultDocumentNodeStructureProps';
-import { ILanguageObject, Ti18nSchema } from '../../types';
-import { getLanguagesFromOption, getBaseLanguage, getSanityClient, getConfig, getBaseIdFromId, getLanguageFromId } from '../../utils';
+import { IDefaultDocumentNodeStructureProps } from '../../IDefaultDocumentNodeStructureProps';
+import { ILanguageObject, Ti18nSchema } from '../../../types';
+import {
+  getLanguagesFromOption,
+  getBaseLanguage,
+  getSanityClient,
+  getConfig,
+  getBaseIdFromId,
+  getLanguageFromId
+} from '../../../utils';
 import { TranslationLink } from '../TranslationLink';
 
 export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDefaultDocumentNodeStructureProps) => {

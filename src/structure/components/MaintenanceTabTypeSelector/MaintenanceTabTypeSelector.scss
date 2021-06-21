@@ -1,0 +1,29 @@
+@import "../../../scss/colors";
+
+.schemaselect {
+  position: relative;
+
+  select {
+    display: block;
+    width: 100%;
+    padding: .8rem;
+    border: 0.1rem solid color(heather);
+    background: transparent;
+    border-radius: 0.2rem;
+    -moz-appearance: textfield;
+    appearance: none;
+
+    &:focus,
+    &:active {
+      box-shadow: 0 0 0 0.2rem rgba(color(blue-ribbon), 0.42);
+      border-color: color(blue-ribbon);
+    }
+  }
+
+  svg {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
