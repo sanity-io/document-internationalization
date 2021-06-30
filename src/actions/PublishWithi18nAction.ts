@@ -33,7 +33,7 @@ export const PublishWithi18nAction = (props: IResolverProps) => {
       || publish.disabled
       || syncState.isSyncing
       || isValidating
-      || markers.length > 0,
+      || markers.some(marker => marker.level === 'error'),
     label: publishing
       ? config.messages?.publishing
       : config.messages?.publish,
