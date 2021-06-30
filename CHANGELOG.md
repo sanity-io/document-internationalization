@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v5.2.1
+* [#58](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/58) Only disable publishing when there are errors (no warnings)
 ## v5.2.0
 * Updated Publish with i18n with transactions to reduce webhook triggers
 * Implemented maintenance operation for fixing base language fields
