@@ -44,6 +44,7 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
           };
         }, {}) : []
       }
-    })
+    });
+    await baseDocumentTransaction.commit();
   }
 }
