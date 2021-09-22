@@ -31,3 +31,4 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 5. [Translation Maintenance](docs/translation-maintenance.md)
 6. [GraphQL support](docs/graphql-intl-doc.md)
 7. [Advanced languages](docs/advanced-languages.md)
+8. [Usage with custom publish action](docs/usage-with-custom-publish.md)

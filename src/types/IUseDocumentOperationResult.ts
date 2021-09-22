@@ -1,6 +1,11 @@
+type ExecutablAction = {
+  disabled?: string;
+  execute: (...args: any[]) => void;
+}
+
 export interface IUseDocumentOperationResult {
-  patch: any;
-  publish: any;
-  duplicate: any;
-  delete: any;
+  patch: ExecutablAction;
+  publish: ExecutablAction;
+  duplicate: ExecutablAction;
+  delete: ExecutablAction;
 }

@@ -1,80 +1,84 @@
 import * as React from 'react';
-import moment from 'moment';
 import { IResolverProps, Ti18nSchema, IUseDocumentOperationResult } from '../types';
 import { useDocumentOperation, useSyncState, useValidationStatus } from '@sanity/react-hooks';
+import { useToast } from '@sanity/ui';
+import { CheckmarkIcon, PublishIcon } from '@sanity/icons'
 import {
   getSchema,
-  getLanguagesFromOption,
-  getBaseLanguage,
-  getLanguageFromId,
-  getBaseIdFromId,
-  getSanityClient,
   getConfig,
-  getTranslationsFor,
+  updateIntlFieldsForDocument,
 } from '../utils';
-import { ReferenceBehavior } from '../constants';
 
-export const PublishWithi18nAction = (props: IResolverProps) => {
-  const schema: Ti18nSchema = getSchema(props.type);
-  const config = getConfig(schema);
-  const baseDocumentId = getBaseIdFromId(props.id);
-  const syncState = (useSyncState as any)(props.id, props.type); // typing does not accept type anymore - used to be required --> @TODO remove if possible
-  const { isValidating, markers } = useValidationStatus(props.id, props.type);
-  const { publish } = useDocumentOperation(props.id, props.type) as IUseDocumentOperationResult;
-  const [publishing, setPublishing] = React.useState(false);
+export const PublishWithi18nAction = ({ type, id, draft, onComplete }: IResolverProps) => {
+  const toast = useToast();
+  const [publishState, setPublishState] = React.useState<'publishing' | 'published' | null>(null);
+  const [updatingIntlFields, setUpdatingIntlFields] = React.useState(false);
+  const { publish } = useDocumentOperation(id, type) as IUseDocumentOperationResult;
+  const { isValidating, markers } = useValidationStatus(id, type);
+  // @ts-ignore
+  const syncState = useSyncState(id, type);
+  const schema = React.useMemo<Ti18nSchema>(() => getSchema(type), [type]);
+  const config = React.useMemo(() => getConfig(schema), [schema]);
+
+  const disabled = React.useMemo(() => (
+    publishState === 'published'
+    || publishState === 'publishing'
+    || updatingIntlFields
+    || publish.disabled
+    || syncState.isSyncing
+    || isValidating
+    || markers.some(marker => marker.level === 'error')
+  ), [publishState, updatingIntlFields, syncState.isSyncing, isValidating, markers]);
+
+  const doUpdateIntlFields = React.useCallback(async () => {
+    setUpdatingIntlFields(true);
+    try {
+      await updateIntlFieldsForDocument(id, type);
+      toast.push({
+        closable: true,
+        status: 'success',
+        title: config.messages?.intlFieldsUpdated,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.push({
+        closable: true,
+        status: 'error',
+        title: err.toString(),
+      });
+    }
+    setUpdatingIntlFields(false);
+  }, [config, toast, id, type]);
+
+  const onHandle = React.useCallback(() => {
+    setPublishState('publishing');
+    publish.execute();
+  }, [publishState, publish, onComplete]);
 
   React.useEffect(() => {
-    if (publishing && !props.draft) setPublishing(false);
-  }, [publish.disabled, props.draft, syncState.isSyncing]);
+    // @README code inspired by @sanity/desk-tool PublishAction.tsx
+    const didPublish = publishState === 'publishing' && !draft;
+    if (didPublish) {
+      doUpdateIntlFields().then(() => {
+        if (onComplete) onComplete();
+      });
+    }
+
+    const nextState = didPublish ? 'published' : null
+    const delay = didPublish ? 200 : 4000
+    const timer = setTimeout(() => {
+      setPublishState(nextState)
+    }, delay)
+    return () => clearTimeout(timer)
+  }, [publishState, draft]);
 
   return {
-    disabled:
-      publishing
-      || publish.disabled
-      || syncState.isSyncing
-      || isValidating
-      || markers.some(marker => marker.level === 'error'),
-    label: publishing
+    disabled,
+    label: publishState === 'publishing'
       ? config.messages?.publishing
-      : config.messages?.publish,
-    onHandle: async () => {
-      setPublishing(true);
-      const client = getSanityClient();
-      const fieldName = config.fieldNames.lang;
-      const refsFieldName = config.fieldNames.references;
-      const langs = await getLanguagesFromOption(config.languages);
-      const languageId = getLanguageFromId(props.id) || getBaseLanguage(langs, config.base)?.name;
-
-      const saveTransaction = client.transaction();
-      saveTransaction.createIfNotExists({ _id: props.id, _type: props.type, _createdAt: moment().utc().toISOString() });
-      saveTransaction.patch(props.draft?._id || props.id, { set: { [fieldName]: languageId } });
-      await saveTransaction.commit();
-      publish.execute();
-
-      const translatedDocuments = await getTranslationsFor(baseDocumentId);
-      if (translatedDocuments.length > 0) {
-        const basedocTransaction = client.transaction();
-        basedocTransaction.createIfNotExists({ _id: baseDocumentId, _type: props.type, _createdAt: moment().utc().toISOString() });
-        basedocTransaction.patch(baseDocumentId, {
-          set: {
-            [refsFieldName]: (config.referenceBehavior !== ReferenceBehavior.DISABLED) ? translatedDocuments.map((doc) => {
-              const lang = getLanguageFromId(doc._id);
-              return {
-                _key: doc._id,
-                lang,
-                ref: {
-                  _type: 'reference',
-                  _ref: doc._id,
-                  _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
-                }
-              };
-            }, {}) : []
-          }
-        });
-        await basedocTransaction.commit();
-      }
-
-      props.onComplete && props.onComplete();
-    }
+      : (updatingIntlFields ? config.messages?.updatingIntlFields : config.messages?.publish),
+    icon: publishState === 'published' ? CheckmarkIcon : PublishIcon,
+    shortcut: disabled ? null : 'Ctrl+Alt+P',
+    onHandle,
   };
 }
