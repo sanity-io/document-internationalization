@@ -10,3 +10,5 @@ export * from './getBaseIdFromId';
 export * from './getAllSchemas';
 export * from './getTranslationsForId';
 export * from './makeObjectKey';
+export * from './createSanityReference';
+export * from './updateIntlFieldsForDocument';

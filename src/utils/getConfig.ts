@@ -29,6 +29,8 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
     messages: {
       publishing: schema?.messages?.publishing || cfg?.messages?.publishing || 'Publishing...',
       publish: schema?.messages?.publish || cfg?.messages?.publish || 'Publish',
+      updatingIntlFields: schema?.messages?.updatingIntlFields || cfg?.messages?.updatingIntlFields || 'Updating i18n fields...',
+      intlFieldsUpdated: schema?.messages?.intlFieldsUpdated || cfg?.messages?.intlFieldsUpdated || 'I18n fields updated',
       loading: schema?.messages?.loading || cfg?.messages?.loading || 'Loading languages...',
       draft: schema?.messages?.draft || cfg?.messages?.draft || 'Draft',
       missingTranslations: schema?.messages?.missingTranslations || cfg?.messages?.missingTranslations || 'Following languages are missing some translations compared to the base language',
