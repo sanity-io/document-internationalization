@@ -1,6 +1,6 @@
 import React from 'react';
-import ConfirmDelete from '@sanity/desk-tool/lib/components/ConfirmDelete';
 import TrashIcon from 'part:@sanity/base/trash-icon'
+import * as ConfirmDeleteModule from '@sanity/desk-tool/lib/components/ConfirmDelete';
 import { IResolverProps, IUseDocumentOperationResult } from '../types';
 import { getConfig, getSanityClient, getBaseIdFromId, getTranslationsFor } from '../utils';
 import { useDocumentOperation } from '@sanity/react-hooks';
@@ -16,6 +16,9 @@ const DISABLED_REASON_TITLE = {
 
 export const DeleteWithi18nAction = ({ id, type, draft, published, onComplete }: IResolverProps) => {
   const toast = useToast();
+  const ConfirmDelete = React.useMemo(() => (
+    ConfirmDeleteModule?.ConfirmDelete ?? ConfirmDeleteModule?.default
+  ), [ConfirmDeleteModule]);
   const config = React.useMemo(() => getConfig(type), [type]);
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id]);
   const { delete: deleteOp } = useDocumentOperation(id, type) as IUseDocumentOperationResult;
