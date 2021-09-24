@@ -3,13 +3,15 @@ import styles from './input.scss';
 import React from 'react';
 import slugify from 'slugify';
 import Fieldset from 'part:@sanity/components/fieldsets/default';
+import shouldReloadFn from 'part:sanity-plugin-intl-input/languages/should-reload?';
 import { Card, Flex, Spinner, Stack, Select } from '@sanity/ui';
 import { ILanguageObject } from '../types/ILanguageObject';
 import { getBaseLanguage, getConfig, getLanguagesFromOption } from '../utils';
 import { FormBuilderInput } from '@sanity/form-builder/lib/FormBuilderInput';
-import PatchEvent, { setIfMissing } from '@sanity/form-builder/PatchEvent';
+import { setIfMissing } from '@sanity/form-builder/PatchEvent';
 import { Path, Marker } from '@sanity/types';
 import { IType } from '../types';
+import { DocumentHistoryContext } from '@sanity/desk-tool/lib/panes/documentPane/documentHistory/context';
 
 const createSlug = (input: string) => slugify(input, { replacement: '_' }).replace(/-/g, '_');
 
@@ -40,9 +42,9 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
     presence,
     type,
     value,
-    level,
-    ...restProps
+    level
   } = props;
+  const historyContext = React.useContext(DocumentHistoryContext);
   const [fetchingLanguages, setFetchingLanguages] = React.useState(false);
   const [currentLanguage, setCurrentLanguage] = React.useState<ILanguageObject | null>(null);
   const [languages, setLanguages] = React.useState<ILanguageObject[]>([]);
@@ -67,12 +69,17 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
   }, [markers, fieldNames]);
 
   const doLoadLanguages = React.useCallback(async () => {
-    setFetchingLanguages(true);
-    const config = getConfig(type.type);
-    const languages = await getLanguagesFromOption(type.options.languages || config.languages);
-    setLanguages(languages);
-    setFetchingLanguages(false);
-  }, [type]);
+    const shouldReload = (historyContext.displayed) && (
+      languages.length === 0 || (shouldReloadFn && shouldReloadFn(historyContext.displayed))
+    );
+    if (shouldReload) {
+      setFetchingLanguages(true);
+      const config = getConfig(type.type);
+      const updated = await getLanguagesFromOption(type.options.languages || config.languages, historyContext.displayed);
+      setLanguages(updated);
+      setFetchingLanguages(false);
+    }
+  }, [type, languages, historyContext.displayed]);
 
   const onLanguageSelectChange = React.useCallback<React.FormEventHandler<HTMLSelectElement>>((event) => {
     const lang = languages.find(lang => lang.name === event.currentTarget.value);
@@ -99,7 +106,7 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
 
   React.useEffect(() => {
     doLoadLanguages();
-  }, [type]);
+  }, [type, historyContext.displayed]);
 
   if (fetchingLanguages) {
     return (
