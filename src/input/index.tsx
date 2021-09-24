@@ -1,4 +1,5 @@
 import 'regenerator-runtime';
+import styles from './input.scss';
 import React from 'react';
 import slugify from 'slugify';
 import Fieldset from 'part:@sanity/components/fieldsets/default';
@@ -73,20 +74,26 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
     setFetchingLanguages(false);
   }, [type]);
 
-  const onSelectLanguage = React.useCallback<React.FormEventHandler<HTMLSelectElement>>((event) => {
+  const onLanguageSelectChange = React.useCallback<React.FormEventHandler<HTMLSelectElement>>((event) => {
     const lang = languages.find(lang => lang.name === event.currentTarget.value);
     if (lang) setCurrentLanguage(lang);
+  }, [currentLanguage, languages]);
+
+  const onSelectLanguage = React.useCallback((language: ILanguageObject) => {
+    setCurrentLanguage(language);
   }, [currentLanguage, languages]);
 
   const onFieldChange = React.useCallback((field, fieldPatchEvent) => {
     if (selectedLanguage && onChange) {
       const slug = createSlug(selectedLanguage.name);
-      onChange(
+      const patchEvent = (
         fieldPatchEvent
           .prefixAll(field.name)
           .prefixAll(slug)
-          .prepend(setIfMissing({ _type: type.name, [slug]: { _type: 'object' } }))
-      )
+          .prepend(setIfMissing({ _type: type.name }, [slug]))
+          .prepend(setIfMissing({ _type: type.name }))
+      );
+      onChange(patchEvent)
     }
   }, [selectedLanguage, onChange]);
 
@@ -107,14 +114,21 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
   return (
     <Card>
       <Stack space={4}>
-        <Select
-          value={selectedLanguage?.name}
-          onChange={onSelectLanguage}
-        >
-          {languages.map((lang, index) => (
-            <option key={lang.name} value={lang.name}>{lang.title}</option>
-          ))}
-        </Select>
+        {(languages.length > 5) ? (
+          <Select value={selectedLanguage?.name} onChange={onLanguageSelectChange}>
+            {languages.map((lang) => (
+              <option key={lang.name} value={lang.name}>{lang.title}</option>
+            ))}
+          </Select>
+        ) : (
+          <div className={styles.switch}>
+            {languages.map((lang, index) => (
+              <button key={lang.name} className={styles.language} disabled={lang.name === selectedLanguage?.name} onClick={() => onSelectLanguage(lang)}>
+                {lang.title}
+              </button>
+            ))}
+          </div>
+        )}
 
         {!!selectedLanguage && (
           <Fieldset
