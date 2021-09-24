@@ -48,21 +48,11 @@ module.exports = (name) => {
         ],
       }))
     ].filter(Boolean),
-    external: [
-      /@babel\/runtime/,
-      'config:intl-input',
-      'part:@sanity/base/client',
-      'part:@sanity/base/document-badges',
-      'part:@sanity/base/schema',
-      'part:@sanity/base/datastore/document',
-      'part:@sanity/base/document-actions',
-      'part:@sanity/base/trash-icon',
-      'part:@sanity/base/content-copy-icon',
-      '@sanity/ui',
-      '@sanity/desk-tool/lib/pane/PaneItem',
-      '@sanity/desk-tool/structure-builder',
-      '@sanity/state-router/lib/components/IntentLink',
-      '@sanity/desk-tool/lib/components/ConfirmDelete'
-    ]
+    external: id => !!(
+      id.match(/@babel\/runtime/)
+      || id.startsWith('config:')
+      || id.startsWith('part:')
+      || id.startsWith('@sanity/')
+    )
   };
 };
