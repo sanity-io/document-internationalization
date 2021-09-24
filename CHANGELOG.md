@@ -3,6 +3,7 @@
 ## v5.3.0
 * [#60](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/60) Improved publish with I18n action and expose "updateIntlFieldsForDocument" action (ie to be used with custom publish action)
 * [#72](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/72) Updated custom delete action
+* It is now possible to define a custom loader and reload function for loading languages.
 
 ## v5.2.1
 * [#58](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/58) Only disable publishing when there are errors (no warnings)

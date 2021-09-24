@@ -45,6 +45,12 @@ declare module '@sanity/state-router/lib/components/IntentLink' {
   export default IntentLink;
 }
 
+declare module '@sanity/desk-tool/lib/panes/documentPane/documentHistory/context' {
+  export const DocumentHistoryContext: React.Context<{
+    displayed: import('@sanity/client').SanityDocument<any> | null;
+  }>;
+}
+
 declare module 'part:@sanity/base/schema' {
   const schemas: {
     _original: {
@@ -52,6 +58,18 @@ declare module 'part:@sanity/base/schema' {
     };
   };
   export default schemas;
+}
+
+declare module 'part:sanity-plugin-intl-input/languages/loader?' {
+  type ILanguageObject = import('./types').ILanguageObject;
+  type TLoaderFnResult = Promise<ILanguageObject[]> | ILanguageObject[];
+  const loader: ((languages: ILanguageObject[], document?: import('@sanity/client').SanityDocument | null) => TLoaderFnResult) | undefined;
+  export default loader;
+}
+
+declare module 'part:sanity-plugin-intl-input/languages/should-reload?' {
+  const fn: (document?: import('@sanity/client').SanityDocument | null) => boolean;
+  export default fn;
 }
 
 declare module '*.scss' {

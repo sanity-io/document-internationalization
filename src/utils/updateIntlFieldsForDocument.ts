@@ -15,9 +15,10 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
   const config = getConfig(schema);
   const client = getSanityClient();
   const baseDocumentId = getBaseIdFromId(id);
+  const document = await client.getDocument(id);
   const fieldName = config.fieldNames.lang;
   const refsFieldName = config.fieldNames.references;
-  const langs = await getLanguagesFromOption(config.languages);
+  const langs = await getLanguagesFromOption(config.languages, document);
   const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.name;
 
   // Update I18n field for current document

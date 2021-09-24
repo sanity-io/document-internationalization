@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './TranslationsComponentFactory.scss';
+import shouldReloadFn from 'part:sanity-plugin-intl-input/languages/should-reload?';
 import { IDefaultDocumentNodeStructureProps } from '../../IDefaultDocumentNodeStructureProps';
 import { ILanguageObject, Ti18nSchema } from '../../../types';
 import {
@@ -11,9 +12,15 @@ import {
   getLanguageFromId
 } from '../../../utils';
 import { TranslationLink } from '../TranslationLink';
+import { useEditState } from '@sanity/react-hooks';
+import type { SanityDocument } from '@sanity/client';
 
 export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDefaultDocumentNodeStructureProps) => {
   const config = getConfig(schema);
+  const { draft, published } = useEditState(props.documentId, props.schemaType) as {
+    draft?: SanityDocument;
+    published?: SanityDocument;
+  };
   const [pending, setPending] = React.useState(false);
   const [languages, setLanguages] = React.useState<ILanguageObject[]>([]);
   const [baseDocument, setBaseDocument] = React.useState(null);
@@ -21,15 +28,20 @@ export const TranslationsComponentFactory = (schema: Ti18nSchema) => (props: IDe
   React.useEffect(
     () => {
       (async () => {
-        setPending(true);
-        const langs = await getLanguagesFromOption(config.languages);
-        const doc = await getSanityClient().fetch('*[_id == $id]', { id: getBaseIdFromId(props.documentId) });
-        if (doc && doc.length > 0) setBaseDocument(doc[0]);
-        setLanguages(langs);
-        setPending(false);
+        const shouldReload = (draft ?? published) && (
+          languages.length === 0 || (shouldReloadFn && shouldReloadFn(draft ?? published))
+        );
+        if (shouldReload) {
+          setPending(true);
+          const langs = await getLanguagesFromOption(config.languages, draft ?? published);
+          const doc = await getSanityClient().fetch('*[_id == $id]', { id: getBaseIdFromId(props.documentId) });
+          if (doc && doc.length > 0) setBaseDocument(doc[0]);
+          setLanguages(langs);
+          setPending(false);
+        }
       })();
     },
-    []
+    [draft, published, languages]
   );
 
   if (pending) {
