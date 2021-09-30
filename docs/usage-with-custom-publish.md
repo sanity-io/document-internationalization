@@ -1,4 +1,5 @@
 # Usage with custom publish action
+## Manual publish implementation
 In some cases you may already have a custom publish action defined for your studio. In this scenario the i18n may not work as expected as documents could be missing the language fields. In order to get the full functionality, you can make use of the `updateIntlFieldsForDocument` function. This is also used internally in the plugin's custom publish action.
 
 Example:
@@ -15,5 +16,23 @@ export const CustomPublishAction = ({ id, type, onComplete }) => {
       if (onComplete) onComplete();
     }
   }
+}
+```
+
+## Add additional actions
+It is also possible to import all actions "as-is" from the package to add to your actions resolver.
+
+Example:
+```js
+import {
+  PublishWithi18nAction,
+  DeleteWithi18nAction,
+  DuplicateWithi18nAction
+} from 'sanity-plugin-intl-input/lib/actions';
+import defaultResolve from 'part:@sanity/base/document-actions'
+
+// @README https://www.sanity.io/docs/document-actions
+export default function resolveDocumentActions(props) {
+  return [...defaultResolve(props), PublishWithi18nAction, DeleteWithi18nAction, DuplicateWithi18nAction]
 }
 ```
