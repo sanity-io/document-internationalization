@@ -23,6 +23,14 @@
     {
       "name": "part:@sanity/form-builder/input/i18n",
       "description": "i18n input"
+    },
+    {
+      "name": "part:sanity-plugin-intl-input/languages/loader",
+      "description": "User implementable languages loader function"
+    },
+    {
+      "name": "part:sanity-plugin-intl-input/languages/should-reload",
+      "description": "User implementable function determening whether the languages should be reloaded"
     }
   ]
 }

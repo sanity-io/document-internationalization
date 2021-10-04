@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "5.2.1",
+  "version": "5.3.0",
   "license": "MIT",
   "author": {
     "name": "Liam Martens",
@@ -40,6 +40,7 @@
     "build:structure": "rollup -c src/structure/rollup.config.js",
     "build:actions": "rollup -c src/actions/rollup.config.js",
     "build:constants": "rollup -c src/constants/rollup.config.js",
+    "build:utils": "rollup -c src/utils/rollup.config.js",
     "watch": "run-p \"build:* -- -w\""
   },
   "devDependencies": {
@@ -54,15 +55,15 @@
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
-    "@sanity/base": "^2.10.2",
+    "@sanity/base": "^2.20.0",
     "@sanity/check": "^2.0.9",
-    "@sanity/client": "^2.8.0",
-    "@sanity/desk-tool": "^2.10.2",
-    "@sanity/form-builder": "^2.10.2",
-    "@sanity/react-hooks": "^2.11.0",
-
-    "@sanity/structure": "^2.10.0",
-    "@sanity/types": "^2.10.0",
+    "@sanity/client": "^2.19.0",
+    "@sanity/desk-tool": "^2.20.0",
+    "@sanity/form-builder": "^2.20.0",
+    "@sanity/react-hooks": "^2.20.0",
+    "@sanity/structure": "^2.20.0",
+    "@sanity/types": "^2.19.0",
+    "@sanity/ui": "^0.36.10",
     "@types/classnames": "^2.2.11",
     "@types/lodash.get": "^4.4.6",
     "@types/react": "^17.0.0",
@@ -81,6 +82,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.0",
     "rollup-plugin-typescript2": "^0.29.0",
+    "styled-components": "^5.3.1",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
@@ -89,12 +91,15 @@
     "@sanity/form-builder": "^2.0.0",
     "@sanity/react-hooks": "^2.0.0",
     "@sanity/structure": "^2.0.0",
+    "@sanity/ui": "^0.36.12",
     "react": "^17.0.0",
     "react-router": "^5.0.0",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.0",
+    "styled-components": "^5.0.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "@cprecioso/country-flag-emoji": "^1.0.0",
     "classnames": "^2.2.6",
     "lodash.get": "^4.4.2",
     "moment": "^2.29.1",

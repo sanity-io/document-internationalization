@@ -1,6 +1,8 @@
 export type TMessagesConfig = {
   publishing?: string;
   publish?: string;
+  updatingIntlFields?: string;
+  intlFieldsUpdated?: string;
   loading?: string;
   missing?: string;
   draft?: string;

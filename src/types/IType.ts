@@ -3,6 +3,7 @@ import { ObjectSchemaTypeWithOptions } from '@sanity/types';
 export interface IField {
     name: string;
     type: IType;
+    readOnly?: boolean;
 }
 
 export interface IFieldSet {

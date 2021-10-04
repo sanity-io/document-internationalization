@@ -1,7 +1,15 @@
 # CHANGELOG
 
+## v5.3.0
+* [#60](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/60) Improved publish with I18n action and expose "updateIntlFieldsForDocument" action (ie to be used with custom publish action)
+* [#72](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/72) Updated custom delete action
+* It is now possible to define a custom loader and reload function for loading languages.
+* It is now possible to import all custom actions from the plugin for re-use or customization.
+* The Intl plugin received a visual overhaul for better consistency with the "native" Sanity UI (thanks to [SimeonGriggs](https://github.com/SimeonGriggs))
+
 ## v5.2.1
 * [#58](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/58) Only disable publishing when there are errors (no warnings)
+
 ## v5.2.0
 * Updated Publish with i18n with transactions to reduce webhook triggers
 * Implemented maintenance operation for fixing base language fields

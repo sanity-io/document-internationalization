@@ -1,5 +1,6 @@
 import 'regenerator-runtime';
 import { StructureBuilder as S } from '@sanity/structure';
+import { EarthGlobeIcon } from '@sanity/icons'
 import { IDefaultDocumentNodeStructureProps } from './IDefaultDocumentNodeStructureProps';
 import { Ti18nSchema } from '../types';
 import { ListItemBuilder } from '@sanity/structure/lib/ListItem';
@@ -59,6 +60,7 @@ export const getMaintenanceListItem = () => {
   return S.listItem()
   .id(`__i18n_translations_maintenance_tab`)
   .title(config.messages?.translationsMaintenance?.title || '')
+  .icon(EarthGlobeIcon)
   .child(getMaintenanceTabComponent());
 };
 
