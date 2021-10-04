@@ -1,14 +1,14 @@
-import React from 'react';
-import styles from './MaintenanceTabResult.scss';
-import { TMessagesConfig } from '../../../types';
-import { getConfig } from '../../../utils';
+import React from "react";
+import { Box, Button, Card, Flex, Text } from "@sanity/ui";
+import { TMessagesConfig } from "../../../types";
+import { getConfig } from "../../../utils";
 
 type Props = {
   pending?: boolean;
   count: number;
-  labelName?: keyof NonNullable<TMessagesConfig['translationsMaintenance']>;
+  labelName?: keyof NonNullable<TMessagesConfig["translationsMaintenance"]>;
   onClick?: (event: React.SyntheticEvent<HTMLButtonElement, Event>) => void;
-}
+};
 
 export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
   pending,
@@ -20,11 +20,28 @@ export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
   const config = getConfig();
 
   return (
-    <div className={styles.entry}>
-      <p>{count} {labelName ? config?.messages?.translationsMaintenance?.[labelName] : children}</p>
-      {(count > 0) && (
-        <button disabled={pending} onClick={onClick}>{config?.messages?.translationsMaintenance?.fix}</button>
-      )}
-    </div>
-  )
-}
+    <Card
+      padding={3}
+      radius={2}
+      shadow={1}
+      tone={count > 0 ? `caution` : `default`}
+    >
+      <Flex align="center">
+        <Box flex={1}>
+          <Text muted={count <= 0}>
+            {count}{" "}
+            {labelName
+              ? config?.messages?.translationsMaintenance?.[labelName]
+              : children}
+          </Text>
+        </Box>
+
+        {count > 0 && (
+          <Button padding={2} fontSize={2} disabled={pending} onClick={onClick}>
+            {config?.messages?.translationsMaintenance?.fix}
+          </Button>
+        )}
+      </Flex>
+    </Card>
+  );
+};
