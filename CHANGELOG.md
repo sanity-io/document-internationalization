@@ -5,6 +5,7 @@
 * [#72](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/72) Updated custom delete action
 * It is now possible to define a custom loader and reload function for loading languages.
 * It is now possible to import all custom actions from the plugin for re-use or customization.
+* The Intl plugin received a visual overhaul for better consistency with the "native" Sanity UI (thanks to [SimeonGriggs](https://github.com/SimeonGriggs))
 
 ## v5.2.1
 * [#58](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/58) Only disable publishing when there are errors (no warnings)
