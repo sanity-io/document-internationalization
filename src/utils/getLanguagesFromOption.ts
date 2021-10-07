@@ -1,8 +1,8 @@
 import get from 'lodash.get';
+import languagesLoaderFn from 'part:sanity-plugin-intl-input/languages/loader?';
 import { TLanguagesOption } from '../types';
 import { normalizeLanguageList } from './normalizeLanguageList';
 import { getSanityClient } from './getSanityClient';
-import languagesLoaderFn from 'part:sanity-plugin-intl-input/languages/loader?';
 import type { SanityDocument } from '@sanity/client';
 
 export const getLanguagesFromOption = async <D extends SanityDocument>(langs: TLanguagesOption, document?: D | null) => {
