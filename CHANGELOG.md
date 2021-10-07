@@ -2,7 +2,7 @@
 
 ## v5.4.0
 * Updated i18n input to use `DocumentPaneContext` instead of `DocumentHistoryContext`. Keeping support for both for now to ensure compatibility for older studios.
-
+* [#83](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/83) Fixed issue with singleton in `v5.3.0`
 ## v5.3.0
 * [#60](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/60) Improved publish with I18n action and expose "updateIntlFieldsForDocument" action (ie to be used with custom publish action)
 * [#72](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/72) Updated custom delete action
