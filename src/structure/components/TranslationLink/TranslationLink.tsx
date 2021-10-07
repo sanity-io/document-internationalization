@@ -49,7 +49,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
     ? docId
     : buildDocId(docId, lang.name);
 
-  const { replaceCurrent } = usePaneRouter();
+  const { navigateIntent } = usePaneRouter();
 
   React.useEffect(() => {
     getSanityClient()
@@ -79,7 +79,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
     }
 
     // TODO: Leverage this function to open doc without resetting all panes
-    replaceCurrent(params);
+    navigateIntent("edit", params);
   };
 
   return (
