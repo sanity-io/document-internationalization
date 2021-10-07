@@ -45,8 +45,9 @@ declare module '@sanity/state-router/lib/components/IntentLink' {
   export default IntentLink;
 }
 
-declare module '@sanity/desk-tool/lib/panes/documentPane/documentHistory/context' {
-  export const DocumentHistoryContext: React.Context<{
+declare module '@sanity/desk-tool/lib/panes/document/DocumentPaneContext' {
+  // @README https://github.com/sanity-io/sanity/blob/next/packages/%40sanity/desk-tool/src/panes/document/DocumentPaneContext.ts
+  export const DocumentPaneContext: React.Context<{
     displayed: import('@sanity/client').SanityDocument<any> | null;
   }>;
 }
