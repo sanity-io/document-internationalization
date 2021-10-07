@@ -19,7 +19,7 @@ import { getBaseLanguage, getConfig, getLanguagesFromOption } from "../utils";
 import { setIfMissing } from "@sanity/form-builder/PatchEvent";
 import { Path, Marker } from "@sanity/types";
 import { IType } from "../types";
-import { DocumentHistoryContext } from "@sanity/desk-tool/lib/panes/documentPane/documentHistory/context";
+import { DocumentPaneContext } from "@sanity/desk-tool/lib/panes/document/DocumentPaneContext";
 
 const createSlug = (input: string) =>
   slugify(input, { replacement: "_" }).replace(/-/g, "_");
@@ -53,7 +53,7 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
     value,
     level,
   } = props;
-  const historyContext = React.useContext(DocumentHistoryContext);
+  const historyContext = React.useContext(DocumentPaneContext);
   const [fetchingLanguages, setFetchingLanguages] = React.useState(false);
   const [currentLanguage, setCurrentLanguage] =
     React.useState<ILanguageObject | null>(null);
