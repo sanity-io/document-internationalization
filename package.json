@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-intl-input",
-  "version": "5.3.0-beta.2",
+  "version": "5.4.0-beta.0",
   "license": "MIT",
   "author": {
     "name": "Liam Martens",
@@ -58,7 +58,7 @@
     "@sanity/base": "^2.20.0",
     "@sanity/check": "^2.0.9",
     "@sanity/client": "^2.19.0",
-    "@sanity/desk-tool": "^2.20.0",
+    "@sanity/desk-tool": "^2.21.0",
     "@sanity/form-builder": "^2.20.0",
     "@sanity/react-hooks": "^2.20.0",
     "@sanity/structure": "^2.20.0",
@@ -87,7 +87,7 @@
   },
   "peerDependencies": {
     "@sanity/base": "^2.0.0",
-    "@sanity/desk-tool": "^2.0.0",
+    "@sanity/desk-tool": "^2.21.0",
     "@sanity/form-builder": "^2.0.0",
     "@sanity/react-hooks": "^2.0.0",
     "@sanity/structure": "^2.0.0",
