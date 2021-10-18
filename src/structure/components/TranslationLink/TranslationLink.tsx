@@ -14,8 +14,8 @@ import {
   Heading,
 } from "@sanity/ui";
 import { usePaneRouter } from "@sanity/desk-tool";
-import { getFlag } from "../../../utils/getFlag";
 
+import { Flag } from "../Flag";
 interface IProps {
   docId: string;
   index: number;
@@ -41,7 +41,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
   // Expects language first, then country: `en-us` or `en`
   const [codeCountry, codeLanguage] = new RegExp(/[_-]/).test(lang.name)
     ? lang.name.split(/[_-]/)
-    : [null, lang.name];
+    : [``, lang.name];
 
   const translatedDocId = (
     config.base ? lang.name === config.base : index === 0
@@ -102,18 +102,22 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
                   paddingRight={3}
                   style={{ position: "relative" }}
                 >
-                  <Heading size={4}>{getFlag(codeCountry)}</Heading>
+                  <Heading size={4}>
+                    <Flag code={codeCountry} />
+                  </Heading>
                   <Heading
                     size={4}
                     style={{ position: "absolute", bottom: 0, right: 0 }}
                   >
-                    {getFlag(codeLanguage)}
+                    <Flag code={codeLanguage} />
                   </Heading>
                 </Flex>
               )}
               {!codeCountry && codeLanguage && (
                 <Box paddingX={1}>
-                  <Heading size={5}>{getFlag(codeLanguage)}</Heading>
+                  <Heading size={5}>
+                    <Flag code={codeLanguage} />
+                  </Heading>
                 </Box>
               )}
             </Box>

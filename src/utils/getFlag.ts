@@ -1,11 +1,35 @@
 import { getEmojiFlag } from "@cprecioso/country-flag-emoji";
+import { allEmojiFlagCodes } from "../structure/components/Flag/allEmojiFlagCodes";
 
+// Get flag from a valid country code
 export const getFlag = (code: string = ``) => {
+  if (!code) {
+    return ``;
+  }
+
+  const flagCode = getFlagCode(code);
+
+  if (!allEmojiFlagCodes.includes(flagCode.toUpperCase())) {
+    return ``;
+  }
+
+  const emoji = getEmojiFlag(flagCode);
+
+  return emoji;
+};
+
+// Convert some language codes to country codes
+export const getFlagCode = (code: string = ``) => {
+  if (!code) {
+    return ``;
+  }
+
   switch (code) {
     case `en`:
-      return getEmojiFlag(`gb`);
+    case `EN`:
+      return `gb`;
 
     default:
-      return getEmojiFlag(code);
+      return code;
   }
 };
