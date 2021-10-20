@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v5.5.0
+* More accessible emoji, flat images for non-supported platforms [#90](https://github.com/LiamMartens/sanity-plugin-intl-input/pull/90)
+* sort 'base' to start of input tablist [#91](https://github.com/LiamMartens/sanity-plugin-intl-input/pull/91)
+* [#88](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/88) Fixed issue where languages would not be loaded for new documents
+
 ## v5.4.0
 * Updated i18n input to use `DocumentPaneContext` instead of `DocumentHistoryContext`. Keeping support for both for now to ensure compatibility for older studios.
 * [#83](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/83) Fixed issue with singleton in `v5.3.0`
