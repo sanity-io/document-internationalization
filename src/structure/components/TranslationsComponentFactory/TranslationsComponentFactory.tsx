@@ -32,10 +32,7 @@ export const TranslationsComponentFactory =
 
     React.useEffect(() => {
       (async () => {
-        const shouldReload =
-          (draft ?? published) &&
-          (languages.length === 0 ||
-            (shouldReloadFn && shouldReloadFn(draft ?? published)));
+        const shouldReload = (languages.length === 0 || (shouldReloadFn && shouldReloadFn(draft ?? published)));
         if (shouldReload) {
           setPending(true);
           const langs = await getLanguagesFromOption(

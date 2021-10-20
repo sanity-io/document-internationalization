@@ -20,6 +20,7 @@ import { setIfMissing } from "@sanity/form-builder/PatchEvent";
 import { Path, Marker } from "@sanity/types";
 import { IType } from "../types";
 import { DocumentPaneContext } from "@sanity/desk-tool/lib/panes/document/DocumentPaneContext";
+import { baseToTop } from "../utils/baseToTop";
 
 const createSlug = (input: string) =>
   slugify(input, { replacement: "_" }).replace(/-/g, "_");
@@ -95,7 +96,20 @@ export const Input = React.forwardRef<any, Props>((props, ref) => {
         type.options.languages || config.languages,
         historyContext.displayed
       );
-      setLanguages(updated);
+      const baseLang = getBaseLanguage(
+        updated,
+        type.options.base || config.base
+      );
+      const updatedSorted = updated
+        .map((lang) => ({
+          ...lang,
+          isBase:
+            typeof baseLang?.name === "string" && lang.name === baseLang?.name,
+        }))
+        .sort(baseToTop)
+        .reverse();
+
+      setLanguages(updatedSorted);
       setFetchingLanguages(false);
     }
   }, [type, languages, historyContext.displayed]);

@@ -2866,6 +2866,11 @@ JSONStream@^1.0.4, JSONStream@^1.3.4:
     jsonparse "^1.2.0"
     through ">=2.2.7 <3"
 
+a11y-react-emoji@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/a11y-react-emoji/-/a11y-react-emoji-1.1.3.tgz#126718f00ad1aa460f5cf645ac417504ae984ad7"
+  integrity sha512-bOFUVygGqYMFsRPEQxf4JUNlsdsYjUk7B/XqoVoOP6Wx0c1QK3KnCtcq0eeWrLGLtq/Q65HAO7c8B5M9QCLTpQ==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz"
