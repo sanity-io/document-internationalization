@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v5.5.1
+* Added `engines` field in `package.json`
+* Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))
+
 ## v5.5.0
 * More accessible emoji, flat images for non-supported platforms [#90](https://github.com/LiamMartens/sanity-plugin-intl-input/pull/90)
 * sort 'base' to start of input tablist [#91](https://github.com/LiamMartens/sanity-plugin-intl-input/pull/91)
