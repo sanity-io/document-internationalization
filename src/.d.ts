@@ -73,6 +73,13 @@ declare module 'part:sanity-plugin-intl-input/languages/should-reload?' {
   export default fn;
 }
 
+declare module 'part:sanity-plugin-intl-input/ui/flags?' {
+  const flags: Record<string, React.ComponentType<{
+    code: string;
+  }>> | undefined;
+  export = flags;
+}
+
 declare module '*.scss' {
     const c: { [key: string]: string; };
     export = c;

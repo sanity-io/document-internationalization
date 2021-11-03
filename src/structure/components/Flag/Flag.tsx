@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
-import Emoji from "a11y-react-emoji";
+import React, { useState, useMemo } from 'react';
+import Emoji from 'a11y-react-emoji';
 
-import { getFlag, getFlagCode } from "../../../utils/getFlag";
+import { getFlag, getFlagCode } from '../../../utils/getFlag';
 
 interface IProps {
   code: string;
