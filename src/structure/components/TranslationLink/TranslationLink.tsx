@@ -1,7 +1,7 @@
-import * as React from "react";
-import { ILanguageObject, Ti18nSchema } from "../../../types";
-import { getSanityClient, getConfig, buildDocId } from "../../../utils";
-import { SanityDocument } from "@sanity/client";
+import * as React from 'react';
+import { ILanguageObject, Ti18nSchema } from '../../../types';
+import { getSanityClient, getConfig, buildDocId } from '../../../utils';
+import { SanityDocument } from '@sanity/client';
 import {
   Stack,
   Button,
@@ -12,10 +12,11 @@ import {
   Text,
   Code,
   Heading,
-} from "@sanity/ui";
-import { usePaneRouter } from "@sanity/desk-tool";
+} from '@sanity/ui';
+import { usePaneRouter } from '@sanity/desk-tool';
+import { Flag } from '../Flag';
+import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
 
-import { Flag } from "../Flag";
 interface IProps {
   docId: string;
   index: number;
@@ -36,6 +37,9 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 }) => {
   const config = getConfig(schema);
   const [existing, setExisting] = React.useState<null | SanityDocument>(null);
+  const FlagComponent = (flagOverrides && lang.name in flagOverrides)
+    ? flagOverrides[lang.name]
+    : Flag;
 
   // Split a country and language if both supplied
   // Expects language first, then country: `en-us` or `en`
@@ -103,20 +107,20 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
                   style={{ position: "relative" }}
                 >
                   <Heading size={4}>
-                    <Flag code={codeCountry} />
+                    <FlagComponent code={codeCountry} />
                   </Heading>
                   <Heading
                     size={4}
                     style={{ position: "absolute", bottom: 0, right: 0 }}
                   >
-                    <Flag code={codeLanguage} />
+                    <FlagComponent code={codeLanguage} />
                   </Heading>
                 </Flex>
               )}
               {!codeCountry && codeLanguage && (
                 <Box paddingX={1}>
                   <Heading size={5}>
-                    <Flag code={codeLanguage} />
+                    <FlagComponent code={codeLanguage} />
                   </Heading>
                 </Box>
               )}

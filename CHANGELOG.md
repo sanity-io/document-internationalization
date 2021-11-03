@@ -1,8 +1,9 @@
 # CHANGELOG
 
 ## v5.5.1
-* Added `engines` field in `package.json`
-* Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))
+* [#92](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/92) Added `engines` field in `package.json`
+* [#89](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/89) Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))
+* [#84](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/84) Allow overriding flag component for edge cases
 
 ## v5.5.0
 * More accessible emoji, flat images for non-supported platforms [#90](https://github.com/LiamMartens/sanity-plugin-intl-input/pull/90)
