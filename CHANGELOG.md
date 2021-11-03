@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v5.5.1
+## v5.6.0
 * [#92](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/92) Added `engines` field in `package.json`
 * [#89](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/89) Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))
 * [#84](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/84) Allow overriding flag component for edge cases
