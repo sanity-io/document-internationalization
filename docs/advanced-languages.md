@@ -71,3 +71,16 @@ export default (document) => {
   return false;
 }
 ```
+
+## Override flag icons
+Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:sanity-plugin-intl-input/ui/flags` studio part as follows:
+
+```flags.js
+export const lang_CULTURE = ({ code }) => (
+  <MyFlag />
+)
+```
+
+Your custom component will receive either the language or culture code (as we render 2 flags by default). If your i18n config does not define cultures it will just receive the language code and we only display a singular flag.
+
+**Remark:** The plugin expects the custom flag components to be named exports from your part implementation, but you could have your locales defined as follows `en-US`. In this case the language can not be used as a variable name so the plugin will look for `en_US` instead, replacing all non alphabetical characters with a `_`

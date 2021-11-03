@@ -37,8 +37,9 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 }) => {
   const config = getConfig(schema);
   const [existing, setExisting] = React.useState<null | SanityDocument>(null);
-  const FlagComponent = (flagOverrides && lang.name in flagOverrides)
-    ? flagOverrides[lang.name]
+  const languageAsVariableName = lang.name.replace(/[^a-zA-Z]/g, '_')
+  const FlagComponent = (flagOverrides && languageAsVariableName in flagOverrides)
+    ? flagOverrides[languageAsVariableName]
     : Flag;
 
   // Split a country and language if both supplied
