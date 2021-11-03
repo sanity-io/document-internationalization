@@ -76,6 +76,8 @@ export default (document) => {
 Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:sanity-plugin-intl-input/ui/flags` studio part as follows:
 
 ```flags.js
+import React from 'react';
+
 export const lang_CULTURE = ({ code }) => (
   <MyFlag />
 )
