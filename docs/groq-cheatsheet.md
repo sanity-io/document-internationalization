@@ -17,7 +17,7 @@ This only applies to document wide translations.
 *[_type == "type" && !(_id in match ["*__i18n__*"])]
 ```
 
-## Get list of all available langauges for a given document type
+## Get list of all available languages for a given document type
 ```
 *[_type == "type" && !(_id in path("drafts.i18n.*") && _id in path("i18n.**"))] {
   "languages": [__i18n_lang, ...__i18n_refs[].lang]
