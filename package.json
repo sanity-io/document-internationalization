@@ -90,6 +90,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.4",
     "lerna": "^3.22.1",
+    "lint-staged": "^12.1.2",
     "node-sass": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.10",
@@ -131,5 +132,18 @@
     "moment": "^2.29.1",
     "regenerator-runtime": "^0.13.7",
     "slugify": "^1.4.6"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "eslint . --quiet --fix", "git add"
+    ],
+    "src/**/*.scss": [
+      "stylelint \"**/*.scss\" --fix", "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
