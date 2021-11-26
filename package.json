@@ -1,6 +1,6 @@
 {
-  "name": "sanity-plugin-intl-input",
-  "version": "5.6.0",
+  "name": "@sanity/document-internationalization",
+  "version": "0.0.1",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -28,11 +28,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/LiamMartens/sanity-plugin-intl-input"
+    "url": "https://github.com/sanity-io/document-internationalization"
   },
   "bugs": {
-    "email": "hi@liammartens.com",
-    "url": "https://github.com/LiamMartens/sanity-plugin-intl-input/issues"
+    "url": "https://github.com/sanity-io/document-internationalization/issues"
   },
   "scripts": {
     "build": "run-p build:*",
