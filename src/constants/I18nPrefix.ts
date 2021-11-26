@@ -1,1 +1,1 @@
-export const I18nPrefix = 'i18n';
+export const I18nPrefix = 'i18n'

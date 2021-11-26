@@ -1,30 +1,19 @@
-import * as React from 'react';
-import { ILanguageObject, Ti18nSchema } from '../../../types';
-import { getSanityClient, getConfig, buildDocId } from '../../../utils';
-import { SanityDocument } from '@sanity/client';
-import {
-  Stack,
-  Button,
-  Badge,
-  Card,
-  Flex,
-  Box,
-  Text,
-  Code,
-  Heading,
-} from '@sanity/ui';
-import { usePaneRouter } from '@sanity/desk-tool';
-import { Flag } from '../Flag';
+import * as React from 'react'
+import {SanityDocument} from '@sanity/client'
+import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading} from '@sanity/ui'
+import {usePaneRouter} from '@sanity/desk-tool'
 import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
+import {Flag} from '../Flag'
+import {getSanityClient, getConfig, buildDocId} from '../../../utils'
+import {ILanguageObject, Ti18nSchema} from '../../../types'
 
 interface IProps {
-  docId: string;
-  index: number;
-  schema: Ti18nSchema;
-  lang: ILanguageObject;
-  currentLanguage: string | null;
-  isCurrentLanguage: boolean;
-  baseDocument?: any;
+  docId: string
+  index: number
+  schema: Ti18nSchema
+  lang: ILanguageObject
+  isCurrentLanguage: boolean
+  baseDocument?: any
 }
 
 export const TranslationLink: React.FunctionComponent<IProps> = ({
@@ -35,57 +24,56 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
   isCurrentLanguage,
   baseDocument,
 }) => {
-  const config = getConfig(schema);
-  const [existing, setExisting] = React.useState<null | SanityDocument>(null);
+  const config = getConfig(schema)
+  const [existing, setExisting] = React.useState<null | SanityDocument>(null)
   const languageAsVariableName = lang.name.replace(/[^a-zA-Z]/g, '_')
-  const FlagComponent = (flagOverrides && languageAsVariableName in flagOverrides)
-    ? flagOverrides[languageAsVariableName]
-    : Flag;
+  const FlagComponent =
+    flagOverrides && languageAsVariableName in flagOverrides
+      ? flagOverrides[languageAsVariableName]
+      : Flag
 
   // Split a country and language if both supplied
   // Expects language first, then country: `en-us` or `en`
   const [codeCountry, codeLanguage] = new RegExp(/[_-]/).test(lang.name)
     ? lang.name.split(/[_-]/)
-    : [``, lang.name];
+    : [``, lang.name]
 
-  const translatedDocId = (
-    config.base ? lang.name === config.base : index === 0
-  )
+  const translatedDocId = (config.base ? lang.name === config.base : index === 0)
     ? docId
-    : buildDocId(docId, lang.name);
+    : buildDocId(docId, lang.name)
 
-  const { navigateIntent } = usePaneRouter();
+  const {navigateIntent} = usePaneRouter()
 
   React.useEffect(() => {
     getSanityClient()
-      .fetch("*[_id == $id || _id == $draftId]", {
+      .fetch('*[_id == $id || _id == $draftId]', {
         id: translatedDocId,
         draftId: `drafts.${translatedDocId}`,
       })
-      .then((r) => {
-        const existing = r.find((r) => r._id === translatedDocId);
-        if (existing) setExisting(existing);
-        else setExisting(r.find((r) => r._id === `drafts.${translatedDocId}`));
+      .then((response) => {
+        const ex = response.find((r) => r._id === translatedDocId)
+        if (ex) setExisting(ex)
+        else setExisting(response.find((r) => r._id === `drafts.${translatedDocId}`))
       })
       .catch((err) => {
-        console.error(err);
-      });
-  }, [lang.name]);
+        console.error(err)
+      })
+  }, [lang.name])
 
   const handleClick = (params = {}) => {
     if (existing === undefined) {
-      const fieldName = config.fieldNames.lang;
+      const fieldName = config.fieldNames.lang
       getSanityClient().createIfNotExists({
         ...(baseDocument ? baseDocument : {}),
         _id: `drafts.${translatedDocId}`,
         _type: schema.name,
         [fieldName]: lang.name,
-      });
+      })
     }
 
     // TODO: Leverage this function to open doc without resetting all panes
-    navigateIntent("edit", params);
-  };
+    navigateIntent('edit', params)
+  }
 
   return (
     <>
@@ -93,10 +81,8 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
         <Button
           mode={isCurrentLanguage ? `default` : `bleed`}
           padding={2}
-          onClick={() =>
-            handleClick({ id: translatedDocId, type: schema.name })
-          }
-          style={{ width: `100%` }}
+          onClick={() => handleClick({id: translatedDocId, type: schema.name})}
+          style={{width: `100%`}}
         >
           <Flex align="center" gap={4}>
             <Box>
@@ -105,15 +91,12 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
                   direction="column"
                   paddingBottom={3}
                   paddingRight={3}
-                  style={{ position: "relative" }}
+                  style={{position: 'relative'}}
                 >
                   <Heading size={4}>
                     <FlagComponent code={codeCountry} />
                   </Heading>
-                  <Heading
-                    size={4}
-                    style={{ position: "absolute", bottom: 0, right: 0 }}
-                  >
+                  <Heading size={4} style={{position: 'absolute', bottom: 0, right: 0}}>
                     <FlagComponent code={codeLanguage} />
                   </Heading>
                 </Flex>
@@ -137,18 +120,14 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
                 Base
               </Badge>
             )}
-            {!existing && (
-              <Badge tone="caution">{config.messages?.missing}</Badge>
-            )}
-            {existing && existing._id.startsWith("drafts.") && (
+            {!existing && <Badge tone="caution">{config.messages?.missing}</Badge>}
+            {existing && existing._id.startsWith('drafts.') && (
               <Badge>{config.messages?.draft}</Badge>
             )}
           </Flex>
         </Button>
       </Card>
-      {lang.isBase && (
-        <Card padding={0} borderTop style={{ height: `1px !important` }} />
-      )}
+      {lang.isBase && <Card padding={0} borderTop style={{height: `1px !important`}} />}
     </>
-  );
-};
+  )
+}

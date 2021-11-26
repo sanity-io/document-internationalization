@@ -1,4 +1,4 @@
 export interface IDefaultDocumentNodeStructureProps {
-    documentId: string;
-    schemaType: string;
+  documentId: string
+  schemaType: string
 }

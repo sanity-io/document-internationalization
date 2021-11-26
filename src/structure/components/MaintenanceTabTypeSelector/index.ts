@@ -1,1 +1,1 @@
-export * from './MaintenanceTabTypeSelector';
+export * from './MaintenanceTabTypeSelector'

@@ -1,14 +1,14 @@
-import React from "react";
-import { Box, Button, Card, Flex, Text } from "@sanity/ui";
-import { TMessagesConfig } from "../../../types";
-import { getConfig } from "../../../utils";
+import React from 'react'
+import {Box, Button, Card, Flex, Text} from '@sanity/ui'
+import {TMessagesConfig} from '../../../types'
+import {getConfig} from '../../../utils'
 
 type Props = {
-  pending?: boolean;
-  count: number;
-  labelName?: keyof NonNullable<TMessagesConfig["translationsMaintenance"]>;
-  onClick?: (event: React.SyntheticEvent<HTMLButtonElement, Event>) => void;
-};
+  pending?: boolean
+  count: number
+  labelName?: keyof NonNullable<TMessagesConfig['translationsMaintenance']>
+  onClick?: (event: React.SyntheticEvent<HTMLButtonElement, Event>) => void
+}
 
 export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
   pending,
@@ -17,22 +17,14 @@ export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
   children,
   onClick,
 }) => {
-  const config = getConfig();
+  const config = getConfig()
 
   return (
-    <Card
-      padding={3}
-      radius={2}
-      shadow={1}
-      tone={count > 0 ? `caution` : `default`}
-    >
+    <Card padding={3} radius={2} shadow={1} tone={count > 0 ? `caution` : `default`}>
       <Flex align="center">
         <Box flex={1}>
           <Text muted={count <= 0}>
-            {count}{" "}
-            {labelName
-              ? config?.messages?.translationsMaintenance?.[labelName]
-              : children}
+            {count} {labelName ? config?.messages?.translationsMaintenance?.[labelName] : children}
           </Text>
         </Box>
 
@@ -43,5 +35,5 @@ export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
         )}
       </Flex>
     </Card>
-  );
-};
+  )
+}

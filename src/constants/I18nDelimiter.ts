@@ -1,1 +1,1 @@
-export const I18nDelimiter = '__i18n_';
+export const I18nDelimiter = '__i18n_'

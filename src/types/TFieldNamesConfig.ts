@@ -1,4 +1,4 @@
 export type TFieldNamesConfig = {
-  lang?: string;
-  references?: string;
+  lang?: string
+  references?: string
 }

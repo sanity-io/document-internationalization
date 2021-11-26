@@ -1,1 +1,1 @@
-export * from './TranslationsComponentFactory';
+export * from './TranslationsComponentFactory'

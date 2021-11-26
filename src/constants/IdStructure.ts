@@ -1,4 +1,4 @@
 export enum IdStructure {
-    SUBPATH = 'subpath',
-    DELIMITER = 'delimiter'
+  SUBPATH = 'subpath',
+  DELIMITER = 'delimiter',
 }

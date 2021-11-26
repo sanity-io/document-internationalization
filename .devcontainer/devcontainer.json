@@ -1,9 +1,11 @@
 {
   "name": "nodejs",
   "image": "node:14-stretch",
-"remoteUser": "node",
-"extensions": [
-	"eamodio.gitlens",
-	"yzhang.markdown-all-in-one"
-]
+  "remoteUser": "node",
+  "extensions": [
+    "eamodio.gitlens",
+    "yzhang.markdown-all-in-one",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ]
 }

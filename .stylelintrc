@@ -1,0 +1,4 @@
+{
+  "extends": ["stylelint-prettier/recommended"],
+  "ignoreFiles": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"]
+}

@@ -3,5 +3,5 @@ export function createSanityReference(id: string, weak = false) {
     _type: 'reference' as const,
     _ref: id,
     _weak: weak,
-  };
+  }
 }

@@ -1,1 +1,1 @@
-export * from './MaintenanceTabResult';
+export * from './MaintenanceTabResult'

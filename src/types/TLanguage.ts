@@ -1,3 +1,3 @@
-import { ILanguageObject } from './ILanguageObject';
+import {ILanguageObject} from './ILanguageObject'
 
-export type Tlanguage = (string | ILanguageObject);
+export type Tlanguage = string | ILanguageObject
