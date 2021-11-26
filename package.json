@@ -46,7 +46,8 @@
     "build:actions": "rollup -c src/actions/rollup.config.js",
     "build:constants": "rollup -c src/constants/rollup.config.js",
     "build:utils": "rollup -c src/utils/rollup.config.js",
-    "watch": "run-p \"build:* -- -w\""
+    "watch": "run-p \"build:* -- -w\"",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
@@ -88,10 +89,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "husky": "^7.0.4",
+    "husky": "^7.0.0",
     "lerna": "^3.22.1",
     "lint-staged": "^12.1.2",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.2.10",
     "postcss-scss": "^4.0.2",
@@ -135,15 +136,10 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
-      "eslint . --quiet --fix", "git add"
+      "eslint . --quiet --fix"
     ],
     "src/**/*.scss": [
-      "stylelint \"**/*.scss\" --fix", "git add"
+      "stylelint \"**/*.scss\" --fix"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
