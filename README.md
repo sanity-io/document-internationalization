@@ -1,9 +1,12 @@
 # Intl plugin for Sanity
 [![npm version](https://img.shields.io/npm/v/sanity-plugin-intl-input.svg?style=flat)](https://www.npmjs.com/package/sanity-plugin-intl-input)
 
-## !! Breaking Change for V5
-**The ID structure for translated documents has changed. Your queries against Sanity will continue to work until you use the maintenance tab (new in V5) to update the ID structure.
-The change was made to improve the querying structure and to make better use of GROQ. The new structure looks as follows `i18n.{baselanguage-document-id}.{language}`. This means you could query all translations for a document as follows `*[_id in path("i18n.{baselanguage-document-id}.*")]`. This vastly improves the querying experience.**
+> sanity-plugin-intl-input will soon be deprecated in favour of an updated version, officially released by Sanity. This is for future compatibility with Sanity Studio and to ensure dedicated maintenance of the plugin. We anticipate no breaking changes to document-level features, however the new official plugin will not support field-level internationalisation.
+
+> Field-level internationalisation is best done using the [guidance in the official Documentation](https://www.sanity.io/docs/localization#cd568b11a09c), combined with the @sanity/language-filter [plugin to improve the UI](https://www.npmjs.com/package/@sanity/language-filter). This method results in a different "shape" of your data, and so you will need to update your schema files and run migration scripts to move field-level data. You can find snippets of these scripts [in the documentation](docs/object-level-migration.md).
+
+> If you have any questions please ask them in the [Sanity Slack community](https://slack.sanity.io/).
+
 
 ## Default solution
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  
@@ -17,6 +20,9 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 | Simple translated object field | Document wide translation |
 |-|-|
 |![Intl Plugin Input](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/docs/img/intl-plugin.gif)|![Intl Plugin Document Translation](https://raw.githubusercontent.com/LiamMartens/sanity-plugin-intl-input/master/docs/img/intl-plugin-document.gif)|
+
+## Important notice
+**Please make sure to read the information about ID structures before setting up your project. It is an important decision that should be made consciously. You can find out more about it [here](docs/important-configuration.md)**
 
 ### Documentation
 0. [V4 to V5 migration guide](docs/v4-v5-migration.md)
@@ -33,7 +39,6 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 7. [Advanced languages](docs/advanced-languages.md)
 8. [Usage with custom publish action](docs/usage-with-custom-publish.md)
 9. [GROQ Cheatsheet](/docs/groq-cheatsheet.md)
-
 ## Other resources
 * [Great guied by nilsnh](https://nilsnh.no/2021/08/22/guide-localizing-sanity-cms-with-the-intl-input-plugin/)
 * [Sanity Starter](https://www.sanity.io/create?template=sanity-io%2Fsanity-template-translation-examples)
