@@ -27,7 +27,7 @@ languages: {
 ```
 
 ## Custom loader functionality
-If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `sanity-plugin-intl-input/languages/loader` part your Sanity Studio. This implementation should be a function which receives the default list of langauges and the current document as parameters. It should return a list of normalized languages (`name` + `title`) and it can be `async`
+If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `sanity-plugin-intl-input/languages/loader` part your Sanity Studio. This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`name` + `title`) and it can be `async`
 
 Example:
 
