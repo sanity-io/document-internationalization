@@ -3,7 +3,7 @@
 
 > sanity-plugin-intl-input will soon be deprecated in favour of an updated version, officially released by Sanity. This is for future compatibility with Sanity Studio and to ensure dedicated maintenance of the plugin. We anticipate no breaking changes to document-level features, however the new official plugin will not support field-level internationalisation.
 
-> Field-level internationalisation is best done using the [guidance in the official Documentation](https://www.sanity.io/docs/localization#cd568b11a09c), combined with the @sanity/language-filter [plugin to improve the UI](https://www.npmjs.com/package/@sanity/language-filter). This method results in a different "shape" of your data, and so you will need to update your schema files and run migration scripts to move field-level data. You can find snippets of these scripts [in the documentation](docs/object-level-migration.md).
+> Field-level internationalisation is best done using the [guidance in the official Documentation](https://www.sanity.io/docs/localization#cd568b11a09c), combined with the @sanity/language-filter [plugin to improve the UI](https://www.npmjs.com/package/@sanity/language-filter). This method is different from the existing implementation and will require you to update your configuration and schema. You can find a migration guide [in the documentation](docs/object-level-migration.md).
 
 > If you have any questions please ask them in the [Sanity Slack community](https://slack.sanity.io/).
 
