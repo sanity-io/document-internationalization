@@ -1,6 +1,6 @@
 import {I18nPrefix, I18nDelimiter} from '../constants'
 
-export const getBaseIdFromId = (id: string) => {
+export const getBaseIdFromId = (id: string): string => {
   // subpath
   const rx = new RegExp(`${I18nPrefix}\\.([^.]+)\\.[^.]+`)
   const match = id.match(rx)

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.0.0
+* Migrated original plugin code
+* Removed object level translations
+* Added additional GROQ examples
+* Added a slug uniqueness validator for document level translations (`import { isSlugUnique } from '@sanity/document-internationalization/lib/validators`)
+
+<!-- // @TODO remove old changelog? -->
 ## v5.6.0
 * [#92](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/92) Added `engines` field in `package.json`
 * [#89](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/89) Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))

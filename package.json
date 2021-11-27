@@ -46,6 +46,7 @@
     "build:actions": "rollup -c src/actions/rollup.config.js",
     "build:constants": "rollup -c src/constants/rollup.config.js",
     "build:utils": "rollup -c src/utils/rollup.config.js",
+    "build:validators": "rollup -c src/validators/rollup.config.js",
     "watch": "run-p \"build:* -- -w\"",
     "prepare": "husky install"
   },
