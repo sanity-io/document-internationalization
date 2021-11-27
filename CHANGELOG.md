@@ -5,6 +5,7 @@
 * Removed object level translations
 * Added additional GROQ examples
 * Added a slug uniqueness validator for document level translations (`import { isSlugUnique } from '@sanity/document-internationalization/lib/validators`)
+* Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
 
 <!-- // @TODO remove old changelog? -->
 ## v5.6.0
