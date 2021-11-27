@@ -7,6 +7,23 @@ This only applies to document wide translations.
 ```
 **Note** This will not work on never before published, base language documents because they will not have the `__i18n_lang` field yet.
 
+## Get specific document by language and fallback to base
+## Subpath
+```
+coalesce(
+  *[_id in path("i18n." + $id + "." + $lang)][0],
+  *[_id == $id][0]
+)
+```
+
+## Delimiter
+```
+coalesce(
+  *[_id match $id && __i18n_lang == $lang][0],
+  *[_id == $id][0]
+)
+```
+
 ## Get all base language documents for a type without language field
 ### Subpath
 ```
