@@ -15,7 +15,10 @@ This definitely works, but makes the UI very clunky as you get more fields that 
 With the intl plugin you will get a cleaner UI for creating translatable documents as the translations are managed document wide.  
 ![Intl Plugin Document Translation](https://raw.githubusercontent.com/sanity-io/document-internationalization/main/docs/img/intl-plugin-document.gif)
 
-### Documentation
+## Important notice before getting started
+An important decision you will need to make is whether to use subpath or delimiter based IDs. Subpaths are slightly easier to query using GROQ, but they also make documents Private, meaning they can only be accessed using an Access Token. Requests with Access Tokens cannot be cached, and so API usage will dramatically increase.
+
+## Documentation
 0. [V4 to V5 migration guide](docs/v4-v5-migration.md)
 1. [Installation Instructions](docs/installation.md)
 2. [General Configuration](docs/general-configuration.md)
