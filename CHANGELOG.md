@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v5.6.1
+* Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
+
 ## v5.6.0
 * [#92](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/92) Added `engines` field in `package.json`
 * [#89](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/89) Added `GROQ Cheatsheet` page in [docs](/docs/groq-cheatsheet.md) as suggested and provided by [gpoole](https://github.com/gpoole))
