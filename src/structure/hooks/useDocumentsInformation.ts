@@ -52,7 +52,7 @@ export const useDocumentsInformation = (schema: string) => {
         const refsCount = Object.keys(d[refsFieldName] || {}).length
         return refsCount != docs.length
       }),
-      missingBaseDocumentRefs: documents.filter((d) => !d[baseRefFieldName]),
+      missingBaseDocumentRefs: translateddocuments.filter((d) => !d[baseRefFieldName]),
       orphanDocuments: translateddocuments.filter((d) => {
         const base = basedocuments.find((doc) => getBaseIdFromId(d._id) === doc._id)
         if (base) return false

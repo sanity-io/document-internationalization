@@ -22,7 +22,7 @@ export const UiMessages = {
     idStructureMismatch: 'document(s) with mismatched ID structures',
     missingLanguageField: 'document(s) are missing the language field',
     missingDocumentRefs: 'document(s) have missing translation references',
-    missingBaseDocumentRefs: 'documnt(s) have missing base document references',
+    missingBaseDocumentRefs: 'document(s) have missing base document references',
     orphanDocuments: 'orphaned translation document(s)',
     referenceBehaviorMismatch: 'document(s) with mismatched reference behaviors',
     baseLanguageMismatch: 'base document(s) with mismatched language field',
