@@ -6,6 +6,7 @@ import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
 import {Flag} from '../Flag'
 import {getSanityClient, getConfig, buildDocId} from '../../../utils'
 import {ILanguageObject, Ti18nSchema} from '../../../types'
+import {UiMessages} from '../../../constants'
 
 interface IProps {
   docId: string
@@ -120,10 +121,8 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
                 Base
               </Badge>
             )}
-            {!existing && <Badge tone="caution">{config.messages?.missing}</Badge>}
-            {existing && existing._id.startsWith('drafts.') && (
-              <Badge>{config.messages?.draft}</Badge>
-            )}
+            {!existing && <Badge tone="caution">{UiMessages.missing}</Badge>}
+            {existing && existing._id.startsWith('drafts.') && <Badge>{UiMessages.draft}</Badge>}
           </Flex>
         </Button>
       </Card>

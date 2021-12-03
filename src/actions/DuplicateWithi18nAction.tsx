@@ -2,7 +2,6 @@ import React from 'react'
 import ContentCopyIcon from 'part:@sanity/base/content-copy-icon'
 import {IResolverProps, IUseDocumentOperationResult} from '../types'
 import {
-  getConfig,
   getSanityClient,
   getBaseIdFromId,
   getTranslationsFor,
@@ -12,6 +11,7 @@ import {
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
+import {UiMessages} from '../constants'
 
 /**
  * This code is mostly taken from the default DuplicateAction provided by Sanity
@@ -24,7 +24,6 @@ const DISABLED_REASON_TITLE = {
 export const DuplicateWithi18nAction = (props: IResolverProps) => {
   const toast = useToast()
   const client = getSanityClient()
-  const config = getConfig(props.type)
   const baseDocumentId = getBaseIdFromId(props.id)
   const {duplicate: duplicateOp} = useDocumentOperation(
     props.id,
@@ -62,8 +61,8 @@ export const DuplicateWithi18nAction = (props: IResolverProps) => {
     disabled: Boolean(duplicateOp.disabled) || isDuplicating,
     title: (duplicateOp.disabled && DISABLED_REASON_TITLE[duplicateOp.disabled]) || '',
     label: isDuplicating
-      ? config.messages?.duplicateAll?.duplicating
-      : config.messages?.duplicateAll?.buttonTitle,
+      ? UiMessages.duplicateAll.duplicating
+      : UiMessages.duplicateAll.buttonTitle,
     onHandle: onDuplicate,
   }
 }

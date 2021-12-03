@@ -1,12 +1,12 @@
 import React from 'react'
 import {Box, Button, Card, Flex, Text} from '@sanity/ui'
-import {TMessagesConfig} from '../../../types'
 import {getConfig} from '../../../utils'
+import {UiMessages} from '../../../constants/UiMessages'
 
 type Props = {
   pending?: boolean
   count: number
-  labelName?: keyof NonNullable<TMessagesConfig['translationsMaintenance']>
+  labelName?: keyof typeof UiMessages['translationsMaintenance']
   onClick?: (event: React.SyntheticEvent<HTMLButtonElement, Event>) => void
 }
 
@@ -24,13 +24,13 @@ export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
       <Flex align="center">
         <Box flex={1}>
           <Text muted={count <= 0}>
-            {count} {labelName ? config?.messages?.translationsMaintenance?.[labelName] : children}
+            {count} {labelName ? UiMessages[labelName] : children}
           </Text>
         </Box>
 
         {count > 0 && (
           <Button padding={2} fontSize={2} disabled={pending} onClick={onClick}>
-            {config?.messages?.translationsMaintenance?.fix}
+            {UiMessages.translationsMaintenance.fix}
           </Button>
         )}
       </Flex>

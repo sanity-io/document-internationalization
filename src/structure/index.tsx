@@ -8,7 +8,7 @@ import {TranslationsComponentFactory} from './components/TranslationsComponentFa
 import {getSchema, getConfig} from '../utils'
 import {SchemaType} from '@sanity/structure/lib/parts/Schema'
 import {MaintenanceTab} from './components/MaintenanceTab'
-import {I18nDelimiter, I18nPrefix, IdStructure} from '../constants'
+import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
 import {DocumentListBuilder} from '@sanity/structure/lib/DocumentList'
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
@@ -49,9 +49,8 @@ export const getDocumentTypes = () => {
 }
 
 export const getMaintenanceTabComponent = () => {
-  const config = getConfig()
   return S.component(MaintenanceTab)
-    .title(config.messages?.translationsMaintenance?.title || '')
+    .title(UiMessages.translationsMaintenance.title)
     .id(`__i18n_translations_maintenance_tab`)
 }
 
@@ -59,7 +58,7 @@ export const getMaintenanceListItem = () => {
   const config = getConfig()
   return S.listItem()
     .id(`__i18n_translations_maintenance_tab`)
-    .title(config.messages?.translationsMaintenance?.title || '')
+    .title(UiMessages.translationsMaintenance.title)
     .icon(EarthGlobeIcon)
     .child(getMaintenanceTabComponent())
 }

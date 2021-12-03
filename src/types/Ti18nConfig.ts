@@ -1,5 +1,4 @@
 import {TLanguagesOption} from './TLanguagesOption'
-import {TMessagesConfig} from './TMessagesConfig'
 import {TFieldNamesConfig} from './TFieldNamesConfig'
 import {IdStructure, ReferenceBehavior} from '../constants'
 
@@ -9,5 +8,4 @@ export type Ti18nConfig = {
   idStructure?: IdStructure
   referenceBehavior?: ReferenceBehavior
   fieldNames?: TFieldNamesConfig
-  messages?: TMessagesConfig
 }

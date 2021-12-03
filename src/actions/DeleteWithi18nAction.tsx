@@ -2,9 +2,10 @@ import React from 'react'
 import TrashIcon from 'part:@sanity/base/trash-icon'
 import * as ConfirmDeleteModule from '@sanity/desk-tool/lib/components/ConfirmDelete'
 import {IResolverProps, IUseDocumentOperationResult} from '../types'
-import {getConfig, getSanityClient, getBaseIdFromId, getTranslationsFor} from '../utils'
+import {getSanityClient, getBaseIdFromId, getTranslationsFor} from '../utils'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
+import {UiMessages} from '../constants'
 
 /**
  * This code is mostly taken from the defualt DeleteAction provided by Sanity
@@ -20,7 +21,6 @@ export const DeleteWithi18nAction = ({id, type, draft, published, onComplete}: I
     () => ConfirmDeleteModule?.ConfirmDelete ?? ConfirmDeleteModule?.default,
     [ConfirmDeleteModule]
   )
-  const config = React.useMemo(() => getConfig(type), [type])
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
   const {delete: deleteOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -76,9 +76,7 @@ export const DeleteWithi18nAction = ({id, type, draft, published, onComplete}: I
     icon: TrashIcon,
     disabled: isDeleting || Boolean(deleteOp.disabled),
     title: (deleteOp.disabled && DISABLED_REASON_TITLE[deleteOp.disabled]) || '',
-    label: isDeleting
-      ? config.messages?.deleteAll?.deleting
-      : config.messages?.deleteAll?.buttonTitle,
+    label: isDeleting ? UiMessages.deleteAll.deleting : UiMessages.deleteAll.buttonTitle,
     dialog: isConfirmDialogOpen && {
       type: 'legacy',
       onClose: onComplete,

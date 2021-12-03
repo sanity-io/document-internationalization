@@ -1,10 +1,10 @@
 import React from 'react'
 import schemas from 'part:@sanity/base/schema'
-import {getConfig} from '../../../utils'
 import {Ti18nSchema} from '../../../types'
-import {Autocomplete, Stack, Text, Card, Flex, Box} from '@sanity/ui'
+import {Autocomplete, Stack, Text, Card} from '@sanity/ui'
 import {EarthGlobeIcon} from '@sanity/icons'
 import Preview from 'part:@sanity/base/preview'
+import {UiMessages} from '../../../constants'
 
 type Props = {
   value: string
@@ -17,7 +17,6 @@ export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
   onChange,
   onOpen,
 }) => {
-  const config = React.useMemo(() => getConfig(), [])
   const i18nSchemas = React.useMemo(
     () => schemas._original.types.filter((s) => !!s.i18n) as Ti18nSchema[],
     []
@@ -25,7 +24,7 @@ export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
 
   return (
     <Stack space={4}>
-      <Text>{config.messages?.translationsMaintenance?.selectSchemaPlaceholder}</Text>
+      <Text>{UiMessages.translationsMaintenance.selectSchemaPlaceholder}</Text>
       <Card>
         <Autocomplete
           fontSize={[2, 2, 3]}

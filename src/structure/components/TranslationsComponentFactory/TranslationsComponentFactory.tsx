@@ -15,6 +15,7 @@ import {
 } from '../../../utils'
 import {TranslationLink} from '../TranslationLink'
 import {baseToTop} from '../../../utils/baseToTop'
+import {UiMessages} from '../../../constants'
 
 const TranslationsComponent = (schema: Ti18nSchema, props: IDefaultDocumentNodeStructureProps) => {
   const config = getConfig(schema)
@@ -68,7 +69,7 @@ const TranslationsComponent = (schema: Ti18nSchema, props: IDefaultDocumentNodeS
       <Flex align="center" justify="center" padding={5}>
         <Inline space={5}>
           <Spinner />
-          <Text align="center">{config.messages?.loading}</Text>
+          <Text align="center">{UiMessages.loading}</Text>
         </Inline>
       </Flex>
     )

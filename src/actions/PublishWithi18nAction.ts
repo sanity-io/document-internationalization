@@ -3,7 +3,8 @@ import {IResolverProps, Ti18nSchema, IUseDocumentOperationResult} from '../types
 import {useDocumentOperation, useSyncState, useValidationStatus} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
-import {getSchema, getConfig, updateIntlFieldsForDocument} from '../utils'
+import {getSchema, updateIntlFieldsForDocument} from '../utils'
+import {UiMessages} from '../constants'
 
 export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverProps) => {
   const toast = useToast()
@@ -13,7 +14,6 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
   const {isValidating, markers} = useValidationStatus(id, type)
   const syncState = useSyncState(id)
   const schema = React.useMemo<Ti18nSchema>(() => getSchema(type), [type])
-  const config = React.useMemo(() => getConfig(schema), [schema])
 
   const disabled = React.useMemo(
     () =>
@@ -28,10 +28,10 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
   )
 
   const label = React.useMemo(() => {
-    if (publishState === 'publishing') return config.messages.publishing
-    if (updatingIntlFields) return config.messages.updatingIntlFields
-    return config.messages?.publish
-  }, [publishState, updatingIntlFields, config.messages])
+    if (publishState === 'publishing') return UiMessages.publishing
+    if (updatingIntlFields) return UiMessages.updatingIntlFields
+    return UiMessages.publish
+  }, [publishState, updatingIntlFields])
 
   const doUpdateIntlFields = React.useCallback(async () => {
     setUpdatingIntlFields(true)
@@ -40,7 +40,7 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
       toast.push({
         closable: true,
         status: 'success',
-        title: config.messages?.intlFieldsUpdated,
+        title: UiMessages.intlFieldsUpdated,
       })
     } catch (err) {
       console.error(err)
@@ -51,7 +51,7 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
       })
     }
     setUpdatingIntlFields(false)
-  }, [config, toast, id, type])
+  }, [toast, id, type])
 
   const onHandle = React.useCallback(() => {
     setPublishState('publishing')
