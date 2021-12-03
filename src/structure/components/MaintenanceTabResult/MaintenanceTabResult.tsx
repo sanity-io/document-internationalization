@@ -24,7 +24,7 @@ export const MaintenanceTabResult: React.FunctionComponent<Props> = ({
       <Flex align="center">
         <Box flex={1}>
           <Text muted={count <= 0}>
-            {count} {labelName ? UiMessages[labelName] : children}
+            {count} {labelName ? UiMessages.translationsMaintenance[labelName] : children}
           </Text>
         </Box>
 
