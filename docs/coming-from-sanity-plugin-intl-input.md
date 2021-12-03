@@ -1,0 +1,21 @@
+# Coming from sanity-plugin-intl-input
+**If you are looking for object level translation, please follow the [migration guide](https://github.com/LiamMartens/sanity-plugin-intl-input/blob/develop/docs/object-level-migration.md)**
+
+If you are using document level translations you will notice some difference in the new plugin. In order to make the transition as smooth as possible here is a list of what's changed and what you need to do
+
+### 1. Delimiter based IDs are now the default again
+After consideration with the team, we have decided to make `delimiter` based IDs the default structure again. `subpath` based IDs will still be supported but are now opt-in only. If you are using subpaths you have 2 options:
+
+1. Keep using them as is by explicitly specifying the id structure in the config
+```diff
+{
++ "idStructure": "subpath"
+}
+```
+
+2. Switch to delimiter based IDs
+   1. Check if you have explicitly specified `subpath` in your intl config. If you have, you can either remove it or replace it with `delimiter`
+   2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all verion history**
+
+### 2. A new field called __i18n_base was introduced for translations
+A new field was introduced which will now be available in translations. The `__i18n_base` field will contain a reference to the base language document similar to how the base document references it's translations. If you are coming from the old plugin you will need to use the "Translation maintenance" to fix the missing fields in your existing translations. This field is not critical but will help with querying your documents.
