@@ -1,46 +1,54 @@
+import chunk from 'lodash.chunk';
 import { ReferenceBehavior } from '../../constants';
 import { Ti18nDocument } from '../../types';
-import { buildDocId, getBaseIdFromId, getConfig, getLanguageFromId, getSanityClient } from '../../utils';
+import { buildDocId, createSanityReference, getBaseIdFromId, getConfig, getLanguageFromId, getSanityClient } from '../../utils';
 
 export const fixIdStructureMismatchDocuments = async (schema: string, documents: Ti18nDocument[]) => {
   const config = getConfig();
   const sanityClient = getSanityClient();
   const refsFieldName = config.fieldNames.references;
-
+  
   // remove old refs
-  await Promise.all(Array.from(new Set(documents.map(d => getBaseIdFromId(d._id)))).map(async id => {
-    await sanityClient.patch(id).set({
-      [refsFieldName]: []
-    }).commit();
-  }));
+  const existingBaseDocumentIds = new Set(documents.map(d => getBaseIdFromId(d._id)))
+  const removeOldRefsTransaction = sanityClient.transaction();
+  existingBaseDocumentIds.forEach((id) => {
+    removeOldRefsTransaction.patch(id, {
+      set: { [refsFieldName]: [] },
+    })
+  });
+  await removeOldRefsTransaction.commit();
 
   // create new document ids
-  await Promise.all(documents.map(async d => {
-    const baseId = getBaseIdFromId(d._id);
-    const lang = getLanguageFromId(d._id);
-    const newId = buildDocId(baseId, lang);
+  await Promise.all(chunk(documents.filter((d) => d._id !== getBaseIdFromId(d._id)), 100).map(async (documentsChunk) => {
     const transaction = sanityClient.transaction();
-    transaction.createIfNotExists({
-      ...d,
-      _id: newId,
-      _type: schema,
-    });
-    transaction.delete(d._id);
-    await transaction.commit();
+    documentsChunk.forEach((d) => {
+      const baseId = getBaseIdFromId(d._id);
+      const lang = getLanguageFromId(d._id);
+      if (lang) {
+        const newId = buildDocId(baseId, lang);
+        transaction.createIfNotExists({
+          ...d,
+          _id: newId,
+          _type: schema,
+        });
+        transaction.delete(d._id);
 
-    // update base document refsFieldName
-    if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
-      await sanityClient.patch(baseId)
-        .setIfMissing({ [refsFieldName]: [] })
-        .append(refsFieldName, [{
-          _key: newId,
-          lang: lang,
-          ref: {
-            _type: 'reference',
-            _ref: newId,
-            _weak: config.referenceBehavior === ReferenceBehavior.WEAK ? true : false,
-          }
-        }]).commit();
-    }
+        // patch base document with updated refs
+        if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
+          transaction.patch(baseId, { setIfMissing: { [refsFieldName]: [] } })
+          transaction.patch(baseId, {
+            insert: {
+              after: `${refsFieldName}[-1]`,
+              items: [{
+                _key: newId,
+                lang: lang,
+                ref: createSanityReference(newId, config.referenceBehavior === ReferenceBehavior.WEAK),
+              }]
+            }
+          })
+        }
+      }
+    });
+    await transaction.commit();
   }));
 }
