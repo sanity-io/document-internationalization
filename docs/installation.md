@@ -1,39 +1,31 @@
 # Installation
 1. Install the plugin using `npm`, `yarn` or the sanity cli
-`yarn add sanity-plugin-intl-input`
-`sanity install intl-input`
-2. Add the plugin in the `sanity.json` of your project
-```
+`yarn add @sanity/document-internationalization`
+`sanity install @sanity/document-internationalization`
+2. Add the plugin in the `sanity.json` of your project (this step is not necessary if you use `sanity install`)
+```diff
 {
-  "root": true,
-  "project": {
-    "name": "..."
-  },
   "plugins": [
-    "...",
-    "intl-input" // <--
++   "@sanity/document-internationalization"
   ]
 }
 ```
 3. The plugin has a custom desk structure to hide translated documents from the main view. You need to manually implement this as follows
 Add the part in `sanity.json`
-```
+```diff
 {
-  ...
   "parts": [
-    ...
-    {
-      "name": "part:@sanity/desk-tool/structure",
-      "path": "./deskStructure.js"
-    }
++   {
++     "name": "part:@sanity/desk-tool/structure",
++     "path": "./deskStructure.js"
++   }
   ]
-  ...
 }
 ```
 
 Implement the structure by creating a file called `deskStructure.js` in the root of your Sanity project and adding the code below (either default implementation or manual implementation). If you want to read more about the structure builder, please refer to the [Sanity documentation](https://www.sanity.io/guides/getting-started-with-structure-builder)
 ```javascript
-import * as Structure from 'sanity-plugin-intl-input/lib/structure';
+import * as Structure from '@sanity/document-internationalization/lib/structure';
 
 // default implementation by re-exporting
 export const getDefaultDocumentNode = Structure.getDefaultDocumentNode;

@@ -13,22 +13,3 @@ Below are all available configuration options.
   * `lang`: The name of the language field (`__i18n_lang`)
   * `references`: The name of the references field (`__i18n_refs`)
   * `baseReference`: The name of the base reference field (`__i18n_base`)
-* `messages`: These are the configurable messages. Can be used to override the default English messages, labels and titles.
-  * `publishing`: Defaults to `Publishing...`
-  * `publish`: Defaults to `Publish`
-  * `loading`: Defaults to `Loading languages...`
-  * `missing`: Defaults to `Missing`
-  * `draft`: Defaults to `Draft`
-  * `missingTranslations`: Defaults to `Following languages are missing some translations compared to the base language`
-  * `deleteAll`
-    * `buttonTitle`: Defaults to `Delete (incl. translations)`
-    * `deleting`: Defaults to `Deleting...`
-  * `translationsMaintenance`
-      * `title`: Defaults to `Translation Maintenance`
-      * `selectSchemaPlaceholder`: Defaults to `Select schema type`
-      * `idStructureMismatch`: Defaults to `document(s) with mismatched ID structures`
-      * `missingLanguageField`: Defaults to `document(s) are missing the language field`
-      * `missingDocumentRefs`: Defaults to `document(s) have missing translation references`
-      * `orphanDocuments`: Defaults to `orphaned translation document(s)`
-      * `referenceBehaviorMismatch`: Defaults to `document(s) with mismatched reference behaviors`
-      * `fix`: Defaults to `Fix`

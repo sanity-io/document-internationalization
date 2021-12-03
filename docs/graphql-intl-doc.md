@@ -38,6 +38,11 @@ const schema = {
       hidden: true
     },
     {
+      name: 'i18n_base',
+      type: 'reference',
+      hidden: true
+    },
+    {
       name: 'i18n_refs',
       type: 'array',
       hidden: true,
@@ -49,4 +54,4 @@ const schema = {
 }
 ```
 
-This way the GraphQL deployment will consider the `i18n_lang` and `i18n_refs` properties as part of your structure and you will be able to query by them.
+This way the GraphQL deployment will consider the `i18n_lang`, `i18n_refs` and `i18n_base` properties as part of your structure and you will be able to query by them.
