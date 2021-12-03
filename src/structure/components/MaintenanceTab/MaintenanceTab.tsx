@@ -54,7 +54,7 @@ export const MaintenanceTab: React.FunctionComponent = () => {
     setPending(true)
     await fixBaseDocumentRefs(selectedSchema, translatedDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema])
+  }, [selectedSchema, translatedDocuments])
 
   const onFixOrphanDocuments = React.useCallback(async () => {
     setPending(true)
