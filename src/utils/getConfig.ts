@@ -29,14 +29,18 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
   const cfg = config
   return {
     base: schema?.base || cfg?.base || '',
-    idStructure: cfg.idStructure || IdStructure.SUBPATH,
+    idStructure: cfg.idStructure || IdStructure.DELIMITER,
     referenceBehavior: cfg.referenceBehavior || ReferenceBehavior.HARD,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance !== false,
     fieldNames: {
       lang: schema?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
       references: schema?.fieldNames?.references || cfg?.fieldNames?.references || '__i18n_refs',
+      baseReference:
+        schema?.fieldNames?.baseReference || cfg?.fieldNames?.baseReference || '__18n_base',
     },
     languages: schema?.languages || cfg?.languages || [],
+    // @TODO improve the i18n of the plugin itself
+    // also the studio
     messages: {
       publishing: schema?.messages?.publishing || cfg?.messages?.publishing || 'Publishing...',
       publish: schema?.messages?.publish || cfg?.messages?.publish || 'Publish',
@@ -91,6 +95,9 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
         missingDocumentRefs:
           cfg?.messages?.translationsMaintenance?.missingDocumentRefs ||
           'document(s) have missing translation references',
+        missingBaseDocumentRefs:
+          cfg.messages?.translationsMaintenance?.missingBaseDocumentRefs ||
+          'documnt(s) have missing base document references',
         orphanDocuments:
           cfg?.messages?.translationsMaintenance?.orphanDocuments ||
           'orphaned translation document(s)',

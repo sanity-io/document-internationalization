@@ -17,8 +17,10 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
   const client = getSanityClient()
   const baseDocumentId = getBaseIdFromId(id)
   const document = await client.getDocument(id)
+  const isTranslation = id !== baseDocumentId
   const fieldName = config.fieldNames.lang
   const refsFieldName = config.fieldNames.references
+  const baseRefFieldName = config.fieldNames.baseReference
   const langs = await getLanguagesFromOption(config.languages, document)
   const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.name
 
@@ -26,11 +28,21 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
   const currentDocumentTransaction = client.transaction()
   currentDocumentTransaction.createIfNotExists({_id: id, _type: type})
   currentDocumentTransaction.patch(id, {
-    set: {[fieldName]: languageId},
+    set: {
+      [fieldName]: languageId,
+      ...(isTranslation && config.referenceBehavior !== ReferenceBehavior.DISABLED
+        ? {
+            [baseRefFieldName]: createSanityReference(
+              baseDocumentId,
+              config.referenceBehavior === ReferenceBehavior.WEAK
+            ),
+          }
+        : {}),
+    },
   })
   await currentDocumentTransaction.commit()
 
-  // update base document reference sif required
+  // update base document reference if required
   const translatedDocuments = await getTranslationsFor(baseDocumentId)
   if (translatedDocuments.length > 0) {
     const baseDocumentTransaction = client.transaction()

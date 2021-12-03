@@ -3,6 +3,7 @@ import {MaintenanceTabTypeSelector} from '../MaintenanceTabTypeSelector'
 import {useDocumentsInformation} from '../../hooks'
 import {MaintenanceTabResult} from '../MaintenanceTabResult'
 import {
+  fixBaseDocumentRefs,
   fixBaseLanguageMismatch,
   fixIdStructureMismatchDocuments,
   fixLanguageFields,
@@ -48,6 +49,12 @@ export const MaintenanceTab: React.FunctionComponent = () => {
     await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
     await fetchInformation(selectedSchema)
   }, [selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
+
+  const onFixBaseDocumntRefs = React.useCallback(async () => {
+    setPending(true)
+    await fixBaseDocumentRefs(selectedSchema, translatedDocuments)
+    await fetchInformation(selectedSchema)
+  }, [selectedSchema])
 
   const onFixOrphanDocuments = React.useCallback(async () => {
     setPending(true)
@@ -97,6 +104,12 @@ export const MaintenanceTab: React.FunctionComponent = () => {
                 count={documentsSummaryInformation.missingDocumentRefs.length}
                 labelName="missingDocumentRefs"
                 onClick={onFixTranslationRefs}
+              />
+              <MaintenanceTabResult
+                pending={pending}
+                count={documentsSummaryInformation.missingBaseDocumentRefs.length}
+                labelName="missingBaseDocumentRefs"
+                onClick={onFixBaseDocumntRefs}
               />
               <MaintenanceTabResult
                 pending={pending}

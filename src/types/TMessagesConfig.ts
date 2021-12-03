@@ -21,6 +21,7 @@ export type TMessagesConfig = {
     idStructureMismatch?: string
     missingLanguageField?: string
     missingDocumentRefs?: string
+    missingBaseDocumentRefs?: string
     orphanDocuments?: string
     referenceBehaviorMismatch?: string
     baseLanguageMismatch?: string

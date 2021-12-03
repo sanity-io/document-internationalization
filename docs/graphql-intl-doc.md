@@ -7,6 +7,7 @@ const schema = {
   i18n: {
     fieldNames: {
       lang: 'i18n_lang'
+      baseReference: 'i18n_base',
       references: 'i18n_refs'
     }
   }

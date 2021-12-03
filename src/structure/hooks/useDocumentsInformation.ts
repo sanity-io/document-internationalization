@@ -41,8 +41,9 @@ export const useDocumentsInformation = (schema: string) => {
     const cfg = getConfig(schema)
     const basedocuments = baseDocuments
     const translateddocuments = translatedDocuments
-    const refsFieldName = cfg.fieldNames?.references
     const langFieldName = cfg.fieldNames?.lang
+    const refsFieldName = cfg.fieldNames?.references
+    const baseRefFieldName = cfg.fieldNames?.baseReference
     return {
       idStructureMismatch: idStructureMismatchDocuments,
       missingLanguageField: documents.filter((d) => !d[langFieldName]),
@@ -51,6 +52,7 @@ export const useDocumentsInformation = (schema: string) => {
         const refsCount = Object.keys(d[refsFieldName] || {}).length
         return refsCount != docs.length
       }),
+      missingBaseDocumentRefs: documents.filter((d) => !d[baseRefFieldName]),
       orphanDocuments: translateddocuments.filter((d) => {
         const base = basedocuments.find((doc) => getBaseIdFromId(d._id) === doc._id)
         if (base) return false

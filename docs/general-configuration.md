@@ -12,6 +12,7 @@ Below are all available configuration options.
 * `fieldNames`: This option configures the field names used for document wide translation
   * `lang`: The name of the language field (`__i18n_lang`)
   * `references`: The name of the references field (`__i18n_refs`)
+  * `baseReference`: The name of the base reference field (`__i18n_base`)
 * `messages`: These are the configurable messages. Can be used to override the default English messages, labels and titles.
   * `publishing`: Defaults to `Publishing...`
   * `publish`: Defaults to `Publish`
