@@ -58,14 +58,13 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
   React.useEffect(() => {
     getSanityClient()
-      .fetch("*[_id == $id || _id == $draftId]", {
+      .fetch(`coalesce(*[_id == $id], *[_id == $draftId])`, {
         id: translatedDocId,
         draftId: `drafts.${translatedDocId}`,
       })
       .then((r) => {
-        const existing = r.find((r) => r._id === translatedDocId);
-        if (existing) setExisting(existing);
-        else setExisting(r.find((r) => r._id === `drafts.${translatedDocId}`));
+        const exists = r.length > 0
+        if (exists) setExisting(r[0])
       })
       .catch((err) => {
         console.error(err);

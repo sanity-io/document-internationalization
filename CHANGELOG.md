@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v5.6.2
+* Fixed an issue where the data is only copied from a published document and not from a draft document when creating a new translation
+
 ## v5.6.1
 * Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
 
