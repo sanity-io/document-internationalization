@@ -83,7 +83,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
     // TODO: Leverage this function to open doc without resetting all panes
     navigateIntent("edit", params);
-  }, [existing, schema, baseDocument]);
+  }, [existing, schema, config, lang, baseDocument]);
 
   return (
     <>
