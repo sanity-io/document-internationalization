@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v5.6.2
+* Fixed an issue where the data is only copied from a published document and not from a draft document when creating a new translation
+* Fixed a bug with "Delete incl translation" where it could not be removed due to references
+
 ## v5.6.1
 * Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
 

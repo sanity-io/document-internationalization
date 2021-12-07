@@ -58,34 +58,32 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
   React.useEffect(() => {
     getSanityClient()
-      .fetch("*[_id == $id || _id == $draftId]", {
+      .fetch(`coalesce(*[_id == $id][0], *[_id == $draftId][0])`, {
         id: translatedDocId,
         draftId: `drafts.${translatedDocId}`,
       })
-      .then((r) => {
-        const existing = r.find((r) => r._id === translatedDocId);
-        if (existing) setExisting(existing);
-        else setExisting(r.find((r) => r._id === `drafts.${translatedDocId}`));
+      .then((existing) => {
+        if (existing) setExisting(existing)
       })
       .catch((err) => {
         console.error(err);
       });
   }, [lang.name]);
 
-  const handleClick = (params = {}) => {
-    if (existing === undefined) {
+  const handleClick = React.useCallback(async (id: string) => {
+    if (!existing) {
       const fieldName = config.fieldNames.lang;
-      getSanityClient().createIfNotExists({
+      await getSanityClient().createIfNotExists({
         ...(baseDocument ? baseDocument : {}),
-        _id: `drafts.${translatedDocId}`,
+        _id: `drafts.${id}`,
         _type: schema.name,
         [fieldName]: lang.name,
       });
     }
 
     // TODO: Leverage this function to open doc without resetting all panes
-    navigateIntent("edit", params);
-  };
+    navigateIntent("edit", { id, type: schema.name });
+  }, [existing, schema, config, lang, baseDocument]);
 
   return (
     <>
@@ -93,9 +91,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
         <Button
           mode={isCurrentLanguage ? `default` : `bleed`}
           padding={2}
-          onClick={() =>
-            handleClick({ id: translatedDocId, type: schema.name })
-          }
+          onClick={() => handleClick(translatedDocId)}
           style={{ width: `100%` }}
         >
           <Flex align="center" gap={4}>
