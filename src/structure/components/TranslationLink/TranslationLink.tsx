@@ -58,20 +58,19 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
   React.useEffect(() => {
     getSanityClient()
-      .fetch(`coalesce(*[_id == $id], *[_id == $draftId])`, {
+      .fetch(`coalesce(*[_id == $id][0], *[_id == $draftId][0])`, {
         id: translatedDocId,
         draftId: `drafts.${translatedDocId}`,
       })
-      .then((r) => {
-        const exists = r.length > 0
-        if (exists) setExisting(r[0])
+      .then((existing) => {
+        if (existing) setExisting(existing)
       })
       .catch((err) => {
         console.error(err);
       });
   }, [lang.name]);
 
-  const handleClick = (params = {}) => {
+  const handleClick = React.useCallback((params = {}) => {
     if (existing === undefined) {
       const fieldName = config.fieldNames.lang;
       getSanityClient().createIfNotExists({
@@ -84,7 +83,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
     // TODO: Leverage this function to open doc without resetting all panes
     navigateIntent("edit", params);
-  };
+  }, [existing, schema, baseDocument]);
 
   return (
     <>
