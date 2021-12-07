@@ -39,11 +39,11 @@ export const DeleteWithi18nAction = ({ id, type, draft, published, onComplete }:
       setIsDeleting(true);
       setConfirmDialogOpen(false);
       const client = getSanityClient();
+      await client.patch(baseDocumentId, {
+        unset: [config.fieldNames.references],
+      }).commit();
       const translatedDocuments = await getTranslationsFor(baseDocumentId);
       const transaction = client.transaction();
-      transaction.patch(baseDocumentId, {
-        unset: [config.fieldNames.references],
-      });
       translatedDocuments.forEach(doc => transaction.delete(doc._id));
       await transaction.commit();
       deleteOp.execute();
