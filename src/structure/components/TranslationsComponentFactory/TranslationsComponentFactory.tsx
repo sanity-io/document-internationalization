@@ -40,11 +40,11 @@ export const TranslationsComponentFactory =
             draft ?? published
           );
           const baseDocId = getBaseIdFromId(props.documentId)
-          const doc = await getSanityClient().fetch(`coalesce(*[_id == $draftId], *[_id == $id])`, {
+          const doc = await getSanityClient().fetch(`coalesce(*[_id == $draftId][0], *[_id == $id][0])`, {
             id: baseDocId,
             draftId: `drafts.${baseDocId}`
           });
-          if (doc && doc.length > 0) setBaseDocument(doc[0]);
+          if (doc) setBaseDocument(doc);
           setLanguages(langs);
           setPending(false);
         }
