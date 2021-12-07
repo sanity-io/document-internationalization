@@ -47,34 +47,35 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
   React.useEffect(() => {
     getSanityClient()
-      .fetch('*[_id == $id || _id == $draftId]', {
+      .fetch(`coalesce(*[_id == $id][0], *[_id == $draftId][0])`, {
         id: translatedDocId,
         draftId: `drafts.${translatedDocId}`,
       })
-      .then((response) => {
-        const ex = response.find((r) => r._id === translatedDocId)
+      .then((ex) => {
         if (ex) setExisting(ex)
-        else setExisting(response.find((r) => r._id === `drafts.${translatedDocId}`))
       })
       .catch((err) => {
         console.error(err)
       })
   }, [lang.name])
 
-  const handleClick = (params = {}) => {
-    if (existing === undefined) {
-      const fieldName = config.fieldNames.lang
-      getSanityClient().createIfNotExists({
-        ...(baseDocument ? baseDocument : {}),
-        _id: `drafts.${translatedDocId}`,
-        _type: schema.name,
-        [fieldName]: lang.name,
-      })
-    }
+  const handleClick = React.useCallback(
+    async (id: string) => {
+      if (!existing) {
+        const fieldName = config.fieldNames.lang
+        await getSanityClient().createIfNotExists({
+          ...(baseDocument ? baseDocument : {}),
+          _id: `drafts.${id}`,
+          _type: schema.name,
+          [fieldName]: lang.name,
+        })
+      }
 
-    // TODO: Leverage this function to open doc without resetting all panes
-    navigateIntent('edit', params)
-  }
+      // TODO: Leverage this function to open doc without resetting all panes
+      navigateIntent('edit', {id, type: schema.name})
+    },
+    [existing, schema, config, lang, baseDocument]
+  )
 
   return (
     <>
@@ -82,7 +83,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
         <Button
           mode={isCurrentLanguage ? `default` : `bleed`}
           padding={2}
-          onClick={() => handleClick({id: translatedDocId, type: schema.name})}
+          onClick={() => handleClick(translatedDocId)}
           style={{width: `100%`}}
         >
           <Flex align="center" gap={4}>

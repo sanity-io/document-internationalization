@@ -2,7 +2,7 @@ import React from 'react'
 import TrashIcon from 'part:@sanity/base/trash-icon'
 import * as ConfirmDeleteModule from '@sanity/desk-tool/lib/components/ConfirmDelete'
 import {IResolverProps, IUseDocumentOperationResult} from '../types'
-import {getSanityClient, getBaseIdFromId, getTranslationsFor} from '../utils'
+import {getSanityClient, getBaseIdFromId, getTranslationsFor, getConfig} from '../utils'
 import {useDocumentOperation} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {UiMessages} from '../constants'
@@ -21,6 +21,7 @@ export const DeleteWithi18nAction = ({id, type, draft, published, onComplete}: I
     () => ConfirmDeleteModule?.ConfirmDelete ?? ConfirmDeleteModule?.default,
     [ConfirmDeleteModule]
   )
+  const config = React.useMemo(() => getConfig(type), [type])
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
   const {delete: deleteOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -40,11 +41,20 @@ export const DeleteWithi18nAction = ({id, type, draft, published, onComplete}: I
       setIsDeleting(true)
       setConfirmDialogOpen(false)
       const client = getSanityClient()
-      deleteOp.execute()
+
+      const baseTransaction = client.transaction()
+      baseTransaction.delete(`drafts.${baseDocumentId}`)
+      baseTransaction.patch(baseDocumentId, {
+        unset: [config.fieldNames.references],
+      })
+      await baseTransaction.commit()
+
       const translatedDocuments = await getTranslationsFor(baseDocumentId)
-      const transaction = client.transaction()
-      translatedDocuments.forEach((doc) => transaction.delete(doc._id))
-      await transaction.commit()
+      const translationsTransaction = client.transaction()
+      translatedDocuments.forEach((doc) => translationsTransaction.delete(doc._id))
+      await translationsTransaction.commit()
+
+      deleteOp.execute()
       if (onComplete) onComplete()
     } catch (err) {
       toast.push({
@@ -52,6 +62,8 @@ export const DeleteWithi18nAction = ({id, type, draft, published, onComplete}: I
         status: 'error',
         title: err.toString(),
       })
+    } finally {
+      setIsDeleting(true)
     }
   }, [baseDocumentId, deleteOp, onComplete])
 

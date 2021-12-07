@@ -1,8 +1,5 @@
 import * as React from 'react'
 import shouldReloadFn from 'part:sanity-plugin-intl-input/languages/should-reload?'
-import {useEditState} from '@sanity/react-hooks'
-import type {SanityDocument} from '@sanity/client'
-import {Stack, Spinner, Inline, Text, Flex} from '@sanity/ui'
 import {IDefaultDocumentNodeStructureProps} from '../../IDefaultDocumentNodeStructureProps'
 import {ILanguageObject, Ti18nSchema} from '../../../types'
 import {
@@ -14,10 +11,16 @@ import {
   getLanguageFromId,
 } from '../../../utils'
 import {TranslationLink} from '../TranslationLink'
+import {useEditState} from '@sanity/react-hooks'
+import type {SanityDocument} from '@sanity/client'
+import {Stack, Spinner, Inline, Text, Flex} from '@sanity/ui'
 import {baseToTop} from '../../../utils/baseToTop'
 import {UiMessages} from '../../../constants'
 
-const TranslationsComponent = (schema: Ti18nSchema, props: IDefaultDocumentNodeStructureProps) => {
+export const TranslationsComponent = (
+  schema: Ti18nSchema,
+  props: IDefaultDocumentNodeStructureProps
+) => {
   const config = getConfig(schema)
   const {draft, published} = useEditState(props.documentId, props.schemaType) as {
     draft?: SanityDocument
@@ -34,15 +37,20 @@ const TranslationsComponent = (schema: Ti18nSchema, props: IDefaultDocumentNodeS
       if (shouldReload) {
         setPending(true)
         const langs = await getLanguagesFromOption(config.languages, draft ?? published)
-        const doc = await getSanityClient().fetch('*[_id == $id]', {
-          id: getBaseIdFromId(props.documentId),
-        })
-        if (doc && doc.length > 0) setBaseDocument(doc[0])
+        const baseDocId = getBaseIdFromId(props.documentId)
+        const doc = await getSanityClient().fetch(
+          `coalesce(*[_id == $draftId][0], *[_id == $id][0])`,
+          {
+            id: baseDocId,
+            draftId: `drafts.${baseDocId}`,
+          }
+        )
+        if (doc) setBaseDocument(doc)
         setLanguages(langs)
         setPending(false)
       }
     })()
-  }, [draft, published, languages])
+  }, [draft, published, languages, config, props.documentId])
 
   const docId = getBaseIdFromId(props.documentId)
   const baseLanguage = getBaseLanguage(languages, config.base)
@@ -62,7 +70,7 @@ const TranslationsComponent = (schema: Ti18nSchema, props: IDefaultDocumentNodeS
       }))
       .sort(baseToTop)
       .reverse()
-  }, [languages, config])
+  }, [languages, config, currentLanguage])
 
   if (pending) {
     return (
