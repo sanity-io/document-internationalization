@@ -25,19 +25,21 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
 }> & {
   withTranslationsMaintenance: boolean
 } {
-  const schema = getI18nConfigFromType(type)
+  const schemaConfig = getI18nConfigFromType(type)
   const cfg = config
+
   return {
-    base: schema?.base || cfg?.base || '',
+    base: schemaConfig?.base || cfg?.base || '',
     idStructure: cfg.idStructure || IdStructure.DELIMITER,
     referenceBehavior: cfg.referenceBehavior || ReferenceBehavior.HARD,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance !== false,
     fieldNames: {
-      lang: schema?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
-      references: schema?.fieldNames?.references || cfg?.fieldNames?.references || '__i18n_refs',
+      lang: schemaConfig?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
+      references:
+        schemaConfig?.fieldNames?.references || cfg?.fieldNames?.references || '__i18n_refs',
       baseReference:
-        schema?.fieldNames?.baseReference || cfg?.fieldNames?.baseReference || '__18n_base',
+        schemaConfig?.fieldNames?.baseReference || cfg?.fieldNames?.baseReference || '__18n_base',
     },
-    languages: schema?.languages || cfg?.languages || [],
+    languages: schemaConfig?.languages || cfg?.languages || [],
   }
 }

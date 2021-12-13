@@ -4,6 +4,6 @@ export interface ITranslationRef {
   ref: {
     _type: 'reference'
     _ref: string
-    _weak: boolean
+    _weak?: boolean
   }
 }

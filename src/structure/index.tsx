@@ -112,5 +112,5 @@ export default () => {
     .id('__root__')
     .title('Content')
     .items(items)
-    .showIcons(items.some((item) => hasIcon(item.getSchemaType())))
+    .showIcons(items.some((item) => hasIcon(item.schemaType)))
 }
