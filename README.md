@@ -15,7 +15,6 @@ With the intl plugin you will get a cleaner UI for creating translatable documen
 An important decision you will need to make is whether to use subpath or delimiter based IDs. Subpaths are slightly easier to query using GROQ, but they also make documents Private, meaning they can only be accessed using an Access Token. Requests with Access Tokens cannot be cached, and so API usage will dramatically increase.
 
 ## Documentation
-0. [Coming from sanity-plugin-intl-input](docs/coming-from-sanity-plugin-intl-input.md)
 1. [Installation Instructions](docs/installation.md)
 2. [General Configuration](docs/general-configuration.md)
 3. [How to use](docs/usage-intl-doc.md)
@@ -25,6 +24,7 @@ An important decision you will need to make is whether to use subpath or delimit
 7. [Advanced languages](docs/advanced-languages.md)
 8. [Usage with custom publish action](docs/usage-with-custom-publish.md)
 9. [GROQ Cheatsheet](/docs/groq-cheatsheet.md)
+10. [Coming from sanity-plugin-intl-input](docs/coming-from-sanity-plugin-intl-input.md)
 ## Other resources
 * [Great guide by nilsnh](https://nilsnh.no/2021/08/22/guide-localizing-sanity-cms-with-the-intl-input-plugin/)
 * [Sanity Starter](https://www.sanity.io/create?template=sanity-io%2Fsanity-template-translation-examples)

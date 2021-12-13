@@ -55,7 +55,6 @@ export const getMaintenanceTabComponent = () => {
 }
 
 export const getMaintenanceListItem = () => {
-  const config = getConfig()
   return S.listItem()
     .id(`__i18n_translations_maintenance_tab`)
     .title(UiMessages.translationsMaintenance.title)
@@ -101,7 +100,7 @@ export const getFilteredDocumentTypeListItems = () => {
     items.splice(0, 0, getMaintenanceListItem())
   }
 
-  return items
+  return items.map((item) => item.serialize())
 }
 
 export default () => {

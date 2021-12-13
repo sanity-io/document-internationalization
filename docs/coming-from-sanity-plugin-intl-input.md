@@ -3,7 +3,10 @@
 
 If you are using document level translations you will notice some difference in the new plugin. In order to make the transition as smooth as possible here is a list of what's changed and what you need to do
 
-### 1. Delimiter based IDs are now the default again
+### 1. The config filename has changed
+You should rename your `intl-input.json` config file to `document-internationalization.json`.
+
+### 2. Delimiter based IDs are now the default again
 After consideration with the team, we have decided to make `delimiter` based IDs the default structure again. `subpath` based IDs will still be supported but are now opt-in only. If you are using subpaths you have 2 options:
 
 1. Keep using them as is by explicitly specifying the id structure in the config

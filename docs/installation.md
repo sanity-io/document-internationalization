@@ -17,21 +17,30 @@ Add the part in `sanity.json`
   "parts": [
 +   {
 +     "name": "part:@sanity/desk-tool/structure",
-+     "path": "./deskStructure.js"
++     "path": "./deskStructure.js"****
 +   }
   ]
 }
 ```
 
 Implement the structure by creating a file called `deskStructure.js` in the root of your Sanity project and adding the code below (either default implementation or manual implementation). If you want to read more about the structure builder, please refer to the [Sanity documentation](https://www.sanity.io/guides/getting-started-with-structure-builder)
+
+### Method 1 - default implementation
+Use this method if you don't already have a custom desk structure implemntation of your own.
+
 ```javascript
 import * as Structure from '@sanity/document-internationalization/lib/structure';
 
-// default implementation by re-exporting
 export const getDefaultDocumentNode = Structure.getDefaultDocumentNode;
 export default Structure.default;
+```
 
-// or manual implementation to use with your own custom desk structure
+### Method 2 - manual implemntation
+Use this method if you need to combine your own desk structure implementation with ours.
+
+```javascript
+import * as Structure from '@sanity/document-internationalization/lib/structure';
+
 export const getDefaultDocumentNode = (props) => {
     if (props.schemaType === 'myschema') {
         return S.document().views(Structure.getDocumentNodeViewsForSchemaType(props.schemaType));
