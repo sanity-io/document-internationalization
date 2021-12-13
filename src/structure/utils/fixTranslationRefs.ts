@@ -1,6 +1,12 @@
 import {ReferenceBehavior} from '../../constants'
 import {Ti18nDocument} from '../../types'
-import {getBaseIdFromId, getConfig, getLanguageFromId, getSanityClient} from '../../utils'
+import {
+  createSanityReference,
+  getBaseIdFromId,
+  getConfig,
+  getLanguageFromId,
+  getSanityClient,
+} from '../../utils'
 
 export const fixTranslationRefs = async (
   schema: string,
@@ -24,11 +30,10 @@ export const fixTranslationRefs = async (
                     return {
                       _key: doc._id,
                       lang,
-                      ref: {
-                        _type: 'reference',
-                        _ref: doc._id,
-                        _weak: config.referenceBehavior === ReferenceBehavior.WEAK,
-                      },
+                      ref: createSanityReference(
+                        doc._id,
+                        config.referenceBehavior === ReferenceBehavior.WEAK
+                      ),
                     }
                   }, {})
                 : [],
