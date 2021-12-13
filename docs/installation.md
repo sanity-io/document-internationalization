@@ -57,7 +57,7 @@ export default () => {
 };
 ```
 
-4. Add the configuration file in your studio's config folder. It should be called `intl-input.json` and needs to be an empty object `{}` (or you can copy the default one if it was not automatically added).
+4. Add the configuration file in your studio's config folder. It should be called `document-internationalization.json` and needs to be an empty object `{}` (or you can copy the default one if it was not automatically added).
 
 5. Now would be a good time to decide on which ID structure you want to use and which reference behavior you want to apply. Information regarding these options can be found on the [Important configuration page](./important-configuration.md)
 

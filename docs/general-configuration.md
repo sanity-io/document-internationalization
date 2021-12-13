@@ -1,5 +1,5 @@
 # General Configuration
-To configure the plugin you can customieze the config file called `intl-input.json` in your studio's `config` folder. If you need specific configuration you can keep in mind, any global config can be overriden per schema.  
+To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder. If you need specific configuration you can keep in mind, any global config can be overriden per schema.  
 
 Below are all available configuration options.
 * `base`: This is the ID of the base/default language (if not specified the first language is used)
@@ -13,3 +13,27 @@ Below are all available configuration options.
   * `lang`: The name of the language field (`__i18n_lang`)
   * `references`: The name of the references field (`__i18n_refs`)
   * `baseReference`: The name of the base reference field (`__i18n_base`)
+
+## Complete example
+```json
+{
+  "base": "en-us",
+  "languages": [
+    {
+      "title": "English (US)",
+      "name": "en-us"
+    },
+    {
+      "title": "Dutch (NL)",
+      "name": "nl-nl"
+    }
+  ],
+  "idStructure": "delimiter",
+  "referenceBehavior": "hard",
+  "fieldNames": {
+    "lang": "__i18n_lang",
+    "references": "__i18n_refs",
+    "baseReference": "__i18n_base"
+  }
+}
+```
