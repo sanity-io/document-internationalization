@@ -73,7 +73,7 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
       setPublishState(nextState)
     }, delay)
     return () => clearTimeout(timer)
-  }, [publishState, draft, doUpdateIntlFields, onComplete])
+  }, [publishState, draft])
 
   return {
     disabled,

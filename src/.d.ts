@@ -10,6 +10,8 @@ declare module 'config:document-internationalization' {
 declare module '@sanity/state-router/lib/RouterContext' {
   export const RouterContext: React.Context<{
     resolveIntentLink: (intentName: string, params?: Record<string, any> | [Record<string, any>, Record<string, any>]) => string;
+    resolvePathFromState: (input: any) => string
+    navigateUrl: (href: string) => void
   }>;
 }
 

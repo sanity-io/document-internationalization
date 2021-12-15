@@ -3,6 +3,7 @@ export const UiMessages = {
   publish: 'Publish',
   updatingIntlFields: 'Updating i18n fields',
   intlFieldsUpdated: 'I18n fields updated',
+  baseDocumentCopied: 'Base document copied',
   loading: 'Loading languages...',
   draft: 'Draft',
   missingTranslations:

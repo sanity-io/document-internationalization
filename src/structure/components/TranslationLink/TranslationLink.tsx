@@ -1,7 +1,8 @@
 import * as React from 'react'
 import {SanityDocument} from '@sanity/client'
-import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading} from '@sanity/ui'
+import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading, useToast} from '@sanity/ui'
 import {usePaneRouter} from '@sanity/desk-tool'
+import {RouterContext} from '@sanity/state-router/lib/RouterContext'
 import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
 import {Flag} from '../Flag'
 import {getSanityClient, getConfig, buildDocId} from '../../../utils'
@@ -25,25 +26,38 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
   isCurrentLanguage,
   baseDocument,
 }) => {
-  const config = getConfig(schema)
+  const toast = useToast()
+  const routerContext = React.useContext(RouterContext)
+  const {routerPanesState, groupIndex, ChildLink} = usePaneRouter()
+  const [loading, setLoading] = React.useState(false)
   const [existing, setExisting] = React.useState<null | SanityDocument>(null)
-  const languageAsVariableName = lang.name.replace(/[^a-zA-Z]/g, '_')
-  const FlagComponent =
-    flagOverrides && languageAsVariableName in flagOverrides
-      ? flagOverrides[languageAsVariableName]
-      : Flag
+  const config = React.useMemo(() => getConfig(schema), [schema])
+  const languageAsVariableName = React.useMemo(
+    () => lang.name.replace(/[^a-zA-Z]/g, '_'),
+    [lang.name]
+  )
+  const FlagComponent = React.useMemo(
+    () =>
+      flagOverrides && languageAsVariableName in flagOverrides
+        ? flagOverrides[languageAsVariableName]
+        : Flag,
+    [flagOverrides, languageAsVariableName]
+  )
 
   // Split a country and language if both supplied
   // Expects language first, then country: `en-us` or `en`
-  const [codeCountry, codeLanguage] = new RegExp(/[_-]/).test(lang.name)
-    ? lang.name.split(/[_-]/)
-    : [``, lang.name]
+  const [codeCountry, codeLanguage] = React.useMemo(
+    () => (new RegExp(/[_-]/).test(lang.name) ? lang.name.split(/[_-]/) : [``, lang.name]),
+    [lang.name]
+  )
 
-  const translatedDocId = (config.base ? lang.name === config.base : index === 0)
-    ? docId
-    : buildDocId(docId, lang.name)
-
-  const {navigateIntent} = usePaneRouter()
+  const translatedDocId = React.useMemo(
+    () =>
+      (config.base ? lang.name === config.base : index === 0)
+        ? docId
+        : buildDocId(docId, lang.name),
+    [config.base, lang.name, index, docId]
+  )
 
   React.useEffect(() => {
     getSanityClient()
@@ -61,20 +75,47 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
   const handleClick = React.useCallback(
     async (id: string) => {
-      if (!existing) {
-        const fieldName = config.fieldNames.lang
-        await getSanityClient().createIfNotExists({
-          ...(baseDocument ? baseDocument : {}),
-          _id: `drafts.${id}`,
-          _type: schema.name,
-          [fieldName]: lang.name,
-        })
-      }
+      try {
+        if (!existing) {
+          setLoading(true)
+          const fieldName = config.fieldNames.lang
+          await getSanityClient().createIfNotExists({
+            ...(baseDocument ? baseDocument : {}),
+            _id: `drafts.${id}`,
+            _type: schema.name,
+            [fieldName]: lang.name,
+          })
+          toast.push({
+            closable: true,
+            status: 'success',
+            title: UiMessages.baseDocumentCopied,
+          })
+        }
 
-      // TODO: Leverage this function to open doc without resetting all panes
-      navigateIntent('edit', {id, type: schema.name})
+        // switch away from translations tab and push child
+        const panes = [
+          ...routerPanesState.slice(0, groupIndex + 1),
+          [
+            {
+              id: translatedDocId,
+              params: {type: schema.name},
+            },
+          ],
+        ]
+
+        const href = routerContext.resolvePathFromState({panes})
+        routerContext.navigateUrl(href)
+      } catch (err) {
+        toast.push({
+          closable: true,
+          status: 'error',
+          title: err.toString(),
+        })
+      } finally {
+        setLoading(false)
+      }
     },
-    [existing, schema, config, lang, baseDocument]
+    [existing, translatedDocId, schema]
   )
 
   return (
