@@ -8,7 +8,6 @@ import {
   fixIdStructureMismatchDocuments,
   fixLanguageFields,
   fixOrphanedDocuments,
-  fixReferenceBehaviorMismatch,
   fixTranslationRefs,
 } from '../../utils'
 import {Stack, Box, Container} from '@sanity/ui'
@@ -64,7 +63,7 @@ export const MaintenanceTab: React.FunctionComponent = () => {
 
   const onFixReferenceBehaviorMismatch = React.useCallback(async () => {
     setPending(true)
-    await fixReferenceBehaviorMismatch(selectedSchema, baseDocuments, translatedDocuments)
+    await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
     await fetchInformation(selectedSchema)
   }, [selectedSchema, baseDocuments, translatedDocuments])
 

@@ -28,7 +28,12 @@ export const useDocumentsInformation = (schema: string) => {
     async (selectedSchema: string) => {
       setPending(true)
       const result = await sanityClientRef.current.fetch<Ti18nDocument[]>(
-        `*[_type == $type && !(_id in path('drafts.**'))]`,
+        `*[_type == $type && !(_id in path('drafts.**'))]{
+          _id,
+          ${config.fieldNames.lang},
+          ${config.fieldNames.references},
+          ${config.fieldNames.baseReference}
+        }`,
         {type: selectedSchema}
       )
       setDocuments(result)
@@ -49,7 +54,9 @@ export const useDocumentsInformation = (schema: string) => {
       missingLanguageField: documents.filter((d) => !d[langFieldName]),
       missingDocumentRefs: basedocuments.filter((d) => {
         const docs = translateddocuments.filter((dx) => getBaseIdFromId(dx._id) === d._id)
-        const refsCount = Object.keys(d[refsFieldName] || {}).length
+        const refsCount = (Object.values(d[refsFieldName] || []) as any[]).filter(
+          (ref) => ref._type === 'reference' && !!ref._ref
+        ).length
         return refsCount != docs.length
       }),
       missingBaseDocumentRefs: translateddocuments.filter((d) => !d[baseRefFieldName]),
@@ -59,12 +66,12 @@ export const useDocumentsInformation = (schema: string) => {
         return true
       }),
       referenceBehaviorMismatch: basedocuments.filter((doc) => {
-        const refs: Record<string, ITranslationRef> = doc[refsFieldName] || {}
+        const refs: ITranslationRef[] = doc[refsFieldName] || []
         if (cfg.referenceBehavior === ReferenceBehavior.DISABLED)
           return Object.keys(refs).length > 0
         if (cfg.referenceBehavior === ReferenceBehavior.WEAK)
-          return Object.values(refs).some((r) => !r.ref._weak)
-        return Object.values(refs).some((r) => !!r.ref._weak)
+          return Object.values(refs).some((r) => !r._weak)
+        return Object.values(refs).some((r) => !!r._weak)
       }),
       baseLanguageMismatch: basedocuments.filter((doc) => {
         return doc.__i18n_lang !== cfg.base

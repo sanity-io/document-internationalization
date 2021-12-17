@@ -54,11 +54,7 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
           if (!lang) return null
           return {
             _key: doc._id,
-            lang,
-            ref: createSanityReference(
-              doc._id,
-              config.referenceBehavior === ReferenceBehavior.WEAK
-            ),
+            ...createSanityReference(doc._id, config.referenceBehavior === ReferenceBehavior.WEAK),
           }
         }, {})
       )
