@@ -10,6 +10,7 @@ import {SchemaType} from '@sanity/structure/lib/parts/Schema'
 import {MaintenanceTab} from './components/MaintenanceTab'
 import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
 import {DocumentListBuilder} from '@sanity/structure/lib/DocumentList'
+import {Child} from '@sanity/structure/dist/dts/StructureNodes'
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
@@ -79,11 +80,23 @@ export const getFilteredDocumentTypeListItems = () => {
         type: list.getId(),
       }),
   }
+
   const items = [
     ...types.withoutI18n,
     ...types.withI18n.map((l) => {
       const schemaType = l.getSchemaType()
       const schemaTypeName = typeof schemaType === 'string' ? schemaType : schemaType?.name
+
+      const i18nChildResolver: Child = (documentId) =>
+        S.document()
+          .id(documentId)
+          .documentId(documentId)
+          .schemaType(schemaTypeName ?? '')
+          .views(
+            schemaTypeName ? getDocumentNodeViewsForSchemaType(schemaTypeName) : [S.view.form()]
+          )
+          .child(i18nChildResolver)
+
       return l.child(
         filterFns[config.idStructure](
           l,
@@ -91,6 +104,7 @@ export const getFilteredDocumentTypeListItems = () => {
             .id(l.getId() || '')
             .title(l.getTitle() || '')
             .menuItems([...(schemaTypeName ? S.orderingMenuItemsForType(schemaTypeName) : [])])
+            .child(i18nChildResolver)
         )
       )
     }),
