@@ -22,3 +22,27 @@ After consideration with the team, we have decided to make `delimiter` based IDs
 
 ### 2. A new field called __i18n_base was introduced for translations
 A new field was introduced which will now be available in translations. The `__i18n_base` field will contain a reference to the base language document similar to how the base document references it's translations. If you are coming from the old plugin you will need to use the "Translation maintenance" to fix the missing fields in your existing translations. This field is not critical but will help with querying your documents.
+
+### 3. The refs structure has changed
+The refs field linking your base document to it's translations has changed in structure. The original structure was as follows:
+```json
+[{
+   "_key": "array-key",
+   "lang": "nl-nl",
+   "ref": {
+      "_type": "reference",
+      "_ref": "ref-id"
+   }
+}]
+```
+
+In the new plugin you will find it has been simplified to just be an array of references:
+```json
+[{
+   "_key": "array-key",
+   "_type": "reference",
+   "_ref": "ref-id"
+}]
+```
+
+Any existing documents will remain unchanged unless "fixed" using the translation maintenance. Old documents will show up as having missing references.
