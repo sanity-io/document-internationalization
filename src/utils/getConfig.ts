@@ -38,7 +38,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
       references:
         schemaConfig?.fieldNames?.references || cfg?.fieldNames?.references || '__i18n_refs',
       baseReference:
-        schemaConfig?.fieldNames?.baseReference || cfg?.fieldNames?.baseReference || '__i8n_base',
+        schemaConfig?.fieldNames?.baseReference || cfg?.fieldNames?.baseReference || '__i18n_base',
     },
     languages: schemaConfig?.languages || cfg?.languages || [],
   }
