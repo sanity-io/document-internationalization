@@ -3,7 +3,7 @@ import {SanityDocument} from '@sanity/client'
 import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading, useToast} from '@sanity/ui'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
-import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
+import flagOverrides from 'part:@sanity/document-internationalization/ui/flags?'
 import omit from 'just-omit'
 import {Flag} from '../Flag'
 import {
