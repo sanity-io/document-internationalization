@@ -1,7 +1,9 @@
 import * as React from 'react'
 import shouldReloadFn from 'part:@sanity/document-internationalization/languages/should-reload?'
+import {useEditState} from '@sanity/react-hooks'
+import {Stack, Spinner, Inline, Text, Flex} from '@sanity/ui'
 import {IDefaultDocumentNodeStructureProps} from '../../IDefaultDocumentNodeStructureProps'
-import {ILanguageObject, Ti18nSchema} from '../../../types'
+import {IEditState, ILanguageObject, Ti18nSchema} from '../../../types'
 import {
   getLanguagesFromOption,
   getBaseLanguage,
@@ -11,9 +13,6 @@ import {
   getLanguageFromId,
 } from '../../../utils'
 import {TranslationLink} from '../TranslationLink'
-import {useEditState} from '@sanity/react-hooks'
-import type {SanityDocument} from '@sanity/client'
-import {Stack, Spinner, Inline, Text, Flex} from '@sanity/ui'
 import {baseToTop} from '../../../utils/baseToTop'
 import {UiMessages} from '../../../constants'
 
@@ -22,10 +21,7 @@ export const TranslationsComponent = (
   props: IDefaultDocumentNodeStructureProps
 ) => {
   const config = getConfig(schema)
-  const {draft, published} = useEditState(props.documentId, props.schemaType) as {
-    draft?: SanityDocument
-    published?: SanityDocument
-  }
+  const {draft, published} = useEditState(props.documentId, props.schemaType) as IEditState
   const [pending, setPending] = React.useState(false)
   const [languages, setLanguages] = React.useState<ILanguageObject[]>([])
   const [baseDocument, setBaseDocument] = React.useState(null)

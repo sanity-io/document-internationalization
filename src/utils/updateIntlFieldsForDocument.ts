@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import {SanityDocument} from '@sanity/client'
 import {ITranslationRef, Ti18nSchema} from '../types'
 import {ReferenceBehavior} from '../constants'
 import {getSanityClient} from './getSanityClient'
@@ -11,12 +12,17 @@ import {getTranslationsFor} from './getTranslationsForId'
 import {getBaseIdFromId} from './getBaseIdFromId'
 import {createSanityReference} from './createSanityReference'
 
-export async function updateIntlFieldsForDocument(id: string, type: string) {
+// @TODO make this into a hook so the hook
+// can look up the existance of a base document on its own
+export async function updateIntlFieldsForDocument(
+  document: SanityDocument,
+  baseDocument?: SanityDocument
+): Promise<void> {
+  const {_type: type, _id: id} = document
   const schema = getSchema<Ti18nSchema>(type)
   const config = getConfig(schema)
   const client = getSanityClient()
   const baseDocumentId = getBaseIdFromId(id)
-  const document = await client.getDocument(id)
   const isTranslation = id !== baseDocumentId
   const fieldName = config.fieldNames.lang
   const refsFieldName = config.fieldNames.references
@@ -43,28 +49,33 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
   await currentDocumentTransaction.commit()
 
   // update base document reference if required
-  const translatedDocuments = await getTranslationsFor(baseDocumentId)
-  if (translatedDocuments.length > 0) {
-    const baseDocumentTransaction = client.transaction()
-    let translatedRefs: ITranslationRef[] = []
-    if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
-      translatedRefs = _.compact(
-        translatedDocuments.map((doc) => {
-          const lang = getLanguageFromId(doc._id)
-          if (!lang) return null
-          return {
-            _key: doc._id,
-            ...createSanityReference(doc._id, config.referenceBehavior === ReferenceBehavior.WEAK),
-          }
-        }, {})
-      )
+  if (baseDocument) {
+    const translatedDocuments = await getTranslationsFor(baseDocumentId)
+    if (translatedDocuments.length > 0) {
+      const baseDocumentTransaction = client.transaction()
+      let translatedRefs: ITranslationRef[] = []
+      if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
+        translatedRefs = _.compact(
+          translatedDocuments.map((doc) => {
+            const lang = getLanguageFromId(doc._id)
+            if (!lang) return null
+            return {
+              _key: doc._id,
+              ...createSanityReference(
+                doc._id,
+                config.referenceBehavior === ReferenceBehavior.WEAK
+              ),
+            }
+          }, {})
+        )
+      }
+      // baseDocumentTransaction.createIfNotExists({_id: baseDocumentId, _type: type})
+      baseDocumentTransaction.patch(baseDocumentId, {
+        set: {
+          [refsFieldName]: translatedRefs,
+        },
+      })
+      await baseDocumentTransaction.commit()
     }
-    baseDocumentTransaction.createIfNotExists({_id: baseDocumentId, _type: type})
-    baseDocumentTransaction.patch(baseDocumentId, {
-      set: {
-        [refsFieldName]: translatedRefs,
-      },
-    })
-    await baseDocumentTransaction.commit()
   }
 }

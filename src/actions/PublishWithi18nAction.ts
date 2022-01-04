@@ -1,19 +1,26 @@
 import * as React from 'react'
-import {IResolverProps, Ti18nSchema, IUseDocumentOperationResult} from '../types'
-import {useDocumentOperation, useSyncState, useValidationStatus} from '@sanity/react-hooks'
+import {
+  useDocumentOperation,
+  useEditState,
+  useSyncState,
+  useValidationStatus,
+} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
-import {getSchema, updateIntlFieldsForDocument} from '../utils'
-import {UiMessages} from '../constants'
+import {getBaseIdFromId, getConfig, getSchema, updateIntlFieldsForDocument} from '../utils'
+import {ReferenceBehavior, UiMessages} from '../constants'
+import {IEditState, IResolverProps, IUseDocumentOperationResult, Ti18nSchema} from '../types'
 
-export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverProps) => {
+export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) => {
   const toast = useToast()
+  const baseDocumentId = getBaseIdFromId(id)
   const [publishState, setPublishState] = React.useState<'publishing' | 'published' | null>(null)
   const [updatingIntlFields, setUpdatingIntlFields] = React.useState(false)
+  const {draft, published} = useEditState(id, type) as IEditState
+  const baseDocumentEditState = useEditState(baseDocumentId, type) as IEditState
   const {publish} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const {isValidating, markers} = useValidationStatus(id, type)
   const syncState = useSyncState(id)
-  const schema = React.useMemo<Ti18nSchema>(() => getSchema(type), [type])
 
   const disabled = React.useMemo(
     () =>
@@ -36,7 +43,11 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
   const doUpdateIntlFields = React.useCallback(async () => {
     setUpdatingIntlFields(true)
     try {
-      await updateIntlFieldsForDocument(id, type)
+      const document = draft || published
+      if (document) {
+        await updateIntlFieldsForDocument(document, baseDocumentEditState.published)
+      }
+
       toast.push({
         closable: true,
         status: 'success',
@@ -51,12 +62,23 @@ export const PublishWithi18nAction = ({type, id, draft, onComplete}: IResolverPr
       })
     }
     setUpdatingIntlFields(false)
-  }, [toast, id, type])
+  }, [toast, draft, published, baseDocumentEditState])
 
   const onHandle = React.useCallback(() => {
     setPublishState('publishing')
-    publish.execute()
-  }, [publish])
+    const schema = getSchema<Ti18nSchema>(type)
+    const config = getConfig(schema)
+    const isTranslation = id !== baseDocumentId
+    if (
+      isTranslation &&
+      !baseDocumentEditState.published &&
+      config.referenceBehavior === ReferenceBehavior.HARD
+    ) {
+      throw new Error(UiMessages.errors.baseDocumentNotPublished)
+    } else {
+      publish.execute()
+    }
+  }, [id, baseDocumentId, type, publish, baseDocumentEditState])
 
   React.useEffect(() => {
     // @README code inspired by @sanity/desk-tool PublishAction.tsx

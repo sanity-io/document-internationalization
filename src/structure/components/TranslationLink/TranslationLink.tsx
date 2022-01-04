@@ -1,19 +1,13 @@
 import * as React from 'react'
-import {SanityDocument} from '@sanity/client'
 import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading, useToast} from '@sanity/ui'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
 import flagOverrides from 'part:@sanity/document-internationalization/ui/flags?'
 import omit from 'just-omit'
+import {useEditState} from '@sanity/react-hooks'
 import {Flag} from '../Flag'
-import {
-  getSanityClient,
-  getConfig,
-  buildDocId,
-  createSanityReference,
-  getBaseIdFromId,
-} from '../../../utils'
-import {ILanguageObject, Ti18nSchema} from '../../../types'
+import {getSanityClient, getConfig, buildDocId} from '../../../utils'
+import {IEditState, ILanguageObject, Ti18nSchema} from '../../../types'
 import {UiMessages} from '../../../constants'
 
 interface IProps {
@@ -35,17 +29,23 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 }) => {
   const toast = useToast()
   const routerContext = React.useContext(RouterContext)
-  const {routerPanesState, groupIndex, ChildLink} = usePaneRouter()
+  const {routerPanesState, groupIndex} = usePaneRouter()
   const [loading, setLoading] = React.useState(false)
-  const [existing, setExisting] = React.useState<null | SanityDocument>(null)
   const config = React.useMemo(() => getConfig(schema), [schema])
+  const translatedDocId = React.useMemo(
+    () =>
+      (config.base ? lang.id === config.base : index === 0) ? docId : buildDocId(docId, lang.id),
+    [config.base, lang.id, index, docId]
+  )
+  const editState = useEditState(translatedDocId, schema.name) as IEditState
+  const existing = React.useMemo(() => editState.published || editState.draft, [editState])
   const languageAsVariableName = React.useMemo(() => lang.id.replace(/[^a-zA-Z]/g, '_'), [lang.id])
   const FlagComponent = React.useMemo(
     () =>
       flagOverrides && languageAsVariableName in flagOverrides
         ? flagOverrides[languageAsVariableName]
         : Flag,
-    [flagOverrides, languageAsVariableName]
+    [languageAsVariableName]
   )
 
   // Split a country and language if both supplied
@@ -55,42 +55,18 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
     [lang.id]
   )
 
-  const translatedDocId = React.useMemo(
-    () =>
-      (config.base ? lang.id === config.base : index === 0) ? docId : buildDocId(docId, lang.id),
-    [config.base, lang.id, index, docId]
-  )
-
-  React.useEffect(() => {
-    getSanityClient()
-      .fetch(`coalesce(*[_id == $id][0], *[_id == $draftId][0])`, {
-        id: translatedDocId,
-        draftId: `drafts.${translatedDocId}`,
-      })
-      .then((ex) => {
-        if (ex) setExisting(ex)
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [lang.id])
-
   const handleClick = React.useCallback(
     async (id: string) => {
       try {
         if (!existing) {
           setLoading(true)
           const langFieldName = config.fieldNames.lang
-          const baseRefFieldName = config.fieldNames.baseReference
           await getSanityClient().createIfNotExists({
             ...(baseDocument ? omit(baseDocument, [config.fieldNames.references]) : {}),
             _id: `drafts.${id}`,
             _type: schema.name,
             [langFieldName]: lang.id,
-            [baseRefFieldName]: createSanityReference(
-              getBaseIdFromId(id)
-              // @TODO properly set weak
-            ),
+            // [baseRefFieldName]: will be added on publish - not possible to add beforehand due to hard reference issue
           })
           toast.push({
             closable: true,
@@ -122,7 +98,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
         setLoading(false)
       }
     },
-    [existing, translatedDocId, schema]
+    [existing, translatedDocId, schema, config]
   )
 
   return (
@@ -131,6 +107,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
         <Button
           mode={isCurrentLanguage ? `default` : `bleed`}
           padding={2}
+          loading={loading}
           onClick={() => handleClick(translatedDocId)}
           style={{width: `100%`}}
         >

@@ -17,7 +17,7 @@ export const normalizeLanguageList = (languages: (string | LanguageConfigObject)
 
     if ('name' in l) {
       console.warn(
-        `The "name" field in your language configuration is deprecatd, please replace it with "id".`
+        `The "name" field in your language configuration is deprecated, please replace it with "id".`
       )
       return {title: l.title, id: l.name}
     }

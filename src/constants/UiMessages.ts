@@ -29,4 +29,8 @@ export const UiMessages = {
     baseLanguageMismatch: 'base document(s) with mismatched language field',
     fix: 'Fix',
   },
+  errors: {
+    baseDocumentNotPublished:
+      'It looks like you have not published your base translation yet. When using strong references it is required to publish the base document before publishing any translated entries',
+  },
 }
