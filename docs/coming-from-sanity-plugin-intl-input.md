@@ -24,10 +24,33 @@ After consideration with the team, we have decided to make `delimiter` based IDs
 
 ### 3. The languages configuration has changed
 The "name" field is now called "id". The old field will still be supported but you will see a deprecation notice.
-### 4. A new field called __i18n_base was introduced for translations
+
+### 4. Studio parts have been renamed
+If you had implemnted any of the previous plugin's studio parts you will need to rename the implementations.
+```diff
+[
+  {
++   "name": "part:@sanity/document-internationalization/languages/loader",
+-   "name": "part:sanity-plugin-intl-input/languages/loader",
+    "description": "User implementable languages loader function"
+  },
+  {
++   "name": "part:@sanity/document-internationalization/languages/should-reload",
+-   "name": "part:sanity-plugin-intl-input/languages/should-reload",
+    "description": "User implementable function determening whether the languages should be reloaded"
+  },
+  {
++   "name": "part:@sanity/document-internationalization/ui/flags",
+-   "name": "part:sanity-plugin-intl-input/ui/flags",
+    "description": "Part can be implemented to override default flag"
+  }
+]
+```
+
+### 5. A new field called __i18n_base was introduced for translations
 A new field was introduced which will now be available in translations. The `__i18n_base` field will contain a reference to the base language document similar to how the base document references it's translations. If you are coming from the old plugin you will need to use the "Translation maintenance" to fix the missing fields in your existing translations. This field is not critical but will help with querying your documents.
 
-### 5. The refs structure has changed
+### 6. The refs structure has changed
 The refs field linking your base document to it's translations has changed in structure. The original structure was as follows:
 ```json
 [{

@@ -1,5 +1,5 @@
 # Document Internationalization Plugin for Sanity
-[![npm version](https://img.shields.io/npm/v/sanity-plugin-intl-input.svg?style=flat)](https://www.npmjs.com/package/sanity-plugin-intl-input)
+[![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
 ## Default solution
 When you want to create translations in Sanity they suggest [following approach](https://www.sanity.io/docs/localization).  

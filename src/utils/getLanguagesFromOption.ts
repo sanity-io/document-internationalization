@@ -1,5 +1,5 @@
 import get from 'just-safe-get'
-import languagesLoaderFn from 'part:sanity-plugin-intl-input/languages/loader?'
+import languagesLoaderFn from 'part:@sanity/document-internationalization/languages/loader?'
 import type {SanityDocument} from '@sanity/client'
 import {ILanguageObject, TLanguagesOption} from '../types'
 import {normalizeLanguageList} from './normalizeLanguageList'

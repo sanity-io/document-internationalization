@@ -27,7 +27,7 @@ languages: {
 ```
 
 ## Custom loader functionality
-If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `sanity-plugin-intl-input/languages/loader` part your Sanity Studio. This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`name` + `title`) and it can be `async`
+If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part your Sanity Studio. This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`name` + `title`) and it can be `async`
 
 Example:
 
@@ -36,7 +36,7 @@ Example:
 {
   "parts": [
     {
-      "implements": "part:sanity-plugin-intl-input/languages/loader",
+      "implements": "part:@sanity/document-internationalization/languages/loader",
       "path": "./loader.js"
     }
   ]
@@ -50,7 +50,7 @@ export default async (languages, document) => {
 }
 ```
 
-One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior. To do this you need to implement the `sanity-plugin-intl-input/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
+One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior. To do this you need to implement the `@sanity/document-internationalization/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
 
 Example:
 **sanity.json**
@@ -58,7 +58,7 @@ Example:
 {
   "parts": [
     {
-      "implements": "part:sanity-plugin-intl-input/languages/should-reload",
+      "implements": "part:@sanity/document-internationalization/languages/should-reload",
       "path": "./should-reload.js"
     }
   ]
@@ -73,7 +73,7 @@ export default (document) => {
 ```
 
 ## Override flag icons
-Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:sanity-plugin-intl-input/ui/flags` studio part as follows:
+Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:@sanity/document-internationalization/ui/flags` studio part as follows:
 
 ```flags.js
 import React from 'react';

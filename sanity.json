@@ -13,15 +13,15 @@
       "path": "actions/index.js"
     },
     {
-      "name": "part:sanity-plugin-intl-input/languages/loader",
+      "name": "part:@sanity/document-internationalization/languages/loader",
       "description": "User implementable languages loader function"
     },
     {
-      "name": "part:sanity-plugin-intl-input/languages/should-reload",
+      "name": "part:@sanity/document-internationalization/languages/should-reload",
       "description": "User implementable function determening whether the languages should be reloaded"
     },
     {
-      "name": "part:sanity-plugin-intl-input/ui/flags",
+      "name": "part:@sanity/document-internationalization/ui/flags",
       "description": "Part can be implemented to override default flag"
     }
   ]

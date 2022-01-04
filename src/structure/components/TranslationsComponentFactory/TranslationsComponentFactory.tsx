@@ -1,5 +1,5 @@
 import * as React from 'react'
-import shouldReloadFn from 'part:sanity-plugin-intl-input/languages/should-reload?'
+import shouldReloadFn from 'part:@sanity/document-internationalization/languages/should-reload?'
 import {IDefaultDocumentNodeStructureProps} from '../../IDefaultDocumentNodeStructureProps'
 import {ILanguageObject, Ti18nSchema} from '../../../types'
 import {
