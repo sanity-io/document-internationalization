@@ -1,5 +1,3 @@
-import {Reference} from '@sanity/types/dist/dts'
-
 export function createSanityReference(id: string, weak = false) {
   return {
     _type: 'reference' as const,

@@ -55,7 +55,7 @@ export const TranslationsComponent = (
   const docId = getBaseIdFromId(props.documentId)
   const baseLanguage = getBaseLanguage(languages, config.base)
   const currentLanguage =
-    getLanguageFromId(props.documentId) || (baseLanguage ? baseLanguage.name : null)
+    getLanguageFromId(props.documentId) || (baseLanguage ? baseLanguage.id : null)
 
   const compiledLanguages = React.useMemo(() => {
     if (!languages?.length) {
@@ -65,8 +65,8 @@ export const TranslationsComponent = (
     return languages
       .map((lang) => ({
         ...lang,
-        isBase: lang.name === config.base,
-        isCurrentLanguage: lang.name === currentLanguage,
+        isBase: lang.id === config.base,
+        isCurrentLanguage: lang.id === currentLanguage,
       }))
       .sort(baseToTop)
       .reverse()
@@ -87,7 +87,7 @@ export const TranslationsComponent = (
     <Stack space={2} padding={2}>
       {compiledLanguages.map((lang, index) => (
         <TranslationLink
-          key={lang.name}
+          key={lang.id}
           docId={docId}
           index={index}
           schema={schema}

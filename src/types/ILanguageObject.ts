@@ -1,5 +1,5 @@
 export interface ILanguageObject {
-  name: string
+  id: string
   title: string
   isCurrentLanguage?: boolean
   isBase?: boolean

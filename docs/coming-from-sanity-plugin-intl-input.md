@@ -20,10 +20,14 @@ After consideration with the team, we have decided to make `delimiter` based IDs
    1. Check if you have explicitly specified `subpath` in your intl config. If you have, you can either remove it or replace it with `delimiter`
    2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all verion history**
 
-### 2. A new field called __i18n_base was introduced for translations
+
+
+### 3. The languages configuration has changed
+The "name" field is now called "id". The old field will still be supported but you will see a deprecation notice.
+### 4. A new field called __i18n_base was introduced for translations
 A new field was introduced which will now be available in translations. The `__i18n_base` field will contain a reference to the base language document similar to how the base document references it's translations. If you are coming from the old plugin you will need to use the "Translation maintenance" to fix the missing fields in your existing translations. This field is not critical but will help with querying your documents.
 
-### 3. The refs structure has changed
+### 5. The refs structure has changed
 The refs field linking your base document to it's translations has changed in structure. The original structure was as follows:
 ```json
 [{

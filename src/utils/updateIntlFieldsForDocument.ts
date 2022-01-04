@@ -22,7 +22,7 @@ export async function updateIntlFieldsForDocument(id: string, type: string) {
   const refsFieldName = config.fieldNames.references
   const baseRefFieldName = config.fieldNames.baseReference
   const langs = await getLanguagesFromOption(config.languages, document)
-  const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.name
+  const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.id
 
   // Update I18n field for current document
   const currentDocumentTransaction = client.transaction()

@@ -1,4 +1,4 @@
-import get from 'lodash.get'
+import get from 'just-safe-get'
 import languagesLoaderFn from 'part:sanity-plugin-intl-input/languages/loader?'
 import type {SanityDocument} from '@sanity/client'
 import {ILanguageObject, TLanguagesOption} from '../types'
@@ -16,10 +16,20 @@ export const getLanguagesFromOption = async <D extends SanityDocument>(
       const value = langs.value
 
       if (typeof value === 'string') return r.map((l) => get(l, value))
-      return r.map((l) => ({
-        name: get(l, value.name),
-        title: get(l, value.title),
-      }))
+      return r.map((l) => {
+        // @deprecated
+        if ('name' in value) {
+          return {
+            name: get(l, value.name),
+            title: get(l, value.title),
+          }
+        }
+
+        return {
+          id: get(l, value.id),
+          title: get(l, value.title),
+        }
+      })
     })()
   )
   if (languagesLoaderFn) {

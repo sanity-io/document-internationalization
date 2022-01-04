@@ -1,4 +1,4 @@
-import chunk from 'lodash.chunk'
+import chunk from 'just-split'
 import {ReferenceBehavior} from '../../constants'
 import {Ti18nDocument} from '../../types'
 import {

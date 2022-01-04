@@ -21,11 +21,11 @@ Below are all available configuration options.
   "languages": [
     {
       "title": "English (US)",
-      "name": "en-us"
+      "id": "en-us"
     },
     {
       "title": "Dutch (NL)",
-      "name": "nl-nl"
+      "id": "nl-nl"
     }
   ],
   "idStructure": "delimiter",

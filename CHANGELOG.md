@@ -9,3 +9,4 @@
 * `delimiter` is now the default ID structure
 * Added maintenance function to add base document ref to translated documents
 * Removed the option for overriding UI messages
+* Updated language configuration to use "id" field instead of "name"

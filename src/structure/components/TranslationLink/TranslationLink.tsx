@@ -4,8 +4,15 @@ import {Stack, Button, Badge, Card, Flex, Box, Text, Code, Heading, useToast} fr
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
 import flagOverrides from 'part:sanity-plugin-intl-input/ui/flags?'
+import omit from 'just-omit'
 import {Flag} from '../Flag'
-import {getSanityClient, getConfig, buildDocId} from '../../../utils'
+import {
+  getSanityClient,
+  getConfig,
+  buildDocId,
+  createSanityReference,
+  getBaseIdFromId,
+} from '../../../utils'
 import {ILanguageObject, Ti18nSchema} from '../../../types'
 import {UiMessages} from '../../../constants'
 
@@ -32,10 +39,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
   const [loading, setLoading] = React.useState(false)
   const [existing, setExisting] = React.useState<null | SanityDocument>(null)
   const config = React.useMemo(() => getConfig(schema), [schema])
-  const languageAsVariableName = React.useMemo(
-    () => lang.name.replace(/[^a-zA-Z]/g, '_'),
-    [lang.name]
-  )
+  const languageAsVariableName = React.useMemo(() => lang.id.replace(/[^a-zA-Z]/g, '_'), [lang.id])
   const FlagComponent = React.useMemo(
     () =>
       flagOverrides && languageAsVariableName in flagOverrides
@@ -47,16 +51,14 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
   // Split a country and language if both supplied
   // Expects language first, then country: `en-us` or `en`
   const [codeCountry, codeLanguage] = React.useMemo(
-    () => (new RegExp(/[_-]/).test(lang.name) ? lang.name.split(/[_-]/) : [``, lang.name]),
-    [lang.name]
+    () => (new RegExp(/[_-]/).test(lang.id) ? lang.id.split(/[_-]/) : [``, lang.id]),
+    [lang.id]
   )
 
   const translatedDocId = React.useMemo(
     () =>
-      (config.base ? lang.name === config.base : index === 0)
-        ? docId
-        : buildDocId(docId, lang.name),
-    [config.base, lang.name, index, docId]
+      (config.base ? lang.id === config.base : index === 0) ? docId : buildDocId(docId, lang.id),
+    [config.base, lang.id, index, docId]
   )
 
   React.useEffect(() => {
@@ -71,19 +73,24 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
       .catch((err) => {
         console.error(err)
       })
-  }, [lang.name])
+  }, [lang.id])
 
   const handleClick = React.useCallback(
     async (id: string) => {
       try {
         if (!existing) {
           setLoading(true)
-          const fieldName = config.fieldNames.lang
+          const langFieldName = config.fieldNames.lang
+          const baseRefFieldName = config.fieldNames.baseReference
           await getSanityClient().createIfNotExists({
-            ...(baseDocument ? baseDocument : {}),
+            ...(baseDocument ? omit(baseDocument, [config.fieldNames.references]) : {}),
             _id: `drafts.${id}`,
             _type: schema.name,
-            [fieldName]: lang.name,
+            [langFieldName]: lang.id,
+            [baseRefFieldName]: createSanityReference(
+              getBaseIdFromId(id)
+              // @TODO properly set weak
+            ),
           })
           toast.push({
             closable: true,
@@ -155,7 +162,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
             <Box flex={1}>
               <Stack space={2}>
                 <Text>{lang.title}</Text>
-                <Code size={1}>{lang.name}</Code>
+                <Code size={1}>{lang.id}</Code>
               </Stack>
             </Box>
             {lang.isBase && (

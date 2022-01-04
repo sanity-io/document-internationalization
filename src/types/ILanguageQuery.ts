@@ -3,6 +3,10 @@ export interface ILanguageQuery {
   value:
     | string
     | {
+        id: string
+        title: string
+      }
+    | {
         name: string
         title: string
       }
