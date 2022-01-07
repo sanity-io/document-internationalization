@@ -1,15 +1,11 @@
 {
   "name": "@sanity/document-internationalization",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.1",
   "license": "MIT",
   "engines": {
     "node": ">=14"
   },
-  "author": {
-    "name": "Liam Martens",
-    "email": "hi@liammartens.com",
-    "url": "https://liammartens.com"
-  },
+  "author": "Sanity.io <hello@sanity.io>",
   "keywords": [
     "sanity",
     "cms",
@@ -48,7 +44,14 @@
     "build:utils": "rollup -c src/utils/rollup.config.js",
     "build:validators": "rollup -c src/validators/rollup.config.js",
     "watch": "run-p \"build:* -- -w\"",
-    "prepare": "husky install"
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable && sanipack build && sanipack verify",
+    "postpublish": "pinst --enable"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
