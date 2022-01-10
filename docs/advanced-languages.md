@@ -1,22 +1,27 @@
-# Advanced Language Definition
+# Advanced language definition
+
 You can also pass a language objects or a GROQ query to the languages option for more advanced language handling.
 
 ## Language objects
-If you pass an object with `name` and `title` to the languages array you can separate the data key and the visualized language name in the UI.
-Eg:
-```
+
+If you pass an object with `id` and `title` to the languages array you can separate the data key and the visualized language name in the UI.
+
+Use underscores `_` instead of hyphens `-` in the `id` field as field names cannot contain hyphens.
+
+```js
 languages: [
-  { name: 'en_us', title: 'English (US)' },
-  { name: 'en_gb', title: 'English (UK)' }
+  {id: 'en_us', title: 'English (US)'},
+  {id: 'en_gb', title: 'English (UK)'},
 ]
 ```
 
 ## GROQ query
+
 It is also possible to pass a GROQ query to the languages option to dynamically fetch the available languages.
-Eg:
-```
+
+```groq
 languages: {
-  query: '*[_type=="language"]{_id,name}',
+  query: '*[_type == "language"]{ _id, name}',
   // these are the object paths to get out of the results to use for name and title
   // it is also possible to pass a simple string which will then be used for both title and name
   value: {
@@ -27,11 +32,13 @@ languages: {
 ```
 
 ## Custom loader functionality
-If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part your Sanity Studio. This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`name` + `title`) and it can be `async`
 
-Example:
+If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part your Sanity Studio.
 
-**sanity.json**
+This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`id` + `title`) and it can be `async`
+
+`sanity.json`
+
 ```json
 {
   "parts": [
@@ -43,17 +50,20 @@ Example:
 }
 ```
 
-**loader.js**
 ```js
+// loader.js
+
 export default async (languages, document) => {
-  return languages;
+  return languages
 }
 ```
 
-One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior. To do this you need to implement the `@sanity/document-internationalization/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
+One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior.
 
-Example:
-**sanity.json**
+To do this you need to implement the `@sanity/document-internationalization/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
+
+`sanity.json`
+
 ```json
 {
   "parts": [
@@ -65,22 +75,23 @@ Example:
 }
 ```
 
-**should-reload.js**
 ```js
+// should-reload.js
+
 export default (document) => {
-  return false;
+  return false
 }
 ```
 
 ## Override flag icons
+
 Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:@sanity/document-internationalization/ui/flags` studio part as follows:
 
-```flags.js
-import React from 'react';
+```js
+// flags.js
+import React from 'react'
 
-export const lang_CULTURE = ({ code }) => (
-  <MyFlag />
-)
+export const lang_CULTURE = ({code}) => <MyFlag />
 ```
 
 Your custom component will receive either the language or culture code (as we render 2 flags by default). If your i18n config does not define cultures it will just receive the language code and we only display a singular flag.

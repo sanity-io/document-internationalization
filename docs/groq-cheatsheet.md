@@ -1,13 +1,15 @@
 # GROQ Cheatsheet
-This only applies to document wide translations.
 
-## Query by language
+## Query for all documents by a particular language
+
 ```
 *[_type == "type" && __i18n_lang == $lang]
 ```
-**Note** This will not work on never before published, base language documents because they will not have the `__i18n_lang` field yet.
+
+**Note** This may not work on never before published, base language documents if they do not have a `__i18n_lang` field value yet.
 
 ## Get specific document by language and fallback to base
+
 ```
 coalesce(
   *[__i18n_base.ref == $id && __i18n_lang == $lang][0],
@@ -15,13 +17,14 @@ coalesce(
 )
 ```
 
-
 ## Get all base language documents for a type without language field
+
 ```
 *[_type == $type && !defined(__i18n_base.ref)]
 ```
 
 ## Get list of all available languages for a given document type
+
 ```
 *[_type == $type && !defined(__i18n_base.ref)] {
   "languages": [__i18n_lang, ...__i18n_refs[].lang]
