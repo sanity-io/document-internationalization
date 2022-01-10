@@ -17,6 +17,7 @@
       "target": "es2015",
       "jsx": "react",
       "rootDir": "./src",
+      "skipLibCheck": true,
       "lib": [
         "es2017.object",
         "es2017",
@@ -31,7 +32,7 @@
       "./src/**/*.tsx"
     ],
     "exclude": [
-      "**/node_modules"
+      "./node_modules"
     ]
   }
   
