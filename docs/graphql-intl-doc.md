@@ -39,7 +39,6 @@ const schema = {
       of: [
         {
           type: 'reference',
-          name: 'ref',
           to: [{type: 'schema'}],
         },
       ],
