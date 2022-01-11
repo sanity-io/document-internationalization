@@ -1,23 +1,8 @@
 # Advanced language definition
 
-You can also pass a language objects or a GROQ query to the languages option for more advanced language handling.
+## GROQ Query
 
-## Language objects
-
-If you pass an object with `id` and `title` to the languages array you can separate the data key and the visualized language name in the UI.
-
-Use underscores `_` instead of hyphens `-` in the `id` field as field names cannot contain hyphens.
-
-```js
-languages: [
-  {id: 'en_us', title: 'English (US)'},
-  {id: 'en_gb', title: 'English (UK)'},
-]
-```
-
-## GROQ query
-
-It is also possible to pass a GROQ query to the languages option to dynamically fetch the available languages.
+It is possible to pass a GROQ query to the languages option to dynamically fetch the available languages.
 
 ```groq
 languages: {

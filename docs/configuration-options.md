@@ -1,16 +1,16 @@
 # Configuration options
 
-To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder. If you need specific configuration you can keep in mind, any global config can be overriden per schema.
+To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder.
 
-Below are all available configuration options.
+This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. These defaults can be overriden on each schema.
 
 ### `base`
 
-This is the ID of the base/default language (if not specified the first language is used)
+This is the ID of the base/default language. If unspecified, the first language is used.
 
 ### `languages`
 
-This option specifies the available language options. This can be any of the following (see [Advanced Languages](./advanced-languages.md) for more information)
+This option specifies the available language options. This can be any of the following:
 
 1. Array of language ID strings
 
@@ -35,13 +35,15 @@ This option specifies the available language options. This can be any of the fol
 }
 ```
 
+See [Advanced Languages](./advanced-languages.md) for more information.
+
 ### `idStructure`
 
 Can be `delimiter` (default) or `subpath`.
 
-The plugin will create references between those documents as well, and so it should be more reliable to query by **reference**, rather than by matching `_id` strings.
+The plugin will create references between base and translated documents, and so it should be reliable to query related documents by **reference**, rather than by matching `_id` strings.
 
-The differences below are related to querying for a base language or translated version of a document based on the `_id` of one another.
+The differences below are related to querying for documents based on the `_id`:
 
 | ID structure          | Advantages                                                | Disadvantages                                                                                                                                                                                                                  | Example `_id`s                  |
 | --------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- |
