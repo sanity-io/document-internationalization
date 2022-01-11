@@ -18,7 +18,7 @@ languages: {
 
 ## Custom loader functionality
 
-If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part your Sanity Studio.
+If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part in your Sanity Studio.
 
 This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`id` + `title`) and it can be `async`
 
