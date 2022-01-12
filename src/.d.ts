@@ -1,6 +1,6 @@
 declare module 'part:@sanity/*';
 
-declare module 'config:document-internationalization' {
+declare module 'config:@sanity/document-internationalization' {
   const config: import('./types').Ti18nConfig & {
     withTranslationsMaintenance?: boolean;
   };

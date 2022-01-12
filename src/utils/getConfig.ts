@@ -1,4 +1,4 @@
-import config from 'config:document-internationalization'
+import config from 'config:@sanity/document-internationalization'
 import {Ti18nSchema, Ti18nConfig} from '../types'
 import {IdStructure, ReferenceBehavior} from '../constants'
 import {getSchema} from './getSchema'

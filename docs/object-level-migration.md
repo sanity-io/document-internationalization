@@ -44,7 +44,7 @@ First of all let's move the `i18nfields` object to a separate object type using 
 
 **schemas/homepage-i18nfields.js**
 ```js
-import i18nconfig from 'config:document-internationalization';
+import i18nconfig from 'config:@sanity/document-internationalization';
 
 export default {
   type: 'object',
@@ -90,7 +90,7 @@ One solution is fieldsets. Using this option we will be able to initially "hide 
 To do this we will need to update our `homepage-i18nfields` schema:
 **schemas/homepage-i18nfields.js**
 ```diff
-import i18nconfig from 'config:document-internationalization';
+import i18nconfig from 'config:@sanity/document-internationalization';
 
 export default {
   type: 'object',
@@ -143,7 +143,7 @@ After installing the plugin we will need to configure it. This is done by implem
 
 **parts/languageFilterConfig.js**
 ```js
-import i18nconfig from 'config:document-internationalization';
+import i18nconfig from 'config:@sanity/document-internationalization';
 
 export default {
   supportedLanguages: i18nconfig.languages.map((lang) => ({
