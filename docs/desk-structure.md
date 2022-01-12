@@ -2,7 +2,7 @@
 
 [See the Sanity docs on how to to setup Desk Structure](https://www.sanity.io/guides/getting-started-with-structure-builder) if you do not already have Desk Structure customised in your project.
 
-Once your Studio has Desk Structure setup, you can configure the plugin in two ways:
+Once your Studio has its own Desk Structure, you can configure the plugin in two ways:
 
 ## Method 1: Default implementation
 

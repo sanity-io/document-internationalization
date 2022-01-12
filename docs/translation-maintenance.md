@@ -1,6 +1,6 @@
 # Translation maintenance
 
-![Translation Maintenance](./img/maintenance-tab.jpg)
+![Translation Maintenance](./img/maintenance-tab.png)
 
 The translation maintenance tab can be used to clean up and manage your Sanity data. It can help with the following operations:
 
