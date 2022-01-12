@@ -1,16 +1,16 @@
 import 'regenerator-runtime' // eslint-disable-line
 import {StructureBuilder as S} from '@sanity/structure'
 import {EarthGlobeIcon} from '@sanity/icons'
-import {IDefaultDocumentNodeStructureProps} from './IDefaultDocumentNodeStructureProps'
-import {Ti18nSchema} from '../types'
-import {ListItemBuilder} from '@sanity/structure/lib/ListItem'
-import {TranslationsComponentFactory} from './components/TranslationsComponentFactory'
-import {getSchema, getConfig} from '../utils'
 import {SchemaType} from '@sanity/structure/lib/parts/Schema'
-import {MaintenanceTab} from './components/MaintenanceTab'
-import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
 import {DocumentListBuilder} from '@sanity/structure/lib/DocumentList'
 import {Child} from '@sanity/structure/dist/dts/StructureNodes'
+import {ListItemBuilder} from '@sanity/structure/lib/ListItem'
+import {Ti18nSchema} from '../types'
+import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
+import {getSchema, getConfig} from '../utils'
+import {TranslationsComponentFactory} from './components/TranslationsComponentFactory'
+import {MaintenanceTab} from './components/MaintenanceTab'
+import {IDefaultDocumentNodeStructureProps} from './IDefaultDocumentNodeStructureProps'
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
