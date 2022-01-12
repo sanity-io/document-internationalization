@@ -27,7 +27,8 @@ Ensure that `@sanity/document-internationalization` is listed in `plugins` insid
 
 ### Configuration file
 
-At a minimum you will need to create an empty configuration file in `./config/document-internationalization.json`
+At a minimum you will need to create an empty configuration file in `./config/@sanity/document-internationalization.json`
+**Note** this configuration file should be created by default upon installation
 
 ```json
 {}
