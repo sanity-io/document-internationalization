@@ -8,14 +8,30 @@
 
 There are two popular methods of internationalization in Sanity Studio:
 
-- **Document-level translation** refers to a schema type having a unique document for every language, joined together by references and/or a predictable `_id`
-- **Field-level translation** refers to mapping over languages to create an object, within which there is a language-specific version of each field
+- **Document-level translation**
+  - A unique document version for every language
+  - Joined together by references and/or a predictable `_id`
+  - Best for documents that have unique, language-specific fields and no common content across languages
+  - Best for translating content using Portable Text
+- **Field-level translation**
+  - A single document with many languages of content
+  - Achieved by mapping over languages on each field, to create an object
+  - Best for documents that have a mix of language-specific and common fields
+  - Not recommended for Portable Text
 
-You'll need to decide on the approach for each schema individually, and you're likely going to have a mix of both.
+This plugin adds features to the Studio to improve handling **document-level translations**.
 
-This plugin adds UI to the Studio to improve handling **document-level translations**.
+- A View Pane to create language versions of each Document
+- Document Actions to update base and translated documents to ensure references stay in tact
+- Document Badges to highlight the language version of a document
 
 For **field-level translations** you should use the [@sanity/language-filter plugin](https://www.npmjs.com/package/@sanity/language-filter).
+
+### Many projects use both!
+
+An example of document-level translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
+
+A good use of field-level translation could be a `person` schema. It could have the same `name` and `image` in every language, but only the `biography` would need translating.
 
 ## Installation
 
@@ -45,7 +61,7 @@ The plugin is now installed, but you will need to complete the following steps t
 3. [GraphQL support](docs/graphql-intl-doc.md)
 4. [Advanced languages](docs/advanced-languages.md)
 5. [Usage with custom publish action](docs/usage-with-custom-publish.md)
-6. [GROQ Cheatsheet](/docs/groq-cheatsheet.md)
+6. [GROQ query examples](/docs/groq-query-examples.md)
 
 ## Migrating from sanity-plugin-intl-input
 
