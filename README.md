@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
-![Document Level Internationalization UI](img/document-level-translation.gif)
+![Document Level Internationalization UI](docs/img/document-level-translation.gif)
 
 ## What this plugin solves
 
