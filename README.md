@@ -2,6 +2,8 @@
 
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
+![Document Level Internationalization UI](img/document-level-translation.gif)
+
 ## What this plugin solves
 
 There are two popular methods of internationalization in Sanity Studio:
@@ -24,15 +26,6 @@ sanity install @sanity/document-internationalization
 ```
 
 Ensure that `@sanity/document-internationalization` is listed in `plugins` inside `sanity.json`.
-
-### Configuration file
-
-At a minimum you will need to create an empty configuration file in `./config/@sanity/document-internationalization.json`
-**Note** this configuration file should be created by default upon installation
-
-```json
-{}
-```
 
 The plugin is now installed, but you will need to complete the following steps to see the Document Translation UI:
 

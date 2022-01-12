@@ -1,6 +1,14 @@
 # Configuration options
 
-To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder.
+To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder. When you installed the plugin, a default one should have been created.
+
+At a minimum the file must exist and can be an empty object
+
+`./config/@sanity/document-internationalization.json`
+
+```json
+{}
+```
 
 This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. These defaults can be overriden on each schema.
 
