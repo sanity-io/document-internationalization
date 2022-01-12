@@ -44,7 +44,7 @@
     "build:utils": "rollup -c src/utils/rollup.config.js",
     "build:validators": "rollup -c src/validators/rollup.config.js",
     "watch": "run-p \"build:* -- -w\"",
-    "_postinstall": "husky install",
+    "postinstall": "husky install",
     "prepublishOnly": "pinst --disable && npm run build",
     "postpublish": "pinst --enable"
   },

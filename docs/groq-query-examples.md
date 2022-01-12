@@ -1,4 +1,4 @@
-# GROQ Cheatsheet
+# GROQ query examples
 
 ## Query for all documents by a particular language
 
@@ -6,7 +6,7 @@
 *[_type == "type" && __i18n_lang == $lang]
 ```
 
-**Note** This may not work on never before published, base language documents if they do not have a `__i18n_lang` field value yet.
+**Note** This may not work on never before published, base language documents if they do not have a `__i18n_lang` field value yet. Avoid this by setting an `initialValue` on your schema.
 
 ## Get specific document by language and fallback to base
 
