@@ -62,7 +62,7 @@ The differences below are related to querying for documents based on the `_id`:
 
 | Behavior name    | Description                                                                                                                                                                        |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hard` (default) | This setting adds hard references from your base document to its translations. This makes it so you can not remove the translations afterwards without removing the base document. |
+| `strong` (default) | This setting adds strong references from your base document to its translations. This makes it so you can not remove the translations afterwards without removing the base document. |
 | `weak`           | This settings adds weak references from your base document to its translations. This allows the removal of translations.                                                           |
 | `disabled`       | This option completely disables this behavior                                                                                                                                      |
 
@@ -90,7 +90,7 @@ This option configures the field names used by the plugin
     }
   ],
   "idStructure": "delimiter",
-  "referenceBehavior": "hard",
+  "referenceBehavior": "strong",
   "fieldNames": {
     "lang": "__i18n_lang",
     "references": "__i18n_refs",

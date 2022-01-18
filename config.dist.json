@@ -1,4 +1,4 @@
 {
     "idStructure": "delimiter",
-    "referenceBehavior": "hard"
+    "referenceBehavior": "strong"
 }

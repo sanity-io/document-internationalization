@@ -1,5 +1,5 @@
 export enum ReferenceBehavior {
-  HARD = 'hard',
+  STRONG = 'strong',
   WEAK = 'weak',
   DISABLED = 'disabled',
 }

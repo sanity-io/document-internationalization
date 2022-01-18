@@ -20,7 +20,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
   const baseDocumentEditState = useEditState(baseDocumentId, type) as IEditState
   const {publish} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const {isValidating, markers} = useValidationStatus(id, type)
-  const syncState = useSyncState(id)
+  const syncState = useSyncState(id, type)
 
   const disabled = React.useMemo(
     () =>
@@ -72,7 +72,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     if (
       isTranslation &&
       !baseDocumentEditState.published &&
-      config.referenceBehavior === ReferenceBehavior.HARD
+      config.referenceBehavior === ReferenceBehavior.STRONG
     ) {
       throw new Error(UiMessages.errors.baseDocumentNotPublished)
     } else {

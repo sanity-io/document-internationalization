@@ -7,7 +7,7 @@ Adding `i18n: true` to a schema will use the defaults in your configuration file
 Alternatively you can set an object like `i18n: {...}` to override those defaults.
 
 - `base`: Override the globally configured base language ID. If there is no base language ID configured at all, the first language in the list will be used.
-- `referenceBehavior`: Can be `hard` (default), `weak` or `disabled`. This option defines how the translated documents are referenced in the parent document
+- `referenceBehavior`: Can be `strong` (default), `weak` or `disabled`. This option defines how the translated documents are referenced in the parent document
 - `languages`: Override the globally configured languages option. If the languages aren't configured globally, this option is required.
 - `fieldNames`
   - `lang`: Override the globally configured language field name (defaults to `__i18n_lang`)
