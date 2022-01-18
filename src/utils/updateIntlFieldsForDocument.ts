@@ -60,7 +60,7 @@ export async function updateIntlFieldsForDocument(
             const lang = getLanguageFromId(doc._id)
             if (!lang) return null
             return {
-              _key: doc._id,
+              _key: lang,
               ...createSanityReference(
                 doc._id,
                 config.referenceBehavior === ReferenceBehavior.WEAK
