@@ -37,7 +37,7 @@ There are 4 aspects to the document wide translation
   "__i18n_lang": "en_US",
   "__i18n_refs": [
     {
-      "_key": "array-key",
+      "_key": "lang",
       "_type": "reference",
       "_ref": "document-id__i18n_nl_NL"
     }

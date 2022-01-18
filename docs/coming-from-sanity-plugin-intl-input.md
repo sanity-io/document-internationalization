@@ -69,7 +69,7 @@ The refs field linking your base document to it's translations has changed in st
 In the new plugin you will find it has been simplified to just be an array of references:
 ```json
 [{
-   "_key": "array-key",
+   "_key": "lang",
    "_type": "reference",
    "_ref": "ref-id"
 }]

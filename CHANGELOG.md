@@ -11,3 +11,5 @@
 * Removed the option for overriding UI messages
 * Updated language configuration to use "id" field instead of "name"
 * Updated studio parts to use new plugin name
+* Renamed "hard" to "strong" for configuring the reference behavior
+* The references from the base document to the translated ones will now receive the language code as their key
