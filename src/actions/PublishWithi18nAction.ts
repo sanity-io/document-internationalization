@@ -72,7 +72,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     if (
       isTranslation &&
       !baseDocumentEditState.published &&
-      config.referenceBehavior === ReferenceBehavior.HARD
+      config.referenceBehavior === ReferenceBehavior.STRONG
     ) {
       throw new Error(UiMessages.errors.baseDocumentNotPublished)
     } else {

@@ -25,6 +25,9 @@ After consideration with the team, we have decided to make `delimiter` based IDs
 ### 3. The languages configuration has changed
 The "name" field is now called "id". The old field will still be supported but you will see a deprecation notice.
 
+### 4. The "hard" reference behavior has been renamed to "strong"
+You may need to update your config to reflect this change.
+
 ### 4. Studio parts have been renamed
 If you had implemnted any of the previous plugin's studio parts you will need to rename the implementations.
 ```diff

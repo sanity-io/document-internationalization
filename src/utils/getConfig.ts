@@ -31,7 +31,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
   return {
     base: schemaConfig?.base || cfg?.base || '',
     idStructure: cfg.idStructure || IdStructure.DELIMITER,
-    referenceBehavior: cfg.referenceBehavior || ReferenceBehavior.HARD,
+    referenceBehavior: cfg.referenceBehavior || ReferenceBehavior.STRONG,
     withTranslationsMaintenance: cfg?.withTranslationsMaintenance !== false,
     fieldNames: {
       lang: schemaConfig?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',

@@ -66,7 +66,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
             _id: `drafts.${id}`,
             _type: schema.name,
             [langFieldName]: lang.id,
-            // [baseRefFieldName]: will be added on publish - not possible to add beforehand due to hard reference issue
+            // [baseRefFieldName]: will be added on publish - not possible to add beforehand due to strong reference issue
           })
           toast.push({
             closable: true,
