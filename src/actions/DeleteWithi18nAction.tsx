@@ -59,10 +59,9 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
         await baseTransaction.commit()
       }
 
-      const translatedDocuments = await getTranslationsFor(baseDocumentId)
+      const translatedDocuments = await getTranslationsFor(baseDocumentId, true)
       const translationsTransaction = client.transaction()
       translatedDocuments.forEach((doc) => {
-        translationsTransaction.delete(`drafts.${doc._id}`)
         translationsTransaction.delete(doc._id)
       })
       await translationsTransaction.commit()
