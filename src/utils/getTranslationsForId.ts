@@ -16,7 +16,13 @@ export const getTranslationsFor = async (baseDocumentId: string, includeDrafts =
         : `*[_id match $segments && !(_id in path('drafts.**'))]`,
       {segments}
     )
-    return documents ? documents.filter((d) => d._id.startsWith(baseDocumentId)) : []
+    console.log('xx',documents)
+    return documents
+      ? documents.filter((d) => (
+        d._id.startsWith(baseDocumentId)
+        || (includeDrafts && d._id.startsWith(`drafts.${baseDocumentId}`))
+      )) 
+      : []
   }
   const documents = await client.fetch<SanityDocument[]>(
     includeDrafts
