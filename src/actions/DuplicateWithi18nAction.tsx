@@ -43,9 +43,11 @@ export const DuplicateWithi18nAction = (props: IResolverProps) => {
         _type: props.type,
       })
       translations.forEach((t) => {
+        const isDraft = t._id.startsWith('drafts.')
+        const newId = buildDocId(dupeId, getLanguageFromId(t._id))
         transaction.create({
           ...t,
-          _id: buildDocId(dupeId, getLanguageFromId(t._id)),
+          _id: isDraft ? `drafts.${newId}` : newId,
         })
       })
       await transaction.commit()

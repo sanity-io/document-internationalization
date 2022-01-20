@@ -27,7 +27,7 @@ export const TranslationsComponent = (
   const [baseDocument, setBaseDocument] = React.useState(null)
 
   React.useEffect(() => {
-    ;(async () => {
+    (async () => {
       const shouldReload =
         languages.length === 0 || (shouldReloadFn && shouldReloadFn(draft ?? published))
       if (shouldReload) {
@@ -59,9 +59,11 @@ export const TranslationsComponent = (
     }
 
     return languages
-      .map((lang) => ({
+      .map((lang, index) => ({
         ...lang,
-        isBase: lang.id === config.base,
+        isBase: config.base
+          ? lang.id === config.base
+          : index === 0,
         isCurrentLanguage: lang.id === currentLanguage,
       }))
       .sort(baseToTop)

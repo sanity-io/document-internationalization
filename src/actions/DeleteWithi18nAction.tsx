@@ -1,7 +1,7 @@
 import React from 'react'
 import TrashIcon from 'part:@sanity/base/trash-icon'
 import * as ConfirmDeleteModule from '@sanity/desk-tool/lib/components/ConfirmDelete'
-import {useDocumentOperation, useEditState} from '@sanity/react-hooks'
+import {useDocumentOperation, useEditState, useSyncState} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {IEditState, IResolverProps, IUseDocumentOperationResult} from '../types'
 import {getSanityClient, getBaseIdFromId, getTranslationsFor, getConfig} from '../utils'
@@ -24,6 +24,8 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
   const config = React.useMemo(() => getConfig(type), [type])
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
   const baseDocumentEditState = useEditState(baseDocumentId, type) as IEditState
+  const syncState = useSyncState(id, type)
+  const baseDocumentSyncState = useSyncState(baseDocumentId, type)
   const {draft, published} = useEditState(id, type) as IEditState
   const {delete: deleteOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -57,9 +59,11 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
         await baseTransaction.commit()
       }
 
-      const translatedDocuments = await getTranslationsFor(baseDocumentId)
+      const translatedDocuments = await getTranslationsFor(baseDocumentId, true)
       const translationsTransaction = client.transaction()
-      translatedDocuments.forEach((doc) => translationsTransaction.delete(doc._id))
+      translatedDocuments.forEach((doc) => {
+        translationsTransaction.delete(doc._id)
+      })
       await translationsTransaction.commit()
 
       deleteOp.execute()
@@ -73,7 +77,7 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
     } finally {
       setIsDeleting(true)
     }
-  }, [baseDocumentId, baseDocumentEditState, deleteOp, onComplete])
+  }, [baseDocumentId, baseDocumentEditState.draft, baseDocumentEditState.published, deleteOp, onComplete])
 
   const dialogContent = React.useMemo(() => {
     if (isConfirmDialogOpen) {
@@ -94,7 +98,11 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
     onHandle,
     color: 'danger',
     icon: TrashIcon,
-    disabled: isDeleting || Boolean(deleteOp.disabled),
+    disabled:
+      isDeleting ||
+      Boolean(deleteOp.disabled) ||
+      syncState.isSyncing ||
+      baseDocumentSyncState.isSyncing,
     title: (deleteOp.disabled && DISABLED_REASON_TITLE[deleteOp.disabled]) || '',
     label: isDeleting ? UiMessages.deleteAll.deleting : UiMessages.deleteAll.buttonTitle,
     dialog: isConfirmDialogOpen && {
