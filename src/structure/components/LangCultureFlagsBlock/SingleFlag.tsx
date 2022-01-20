@@ -1,9 +1,9 @@
 import React, {useState, useMemo} from 'react'
 import Emoji from 'a11y-react-emoji'
-
 import {getFlag, getFlagCode} from '../../../utils/getFlag'
 
-interface IProps {
+type Props = {
+  className?: string
   code: string
 }
 
@@ -11,7 +11,7 @@ const isUsingWindows = navigator?.appVersion?.indexOf('Win') !== -1
 const blank32x32Image = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAH0lEQVR42mNkoBAwjhowasCoAaMGjBowasCoAcPNAACOMAAhOO/A7wAAAABJRU5ErkJggg==`
 
 // Windows does not have support for flag emojis
-export const Flag: React.FunctionComponent<IProps> = ({code}) => {
+export const SingleFlag: React.FunctionComponent<Props> = ({code,className}) => {
   const [hasFlag, setHasFlag] = useState(true)
   const [opacity, setOpacity] = useState(0)
   const flagEmoji = useMemo(() => getFlag(code), [code])
@@ -26,6 +26,7 @@ export const Flag: React.FunctionComponent<IProps> = ({code}) => {
         onError={() => setHasFlag(false)}
         // Hide flash of alt text
         onLoad={() => setOpacity(1)}
+        className={className}
       />
     )
   }
@@ -38,6 +39,7 @@ export const Flag: React.FunctionComponent<IProps> = ({code}) => {
         src={blank32x32Image}
         style={{width: `1em`, opacity}}
         onLoad={() => setOpacity(1)}
+        className={className}
       />
     )
   }
@@ -55,5 +57,11 @@ export const Flag: React.FunctionComponent<IProps> = ({code}) => {
   }
 
   // Otherwise, show accessible emoji for everyone else
-  return <Emoji symbol={flagEmoji} label={code} />
+  return (
+    <Emoji
+      symbol={flagEmoji}
+      label={code}
+      className={className}
+    />
+  )
 }

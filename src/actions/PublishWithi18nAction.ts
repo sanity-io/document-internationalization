@@ -21,6 +21,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
   const {publish} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const {isValidating, markers} = useValidationStatus(id, type)
   const syncState = useSyncState(id, type)
+  const baseDocumentSyncState = useSyncState(baseDocumentId, type)
 
   const disabled = React.useMemo(
     () =>
@@ -29,9 +30,10 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
       updatingIntlFields ||
       publish.disabled ||
       syncState.isSyncing ||
+      baseDocumentSyncState.isSyncing ||
       isValidating ||
       markers.some((marker) => marker.level === 'error'),
-    [publishState, updatingIntlFields, syncState.isSyncing, isValidating, markers, publish.disabled]
+    [publishState, updatingIntlFields, syncState.isSyncing, baseDocumentSyncState.isSyncing, isValidating, markers, publish.disabled]
   )
 
   const label = React.useMemo(() => {
@@ -62,7 +64,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
       })
     }
     setUpdatingIntlFields(false)
-  }, [toast, draft, published, baseDocumentEditState])
+  }, [toast, draft, published, baseDocumentEditState.published])
 
   const onHandle = React.useCallback(() => {
     setPublishState('publishing')
@@ -78,7 +80,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     } else {
       publish.execute()
     }
-  }, [id, baseDocumentId, type, publish, baseDocumentEditState])
+  }, [id, baseDocumentId, type, publish, baseDocumentEditState.published])
 
   React.useEffect(() => {
     // @README code inspired by @sanity/desk-tool PublishAction.tsx

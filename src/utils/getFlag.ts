@@ -1,5 +1,5 @@
 import {getEmojiFlag} from '@cprecioso/country-flag-emoji'
-import {allEmojiFlagCodes} from '../structure/components/Flag/allEmojiFlagCodes'
+import {allEmojiFlagCodes} from '../structure/components/LangCultureFlagsBlock/allEmojiFlagCodes'
 
 // Get flag from a valid country code
 export const getFlag = (code = ``) => {
