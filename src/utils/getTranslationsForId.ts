@@ -16,7 +16,6 @@ export const getTranslationsFor = async (baseDocumentId: string, includeDrafts =
         : `*[_id match $segments && !(_id in path('drafts.**'))]`,
       {segments}
     )
-    console.log('xx',documents)
     return documents
       ? documents.filter((d) => (
         d._id.startsWith(baseDocumentId)

@@ -10,6 +10,7 @@ import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
 import {getBaseIdFromId, getConfig, getSchema, updateIntlFieldsForDocument} from '../utils'
 import {ReferenceBehavior, UiMessages} from '../constants'
 import {IEditState, IResolverProps, IUseDocumentOperationResult, Ti18nSchema} from '../types'
+import { useDelayedFlag } from '../hooks'
 
 export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) => {
   const toast = useToast()
@@ -22,9 +23,8 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
   const {isValidating, markers} = useValidationStatus(id, type)
   const syncState = useSyncState(id, type)
   const baseDocumentSyncState = useSyncState(baseDocumentId, type)
-
-  const disabled = React.useMemo(
-    () =>
+  const disabled = useDelayedFlag(
+    !!(
       publishState === 'published' ||
       publishState === 'publishing' ||
       updatingIntlFields ||
@@ -32,8 +32,8 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
       syncState.isSyncing ||
       baseDocumentSyncState.isSyncing ||
       isValidating ||
-      markers.some((marker) => marker.level === 'error'),
-    [publishState, updatingIntlFields, syncState.isSyncing, baseDocumentSyncState.isSyncing, isValidating, markers, publish.disabled]
+      markers.some((marker) => marker.level === 'error')
+    )
   )
 
   const label = React.useMemo(() => {
@@ -47,7 +47,8 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     try {
       const document = draft || published
       if (document) {
-        await updateIntlFieldsForDocument(document)
+        console.log(baseDocumentEditState.published)
+        await updateIntlFieldsForDocument(document, baseDocumentEditState.published)
       }
 
       toast.push({
@@ -64,7 +65,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
       })
     }
     setUpdatingIntlFields(false)
-  }, [toast, draft, published])
+  }, [toast, draft, published, baseDocumentEditState.published])
 
   const onHandle = React.useCallback(() => {
     setPublishState('publishing')
@@ -83,13 +84,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
   }, [id, baseDocumentId, type, publish, baseDocumentEditState.published])
 
   React.useEffect(() => {
-    // @README code inspired by @sanity/desk-tool PublishAction.tsx
     const didPublish = publishState === 'publishing' && !draft
-    if (didPublish) {
-      doUpdateIntlFields().then(() => {
-        if (onComplete) onComplete()
-      })
-    }
 
     const nextState = didPublish ? 'published' : null
     const delay = didPublish ? 200 : 4000
@@ -98,6 +93,15 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     }, delay)
     return () => clearTimeout(timer)
   }, [publishState, draft])
+
+  React.useEffect(() => {
+    if (publishState === 'published') {
+      console.log('didPublish', publishState, draft)
+      doUpdateIntlFields().then(() => {
+        if (onComplete) onComplete()
+      })
+    }
+  }, [publishState])
 
   return {
     disabled,
