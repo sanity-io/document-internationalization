@@ -47,7 +47,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     try {
       const document = draft || published
       if (document) {
-        await updateIntlFieldsForDocument(document, baseDocumentEditState.published)
+        await updateIntlFieldsForDocument(document)
       }
 
       toast.push({
@@ -64,7 +64,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
       })
     }
     setUpdatingIntlFields(false)
-  }, [toast, draft, published, baseDocumentEditState.published])
+  }, [toast, draft, published])
 
   const onHandle = React.useCallback(() => {
     setPublishState('publishing')

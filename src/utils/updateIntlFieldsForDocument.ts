@@ -16,7 +16,6 @@ import {createSanityReference} from './createSanityReference'
 // can look up the existance of a base document on its own
 export async function updateIntlFieldsForDocument(
   document: SanityDocument,
-  baseDocument?: SanityDocument
 ): Promise<void> {
   const {_type: type, _id: id} = document
   const schema = getSchema<Ti18nSchema>(type)
@@ -29,6 +28,13 @@ export async function updateIntlFieldsForDocument(
   const baseRefFieldName = config.fieldNames.baseReference
   const langs = await getLanguagesFromOption(config.languages, document)
   const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.id
+  const baseDocument = await getSanityClient().fetch<SanityDocument>(
+    `coalesce(*[_id == $draftId][0], *[_id == $id][0])`,
+    {
+      id: baseDocumentId,
+      draftId: `drafts.${baseDocumentId}`,
+    }
+  )
 
   // Update I18n field for current document
   const currentDocumentTransaction = client.transaction()
