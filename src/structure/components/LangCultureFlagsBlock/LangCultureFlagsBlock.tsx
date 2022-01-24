@@ -19,7 +19,7 @@ const FlagBox = styled.div<SizeProps & MissingProps>`
   vertical-align: middle;
   filter: ${props => {
     if (props.missing) {
-      return 'grayscale(75%)'
+      return 'grayscale(100%)'
     }
   }};
   font-size: ${props => {
@@ -29,13 +29,13 @@ const FlagBox = styled.div<SizeProps & MissingProps>`
     }
   }};
   &:first-child:not(:last-child) {
-    transform: translateY(-.2em);
+    transform: translateY(-.2em) translateX(${props => {
+      const { space } = props.theme.sanity
+      return rem(-space[3])
+    }});
   }
   &:last-child:not(:first-child) {
-    transform: translateY(.2em) translateX(${props => {
-      const { space } = props.theme.sanity
-      return rem(space[3])
-    }});
+    transform: translateY(.2em);
   }
 `
 
@@ -54,13 +54,13 @@ export const LangCultureFlagsBlock: React.FC<Props> = ({language,isMissing}) => 
 
   // Split a country and language if both supplied
   // Expects language first, then country: `en-us` or `en`
-  const [codeCountry, codeLanguage] = React.useMemo(
-    () => (new RegExp(/[_-]/).test(language.id) ? language.id.split(/[_-]/) : [``, language.id]),
+  const [codeLanguage, codeCountry] = React.useMemo(
+    () => (new RegExp(/[_-]/).test(language.id) ? language.id.split(/[_-]/) : [language.id, ``]),
     [language.id]
   )
 
   return (
-    <Grid paddingRight={(!codeCountry && codeLanguage) ? 3 : 0} cols={1} rows={1}>
+    <Grid paddingLeft={3} cols={1} rows={1}>
       {codeCountry && codeLanguage && (
         <>
           <FlagBox size={4} missing={isMissing}>
@@ -71,8 +71,8 @@ export const LangCultureFlagsBlock: React.FC<Props> = ({language,isMissing}) => 
           </FlagBox>
         </>
       )}
-      {(!codeCountry && codeLanguage) && (
-        <FlagBox size={5} missing={isMissing}>
+      {!codeCountry && codeLanguage && (
+        <FlagBox size={4} missing={isMissing}>
           <FlagComponent code={codeLanguage} />
         </FlagBox>
       )}

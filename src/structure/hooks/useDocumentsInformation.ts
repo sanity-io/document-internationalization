@@ -1,54 +1,59 @@
 import React from 'react'
 import {I18nDelimiter, I18nPrefix, IdStructure, ReferenceBehavior} from '../../constants'
-import {ITranslationRef, Ti18nDocument} from '../../types'
-import {getBaseIdFromId, getConfig, getSanityClient} from '../../utils'
+import {ILanguageObject, ITranslationRef, Ti18nDocument} from '../../types'
+import {getBaseIdFromId, getBaseLanguage, getConfig, getLanguagesFromOption, getSanityClient} from '../../utils'
 
 export const useDocumentsInformation = (schema: string) => {
-  const config = getConfig()
+  const config = React.useMemo(() => getConfig(schema), [schema])
   const sanityClientRef = React.useRef(getSanityClient())
   const [pending, setPending] = React.useState(false)
   const [documents, setDocuments] = React.useState<Ti18nDocument[]>([])
+  const [languages, setLanguages] = React.useState<ILanguageObject[]>([])
   const baseDocuments = React.useMemo(() => {
     if (config.idStructure === IdStructure.DELIMITER)
       return documents.filter((d) => !d._id.includes(I18nDelimiter))
     return documents.filter((d) => !d._id.startsWith(I18nPrefix))
-  }, [documents])
+  }, [config, documents])
   const translatedDocuments = React.useMemo(() => {
     if (config.idStructure === IdStructure.DELIMITER)
       return documents.filter((d) => d._id.includes(I18nDelimiter))
     return documents.filter((d) => d._id.startsWith(I18nPrefix))
-  }, [documents])
+  }, [config, documents])
   const idStructureMismatchDocuments = React.useMemo(() => {
     if (config.idStructure === IdStructure.DELIMITER)
       return documents.filter((d) => d._id.startsWith(I18nPrefix))
     return documents.filter((d) => d._id.includes(I18nDelimiter))
-  }, [documents])
+  }, [config, documents])
 
   const fetchInformation = React.useCallback(
     async (selectedSchema: string) => {
       setPending(true)
-      const result = await sanityClientRef.current.fetch<Ti18nDocument[]>(
-        `*[_type == $type && !(_id in path('drafts.**'))]{
-          _id,
-          ${config.fieldNames.lang},
-          ${config.fieldNames.references},
-          ${config.fieldNames.baseReference}
-        }`,
-        {type: selectedSchema}
-      )
+      const [langs, result] = await Promise.all([
+        getLanguagesFromOption(config.languages),
+        sanityClientRef.current.fetch<Ti18nDocument[]>(
+          `*[_type == $type && !(_id in path('drafts.**'))]{
+            _id,
+            ${config.fieldNames.lang},
+            ${config.fieldNames.references},
+            ${config.fieldNames.baseReference}
+          }`,
+          {type: selectedSchema}
+        )
+      ])
+      setLanguages(langs)
       setDocuments(result)
       setPending(false)
     },
-    [pending, documents, sanityClientRef.current]
+    [pending, config, documents, sanityClientRef.current]
   )
 
   const documentsSummaryInformation = React.useMemo(() => {
-    const cfg = getConfig(schema)
+    const base = getBaseLanguage(languages, config.base)
     const basedocuments = baseDocuments
     const translateddocuments = translatedDocuments
-    const langFieldName = cfg.fieldNames?.lang
-    const refsFieldName = cfg.fieldNames?.references
-    const baseRefFieldName = cfg.fieldNames?.baseReference
+    const langFieldName = config.fieldNames?.lang
+    const refsFieldName = config.fieldNames?.references
+    const baseRefFieldName = config.fieldNames?.baseReference
     return {
       idStructureMismatch: idStructureMismatchDocuments,
       missingLanguageField: documents.filter((d) => !d[langFieldName]),
@@ -61,23 +66,23 @@ export const useDocumentsInformation = (schema: string) => {
       }),
       missingBaseDocumentRefs: translateddocuments.filter((d) => !d[baseRefFieldName]),
       orphanDocuments: translateddocuments.filter((d) => {
-        const base = basedocuments.find((doc) => getBaseIdFromId(d._id) === doc._id)
-        if (base) return false
+        const baseDoc = basedocuments.find((doc) => getBaseIdFromId(d._id) === doc._id)
+        if (baseDoc) return false
         return true
       }),
       referenceBehaviorMismatch: basedocuments.filter((doc) => {
         const refs: ITranslationRef[] = doc[refsFieldName] || []
-        if (cfg.referenceBehavior === ReferenceBehavior.DISABLED)
+        if (config.referenceBehavior === ReferenceBehavior.DISABLED)
           return Object.keys(refs).length > 0
-        if (cfg.referenceBehavior === ReferenceBehavior.WEAK)
+        if (config.referenceBehavior === ReferenceBehavior.WEAK)
           return Object.values(refs).some((r) => !r._weak)
         return Object.values(refs).some((r) => !!r._weak)
       }),
       baseLanguageMismatch: basedocuments.filter((doc) => {
-        return doc.__i18n_lang !== cfg.base
+        return base?.id && doc.__i18n_lang !== base.id
       }),
     }
-  }, [documents, schema, baseDocuments, translatedDocuments, idStructureMismatchDocuments])
+  }, [config, documents, languages, schema, baseDocuments, translatedDocuments, idStructureMismatchDocuments])
 
   React.useEffect(() => {
     if (schema) {
