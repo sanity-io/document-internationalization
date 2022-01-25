@@ -126,19 +126,19 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
               <Flex align="center" gap={2}>
                 {lang.isBase && (
-                  <Badge tone="primary" mode="outline">
-                    Base
-                  </Badge>
+                  <Badge tone="primary" mode="outline">{UiMessages.base}</Badge>
                 )}
                 {!existing && (
-                  <Badge tone="caution">{UiMessages.missing}</Badge>
+                  <Badge marginRight={2} tone="caution">{UiMessages.missing}</Badge>
                 )}
                 {existing && existing._id.startsWith('drafts.') && (
                   <Badge>{UiMessages.draft}</Badge>
                 )}
 
                 {!existing && (
-                  <AddIcon fontSize={24} />
+                  <Box padding={2}>
+                    <AddIcon display="block" fontSize={24} />
+                  </Box>
                 )}
               </Flex>
             </Flex>
