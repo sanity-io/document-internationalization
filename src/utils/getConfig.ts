@@ -32,7 +32,7 @@ export function getConfig(type?: string | Ti18nSchema): Required<{
     base: schemaConfig?.base || cfg?.base || '',
     idStructure: cfg.idStructure || IdStructure.DELIMITER,
     referenceBehavior: cfg.referenceBehavior || ReferenceBehavior.STRONG,
-    withTranslationsMaintenance: cfg?.withTranslationsMaintenance !== false,
+    withTranslationsMaintenance: cfg?.withTranslationsMaintenance === true,
     fieldNames: {
       lang: schemaConfig?.fieldNames?.lang || cfg?.fieldNames?.lang || '__i18n_lang',
       references:

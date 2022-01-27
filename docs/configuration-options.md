@@ -66,6 +66,10 @@ The differences below are related to querying for documents based on the `_id`:
 | `weak`           | This settings adds weak references from your base document to its translations. This allows the removal of translations.                                                           |
 | `disabled`       | This option completely disables this behavior                                                                                                                                      |
 
+### withTranslationsMaintenance
+This option can be enabled to show the "Translation maintenance" tab in the desk structure. This is disabled by default as it is an advanced feature and could potentially lead to unexpected behavior.
+You can read more about what it can and can't do on the [Translation Maintenance Info Page](./translation-maintenance.md)
+
 ### `fieldNames`
 
 This option configures the field names used by the plugin
@@ -91,6 +95,7 @@ This option configures the field names used by the plugin
   ],
   "idStructure": "delimiter",
   "referenceBehavior": "strong",
+  "withTranslationsMaintenance": false,
   "fieldNames": {
     "lang": "__i18n_lang",
     "references": "__i18n_refs",

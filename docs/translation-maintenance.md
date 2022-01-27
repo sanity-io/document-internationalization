@@ -1,8 +1,11 @@
 # Translation maintenance
 
+## :warning: This is an advanced feature as it will affect your dataset. Make sure you know what you are doing when using it.
+
 ![Translation Maintenance](./img/maintenance-tab.png)
 
-The translation maintenance tab can be used to clean up and manage your Sanity data. It can help with the following operations:
+The translation maintenance tab can be used to clean up and manage your Sanity data. It can help you out when you need to adjust data in bulk after changing the i18n configuration or simply when something went wrong.
+ It can help with the following operations:
 
 1. Migrating between different `_id` structures
 2. Fix documents who are missing the language field
