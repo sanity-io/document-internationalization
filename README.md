@@ -56,12 +56,13 @@ The plugin is now installed, but you will need to complete the following steps t
 
 ## Other documentation
 
-1. [Data structure](docs/datastructure-intl-doc.md)
-2. [Translation Maintenance](docs/translation-maintenance.md)
-3. [GraphQL support](docs/graphql-intl-doc.md)
-4. [Advanced languages](docs/advanced-languages.md)
-5. [Usage with custom publish action](docs/usage-with-custom-publish.md)
-6. [GROQ query examples](/docs/groq-query-examples.md)
+1. [Known Caveats](docs/known-caveats.md)
+2. [Data structure](docs/datastructure-intl-doc.md)
+3. [Translation Maintenance](docs/translation-maintenance.md)
+4. [GraphQL support](docs/graphql-intl-doc.md)
+5. [Advanced languages](docs/advanced-languages.md)
+6. [Usage with custom publish action](docs/usage-with-custom-publish.md)
+7. [GROQ query examples](/docs/groq-query-examples.md)
 
 ## Migrating from sanity-plugin-intl-input
 
