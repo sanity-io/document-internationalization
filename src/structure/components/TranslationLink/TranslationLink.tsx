@@ -1,6 +1,6 @@
 import * as React from 'react'
 import omit from 'just-omit'
-import {SplitVerticalIcon,AddIcon} from '@sanity/icons'
+import {SplitVerticalIcon, AddIcon} from '@sanity/icons'
 import {Stack, Button, Badge, Card, Flex, Box, Text, Code, useToast} from '@sanity/ui'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
@@ -113,10 +113,7 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
             style={{width: `100%`}}
           >
             <Flex align="center" gap={4}>
-              <LangCultureFlagsBlock
-                isMissing={!existing}
-                language={lang}
-              />
+              <LangCultureFlagsBlock isMissing={!existing} language={lang} />
               <Box flex={1}>
                 <Stack space={2}>
                   <Text>{lang.title}</Text>
@@ -126,10 +123,14 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
 
               <Flex align="center" gap={2}>
                 {lang.isBase && (
-                  <Badge tone="primary" mode="outline">{UiMessages.base}</Badge>
+                  <Badge tone="primary" mode="outline">
+                    {UiMessages.base}
+                  </Badge>
                 )}
                 {!existing && (
-                  <Badge marginRight={2} tone="caution">{UiMessages.missing}</Badge>
+                  <Badge marginRight={2} tone="caution">
+                    {UiMessages.missing}
+                  </Badge>
                 )}
                 {existing && existing._id.startsWith('drafts.') && (
                   <Badge>{UiMessages.draft}</Badge>
@@ -143,9 +144,14 @@ export const TranslationLink: React.FunctionComponent<IProps> = ({
               </Flex>
             </Flex>
           </Button>
-          {(existing && !loading) && (
-            <Box padding={2} style={{ flexShrink: 0 }}>
-              <Button style={{ display: 'block' }} mode="bleed" padding={2} onClick={() => handleOpenInNewView()}>
+          {existing && !loading && (
+            <Box padding={2} style={{flexShrink: 0}}>
+              <Button
+                style={{display: 'block'}}
+                mode="bleed"
+                padding={2}
+                onClick={() => handleOpenInNewView()}
+              >
                 <SplitVerticalIcon display="block" fontSize={24} />
               </Button>
             </Box>

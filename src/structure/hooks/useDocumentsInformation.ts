@@ -1,7 +1,13 @@
 import React from 'react'
 import {I18nDelimiter, I18nPrefix, IdStructure, ReferenceBehavior} from '../../constants'
 import {ILanguageObject, ITranslationRef, Ti18nDocument} from '../../types'
-import {getBaseIdFromId, getBaseLanguage, getConfig, getLanguagesFromOption, getSanityClient} from '../../utils'
+import {
+  getBaseIdFromId,
+  getBaseLanguage,
+  getConfig,
+  getLanguagesFromOption,
+  getSanityClient,
+} from '../../utils'
 
 export const useDocumentsInformation = (schema: string) => {
   const config = React.useMemo(() => getConfig(schema), [schema])
@@ -38,7 +44,7 @@ export const useDocumentsInformation = (schema: string) => {
             ${config.fieldNames.baseReference}
           }`,
           {type: selectedSchema}
-        )
+        ),
       ])
       setLanguages(langs)
       setDocuments(result)
@@ -82,7 +88,14 @@ export const useDocumentsInformation = (schema: string) => {
         return base?.id && doc.__i18n_lang !== base.id
       }),
     }
-  }, [config, documents, languages, schema, baseDocuments, translatedDocuments, idStructureMismatchDocuments])
+  }, [
+    config,
+    documents,
+    languages,
+    baseDocuments,
+    translatedDocuments,
+    idStructureMismatchDocuments,
+  ])
 
   React.useEffect(() => {
     if (schema) {
