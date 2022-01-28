@@ -1,4 +1,5 @@
 {
     "idStructure": "delimiter",
-    "referenceBehavior": "strong"
+    "referenceBehavior": "strong",
+    "languages": ["en"]
 }
