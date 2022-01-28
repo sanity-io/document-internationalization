@@ -55,9 +55,8 @@ export const fixIdStructureMismatchDocuments = async (
                 after: `${refsFieldName}[-1]`,
                 items: [
                   {
-                    _key: newId,
-                    lang: lang,
-                    ref: createSanityReference(
+                    _key: lang,
+                    ...createSanityReference(
                       newId,
                       config.referenceBehavior === ReferenceBehavior.WEAK
                     ),
