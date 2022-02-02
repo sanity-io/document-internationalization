@@ -30,8 +30,8 @@ This option specifies the available language options. This can be any of the fol
 
 ```json
 "languages": [
-  [{"id": "en", "title": "English"}],
-  [{"id": "fr", "title": "French"}],
+  {"id": "en", "title": "English"},
+  {"id": "fr", "title": "French"},
 ]
 ```
 
