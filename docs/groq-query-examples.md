@@ -30,3 +30,18 @@ coalesce(
   "languages": [__i18n_lang, ...__i18n_refs[].lang]
 }
 ```
+
+## Get all translated document versions from the current document
+
+```
+defined(__i18n_refs) => {
+    "translations": __i18n_refs[]->{
+        ...,
+    }
+  },
+  defined(__i18n_base) => {
+    "translations": *[(_id match ^.__i18n_base._ref + "*" || _id match ^.__i18n_base._ref )&& _id != ^._id]{
+        ...,
+    }
+  }
+```
