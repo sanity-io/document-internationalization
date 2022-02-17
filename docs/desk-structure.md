@@ -15,7 +15,7 @@ export const getDefaultDocumentNode = Structure.getDefaultDocumentNode
 export default Structure.default
 ```
 
-## Method 2: Manual implemntation
+## Method 2: Manual implementation
 
 Use this method if you need to combine your own desk structure implementation with the plugin.
 
