@@ -11,7 +11,6 @@ Use this method if you don't already have a custom desk structure of your own.
 ```js
 import * as Structure from '@sanity/document-internationalization/lib/structure'
 
-export const getDefaultDocumentNode = Structure.getDefaultDocumentNode
 export default Structure.default
 ```
 
@@ -21,13 +20,6 @@ Use this method if you need to combine your own desk structure implementation wi
 
 ```js
 import * as Structure from '@sanity/document-internationalization/lib/structure'
-
-export const getDefaultDocumentNode = (props) => {
-  if (props.schemaType === 'myschema') {
-    return S.document().views(Structure.getDocumentNodeViewsForSchemaType(props.schemaType))
-  }
-  return S.document()
-}
 
 export default () => {
   const items = Structure.getFilteredDocumentTypeListItems()

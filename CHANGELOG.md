@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## v1.0.0
+## v0.0.1-beta.9
+**BREAKING**  
+**The `getDocumentNodeViewsForSchemaType` function has been removed as it is not required anymore**
+* The language selector has been updated to better align with the official language-filter plugin for field level translations. This does mean it is not required to implement `getDefaultDocumentNode` any more as the new UI does not require a custom desk structure but rather integrates with the studio natively.
+
+## v0.0.1-beta.8
 * Migrated original plugin code
 * Removed object level translations
 * Added additional GROQ examples
