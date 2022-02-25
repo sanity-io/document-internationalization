@@ -5,12 +5,9 @@ import {SchemaType} from '@sanity/structure/lib/parts/Schema'
 import {DocumentListBuilder} from '@sanity/structure/lib/DocumentList'
 import {Child} from '@sanity/structure/dist/dts/StructureNodes'
 import {ListItemBuilder} from '@sanity/structure/lib/ListItem'
-import {Ti18nSchema} from '../types'
 import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
-import {getSchema, getConfig} from '../utils'
-import {TranslationsComponentFactory} from './components/TranslationsComponentFactory'
+import {getConfig} from '../utils'
 import {MaintenanceTab} from './components/MaintenanceTab'
-import {IDefaultDocumentNodeStructureProps} from './IDefaultDocumentNodeStructureProps'
 
 const hasIcon = (schemaType?: SchemaType | string): boolean => {
   if (!schemaType || typeof schemaType === 'string') {
@@ -19,19 +16,7 @@ const hasIcon = (schemaType?: SchemaType | string): boolean => {
   return Boolean(schemaType.icon)
 }
 
-export const getDocumentNodeViewsForSchemaType = (type: string) => {
-  const schema: Ti18nSchema = getSchema(type)
-  return [
-    S.view.form(),
-    S.view.component(TranslationsComponentFactory(schema)).title('Translations'),
-  ]
-}
-
-export const getDefaultDocumentNode = (props: IDefaultDocumentNodeStructureProps) => {
-  const schema: Ti18nSchema = getSchema(props.schemaType)
-  if (schema && schema.i18n) {
-    return S.document().views(getDocumentNodeViewsForSchemaType(props.schemaType))
-  }
+export const getDefaultDocumentNode = () => {
   return S.document()
 }
 
@@ -92,9 +77,7 @@ export const getFilteredDocumentTypeListItems = () => {
           .id(documentId)
           .documentId(documentId)
           .schemaType(schemaTypeName ?? '')
-          .views(
-            schemaTypeName ? getDocumentNodeViewsForSchemaType(schemaTypeName) : [S.view.form()]
-          )
+          .views([S.view.form()])
           .child(i18nChildResolver)
 
       return l.child(

@@ -1,6 +1,6 @@
 {
   "name": "@sanity/document-internationalization",
-  "version": "0.0.1-beta.8",
+  "version": "0.0.1-beta.9",
   "license": "MIT",
   "engines": {
     "node": ">=14"
@@ -39,6 +39,7 @@
     "build:type": "tsc -p .",
     "build:badges": "rollup -c src/badges/rollup.config.js",
     "build:structure": "rollup -c src/structure/rollup.config.js",
+    "build:language-select": "rollup -c src/language-select/rollup.config.js",
     "build:actions": "rollup -c src/actions/rollup.config.js",
     "build:constants": "rollup -c src/constants/rollup.config.js",
     "build:utils": "rollup -c src/utils/rollup.config.js",
@@ -122,10 +123,10 @@
     "@sanity/base": "^2.0.0",
     "@sanity/desk-tool": "^2.21.0",
     "@sanity/form-builder": "^2.0.0",
+    "@sanity/icons": "^1.2.3",
     "@sanity/react-hooks": "^2.0.0",
     "@sanity/structure": "^2.0.0",
     "@sanity/ui": "^0.36.12",
-    "@sanity/icons": "^1.2.3",
     "react": "^17.0.0",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
@@ -137,10 +138,13 @@
     "a11y-react-emoji": "^1.1.3",
     "classnames": "^2.2.6",
     "just-omit": "^2.0.1",
+    "just-partition": "^2.0.1",
     "just-safe-get": "^4.0.1",
     "just-split": "^3.0.1",
     "moment": "^2.29.1",
     "pinst": "^2.1.6",
+    "react-easy-emoji": "^1.6.1",
+    "react-uid": "^2.3.1",
     "regenerator-runtime": "^0.13.7",
     "slugify": "^1.4.6"
   },
