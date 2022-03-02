@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## v1.0.0
+## v0.0.1-beta.9
+* Fixed a bug with the `fixBaseLanguageMismatch` method as it was not considering the field name configuration
+
+## v0.0.1-beta.8
 * Migrated original plugin code
 * Removed object level translations
 * Added additional GROQ examples
