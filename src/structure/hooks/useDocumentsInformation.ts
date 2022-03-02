@@ -85,7 +85,7 @@ export const useDocumentsInformation = (schema: string) => {
         return Object.values(refs).some((r) => !!r._weak)
       }),
       baseLanguageMismatch: basedocuments.filter((doc) => {
-        return base?.id && doc.__i18n_lang !== base.id
+        return base?.id && doc[langFieldName] !== base.id
       }),
     }
   }, [
