@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.0.1-beta.10
+* Fixed [#27](https://github.com/sanity-io/document-internationalization/issues/27)
+
 ## v0.0.1-beta.9
 * Fixed a bug with the `fixBaseLanguageMismatch` method as it was not considering the field name configuration
 
