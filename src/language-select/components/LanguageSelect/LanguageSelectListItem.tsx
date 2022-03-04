@@ -1,5 +1,6 @@
 import React from 'react'
 import omit from 'just-omit'
+import {hues} from '@sanity/color'
 import {Text, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
 import {AddIcon, SpinnerIcon, SplitVerticalIcon} from '@sanity/icons'
 import styled, {css, keyframes} from 'styled-components'
@@ -40,6 +41,7 @@ const ListItemSplitButton = styled(Button)`
 
   & svg {
     display: block;
+    color: ${hues.gray[700].hex};
   }
 
   ${({theme}) => css`
