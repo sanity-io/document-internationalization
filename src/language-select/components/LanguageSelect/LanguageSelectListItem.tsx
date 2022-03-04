@@ -1,11 +1,11 @@
 import React from 'react'
-import {Text, Box, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
+import omit from 'just-omit'
+import {Text, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
 import {AddIcon, SpinnerIcon, SplitVerticalIcon} from '@sanity/icons'
-import styled, {keyframes} from 'styled-components'
+import styled, {css, keyframes} from 'styled-components'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
 import {useEditState} from '@sanity/react-hooks'
-import omit from 'just-omit'
 import {SingleFlag} from '../SingleFlag'
 import type {IExtendedLanguageObject} from '../../../types'
 import {UiMessages} from '../../../constants'
@@ -34,12 +34,19 @@ const ListItemBadge = styled(Text)`
 `
 
 const ListItemSplitButton = styled(Button)`
+  display: none;
   flex-shrink: 0;
   margin-left: 4px;
 
   & svg {
     display: block;
   }
+
+  ${({theme}) => css`
+    @media (min-width: ${theme.sanity.media[1] / 16}em) {
+      display: block;
+    }
+  `}
 `
 
 export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
