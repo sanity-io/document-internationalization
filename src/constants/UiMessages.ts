@@ -4,6 +4,11 @@ export const UiMessages = {
   updatingIntlFields: 'Updating i18n fields',
   intlFieldsUpdated: 'I18n fields updated',
   baseDocumentCopied: 'Base document copied',
+  translationCreatedToast: {
+    title: (name: string): string => `Translation created: ${name}`,
+    description: (name: string): string =>
+      `The content from ‘${name}’ is copied into the new document translation.`,
+  },
   loading: 'Loading languages...',
   draft: 'Draft',
   missingTranslations:

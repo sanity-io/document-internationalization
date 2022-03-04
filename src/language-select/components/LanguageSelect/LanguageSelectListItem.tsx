@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Text, Button, Badge, Grid, Flex, useToast} from '@sanity/ui'
+import {Text, Box, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
 import {AddIcon, SpinnerIcon, SplitVerticalIcon} from '@sanity/icons'
 import styled, {keyframes} from 'styled-components'
 import {usePaneRouter} from '@sanity/desk-tool'
@@ -22,29 +22,15 @@ const rotate = keyframes`
   to { transform: rotate(360deg); }
 `
 
-const ListItemButton = styled(Button)`
-  flex-grow: 1;
-  width: 100%;
-  min-width: 240px;
-`
-
 const ListItemSpinner = styled(SpinnerIcon)`
-  display: block;
   animation: ${rotate} 500ms linear infinite;
 `
 
-const ListItemGrid = styled(Grid)`
-  grid-template-columns: 21px 1fr;
-  align-items: center;
-  gap: ${(props) => `${props.theme.sanity.space[1]}px`};
-`
-
-const ListItemContentFlex = styled(Flex)`
-  align-items: center;
-`
-
-const ListItemLabel = styled(Text)`
-  transform: translateY(0.413rem);
+const ListItemBadge = styled(Text)`
+  & > span {
+    display: inline-block;
+    vertical-align: middle;
+  }
 `
 
 const ListItemSplitButton = styled(Button)`
@@ -56,7 +42,7 @@ const ListItemSplitButton = styled(Button)`
   }
 `
 
-export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) => {
+export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const toast = useToast()
   const {currentDocumentId, currentDocumentType, baseLanguage} =
     React.useContext(LanguageSelectContext)
@@ -66,11 +52,18 @@ export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) =>
   }
 
   const routerContext = React.useContext(RouterContext)
-  const {routerPanesState, groupIndex} = usePaneRouter()
+  const {routerPanesState, groupIndex, replaceCurrent} = usePaneRouter()
   const [pending, setPending] = React.useState(false)
   const config = React.useMemo(() => getConfig(currentDocumentType), [currentDocumentType])
   const baseId = React.useMemo(() => getBaseIdFromId(currentDocumentId), [currentDocumentId])
   const flagCode = React.useMemo(() => language.id.split('-').pop(), [language.id])
+  const FlagIcon = React.useMemo(
+    () =>
+      function FlagIconComponent(props: React.ComponentType<typeof SingleFlag>) {
+        return <SingleFlag code={flagCode} {...props} />
+      },
+    [flagCode]
+  )
   const translatedId = React.useMemo(
     () => (language.id === baseLanguage?.id ? baseId : buildDocId(baseId, language.id)),
     [baseId, language.id, baseLanguage]
@@ -79,20 +72,12 @@ export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) =>
 
   const openDocumentInCurrentPane = React.useCallback(
     (id: string, type: string) => {
-      const panes = [
-        ...routerPanesState.slice(0, groupIndex),
-        [
-          {
-            id: id,
-            params: {type},
-          },
-        ],
-      ]
-
-      const href = routerContext.resolvePathFromState({panes})
-      routerContext.navigateUrl(href)
+      replaceCurrent({
+        id,
+        params: {type},
+      })
     },
-    [routerContext, routerPanesState, groupIndex]
+    [replaceCurrent]
   )
 
   const openDocumentInSidePane = React.useCallback(
@@ -127,7 +112,10 @@ export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) =>
       toast.push({
         closable: true,
         status: 'success',
-        title: UiMessages.baseDocumentCopied,
+        title: UiMessages.translationCreatedToast.title(language.title),
+        description: baseLanguage
+          ? UiMessages.translationCreatedToast.description(baseLanguage.title)
+          : undefined,
       })
       openDocumentInCurrentPane(translatedId, currentDocumentType)
     } catch (err) {
@@ -142,6 +130,8 @@ export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) =>
   }, [
     toast,
     language.id,
+    language.title,
+    baseLanguage,
     translatedId,
     currentDocumentType,
     config.fieldNames.lang,
@@ -161,59 +151,45 @@ export const LanguageSelectorListItem: React.FC<Props> = ({status, language}) =>
 
   if (status === 'missing') {
     return (
-      <ListItemButton
-        mode="bleed"
-        textAlign="left"
-        padding={2}
+      <MenuItem
+        as="button"
+        data-as="button"
         disabled={pending}
+        icon={pending ? ListItemSpinner : AddIcon}
+        text={language.title}
         onClick={handleCreateClick}
-      >
-        <ListItemGrid>
-          {pending ? (
-            <ListItemSpinner width={21} height={21} />
-          ) : (
-            <AddIcon width={21} height={21} />
-          )}
-          <Box>
-            <ListItemLabel size={2}>{language.title}</ListItemLabel>
-          </Box>
-        </ListItemGrid>
-      </ListItemButton>
+      />
     )
   }
 
-  if (flagCode) {
-    return (
-      <Flex>
-        <ListItemButton
+  return (
+    <Flex>
+      <MenuItem
+        as="button"
+        data-as="button"
+        data-selected={language.isCurrentLanguage}
+        selected={language.isCurrentLanguage}
+        icon={FlagIcon}
+        iconRight={
+          language.isBase && (
+            <ListItemBadge>
+              <Badge marginX={2}>{UiMessages.base}</Badge>
+            </ListItemBadge>
+          )
+        }
+        text={language.title}
+        onClick={handleOpenClick}
+      />
+      {!language.isCurrentLanguage && (
+        <ListItemSplitButton
           mode="bleed"
           tone="primary"
-          selected={language.isCurrentLanguage}
-          textAlign="left"
           padding={2}
-          onClick={handleOpenClick}
+          onClick={handleOpenInSidePaneClick}
         >
-          <ListItemGrid>
-            <SingleFlag code={flagCode} />
-            <ListItemContentFlex>
-              <ListItemLabel size={2}>{language.title}</ListItemLabel>
-              {language.isBase && <Badge marginX={2}>{UiMessages.base}</Badge>}
-            </ListItemContentFlex>
-          </ListItemGrid>
-        </ListItemButton>
-        {!language.isCurrentLanguage && (
-          <ListItemSplitButton
-            mode="bleed"
-            tone="primary"
-            padding={2}
-            onClick={handleOpenInSidePaneClick}
-          >
-            <SplitVerticalIcon width={21} height={21} />
-          </ListItemSplitButton>
-        )}
-      </Flex>
-    )
-  }
-
-  return null
+          <SplitVerticalIcon width={19} height={19} />
+        </ListItemSplitButton>
+      )}
+    </Flex>
+  )
 }

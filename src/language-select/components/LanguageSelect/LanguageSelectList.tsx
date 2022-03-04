@@ -1,12 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Box, Grid} from '@sanity/ui'
-import {SanityDocument} from '@sanity/client'
 import {IExtendedLanguageObject} from '../../../types'
 import {UiMessages} from '../../../constants'
 import {baseToTop} from '../../../utils/baseToTop'
 import {LanguageSelectLabel} from './LanguageSelectLabel'
-import {LanguageSelectorListItem} from './LanguageSelectListItem'
+import {LanguageSelectListItem} from './LanguageSelectListItem'
 
 type Props = {
   draftLanguageObjects: IExtendedLanguageObject[]
@@ -54,7 +53,7 @@ export const LanguageSelectList: React.FC<Props> = ({
           <LanguageSelectLabel>{UiMessages.languageSelect.listLabels.existing}</LanguageSelectLabel>
           <Grid columns={1} gap={1}>
             {existingLanguageObjects.map((language) => (
-              <LanguageSelectorListItem
+              <LanguageSelectListItem
                 key={language.id}
                 status={language.status}
                 language={language}
@@ -71,7 +70,7 @@ export const LanguageSelectList: React.FC<Props> = ({
           <LanguageSelectLabel>{UiMessages.languageSelect.listLabels.missing}</LanguageSelectLabel>
           <Grid columns={1} gap={1}>
             {missingLanguageObjects.map((language) => (
-              <LanguageSelectorListItem key={language.id} status="missing" language={language} />
+              <LanguageSelectListItem key={language.id} status="missing" language={language} />
             ))}
           </Grid>
         </Box>

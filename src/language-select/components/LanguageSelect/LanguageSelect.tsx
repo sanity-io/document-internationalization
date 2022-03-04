@@ -1,10 +1,9 @@
 import React from 'react'
 import get from 'just-safe-get'
-import {Button, Grid, Box, Popover, Text, Flex, useClickOutside} from '@sanity/ui'
+import {Button, Menu, MenuButton, PopoverProps} from '@sanity/ui'
 import type {SchemaType} from '@sanity/types'
 import type {SanityDocument} from '@sanity/client'
 import {ChevronDownIcon} from '@sanity/icons'
-import styled from 'styled-components'
 import {SingleFlag} from '../SingleFlag'
 import {
   buildDocId,
@@ -24,25 +23,15 @@ type Props = {
   document: SanityDocument
 }
 
-const LanguageSelectFlex = styled(Flex)`
-  align-items: center;
-  justify-content: space-between;
-`
-
-const LanguageSelectGrid = styled(Grid)`
-  align-items: center;
-`
-
-const LanguageSelectLabel = styled(Text)`
-  transform: translateY(0.413rem);
-`
+const POPOVER_PROPS: PopoverProps = {
+  constrainSize: true,
+  placement: 'bottom',
+  portal: true,
+}
 
 export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
   const config = React.useMemo(() => getConfig(schemaType.name), [schemaType.name])
   const [pending, languages] = useLanguages(document)
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [triggerRef, setTriggerRef] = React.useState<HTMLButtonElement | null>(null)
-  const [popoverRef, setPopoverRef] = React.useState<HTMLElement | null>(null)
 
   const baseLanguage = React.useMemo(
     () => getBaseLanguage(languages, config.base),
@@ -106,33 +95,12 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     }
   }, [config, languages, baseLanguage, editStates, currentLanguageCode])
 
-  const handleClose = React.useCallback(() => {
-    setIsOpen(false)
-  }, [])
-
-  const handleOpen = React.useCallback(() => {
-    setIsOpen(true)
-  }, [])
-
-  const handleKeyUp = React.useCallback(
-    (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.key === 'Escape') {
-        handleClose()
-      }
-    },
-    [handleClose]
-  )
-
-  useClickOutside(() => {
-    handleClose()
-  }, [popoverRef, triggerRef])
-
   if (!currentLanguageObject || !currentLanguageCode || pending || languages.length === 0) {
     return (
       <Button
         disabled
         mode="bleed"
-        padding={2}
+        padding={3}
         loading={pending}
         iconRight={ChevronDownIcon}
         text={UiMessages.languageSelect.placeholder}
@@ -149,42 +117,25 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
         currentDocumentId: document._id,
       }}
     >
-      <Button
-        mode="bleed"
-        padding={2}
-        ref={setTriggerRef}
-        onClick={handleOpen}
-        text={
-          <LanguageSelectFlex>
-            <LanguageSelectGrid gap={2} autoCols="auto" autoFlow="column">
-              {!!currentLanguageFlagCode && <SingleFlag code={currentLanguageFlagCode} />}
-              <Box marginRight={2}>
-                <LanguageSelectLabel>
-                  {currentLanguageObject.title ?? currentLanguageObject.id}
-                </LanguageSelectLabel>
-              </Box>
-            </LanguageSelectGrid>
-            <ChevronDownIcon width={21} height={21} />
-          </LanguageSelectFlex>
+      <MenuButton
+        id="document-internationalization/language-select"
+        popover={POPOVER_PROPS}
+        button={
+          <Button
+            mode="bleed"
+            icon={<SingleFlag code={currentLanguageFlagCode} />}
+            iconRight={ChevronDownIcon}
+            padding={3}
+            title={currentLanguageObject.title ?? currentLanguageObject.id}
+            text={currentLanguageObject.title ?? currentLanguageObject.id}
+          />
+        }
+        menu={
+          <Menu>
+            <LanguageSelectList {...languagesObjects} />
+          </Menu>
         }
       />
-      {!!triggerRef && (
-        <Popover
-          portal
-          autoFocus
-          constrainSize
-          max="none"
-          ref={setPopoverRef}
-          open={isOpen}
-          placement="bottom"
-          referenceElement={triggerRef}
-          content={
-            <Box padding={1} overflow="auto" sizing="border" onKeyUp={handleKeyUp}>
-              <LanguageSelectList {...languagesObjects} />
-            </Box>
-          }
-        />
-      )}
     </LanguageSelectContext.Provider>
   )
 }
