@@ -68,7 +68,7 @@
     "@sanity/base": "^2.20.0",
     "@sanity/check": "^2.0.9",
     "@sanity/client": "^2.19.0",
-    "@sanity/desk-tool": "^2.21.0",
+    "@sanity/desk-tool": "^2.28.0",
     "@sanity/form-builder": "^2.20.0",
     "@sanity/icons": "^1.2.3",
     "@sanity/react-hooks": "^2.20.0",
