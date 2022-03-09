@@ -105,7 +105,7 @@
     "react-router-dom": "^5.1.0",
     "rollup": "^2.36.1",
     "rollup-plugin-cleaner": "^1.0.0",
-    "rollup-pylugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
     "styled-components": "^5.3.1",
