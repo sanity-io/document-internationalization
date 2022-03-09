@@ -18,7 +18,7 @@ After consideration with the team, we have decided to make `delimiter` based IDs
 
 2. Switch to delimiter based IDs
    1. Check if you have explicitly specified `subpath` in your intl config. If you have, you can either remove it or replace it with `delimiter`
-   2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all verion history**
+   2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all version history**
 
 
 

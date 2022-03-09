@@ -1,4 +1,5 @@
 import type {UniqueCheckerFn} from '@sanity/types'
+import {I18nDelimiter} from '../constants'
 import {getBaseIdFromId, getSanityClient, serializePath} from '../utils'
 
 /**
@@ -33,7 +34,10 @@ export const isSlugUnique: UniqueCheckerFn = (slug, context) => {
 
   const constraints = [
     '_type == $docType',
-    '!(_id match $baseId || _id in path("i18n." + $baseId + ".*") || _id in path("drafts.**"))',
+    '!(_id in path("drafts.**"))', // exclude drafts
+    '_id != $baseId', // exclude own base document
+    '!(_id in path("i18n." + $baseId + ".*"))', // exclude any subpath translations
+    `!(_id match $baseId  + "${I18nDelimiter}*")`, // exclude any delimiter based translations
     `${atPath} == $slug`,
   ].join(' && ')
 

@@ -15,14 +15,15 @@ declare module '@sanity/state-router/lib/RouterContext' {
   }>;
 }
 
-declare module '@sanity/desk-tool/lib/components/ConfirmDelete' {
-  export const ConfirmDelete: React.FC<{
-    draft?: import('@sanity/client').SanityDocument<any>;
-    published?: import('@sanity/client').SanityDocument<any>;
+declare module '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDeleteDialog' {
+  export const ConfirmDeleteDialog: React.FC<{
+    id: string;
+    type: string;
+    action?: string;
     onCancel?: () => void;
     onConfirm?: () => void;
   }>;
-  export default ConfirmDelete;
+  export default ConfirmDeleteDialog;
 }
 
 declare module '@sanity/desk-tool/lib/components/enhanceWithReferringDocuments' {
