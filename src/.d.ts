@@ -82,11 +82,6 @@ declare module 'part:@sanity/document-internationalization/ui/flags?' {
   export = flags;
 }
 
-declare module '*.scss' {
-    const c: { [key: string]: string; };
-    export = c;
-}
-
 declare module '*.css' {
   const c: { [key: string]: string; };
   export = c;
