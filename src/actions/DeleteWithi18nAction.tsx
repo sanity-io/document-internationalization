@@ -1,6 +1,6 @@
 import React from 'react'
 import TrashIcon from 'part:@sanity/base/trash-icon'
-import * as ConfirmDeleteModule from '@sanity/desk-tool/lib/components/ConfirmDelete'
+import ConfirmDeleteDialog from '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDeleteDialog';
 import {useDocumentOperation, useEditState, useSyncState} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {IEditState, IResolverProps, IUseDocumentOperationResult} from '../types'
@@ -17,16 +17,11 @@ const DISABLED_REASON_TITLE = {
 
 export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => {
   const toast = useToast()
-  const ConfirmDelete = React.useMemo(
-    () => ConfirmDeleteModule?.ConfirmDelete ?? ConfirmDeleteModule?.default,
-    [ConfirmDeleteModule]
-  )
   const config = React.useMemo(() => getConfig(type), [type])
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
   const baseDocumentEditState = useEditState(baseDocumentId, type) as IEditState
   const syncState = useSyncState(id, type)
   const baseDocumentSyncState = useSyncState(baseDocumentId, type)
-  const {draft, published} = useEditState(id, type) as IEditState
   const {delete: deleteOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const [isDeleting, setIsDeleting] = React.useState(false)
   const [isConfirmDialogOpen, setConfirmDialogOpen] = React.useState(false)
@@ -82,9 +77,10 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
   const dialogContent = React.useMemo(() => {
     if (isConfirmDialogOpen) {
       return (
-        <ConfirmDelete
-          draft={draft}
-          published={published}
+        <ConfirmDeleteDialog
+          action="delete"
+          id={id}
+          type={type}
           onCancel={onDialogCancel}
           onConfirm={onDialogConfirm}
         />
@@ -92,7 +88,7 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
     }
 
     return null
-  }, [isConfirmDialogOpen, draft, published, onDialogCancel, onDialogConfirm])
+  }, [id, type, isConfirmDialogOpen, onDialogCancel, onDialogConfirm])
 
   return {
     onHandle,

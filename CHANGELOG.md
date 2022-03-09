@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## v0.0.1-beta.11
+* [#124](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/124) Updates an internal import to support the minor bump from `@sanity/desk-tool@2.28.0`
 ## v0.0.1-beta.10
 * Fixed [#27](https://github.com/sanity-io/document-internationalization/issues/27)
 
