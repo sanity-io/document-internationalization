@@ -1,7 +1,7 @@
 import React from 'react'
 import omit from 'just-omit'
 import {hues} from '@sanity/color'
-import {Text, Button, Box, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
+import {Text, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
 import {AddIcon, SpinnerIcon} from '@sanity/icons'
 import styled, {css, keyframes} from 'styled-components'
 import {usePaneRouter} from '@sanity/desk-tool'
@@ -30,7 +30,7 @@ const ListItemSpinner = styled(SpinnerIcon)`
 
 const ListItemBadge = styled(Text)`
   margin-left: ${({theme}) => `${theme.sanity.space[2]}px`};
-  margin-right: 27px;
+  margin-right: 35px;
   margin-top: 1px;
 
   & > span {
@@ -56,9 +56,15 @@ const ListItemSplitButton = styled(Button)`
   `}
 `
 
-const MenuItemButton: React.ComponentProps<typeof MenuItem>['as'] = (props) => (
-  <button type="button" {...props} />
-)
+const MenuItemButton = styled.button``
+const MenuItemSelectedButton = styled.button`
+  color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.fg};
+  background-color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.bg};
+
+  span {
+    color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.fg};
+  }
+`
 
 export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const toast = useToast()
@@ -190,7 +196,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   return (
     <Flex>
       <MenuItem
-        as={MenuItemButton}
+        as={language.isCurrentLanguage ? MenuItemSelectedButton : MenuItemButton}
         data-as="button"
         data-selected={language.isCurrentLanguage}
         selected={language.isCurrentLanguage}
