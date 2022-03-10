@@ -13,7 +13,7 @@ export const UiMessages = {
   draft: 'Draft',
   missingTranslations:
     'Following languages are missing some translations compared to the base language',
-  base: 'Base',
+  base: 'Base Translation',
   missing: 'Missing',
   deleteAll: {
     buttonTitle: 'Delete (incl. translations)',

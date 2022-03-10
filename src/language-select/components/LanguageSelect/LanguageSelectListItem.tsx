@@ -1,8 +1,8 @@
 import React from 'react'
 import omit from 'just-omit'
 import {hues} from '@sanity/color'
-import {Text, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
-import {AddIcon, SpinnerIcon, SplitVerticalIcon} from '@sanity/icons'
+import {Text, Button, Box, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
+import {AddIcon, SpinnerIcon} from '@sanity/icons'
 import styled, {css, keyframes} from 'styled-components'
 import {usePaneRouter} from '@sanity/desk-tool'
 import {RouterContext} from '@sanity/state-router/lib/RouterContext'
@@ -11,6 +11,7 @@ import {SingleFlag} from '../SingleFlag'
 import type {IExtendedLanguageObject} from '../../../types'
 import {UiMessages} from '../../../constants'
 import {buildDocId, getBaseIdFromId, getConfig, getSanityClient} from '../../../utils'
+import {SplitPaneIcon} from '../SplitPaneIcon'
 import {LanguageSelectContext} from './LanguageSelectContext'
 
 type Props = {
@@ -28,6 +29,10 @@ const ListItemSpinner = styled(SpinnerIcon)`
 `
 
 const ListItemBadge = styled(Text)`
+  margin-left: ${({theme}) => `${theme.sanity.space[2]}px`};
+  margin-right: 27px;
+  margin-top: 1px;
+
   & > span {
     display: inline-block;
     vertical-align: middle;
@@ -50,6 +55,10 @@ const ListItemSplitButton = styled(Button)`
     }
   `}
 `
+
+const MenuItemButton: React.ComponentProps<typeof MenuItem>['as'] = (props) => (
+  <button type="button" {...props} />
+)
 
 export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const toast = useToast()
@@ -78,6 +87,15 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
     [baseId, language.id, baseLanguage]
   )
   const baseDocumentEditState = useEditState(baseId, currentDocumentType)
+  const baseTranslationBadgeLabel = React.useMemo(() => {
+    if (language.isBase) {
+      if (language.title.length >= 20) {
+        return UiMessages.base.split(' ')[0]
+      }
+      return UiMessages.base
+    }
+    return null
+  }, [language])
 
   const openDocumentInCurrentPane = React.useCallback(
     (id: string, type: string) => {
@@ -91,15 +109,13 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
 
   const openDocumentInSidePane = React.useCallback(
     (id: string, type: string) => {
-      const panes = [
-        ...routerPanesState.slice(0, groupIndex + 1),
-        [
-          {
-            id: id,
-            params: {type},
-          },
-        ],
-      ]
+      const panes = [...routerPanesState]
+      panes.splice(groupIndex + 1, 0, [
+        {
+          id: id,
+          params: {type},
+        },
+      ])
 
       const href = routerContext.resolvePathFromState({panes})
       routerContext.navigateUrl(href)
@@ -161,7 +177,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   if (status === 'missing') {
     return (
       <MenuItem
-        as="button"
+        as={MenuItemButton}
         data-as="button"
         disabled={pending}
         icon={pending ? ListItemSpinner : AddIcon}
@@ -174,15 +190,15 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   return (
     <Flex>
       <MenuItem
-        as="button"
+        as={MenuItemButton}
         data-as="button"
         data-selected={language.isCurrentLanguage}
         selected={language.isCurrentLanguage}
         icon={FlagIcon}
         iconRight={
-          language.isBase && (
+          !!baseTranslationBadgeLabel && (
             <ListItemBadge>
-              <Badge marginX={2}>{UiMessages.base}</Badge>
+              <Badge>{baseTranslationBadgeLabel}</Badge>
             </ListItemBadge>
           )
         }
@@ -191,12 +207,13 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       />
       {!language.isCurrentLanguage && (
         <ListItemSplitButton
+          type="button"
+          tone="default"
           mode="bleed"
-          tone="primary"
           padding={2}
           onClick={handleOpenInSidePaneClick}
         >
-          <SplitVerticalIcon width={19} height={19} />
+          <SplitPaneIcon width={19} height={19} />
         </ListItemSplitButton>
       )}
     </Flex>
