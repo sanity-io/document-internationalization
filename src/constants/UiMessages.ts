@@ -4,11 +4,16 @@ export const UiMessages = {
   updatingIntlFields: 'Updating i18n fields',
   intlFieldsUpdated: 'I18n fields updated',
   baseDocumentCopied: 'Base document copied',
+  translationCreatedToast: {
+    title: (name: string): string => `Translation created: ${name}`,
+    description: (name: string): string =>
+      `The content from ‘${name}’ is copied into the new document translation.`,
+  },
   loading: 'Loading languages...',
   draft: 'Draft',
   missingTranslations:
     'Following languages are missing some translations compared to the base language',
-  base: 'Base',
+  base: 'Base Translation',
   missing: 'Missing',
   deleteAll: {
     buttonTitle: 'Delete (incl. translations)',
@@ -33,5 +38,12 @@ export const UiMessages = {
   errors: {
     baseDocumentNotPublished:
       'It looks like you have not published your base translation yet. When using strong references it is required to publish the base document before publishing any translated entries',
+  },
+  languageSelect: {
+    placeholder: 'Switch language',
+    listLabels: {
+      existing: 'Select document translations',
+      missing: 'Create new document translations',
+    },
   },
 }

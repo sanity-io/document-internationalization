@@ -1,4 +1,5 @@
 export * from './ILanguageObject'
+export * from './IExtendedLanguageObject'
 export * from './ILanguageQuery'
 export * from './IType'
 export * from './TLanguage'

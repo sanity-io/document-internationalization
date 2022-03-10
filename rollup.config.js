@@ -31,7 +31,7 @@ module.exports = (name) => {
         },
         autoModules: false,
         minimize: false,
-        extensions: ['.css', '.scss'],
+        extensions: ['.css'],
       }),
       resolve({
         extensions: ['.js', '.jsx', '.ts', '.tsx'],

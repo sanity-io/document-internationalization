@@ -10,7 +10,7 @@ import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
 import {getBaseIdFromId, getConfig, getSchema, updateIntlFieldsForDocument} from '../utils'
 import {ReferenceBehavior, UiMessages} from '../constants'
 import {IEditState, IResolverProps, IUseDocumentOperationResult, Ti18nSchema} from '../types'
-import { useDelayedFlag } from '../hooks'
+import {useDelayedFlag} from '../hooks'
 
 export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) => {
   const toast = useToast()
@@ -47,7 +47,6 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
     try {
       const document = draft || published
       if (document) {
-        console.log(baseDocumentEditState.published)
         await updateIntlFieldsForDocument(document, baseDocumentEditState.published)
       }
 
@@ -96,7 +95,6 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
 
   React.useEffect(() => {
     if (publishState === 'published') {
-      console.log('didPublish', publishState, draft)
       doUpdateIntlFields().then(() => {
         if (onComplete) onComplete()
       })

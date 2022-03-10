@@ -25,6 +25,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off', // because of parts
     'import/no-unresolved': ['error', {ignore: ['.*:.*']}], // because of parts
     'prettier/prettier': 'error',
+    'max-nested-callbacks': 'warn',
     'sort-imports': 'off', // prefer import/order
   },
   plugins: ['import', '@typescript-eslint', 'prettier', 'react'],

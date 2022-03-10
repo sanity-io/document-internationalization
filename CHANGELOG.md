@@ -1,7 +1,13 @@
 # CHANGELOG
 
+## v0.0.1-beta.12
+**BREAKING**
+**The `getDocumentNodeViewsForSchemaType` function has been removed as it is not required anymore**
+* The language selector has been updated to better align with the official language-filter plugin for field level translations. This does mean it is not required to implement `getDefaultDocumentNode` any more as the new UI does not require a custom desk structure but rather integrates with the studio natively.
+
 ## v0.0.1-beta.11
 * [#124](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/124) Updates an internal import to support the minor bump from `@sanity/desk-tool@2.28.0`
+
 ## v0.0.1-beta.10
 * Fixed [#27](https://github.com/sanity-io/document-internationalization/issues/27)
 
