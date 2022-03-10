@@ -56,7 +56,10 @@ const ListItemSplitButton = styled(Button)`
   `}
 `
 
-const MenuItemButton = styled.button``
+const MenuItemButton: React.ComponentProps<typeof MenuItem>['as'] = (props) => (
+  <button type="button" {...props} />
+)
+
 const MenuItemSelectedButton = styled.button`
   color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.fg};
   background-color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.bg};
