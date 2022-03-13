@@ -83,13 +83,13 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const [pending, setPending] = React.useState(false)
   const config = React.useMemo(() => getConfig(currentDocumentType), [currentDocumentType])
   const baseId = React.useMemo(() => getBaseIdFromId(currentDocumentId), [currentDocumentId])
-  const flagCode = React.useMemo(() => language.id.split('-').pop(), [language.id])
+  const flagCode = React.useMemo(() => language.id.split(/[_-]/).pop(), [language.id])
   const FlagIcon = React.useMemo(
     () =>
       function FlagIconComponent(props: React.ComponentType<typeof SingleFlag>) {
-        return <SingleFlag code={flagCode} {...props} />
+        return <SingleFlag code={flagCode} langCulture={language.id} {...props} />
       },
-    [flagCode]
+    [flagCode, language]
   )
   const translatedId = React.useMemo(
     () => (language.id === baseLanguage?.id ? baseId : buildDocId(baseId, language.id)),

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.1.1
+* [#32](https://github.com/sanity-io/document-internationalization/issues/32) Fixes default and custom flag implementations
+
 ## v0.1.0
 This is the first stable release for the official document internationalization plugin. A few things have changed since the original plugin. For a migration guide please see [this guide](docs/coming-from-sanity-plugin-intl-input.md).
 
