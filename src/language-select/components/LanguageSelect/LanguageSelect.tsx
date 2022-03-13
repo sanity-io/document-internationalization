@@ -46,7 +46,7 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     [languages, currentLanguageCode]
   )
   const currentLanguageFlagCode = React.useMemo(
-    () => currentLanguageCode?.split('-').pop(),
+    () => currentLanguageCode?.split(/[-_]/).pop(),
     [currentLanguageCode]
   )
   const editStateIds = React.useMemo(() => {
@@ -123,7 +123,7 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
         button={
           <Button
             mode="bleed"
-            icon={<SingleFlag code={currentLanguageFlagCode} />}
+            icon={<SingleFlag code={currentLanguageFlagCode} langCulture={currentLanguageCode} />}
             iconRight={ChevronDownIcon}
             padding={3}
             title={currentLanguageObject.title ?? currentLanguageObject.id}
