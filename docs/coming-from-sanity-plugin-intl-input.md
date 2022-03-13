@@ -76,3 +76,6 @@ In the new plugin you will find it has been simplified to just be an array of re
 ```
 
 Any existing documents will remain unchanged unless "fixed" using the translation maintenance. Old documents will show up as having missing references.
+
+### 8. The desk structure has changed
+The `getDocumentNodeViewsForSchemaType` function has been removed as it is not required anymore. The language selector has been updated to better align with the official language-filter plugin for field level translations. This does mean it is not required to implement `getDefaultDocumentNode` any more as the new UI does not require a custom desk structure but rather integrates with the studio natively.

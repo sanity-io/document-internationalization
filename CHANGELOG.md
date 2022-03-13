@@ -1,29 +1,21 @@
 # CHANGELOG
 
-## v0.0.1-beta.12
-**BREAKING**
-**The `getDocumentNodeViewsForSchemaType` function has been removed as it is not required anymore**
-* The language selector has been updated to better align with the official language-filter plugin for field level translations. This does mean it is not required to implement `getDefaultDocumentNode` any more as the new UI does not require a custom desk structure but rather integrates with the studio natively.
+## v0.1.0
+This is the first stable release for the official document internationalization plugin. A few things have changed since the original plugin. For a migration guide please see [this guide](docs/coming-from-sanity-plugin-intl-input.md).
 
-## v0.0.1-beta.11
-* [#124](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/124) Updates an internal import to support the minor bump from `@sanity/desk-tool@2.28.0`
+**Breaking Changes**
+- Object level translations are not supported by this plugin anymore. If your project requires this please use the [@sanity/language-filter](https://www.npmjs.com/package/@sanity/language-filter) plugin.
+- `delimiter` is now the default ID structure as opposed to `subpath`. If you are using the legacy plugin with no `idStructure` specified you will need to make sure to configure it explicitly in this version. Coming from the old version you will need to set it to `subpath` to keep your current structure.
+- It is not possible anymore to override the UI messages using plugin configuration.
+- The language configuration has been updated to use an `id` field instead of `name`. This change was made to align with the `@sanity/language-filter` plugin. You will need to update your language configuration if you are coming from the old plugin.
+- The `hard` reference behavior configuration has been renamed to `strong` to be more consistent with Sanity itself.
+- The `__i18n_refs` field will now be a simple array of rerences as opposed to an array of custom objects. They are keyed by their language code for easier querying.
 
-## v0.0.1-beta.10
-* Fixed [#27](https://github.com/sanity-io/document-internationalization/issues/27)
+**Fixes**
+- Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
+- Fixed a bug with the `fixBaseLanguageMismatch` method as it was not considering the field name configuration
+- [#124](https://github.com/LiamMartens/sanity-plugin-intl-input/issues/124) Updates an internal import to support the minor bump from `@sanity/desk-tool@2.28.0`
 
-## v0.0.1-beta.9
-* Fixed a bug with the `fixBaseLanguageMismatch` method as it was not considering the field name configuration
-
-## v0.0.1-beta.8
-* Migrated original plugin code
-* Removed object level translations
-* Added additional GROQ examples
-* Added a slug uniqueness validator for document level translations (`import { isSlugUnique } from '@sanity/document-internationalization/lib/validators`)
-* Fixed issue with `fixIdStructureMismatchDocuments` maintenance function
-* `delimiter` is now the default ID structure
-* Added maintenance function to add base document ref to translated documents
-* Removed the option for overriding UI messages
-* Updated language configuration to use "id" field instead of "name"
-* Updated studio parts to use new plugin name
-* Renamed "hard" to "strong" for configuring the reference behavior
-* The references from the base document to the translated ones will now receive the language code as their key
+**Other Changes**
+- Added a slug uniqueness validator for document level translations (`import { isSlugUnique } from '@sanity/document-internationalization/lib/validators`)
+- A maintenance function was created to add base document refs to translated documents
