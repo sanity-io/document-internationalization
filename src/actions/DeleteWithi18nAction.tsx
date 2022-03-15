@@ -1,6 +1,6 @@
 import React from 'react'
 import TrashIcon from 'part:@sanity/base/trash-icon'
-import ConfirmDeleteDialog from '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDeleteDialog'
+import {ConfirmDeleteDialog} from '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDeleteDialog'
 import {useDocumentOperation, useEditState, useSyncState} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {IEditState, IResolverProps, IUseDocumentOperationResult} from '../types'
