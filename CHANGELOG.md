@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.1.2
+* Fixed import to `ConfirmDeleteDialog`
+
 ## v0.1.1
 * [#32](https://github.com/sanity-io/document-internationalization/issues/32) Fixes default and custom flag implementations
 
