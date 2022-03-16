@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.1.4
+* Fixed an issue with filtering `all:part:@sanity/desk-tool/language-select-component`
+
 ## v0.1.3
 * The plugin will not show the language dropdown anymore for schemas that do not have `i18n` enabled. This version also brings support for the `@sanity/language-filter` plugin for non `i18n` schemas.
 

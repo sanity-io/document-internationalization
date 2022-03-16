@@ -14,11 +14,14 @@ type Props = {
 const LanguageSelectContainer: React.FC<Props> = ({schemaType}) => {
   const documentContext = React.useContext(DocumentPaneContext)
   const FallbackImplementation = React.useMemo(() => {
-    return (
-      languageFilterImplementations.filter(
-        (component) => LanguageSelectContainer !== component
-      )?.[0] ?? null
-    )
+    if (languageFilterImplementations && Array.isArray(languageFilterImplementations)) {
+      return (
+        languageFilterImplementations?.filter(
+          (component) => LanguageSelectContainer !== component
+        )?.[0] ?? null
+      )
+    }
+    return null
   }, [])
 
   if (schemaType?.i18n && documentContext.displayed?._id) {
