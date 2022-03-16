@@ -23,7 +23,7 @@ declare module '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDele
     onCancel?: () => void;
     onConfirm?: () => void;
   }>;
-  export default ConfirmDeleteDialog;
+  export { ConfirmDeleteDialog };
 }
 
 declare module '@sanity/desk-tool/lib/components/enhanceWithReferringDocuments' {

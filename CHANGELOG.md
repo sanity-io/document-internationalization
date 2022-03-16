@@ -1,7 +1,10 @@
 # CHANGELOG
 
-## v0.1.2
+## v0.1.3
 * The plugin will not show the language dropdown anymore for schemas that do not have `i18n` enabled. This version also brings support for the `@sanity/language-filter` plugin for non `i18n` schemas.
+
+## v0.1.2
+* Fixed import to `ConfirmDeleteDialog`
 
 ## v0.1.1
 * [#32](https://github.com/sanity-io/document-internationalization/issues/32) Fixes default and custom flag implementations
