@@ -5,10 +5,6 @@
   },
   "parts": [
     {
-      "name": "part:@sanity/document-internationalization/external/language-filter",
-      "description": "External part to support @sanity/language-filter plugin"
-    },
-    {
       "name": "part:@sanity/document-internationalization/languages/loader",
       "description": "User implementable languages loader function"
     },
@@ -31,10 +27,6 @@
     {
       "implements": "part:@sanity/desk-tool/language-select-component",
       "path": "language-select/index.js"
-    },
-    {
-      "implements": "part:@sanity/document-internationalization/external/language-filter",
-      "path": "../../language-filter/lib/SelectLanguageProvider"
     }
   ]
 }

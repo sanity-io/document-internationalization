@@ -56,9 +56,11 @@ const ListItemSplitButton = styled(Button)`
   `}
 `
 
-const MenuItemButton: React.ComponentProps<typeof MenuItem>['as'] = (props) => (
-  <button type="button" {...props} />
-)
+const MenuItemButtonComponent: React.ForwardRefRenderFunction<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+> = (props, ref) => <button type="button" ref={ref} {...props} />
+const MenuItemButton = React.forwardRef(MenuItemButtonComponent)
 
 const MenuItemSelectedButton = styled.button`
   color: ${({theme}) => theme.sanity.color.button.default.primary.enabled.fg};
