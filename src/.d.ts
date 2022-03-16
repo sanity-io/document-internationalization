@@ -83,6 +83,13 @@ declare module 'part:@sanity/document-internationalization/ui/flags?' {
   export = flags;
 }
 
+declare module '@sanity/language-filter' {
+  const SelectLanguageProvider: React.FC<{
+    schemaType?: import('@sanity/types').SchemaType
+  }>
+  export default SelectLanguageProvider
+}
+
 declare module '*.css' {
   const c: { [key: string]: string; };
   export = c;
