@@ -5,18 +5,6 @@
   },
   "parts": [
     {
-      "implements": "part:@sanity/base/document-badges/resolver",
-      "path": "badges/index.js"
-    },
-    {
-      "implements": "part:@sanity/base/document-actions/resolver",
-      "path": "actions/index.js"
-    },
-    {
-      "implements": "part:@sanity/desk-tool/language-select-component",
-      "path": "language-select/index.js"
-    },
-    {
       "name": "part:@sanity/document-internationalization/languages/loader",
       "description": "User implementable languages loader function"
     },
@@ -27,6 +15,18 @@
     {
       "name": "part:@sanity/document-internationalization/ui/flags",
       "description": "Part can be implemented to override default flag"
+    },
+    {
+      "implements": "part:@sanity/base/document-badges/resolver",
+      "path": "badges/index.js"
+    },
+    {
+      "implements": "part:@sanity/base/document-actions/resolver",
+      "path": "actions/index.js"
+    },
+    {
+      "implements": "part:@sanity/desk-tool/language-select-component",
+      "path": "language-select/index.js"
     }
   ]
 }
