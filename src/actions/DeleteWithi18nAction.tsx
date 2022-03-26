@@ -108,6 +108,7 @@ export const DeleteWithi18nAction: DocumentActionComponent = ({id, type, onCompl
       Boolean(deleteOp.disabled) ||
       syncState.isSyncing ||
       baseDocumentSyncState.isSyncing,
+    shortcut: 'CTRL+ALT+D',
     title: (deleteOp.disabled && DISABLED_REASON_TITLE[deleteOp.disabled]) || '',
     label: isDeleting ? UiMessages.deleteAll.deleting : UiMessages.deleteAll.buttonTitle,
     dialog: isConfirmDialogOpen && {
