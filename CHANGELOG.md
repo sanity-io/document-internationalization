@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.1.5
+* For base I18n documents the default "Delete" action will now be replaced with the Delete (incl. translations)" action. The default "Delete" action does not make sense for base documents in any scenario as it results in broken references.
+
 ## v0.1.4
 * Fixed an issue with filtering `all:part:@sanity/desk-tool/language-select-component`
 

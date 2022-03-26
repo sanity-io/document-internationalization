@@ -1,6 +1,9 @@
 import React from 'react'
 import ContentCopyIcon from 'part:@sanity/base/content-copy-icon'
-import {IResolverProps, IUseDocumentOperationResult} from '../types'
+import {useDocumentOperation} from '@sanity/react-hooks'
+import {useToast} from '@sanity/ui'
+import {uuid} from '@sanity/uuid'
+import type {DocumentActionComponent} from '@sanity/base'
 import {
   getSanityClient,
   getBaseIdFromId,
@@ -8,9 +11,7 @@ import {
   buildDocId,
   getLanguageFromId,
 } from '../utils'
-import {useDocumentOperation} from '@sanity/react-hooks'
-import {useToast} from '@sanity/ui'
-import {uuid} from '@sanity/uuid'
+import {IUseDocumentOperationResult} from '../types'
 import {UiMessages} from '../constants'
 
 /**
@@ -21,14 +22,11 @@ const DISABLED_REASON_TITLE = {
   NOTHING_TO_DUPLICATE: "This document doesn't yet exist so there's nothing to duplicate",
 }
 
-export const DuplicateWithi18nAction = (props: IResolverProps) => {
+export const DuplicateWithi18nAction: DocumentActionComponent = ({id, type, draft, published}) => {
   const toast = useToast()
   const client = getSanityClient()
-  const baseDocumentId = getBaseIdFromId(props.id)
-  const {duplicate: duplicateOp} = useDocumentOperation(
-    props.id,
-    props.type
-  ) as IUseDocumentOperationResult
+  const baseDocumentId = getBaseIdFromId(id)
+  const {duplicate: duplicateOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
   const [isDuplicating, setDuplicating] = React.useState(false)
 
   const onDuplicate = React.useCallback(async () => {
@@ -38,9 +36,9 @@ export const DuplicateWithi18nAction = (props: IResolverProps) => {
       const translations = await getTranslationsFor(baseDocumentId)
       const transaction = client.transaction()
       transaction.create({
-        ...(props.draft ?? props.published),
+        ...(draft ?? published),
         _id: dupeId,
-        _type: props.type,
+        _type: type,
       })
       translations.forEach((t) => {
         const isDraft = t._id.startsWith('drafts.')
@@ -56,7 +54,7 @@ export const DuplicateWithi18nAction = (props: IResolverProps) => {
       toast.push(err.message)
     }
     setDuplicating(false)
-  }, [baseDocumentId, props.onComplete, props.type, props.draft, props.published])
+  }, [client, toast, baseDocumentId, type, draft, published])
 
   return {
     icon: ContentCopyIcon,

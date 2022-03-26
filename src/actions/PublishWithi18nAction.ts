@@ -7,12 +7,13 @@ import {
 } from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
+import type {DocumentActionComponent} from '@sanity/base'
 import {getBaseIdFromId, getConfig, getSchema, updateIntlFieldsForDocument} from '../utils'
 import {ReferenceBehavior, UiMessages} from '../constants'
-import {IEditState, IResolverProps, IUseDocumentOperationResult, Ti18nSchema} from '../types'
+import {IEditState, IUseDocumentOperationResult, Ti18nSchema} from '../types'
 import {useDelayedFlag} from '../hooks'
 
-export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) => {
+export const PublishWithi18nAction: DocumentActionComponent = ({type, id, onComplete}) => {
   const toast = useToast()
   const baseDocumentId = getBaseIdFromId(id)
   const [publishState, setPublishState] = React.useState<'publishing' | 'published' | null>(null)
@@ -99,7 +100,7 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
         if (onComplete) onComplete()
       })
     }
-  }, [publishState])
+  }, [publishState, onComplete, doUpdateIntlFields])
 
   return {
     disabled,
