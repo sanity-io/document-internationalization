@@ -16,6 +16,7 @@ import {useDelayedFlag} from '../hooks'
 export const PublishWithi18nAction: DocumentActionComponent = ({type, id, onComplete}) => {
   const toast = useToast()
   const baseDocumentId = getBaseIdFromId(id)
+  const updatingIntlFieldsPromiseRef = React.useRef<Promise<void> | null>(null)
   const [publishState, setPublishState] = React.useState<'publishing' | 'published' | null>(null)
   const [updatingIntlFields, setUpdatingIntlFields] = React.useState(false)
   const {draft, published} = useEditState(id, type) as IEditState
@@ -96,9 +97,11 @@ export const PublishWithi18nAction: DocumentActionComponent = ({type, id, onComp
 
   React.useEffect(() => {
     if (publishState === 'published') {
-      doUpdateIntlFields().then(() => {
-        if (onComplete) onComplete()
-      })
+      if (!updatingIntlFieldsPromiseRef.current) {
+        updatingIntlFieldsPromiseRef.current = doUpdateIntlFields()
+          .then(() => onComplete && onComplete())
+          .finally(() => (updatingIntlFieldsPromiseRef.current = null))
+      }
     }
   }, [publishState, onComplete, doUpdateIntlFields])
 
