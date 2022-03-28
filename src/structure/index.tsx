@@ -48,7 +48,7 @@ export const getMaintenanceListItem = () => {
     .child(getMaintenanceTabComponent())
 }
 
-export const getFilteredDocumentTypeListItems = () => {
+export const getFilteredDocumentTypeListItems = (options: any = {}) => {
   const config = getConfig()
   const types = getDocumentTypes()
 
@@ -77,7 +77,7 @@ export const getFilteredDocumentTypeListItems = () => {
           .id(documentId)
           .documentId(documentId)
           .schemaType(schemaTypeName ?? '')
-          .views([S.view.form()])
+          .views(options?.views || [S.view.form()])
           .child(i18nChildResolver)
 
       return l.child(
