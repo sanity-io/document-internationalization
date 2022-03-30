@@ -3,7 +3,6 @@ import {StructureBuilder as S} from '@sanity/structure'
 import {EarthGlobeIcon} from '@sanity/icons'
 import {SchemaType} from '@sanity/structure/lib/parts/Schema'
 import {DocumentListBuilder} from '@sanity/structure/lib/DocumentList'
-import {Child} from '@sanity/structure/dist/dts/StructureNodes'
 import {ListItemBuilder} from '@sanity/structure/lib/ListItem'
 import {I18nDelimiter, I18nPrefix, IdStructure, UiMessages} from '../constants'
 import {getConfig} from '../utils'
@@ -72,22 +71,14 @@ export const getFilteredDocumentTypeListItems = () => {
       const schemaType = l.getSchemaType()
       const schemaTypeName = typeof schemaType === 'string' ? schemaType : schemaType?.name
 
-      const i18nChildResolver: Child = (documentId) =>
-        S.document()
-          .id(documentId)
-          .documentId(documentId)
-          .schemaType(schemaTypeName ?? '')
-          .views([S.view.form()])
-          .child(i18nChildResolver)
-
       return l.child(
         filterFns[config.idStructure](
           l,
           S.documentList()
             .id(l.getId() || '')
             .title(l.getTitle() || '')
+            .schemaType(schemaTypeName ?? '')
             .menuItems([...(schemaTypeName ? S.orderingMenuItemsForType(schemaTypeName) : [])])
-            .child(i18nChildResolver)
         )
       )
     }),

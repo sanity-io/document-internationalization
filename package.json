@@ -1,6 +1,6 @@
 {
   "name": "@sanity/document-internationalization",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "engines": {
     "node": ">=14"
