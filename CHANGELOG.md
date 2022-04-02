@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.1.6
+* Fixed translation maintenance functionality
+
 ## v0.1.5
 * Don't override `child` resolver as it is not required anymore. This way it will correctly fallback on the Studio's structure definition
 

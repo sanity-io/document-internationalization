@@ -12,7 +12,6 @@ import {
 } from '../../utils'
 import {Stack, Box, Container} from '@sanity/ui'
 
-
 export const MaintenanceTabContent = () => {
   const [selectedSchema, setSelectedSchema] = React.useState('')
   const {

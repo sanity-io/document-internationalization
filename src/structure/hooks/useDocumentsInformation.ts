@@ -39,6 +39,7 @@ export const useDocumentsInformation = (schema: string) => {
         sanityClientRef.current.fetch<Ti18nDocument[]>(
           `*[_type == $type && !(_id in path('drafts.**'))]{
             _id,
+            _type,
             ${config.fieldNames.lang},
             ${config.fieldNames.references},
             ${config.fieldNames.baseReference}
