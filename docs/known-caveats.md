@@ -3,7 +3,7 @@
 ## Usage with singletons
 There is currently no clean way of handling translations for singletons. Simply because of the way they are usually set-up.
 
-You would for exmaple have a desk structure item like this:
+You would for example have a desk structure item like this:
 ```js
   S.documentListItem()
     .schemaType(`schemaType`).id(`my-id`)
