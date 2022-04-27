@@ -30,3 +30,6 @@ coalesce(
   "languages": [__i18n_lang, ...__i18n_refs[].lang]
 }
 ```
+
+## Additional examples
+[Query for slugs for all available locales of this document](https://www.sanity.io/schemas/query-for-slugs-for-all-available-locales-of-this-document-0bf5d2ce)
