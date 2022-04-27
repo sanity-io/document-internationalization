@@ -1,6 +1,6 @@
 # Configuration options
 
-To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config` folder. When you installed the plugin, a default one should have been created.
+To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config/@sanity` folder. When you installed the plugin, a default one should have been created.
 
 At a minimum the file must exist and can be an empty object
 
@@ -10,7 +10,7 @@ At a minimum the file must exist and can be an empty object
 {}
 ```
 
-This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. These defaults can be overriden on each schema.
+This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. These defaults can be overridden on each schema.
 
 ### `base`
 
@@ -55,7 +55,7 @@ The differences below are related to querying for documents based on the `_id`:
 
 | ID structure          | Advantages                                                | Disadvantages                                                                                                                                                                                                                  | Example `_id`s                  |
 | --------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- |
-| `delimiter` (default) | Makes documents available without access token            | Querying translated documents by `_id` is more tricky as it requires some odd usage of `match` (eg. to fetch the translations for document ID `a-b-c`, you need to use following query `*[_id match ["a", "b", "c__i18n_*"]]`) | `asdf-123` `asdf-1234__i18n_fr` |
+| `delimiter` (default) | Makes documents available without access token            | Querying translated documents by `_id` is more tricky as it requires some odd usage of `match` (e.g. to fetch the translations for document ID `a-b-c`, you need to use following query `*[_id match ["a", "b", "c__i18n_*"]]`) | `asdf-123` `asdf-1234__i18n_fr` |
 | `subpath`             | Simpler querying by `_id` using `*[_id in path(i18n.**)]` | Subpaths make documents private, meaning they can only be accessed using an access token, which may increase API usage.                                                                                                        | `asdf-1234` `i18n.asdf-1234.fr` |
 
 ### `referenceBehavior`

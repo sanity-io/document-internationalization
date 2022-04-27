@@ -29,7 +29,7 @@ The "name" field is now called "id". The old field will still be supported but y
 You will need to update your config to reflect this change.
 
 ### 5. Studio parts have been renamed
-If you had implemnted any of the previous plugin's studio parts you will need to rename the implementations.
+If you had implemented any of the previous plugin's studio parts you will need to rename the implementations.
 ```diff
 [
   {
