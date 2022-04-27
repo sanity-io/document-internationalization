@@ -7,14 +7,16 @@ import {
 } from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
 import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
+import type {DocumentActionComponent} from '@sanity/base'
 import {getBaseIdFromId, getConfig, getSchema, updateIntlFieldsForDocument} from '../utils'
 import {ReferenceBehavior, UiMessages} from '../constants'
-import {IEditState, IResolverProps, IUseDocumentOperationResult, Ti18nSchema} from '../types'
+import {IEditState, IUseDocumentOperationResult, Ti18nSchema} from '../types'
 import {useDelayedFlag} from '../hooks'
 
-export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) => {
+export const PublishWithi18nAction: DocumentActionComponent = ({type, id, onComplete}) => {
   const toast = useToast()
   const baseDocumentId = getBaseIdFromId(id)
+  const updatingIntlFieldsPromiseRef = React.useRef<Promise<void> | null>(null)
   const [publishState, setPublishState] = React.useState<'publishing' | 'published' | null>(null)
   const [updatingIntlFields, setUpdatingIntlFields] = React.useState(false)
   const {draft, published} = useEditState(id, type) as IEditState
@@ -95,11 +97,13 @@ export const PublishWithi18nAction = ({type, id, onComplete}: IResolverProps) =>
 
   React.useEffect(() => {
     if (publishState === 'published') {
-      doUpdateIntlFields().then(() => {
-        if (onComplete) onComplete()
-      })
+      if (!updatingIntlFieldsPromiseRef.current) {
+        updatingIntlFieldsPromiseRef.current = doUpdateIntlFields()
+          .then(() => onComplete && onComplete())
+          .finally(() => (updatingIntlFieldsPromiseRef.current = null))
+      }
     }
-  }, [publishState])
+  }, [publishState, onComplete, doUpdateIntlFields])
 
   return {
     disabled,

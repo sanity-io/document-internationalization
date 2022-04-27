@@ -3,7 +3,8 @@ import TrashIcon from 'part:@sanity/base/trash-icon'
 import {ConfirmDeleteDialog} from '@sanity/desk-tool/lib/components/confirmDeleteDialog/ConfirmDeleteDialog'
 import {useDocumentOperation, useEditState, useSyncState} from '@sanity/react-hooks'
 import {useToast} from '@sanity/ui'
-import {IEditState, IResolverProps, IUseDocumentOperationResult} from '../types'
+import type {DocumentActionComponent} from '@sanity/base'
+import {IEditState, IUseDocumentOperationResult} from '../types'
 import {getSanityClient, getBaseIdFromId, getTranslationsFor, getConfig} from '../utils'
 import {UiMessages} from '../constants'
 
@@ -15,7 +16,7 @@ const DISABLED_REASON_TITLE = {
   NOTHING_TO_DELETE: "This document doesn't yet exist or is already deleted",
 }
 
-export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => {
+export const DeleteWithi18nAction: DocumentActionComponent = ({id, type, onComplete}) => {
   const toast = useToast()
   const config = React.useMemo(() => getConfig(type), [type])
   const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
@@ -107,6 +108,7 @@ export const DeleteWithi18nAction = ({id, type, onComplete}: IResolverProps) => 
       Boolean(deleteOp.disabled) ||
       syncState.isSyncing ||
       baseDocumentSyncState.isSyncing,
+    shortcut: 'CTRL+ALT+D',
     title: (deleteOp.disabled && DISABLED_REASON_TITLE[deleteOp.disabled]) || '',
     label: isDeleting ? UiMessages.deleteAll.deleting : UiMessages.deleteAll.buttonTitle,
     dialog: isConfirmDialogOpen && {

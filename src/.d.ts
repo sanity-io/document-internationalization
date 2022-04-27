@@ -90,6 +90,14 @@ declare module 'all:part:@sanity/desk-tool/language-select-component' {
   export default implementations
 }
 
+declare module 'part:@sanity/base/document-actions' {
+  type DocumentActionComponent = import('@sanity/base').DocumentActionComponent
+  const defaultResolver: (input: any) => DocumentActionComponent[];
+  export const PublishAction: DocumentActionComponent;
+  export const DeleteAction: DocumentActionComponent;
+  export default defaultResolver;
+}
+
 declare module '*.css' {
   const c: { [key: string]: string; };
   export = c;
