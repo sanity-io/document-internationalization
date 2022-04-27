@@ -1,7 +1,13 @@
 # CHANGELOG
 
-## v0.1.5
+## v0.1.7
 * For base I18n documents the default "Delete" action will now be replaced with the Delete (incl. translations)" action. The default "Delete" action does not make sense for base documents in any scenario as it results in broken references.
+
+## v0.1.6
+* Fixed translation maintenance functionality
+
+## v0.1.5
+* Don't override `child` resolver as it is not required anymore. This way it will correctly fallback on the Studio's structure definition
 
 ## v0.1.4
 * Fixed an issue with filtering `all:part:@sanity/desk-tool/language-select-component`

@@ -43,7 +43,7 @@ export default async (languages, document) => {
 }
 ```
 
-One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior.
+One thing to keep in mind is that the languages will not be reloaded every time the document updates. It is however possible to define an additional `part` to customize this behavior.
 
 To do this you need to implement the `@sanity/document-internationalization/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
 

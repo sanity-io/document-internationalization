@@ -1,5 +1,5 @@
 # Object Level Translations Migration
-As mentioned in the README, the object level translations will be deprecated in the new "Official" translation plugin from Sanity. When you migrate to the new plugin and want to keep your object level translations you will need to follow the following steps to match their [offical guidance](https://www.sanity.io/docs/localization#cd568b11a09c) on this form of localization.
+As mentioned in the README, the object level translations will be deprecated in the new "Official" translation plugin from Sanity. When you migrate to the new plugin and want to keep your object level translations you will need to follow the following steps to match their [official guidance](https://www.sanity.io/docs/localization#cd568b11a09c) on this form of localization.
 
 ## Current situation
 For this migration guide, let's assume we are starting from the following configuration.
