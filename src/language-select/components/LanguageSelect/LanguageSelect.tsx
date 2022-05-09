@@ -12,9 +12,10 @@ import {
   getConfig,
   getLanguageFromId,
 } from '../../../utils'
-import {useLanguages, useManyEditStates} from '../../hooks'
+import {useLanguages} from '../../hooks'
 import {UiMessages} from '../../../constants'
 import {IExtendedLanguageObject} from '../../../types'
+import useListeningQuery from '../../hooks/useListeningQuery'
 import {LanguageSelectList} from './LanguageSelectList'
 import {LanguageSelectContext} from './LanguageSelectContext'
 
@@ -49,28 +50,63 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     () => currentLanguageCode?.split(/[-_]/).pop(),
     [currentLanguageCode]
   )
-  const editStateIds = React.useMemo(() => {
+
+  // Find and listen to changes on all potential language versions of documents
+  const query = `*[_type == $type && _id in $ids]{
+    _id, 
+    "${config.fieldNames.lang}": ${config.fieldNames.lang}
+  }`
+  const queryParams = React.useMemo(() => {
     const baseId = getBaseIdFromId(document._id)
-    return languages.map((lang) => (lang === baseLanguage ? baseId : buildDocId(baseId, lang.id)))
-  }, [baseLanguage, languages, document._id])
-  const editStates = useManyEditStates(editStateIds, document._type)
+    const publishedIds = languages.map((lang) =>
+      lang === baseLanguage ? baseId : buildDocId(baseId, lang.id)
+    )
+    const draftIds = publishedIds.map((id) => `drafts.${id}`)
 
+    return {
+      ids: [...publishedIds, ...draftIds],
+      type: document._type,
+    }
+  }, [baseLanguage, languages, document._id, document._type])
+
+  console.log(`LanguageSelect rerendering`)
+  const {loading, data} = useListeningQuery(query, queryParams)
+
+  // Create a list of objects with current status
   const languagesObjects = React.useMemo(() => {
-    const editStatePerLanguage = new Map<string, typeof editStates[number]>()
-    editStates.forEach((state) => {
-      const doc = state?.draft ?? state?.published
-      const lang = get(doc ?? {}, config.fieldNames.lang) as string | undefined
-      const isBase = doc && doc._id.replace(/^drafts\./, '') === getBaseIdFromId(doc._id)
-      if (lang) {
-        editStatePerLanguage.set(lang, state)
-      } else if (isBase && baseLanguage?.id) {
-        editStatePerLanguage.set(baseLanguage.id, state)
-      }
-    })
-
     const draftLanguageObjects: IExtendedLanguageObject[] = []
     const publishedLanguageObjects: IExtendedLanguageObject[] = []
     const missingLanguageObjects: IExtendedLanguageObject[] = []
+
+    if (!data?.length) {
+      return {
+        draftLanguageObjects,
+        publishedLanguageObjects,
+        missingLanguageObjects,
+      }
+    }
+
+    // Prefer drafts if they exist
+    const filteredDocuments = data.reduce((acc, cur) => {
+      if (!cur._id.startsWith(`drafts.`)) {
+        const alsoHasDraft = data.some((doc) => doc._id === `drafts.${cur._id}`)
+
+        return alsoHasDraft ? acc : [...acc, cur]
+      }
+
+      return [...acc, cur]
+    }, [])
+
+    const editStatePerLanguage = new Map()
+    filteredDocuments.forEach((doc) => {
+      const lang = get(doc ?? {}, config.fieldNames.lang) as string | undefined
+      const isBase = doc && doc._id.replace(/^drafts\./, '') === getBaseIdFromId(doc._id)
+      if (lang) {
+        editStatePerLanguage.set(lang, doc)
+      } else if (isBase && baseLanguage?.id) {
+        editStatePerLanguage.set(baseLanguage.id, doc)
+      }
+    })
 
     languages.forEach((lang, index) => {
       const extendedObject = {
@@ -78,10 +114,10 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
         isBase: baseLanguage ? lang.id === baseLanguage.id : index === 0,
         isCurrentLanguage: lang.id === currentLanguageCode,
       }
-      const editState = editStatePerLanguage.get(lang.id)
-      if (editState?.published) {
+      const doc = editStatePerLanguage.get(lang.id)
+      if (doc?._id && !doc._id.startsWith(`drafts.`)) {
         publishedLanguageObjects.push(extendedObject)
-      } else if (editState?.draft) {
+      } else if (doc?._id && doc._id.startsWith(`drafts.`)) {
         draftLanguageObjects.push(extendedObject)
       } else {
         missingLanguageObjects.push(extendedObject)
@@ -93,15 +129,21 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
       publishedLanguageObjects,
       missingLanguageObjects,
     }
-  }, [config, languages, baseLanguage, editStates, currentLanguageCode])
+  }, [config, languages, baseLanguage, data, currentLanguageCode])
 
-  if (!currentLanguageObject || !currentLanguageCode || pending || languages.length === 0) {
+  if (
+    !currentLanguageObject ||
+    !currentLanguageCode ||
+    pending ||
+    loading ||
+    languages.length === 0
+  ) {
     return (
       <Button
         disabled
         mode="bleed"
         padding={3}
-        loading={pending}
+        loading={pending || loading}
         iconRight={ChevronDownIcon}
         text={UiMessages.languageSelect.placeholder}
       />
