@@ -1,8 +1,10 @@
+import {polyfillCountryFlagEmojis} from 'country-flag-emoji-polyfill'
 import React, {useMemo} from 'react'
-import emoji from 'react-easy-emoji'
 import styled from 'styled-components'
 import * as customFlagComponents from 'part:@sanity/document-internationalization/ui/flags?'
 import {getFlag} from '../../../utils/getFlag'
+
+polyfillCountryFlagEmojis()
 
 type Props = {
   className?: string
@@ -21,6 +23,10 @@ const FlagImageContainer = styled.span`
   }
 `
 
+const EmojiSpan = styled.span`
+  font-family: 'Twemoji Country Flags';
+`
+
 export const SingleFlag: React.FunctionComponent<Props> = ({code, langCulture, className}) => {
   const flagEmoji = useMemo(() => code && getFlag(code), [code])
   const CustomFlagComponent = useMemo(() => {
@@ -35,7 +41,11 @@ export const SingleFlag: React.FunctionComponent<Props> = ({code, langCulture, c
 
   return (
     <FlagImageContainer aria-label={code} className={className}>
-      {CustomFlagComponent && code ? <CustomFlagComponent code={code} /> : emoji(flagEmoji) || '🏳️‍🌈'}
+      {CustomFlagComponent && code ? (
+        <CustomFlagComponent code={code} />
+      ) : (
+        <EmojiSpan>{flagEmoji}</EmojiSpan> || '🏳️‍🌈'
+      )}
     </FlagImageContainer>
   )
 }

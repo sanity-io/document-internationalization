@@ -20,10 +20,13 @@ type Observable = {
   unsubscribe: () => void
 }
 
+const DEFAULT_PARAMS = {}
+const DEFAULT_OPTIONS = {apiVersion: `v2022-05-09`}
+
 export default function useListeningQuery(
   query: string,
-  params: Params = {},
-  options: ListenQueryOptions = {apiVersion: `v2022-05-09`}
+  params: Params = DEFAULT_PARAMS,
+  options: ListenQueryOptions = DEFAULT_OPTIONS
 ): ReturnShape {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -31,7 +34,24 @@ export default function useListeningQuery(
   const subscription = useRef<null | Observable>(null)
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('query changed')
+  }, [query])
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('params')
+  }, [params])
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('options')
+  }, [options])
+
+  useEffect(() => {
     if (query) {
+      // eslint-disable-next-line no-console
+      console.log('SUBSCRIBING', params)
       subscription.current = documentStore
         .listenQuery(query, params, options)
         .pipe(
@@ -46,10 +66,7 @@ export default function useListeningQuery(
           })
         )
         .subscribe((documents) => {
-          // Prevent re-renders from subscription returning the same data
-          if (!isEqual(data, documents)) {
-            setData(documents)
-          }
+          setData((current) => (isEqual(current, documents) ? current : documents))
           setLoading(false)
           setError(false)
         })

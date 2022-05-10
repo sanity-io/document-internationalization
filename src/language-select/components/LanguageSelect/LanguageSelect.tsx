@@ -69,7 +69,6 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     }
   }, [baseLanguage, languages, document._id, document._type])
 
-  console.log(`LanguageSelect rerendering`)
   const {loading, data} = useListeningQuery(query, queryParams)
 
   // Create a list of objects with current status
