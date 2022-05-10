@@ -34,24 +34,7 @@ export default function useListeningQuery(
   const subscription = useRef<null | Observable>(null)
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('query changed')
-  }, [query])
-
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('params')
-  }, [params])
-
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('options')
-  }, [options])
-
-  useEffect(() => {
     if (query) {
-      // eslint-disable-next-line no-console
-      console.log('SUBSCRIBING', params)
       subscription.current = documentStore
         .listenQuery(query, params, options)
         .pipe(
