@@ -24,7 +24,7 @@ const LanguageSelectContainer: React.FC<Props> = ({schemaType}) => {
     return null
   }, [])
 
-  if (schemaType?.i18n && documentContext.displayed?._id) {
+  if (schemaType?.i18n && documentContext?.displayed?._id) {
     return <LanguageSelect schemaType={schemaType} document={documentContext.displayed} />
   }
 
