@@ -2,27 +2,17 @@
 
 [See the Sanity docs on how to to setup Desk Structure](https://www.sanity.io/guides/getting-started-with-structure-builder) if you do not already have Desk Structure customised in your project.
 
-Once your Studio has its own Desk Structure, you can configure the plugin in two ways:
-
-## Method 1: Default implementation
-
-Use this method if you don't already have a custom desk structure of your own.
+Once your Studio has its own Desk Structure, you'll want to filter down any Lists for internationalized schema types to just base language documents:
 
 ```js
-import * as Structure from '@sanity/document-internationalization/lib/structure'
-
-export default Structure.default
-```
-
-## Method 2: Manual implementation
-
-Use this method if you need to combine your own desk structure implementation with the plugin.
-
-```js
-import * as Structure from '@sanity/document-internationalization/lib/structure'
-
-export default () => {
-  const items = Structure.getFilteredDocumentTypeListItems()
-  return S.list().id('__root__').title('Content').items(items)
-}
+S.listItem()
+  .title(`Lesson`)
+  .child(
+    S.documentList()
+      .title(`Lesson documents`)
+      .schemaType('lesson')
+      .filter('_type == "lesson" && __i18n_lang == $baseLanguage')
+      .params({baseLanguage: `en_US`})
+      .canHandleIntent(S.documentTypeList('lesson').getCanHandleIntent())
+  )
 ```

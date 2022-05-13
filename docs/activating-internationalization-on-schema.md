@@ -2,9 +2,17 @@
 
 To enable document wide translations for a schemas you need to add the `i18n` key in a schema.
 
-Adding `i18n: true` to a schema will use the defaults in your configuration file.
+Adding `i18n: true` to a document schema will use the defaults in your configuration file. Example:
 
-Alternatively you can set an object like `i18n: {...}` to override those defaults.
+```js
+export default {
+  type: 'document',
+  i18n: true,
+  // ... all other settings
+}
+```
+
+Alternatively you can set an object like `i18n: {...}` to override your configuration file's defaults per-schema.
 
 - `base`: Override the globally configured base language ID. If there is no base language ID configured at all, the first language in the list will be used.
 - `referenceBehavior`: Can be `strong` (default), `weak` or `disabled`. This option defines how the translated documents are referenced in the parent document
@@ -18,13 +26,12 @@ Alternatively you can set an object like `i18n: {...}` to override those default
 
 Consider setting [Initial Values](https://www.sanity.io/guides/getting-started-with-initial-values-for-new-documents) so that the base language value is already set on new documents.
 
-## Example
-
 ```js
 export default {
   type: 'document',
-  name: '...',
-  title: '...',
+  initialValue: {
+    __i18n_lang: 'en_US',
+  },
   i18n: {
     base: 'en_US',
     languages: ['en_US', 'nl_NL'],
@@ -34,11 +41,8 @@ export default {
       baseReference: '__i18n_base',
     },
   },
-  initialValue: {
-    __i18n_lang: 'en_US',
-  },
-  fields: [],
+  // ... all other settings
 }
 ```
 
-With desk structure and your schema setup, you should now see the "Translations" View Pane in your Studio!
+With Desk Structure and your Schema setup, you should now see the Language Selector above the document editor in your Studio.

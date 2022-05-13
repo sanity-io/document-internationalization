@@ -17,6 +17,10 @@ const Divider = styled(Box)`
   border-bottom: 1px solid var(--card-shadow-outline-color);
 `
 
+const SelectorBox = styled(Box)`
+  minwidth: 250;
+`
+
 export const LanguageSelectList: React.FC<Props> = ({
   draftLanguageObjects,
   publishedLanguageObjects,
@@ -47,7 +51,7 @@ export const LanguageSelectList: React.FC<Props> = ({
   }, [draftLanguageObjects, publishedLanguageObjects])
 
   return (
-    <Box>
+    <SelectorBox>
       {!!existingLanguageObjects.length && (
         <Box>
           <LanguageSelectLabel>{UiMessages.languageSelect.listLabels.existing}</LanguageSelectLabel>
@@ -75,6 +79,6 @@ export const LanguageSelectList: React.FC<Props> = ({
           </Grid>
         </Box>
       )}
-    </Box>
+    </SelectorBox>
   )
 }
