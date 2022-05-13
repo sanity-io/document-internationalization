@@ -14,9 +14,8 @@ type Props = {
 
 const FlagImageContainer = styled.span`
   display: block;
-  padding: 1px;
   font-size: 19px;
-  margin: 0px -0.05em 0px -0.1em;
+  transform: translateY(-1px);
 
   & img {
     display: block;

@@ -28,17 +28,6 @@ const ListItemSpinner = styled(SpinnerIcon)`
   animation: ${rotate} 500ms linear infinite;
 `
 
-const ListItemBadge = styled(Text)`
-  margin-left: ${({theme}) => `${theme.sanity.space[2]}px`};
-  margin-right: 35px;
-  margin-top: 1px;
-
-  & > span {
-    display: inline-block;
-    vertical-align: middle;
-  }
-`
-
 const ListItemSplitButton = styled(Button)`
   display: none;
   flex-shrink: 0;
@@ -207,11 +196,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
         selected={language.isCurrentLanguage}
         icon={FlagIcon}
         iconRight={
-          !!baseTranslationBadgeLabel && (
-            <ListItemBadge>
-              <Badge>{baseTranslationBadgeLabel}</Badge>
-            </ListItemBadge>
-          )
+          !!baseTranslationBadgeLabel && <Badge fontSize={0}>{baseTranslationBadgeLabel}</Badge>
         }
         text={language.title}
         onClick={handleOpenClick}

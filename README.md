@@ -21,7 +21,7 @@ There are two popular methods of internationalization in Sanity Studio:
 
 This plugin adds features to the Studio to improve handling **document-level translations**.
 
-- A View Pane to create language versions of each Document
+- A Language Selector to create and browse language-specific versions of each Document
 - Document Actions to update base and translated documents to ensure references stay in tact
 - Document Badges to highlight the language version of a document
 
@@ -47,12 +47,12 @@ The plugin is now installed, but you will need to complete the following steps t
 
 ## Setup next steps
 
-1. [Customise Desk Structure](docs/desk-structure.md)  
-   To setup the 'Translations' View Pane on Documents
-2. [Configuration options](docs/configuration-options.md)  
+1. [Configuration options](docs/configuration-options.md)  
    To declare available Languages and other settings
-3. [Activating internationalization on schema](docs/activating-internationalization-on-schema.md)  
+2. [Activating internationalization on schema](docs/activating-internationalization-on-schema.md)  
    To enable all the above features on schema
+3. [Customise Desk Structure](docs/desk-structure.md)  
+   To filter documents down to the base language version
 
 ## Other documentation
 
