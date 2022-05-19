@@ -25,8 +25,12 @@ export const getFlagCode = (code = ``): string => {
   }
 
   switch (code.toLocaleLowerCase()) {
+    // Return :flag-gb: for English
     case `en`:
       return `gb`
+    // Return :flag-al: for Albanian (ISO 639-1 Language Code is "sq")
+    case `sq`:
+      return `al`
 
     default:
       return code
