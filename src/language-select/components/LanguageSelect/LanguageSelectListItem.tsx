@@ -128,11 +128,28 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       setPending(true)
       const baseDocument = baseDocumentEditState.draft || baseDocumentEditState.published
       const langFieldName = config.fieldNames.lang
+      const referencesFieldName = config.fieldNames.references
+      const baseFieldName = config.fieldNames.baseReference
       await getSanityClient().createIfNotExists({
-        ...(baseDocument ? omit(baseDocument, [config.fieldNames.references]) : {}),
         _id: `drafts.${translatedId}`,
         _type: currentDocumentType,
+
+        // Remove other language references from new draft
+        ...(baseDocument ? omit(baseDocument, [`_id`, `_type`]) : {}),
+        // [referencesFieldName]: baseDocument?.[referencesFieldName] ?? [],
+
+        // Set new language
         [langFieldName]: language.id,
+
+        // Set base language reference
+        ...(baseDocument?._id
+          ? {
+              [baseFieldName]: {
+                _type: 'reference',
+                _ref: baseDocument._id.replace(`drafts.*`, ``),
+              },
+            }
+          : {}),
       })
       toast.push({
         closable: true,
@@ -153,17 +170,18 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       setPending(false)
     }
   }, [
-    toast,
-    language.id,
-    language.title,
-    baseLanguage,
-    translatedId,
-    currentDocumentType,
-    config.fieldNames.lang,
-    config.fieldNames.references,
-    openDocumentInCurrentPane,
     baseDocumentEditState.draft,
     baseDocumentEditState.published,
+    config.fieldNames.lang,
+    config.fieldNames.references,
+    config.fieldNames.baseReference,
+    translatedId,
+    currentDocumentType,
+    language.id,
+    language.title,
+    toast,
+    baseLanguage,
+    openDocumentInCurrentPane,
   ])
 
   const handleOpenClick = React.useCallback(() => {
