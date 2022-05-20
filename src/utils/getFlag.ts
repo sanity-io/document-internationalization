@@ -28,7 +28,7 @@ export const getFlagCode = (code = ``): string => {
     // Return :flag-gb: for English
     case `en`:
       return `gb`
-    // Return :flag-al: for Albanian (ISO 639-1 Language Code is "sq")
+    // Return :flag-al: (Albania) for `sq` language code
     case `sq`:
       return `al`
 

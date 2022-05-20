@@ -1,6 +1,6 @@
 import React from 'react'
 import get from 'just-safe-get'
-import {Button, Menu, MenuButton, PopoverProps} from '@sanity/ui'
+import {Box, Button, Flex, Menu, MenuButton, PopoverProps, Text} from '@sanity/ui'
 import type {SchemaType} from '@sanity/types'
 import type {SanityDocument} from '@sanity/client'
 import {ChevronDownIcon} from '@sanity/icons'
@@ -163,13 +163,19 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
         popover={POPOVER_PROPS}
         button={
           <Button
+            paddingY={1}
+            paddingX={2}
             mode="bleed"
-            icon={<SingleFlag code={currentLanguageFlagCode} langCulture={currentLanguageCode} />}
-            iconRight={ChevronDownIcon}
-            padding={3}
             title={currentLanguageObject.title ?? currentLanguageObject.id}
-            text={currentLanguageObject.title ?? currentLanguageObject.id}
-          />
+          >
+            <Flex align="center" gap={2}>
+              <SingleFlag code={currentLanguageFlagCode} langCulture={currentLanguageCode} />
+              <Box flex={1}>
+                <Text>{currentLanguageObject.title ?? currentLanguageObject.id}</Text>
+              </Box>
+              <ChevronDownIcon width={19} height={19} />
+            </Flex>
+          </Button>
         }
         menu={
           <Menu>

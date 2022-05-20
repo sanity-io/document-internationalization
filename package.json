@@ -136,13 +136,14 @@
   "dependencies": {
     "@babel/runtime": "^7.12.5",
     "@cprecioso/country-flag-emoji": "^1.0.0",
-    "country-flag-emoji-polyfill": "^0.1.1",
+    "html-react-parser": "^1.4.12",
     "just-omit": "^2.0.1",
     "just-safe-get": "^4.0.1",
     "just-split": "^3.0.1",
     "pinst": "^2.1.6",
     "react-twemoji": "^0.5.0",
-    "regenerator-runtime": "^0.13.7"
+    "regenerator-runtime": "^0.13.7",
+    "twemoji": "^14.0.2"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
