@@ -2,7 +2,7 @@ export const UiMessages = {
   publishing: 'Publishing...',
   publish: 'Publish',
   updatingIntlFields: 'Updating i18n fields',
-  intlFieldsUpdated: 'I18n fields updated',
+  intlFieldsUpdated: 'i18n fields updated',
   baseDocumentCopied: 'Base document copied',
   translationCreatedToast: {
     title: (name: string): string => `Translation created: ${name}`,

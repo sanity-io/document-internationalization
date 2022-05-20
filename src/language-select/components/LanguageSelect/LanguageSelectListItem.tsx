@@ -1,7 +1,7 @@
 import React from 'react'
 import omit from 'just-omit'
 import {hues} from '@sanity/color'
-import {Text, Button, Badge, Flex, useToast, MenuItem} from '@sanity/ui'
+import {Text, Button, Badge, Flex, useToast, MenuItem, Box} from '@sanity/ui'
 import {AddIcon, SpinnerIcon} from '@sanity/icons'
 import styled, {css, keyframes} from 'styled-components'
 import {usePaneRouter} from '@sanity/desk-tool'
@@ -75,13 +75,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const config = React.useMemo(() => getConfig(currentDocumentType), [currentDocumentType])
   const baseId = React.useMemo(() => getBaseIdFromId(currentDocumentId), [currentDocumentId])
   const flagCode = React.useMemo(() => language.id.split(/[_-]/).pop(), [language.id])
-  const FlagIcon = React.useMemo(
-    () =>
-      function FlagIconComponent(props: React.ComponentType<typeof SingleFlag>) {
-        return <SingleFlag code={flagCode} langCulture={language.id} {...props} />
-      },
-    [flagCode, language]
-  )
+
   const translatedId = React.useMemo(
     () => (language.id === baseLanguage?.id ? baseId : buildDocId(baseId, language.id)),
     [baseId, language.id, baseLanguage]
@@ -128,11 +122,27 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       setPending(true)
       const baseDocument = baseDocumentEditState.draft || baseDocumentEditState.published
       const langFieldName = config.fieldNames.lang
+      const referencesFieldName = config.fieldNames.references
+      const baseFieldName = config.fieldNames.baseReference
       await getSanityClient().createIfNotExists({
-        ...(baseDocument ? omit(baseDocument, [config.fieldNames.references]) : {}),
         _id: `drafts.${translatedId}`,
         _type: currentDocumentType,
+
+        // Remove other language references from new draft
+        ...(baseDocument ? omit(baseDocument, [`_id`, `_type`, referencesFieldName]) : {}),
+
+        // Set new language
         [langFieldName]: language.id,
+
+        // Set base language reference
+        ...(baseDocument?._id
+          ? {
+              [baseFieldName]: {
+                _type: 'reference',
+                _ref: baseDocument._id.replace(`drafts.*`, ``),
+              },
+            }
+          : {}),
       })
       toast.push({
         closable: true,
@@ -153,17 +163,18 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       setPending(false)
     }
   }, [
-    toast,
-    language.id,
-    language.title,
-    baseLanguage,
-    translatedId,
-    currentDocumentType,
-    config.fieldNames.lang,
-    config.fieldNames.references,
-    openDocumentInCurrentPane,
     baseDocumentEditState.draft,
     baseDocumentEditState.published,
+    config.fieldNames.lang,
+    config.fieldNames.references,
+    config.fieldNames.baseReference,
+    translatedId,
+    currentDocumentType,
+    language.id,
+    language.title,
+    toast,
+    baseLanguage,
+    openDocumentInCurrentPane,
   ])
 
   const handleOpenClick = React.useCallback(() => {
@@ -194,13 +205,20 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
         data-as="button"
         data-selected={language.isCurrentLanguage}
         selected={language.isCurrentLanguage}
-        icon={FlagIcon}
-        iconRight={
-          !!baseTranslationBadgeLabel && <Badge fontSize={0}>{baseTranslationBadgeLabel}</Badge>
-        }
-        text={language.title}
         onClick={handleOpenClick}
-      />
+        paddingY={1}
+        paddingX={2}
+      >
+        <Flex align="center" gap={2}>
+          <SingleFlag code={flagCode} langCulture={language.id} />
+          <Box flex={1}>
+            <Text>{language.title}</Text>
+          </Box>
+          {baseTranslationBadgeLabel ? (
+            <Badge fontSize={0}>{baseTranslationBadgeLabel}</Badge>
+          ) : null}
+        </Flex>
+      </MenuItem>
       {!language.isCurrentLanguage && (
         <ListItemSplitButton
           type="button"
