@@ -43,6 +43,11 @@ An example of document-level translation could be a `lesson` schema, the `title`
 
 A good use of field-level translation could be a `person` schema. It could have the same `name` and `image` in every language, but only the `biography` would need translating.
 
+## Studio V3 known issues
+
+Studio V3 does not implement language-filter yet. This means that the language button has moved into the document editor flow for the time being.
+We will be looking to restore the button placement during Studio V3 dev-preview. 
+
 ## Installation
 
 From the same directory as the Studio run:
