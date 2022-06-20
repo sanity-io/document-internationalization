@@ -1,10 +1,8 @@
-import _ from 'lodash'
-import {SanityDocument} from '@sanity/client'
-import {ITranslationRef, Ti18nSchema} from '../types'
+import compact from 'lodash/compact'
+import {SanityClient, SanityDocument} from '@sanity/client'
+import {ITranslationRef} from '../types'
 import {ReferenceBehavior} from '../constants'
-import {getSanityClient} from './getSanityClient'
-import {getConfig} from './getConfig'
-import {getSchema} from './getSchema'
+import {ApplyConfigResult} from '../utils'
 import {getLanguagesFromOption} from './getLanguagesFromOption'
 import {getLanguageFromId} from './getLanguageFromId'
 import {getBaseLanguage} from './getBaseLanguage'
@@ -15,19 +13,18 @@ import {createSanityReference} from './createSanityReference'
 // @TODO make this into a hook so the hook
 // can look up the existance of a base document on its own
 export async function updateIntlFieldsForDocument(
+  client: SanityClient,
+  config: ApplyConfigResult,
   document: SanityDocument,
   baseDocument?: SanityDocument
 ): Promise<void> {
   const {_type: type, _id: id} = document
-  const schema = getSchema<Ti18nSchema>(type)
-  const config = getConfig(schema)
-  const client = getSanityClient()
   const baseDocumentId = getBaseIdFromId(id)
   const isTranslation = id !== baseDocumentId
   const fieldName = config.fieldNames.lang
   const refsFieldName = config.fieldNames.references
   const baseRefFieldName = config.fieldNames.baseReference
-  const langs = await getLanguagesFromOption(config.languages, document)
+  const langs = await getLanguagesFromOption(client, config, config.languages, document)
   const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.id
 
   // Update I18n field for current document
@@ -50,12 +47,12 @@ export async function updateIntlFieldsForDocument(
 
   // update base document reference if required
   if (baseDocument) {
-    const translatedDocuments = await getTranslationsFor(baseDocumentId)
+    const translatedDocuments = await getTranslationsFor(client, config, baseDocumentId)
     if (translatedDocuments.length > 0) {
       const baseDocumentTransaction = client.transaction()
       let translatedRefs: ITranslationRef[] = []
       if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
-        translatedRefs = _.compact(
+        translatedRefs = compact(
           translatedDocuments.map((doc) => {
             const lang = getLanguageFromId(doc._id)
             if (!lang) return null

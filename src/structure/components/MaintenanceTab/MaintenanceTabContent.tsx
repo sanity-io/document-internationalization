@@ -1,4 +1,6 @@
-import React from 'react'
+import React, {forwardRef, Ref} from 'react'
+import {useSchema} from 'sanity'
+import {Box, Container, Stack} from '@sanity/ui'
 import {MaintenanceTabTypeSelector} from '../MaintenanceTabTypeSelector'
 import {useDocumentsInformation} from '../../hooks'
 import {MaintenanceTabResult} from '../MaintenanceTabResult'
@@ -10,10 +12,20 @@ import {
   fixOrphanedDocuments,
   fixTranslationRefs,
 } from '../../utils'
-import {Stack, Box, Container} from '@sanity/ui'
+import {Ti18nConfig} from '../../../types'
+import {useSanityClient} from '../../../utils'
+import {useConfig} from '../../../hooks'
 
-export const MaintenanceTabContent = () => {
+export interface MaintenanceTabContentProps {
+  config: Ti18nConfig
+}
+
+export const MaintenanceTabContent = forwardRef(function MaintenanceTabContent(
+  {config: pluginConfig}: MaintenanceTabContentProps,
+  ref: Ref<HTMLInputElement>
+) {
   const [selectedSchema, setSelectedSchema] = React.useState('')
+  const client = useSanityClient()
   const {
     pending,
     setPending,
@@ -22,56 +34,74 @@ export const MaintenanceTabContent = () => {
     translatedDocuments,
     documentsSummaryInformation,
     fetchInformation,
-  } = useDocumentsInformation(selectedSchema)
+  } = useDocumentsInformation(pluginConfig, selectedSchema)
+  const schemaRegistry = useSchema()
+  const config = useConfig(pluginConfig, selectedSchema)
 
   const onSchemaTypeChange = React.useCallback(
     (schemaName: string) => setSelectedSchema(schemaName),
-    [selectedSchema]
+    []
   )
 
-  const handleOpen = React.useCallback(() => setSelectedSchema(''), [selectedSchema])
+  const handleOpen = React.useCallback(() => setSelectedSchema(''), [])
 
   const onFixIdStructureMismatchDocuments = React.useCallback(async () => {
     setPending(true)
-    await fixIdStructureMismatchDocuments(selectedSchema, documents)
+    await fixIdStructureMismatchDocuments(client, config, selectedSchema, documents)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, documents, fetchInformation])
+  }, [setPending, client, config, selectedSchema, documents, fetchInformation])
 
   const onFixMissingLanguageFields = React.useCallback(async () => {
     setPending(true)
-    await fixLanguageFields(selectedSchema, documents)
+    await fixLanguageFields(client, config, schemaRegistry, documents)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, documents, fetchInformation])
+  }, [setPending, client, schemaRegistry, config, selectedSchema, documents, fetchInformation])
 
   const onFixTranslationRefs = React.useCallback(async () => {
     setPending(true)
-    await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
+    await fixTranslationRefs(client, config, baseDocuments, translatedDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
+  }, [
+    setPending,
+    client,
+    config,
+    selectedSchema,
+    baseDocuments,
+    translatedDocuments,
+    fetchInformation,
+  ])
 
   const onFixBaseDocumntRefs = React.useCallback(async () => {
     setPending(true)
-    await fixBaseDocumentRefs(selectedSchema, translatedDocuments)
+    await fixBaseDocumentRefs(client, config, translatedDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, translatedDocuments])
+  }, [setPending, fetchInformation, client, config, selectedSchema, translatedDocuments])
 
   const onFixOrphanDocuments = React.useCallback(async () => {
     setPending(true)
-    await fixOrphanedDocuments(baseDocuments, translatedDocuments)
+    await fixOrphanedDocuments(client, baseDocuments, translatedDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
+  }, [setPending, client, selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
 
   const onFixReferenceBehaviorMismatch = React.useCallback(async () => {
     setPending(true)
-    await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
+    await fixTranslationRefs(client, config, baseDocuments, translatedDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, translatedDocuments])
+  }, [
+    setPending,
+    fetchInformation,
+    client,
+    config,
+    selectedSchema,
+    baseDocuments,
+    translatedDocuments,
+  ])
 
   const onFixBaseLanguageMismatch = React.useCallback(async () => {
     setPending(true)
-    await fixBaseLanguageMismatch(selectedSchema, baseDocuments)
+    await fixBaseLanguageMismatch(client, config, baseDocuments)
     await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, fetchInformation])
+  }, [setPending, client, config, selectedSchema, baseDocuments, fetchInformation])
 
   return (
     <Container width={1}>
@@ -81,6 +111,7 @@ export const MaintenanceTabContent = () => {
             value={selectedSchema}
             onChange={onSchemaTypeChange}
             onOpen={handleOpen}
+            ref={ref}
           />
         </Box>
         {!!selectedSchema && (
@@ -134,4 +165,4 @@ export const MaintenanceTabContent = () => {
       </Stack>
     </Container>
   )
-}
+})

@@ -25,7 +25,7 @@ export function useDelayedFlag(
       }
     }
     return undefined
-  }, [value, timeout, delayedOn, delayedOff])
+  }, [flag, value, timeout, delayedOn, delayedOff])
 
   return flag
 }

@@ -1,21 +1,21 @@
 import chunk from 'just-split'
+import {SanityClient} from '@sanity/client'
 import {ReferenceBehavior} from '../../constants'
 import {Ti18nDocument} from '../../types'
 import {
+  ApplyConfigResult,
   buildDocId,
   createSanityReference,
   getBaseIdFromId,
-  getConfig,
   getLanguageFromId,
-  getSanityClient,
 } from '../../utils'
 
 export const fixIdStructureMismatchDocuments = async (
+  sanityClient: SanityClient,
+  config: ApplyConfigResult,
   schema: string,
   documents: Ti18nDocument[]
-) => {
-  const config = getConfig()
-  const sanityClient = getSanityClient()
+): Promise<void[]> => {
   const refsFieldName = config.fieldNames.references
 
   // remove old refs
@@ -29,7 +29,7 @@ export const fixIdStructureMismatchDocuments = async (
   await removeOldRefsTransaction.commit()
 
   // create new document ids
-  await Promise.all(
+  return Promise.all(
     chunk(
       documents.filter((d) => d._id !== getBaseIdFromId(d._id)),
       100
@@ -39,7 +39,7 @@ export const fixIdStructureMismatchDocuments = async (
         const baseId = getBaseIdFromId(d._id)
         const lang = getLanguageFromId(d._id)
         if (lang) {
-          const newId = buildDocId(baseId, lang)
+          const newId = buildDocId(config, baseId, lang)
           transaction.createIfNotExists({
             ...d,
             _id: newId,

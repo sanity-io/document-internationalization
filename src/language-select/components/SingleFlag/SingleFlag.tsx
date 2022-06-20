@@ -1,10 +1,10 @@
-import React, {useMemo} from 'react'
+import React, {useContext, useMemo} from 'react'
 import twemoji from 'twemoji'
 import parse from 'html-react-parser'
-import * as customFlagComponents from 'part:@sanity/document-internationalization/ui/flags?'
 import {Box} from '@sanity/ui'
 import styled from 'styled-components'
 import {getFlag} from '../../../utils/getFlag'
+import {LanguageConfigContext} from '../LanguageSelect/LanguageConfigContext'
 
 type Props = {
   code?: string
@@ -21,6 +21,7 @@ export const SingleFlag: React.FunctionComponent<Props> = ({code, langCulture}) 
   const flagHtml = twemoji.parse(flagEmoji ?? `🇺🇳`, {folder: 'svg', ext: '.svg'})
   const flagReact = parse(flagHtml)
 
+  const {customFlagComponents} = useContext(LanguageConfigContext)
   const CustomFlagComponent = useMemo(() => {
     if (langCulture && customFlagComponents) {
       const exportedName = langCulture.replace(/[^a-zA-Z0-9_]/g, '_')
@@ -29,7 +30,7 @@ export const SingleFlag: React.FunctionComponent<Props> = ({code, langCulture}) 
       }
     }
     return null
-  }, [langCulture])
+  }, [langCulture, customFlagComponents])
 
   return (
     <Box aria-label={code}>

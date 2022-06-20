@@ -1,13 +1,18 @@
+import {SanityClient} from '@sanity/client'
+import type {Schema} from 'sanity'
 import {Ti18nDocument, Ti18nSchema} from '../../types'
-import {getConfig, getLanguageFromId, getSanityClient, getSchema} from '../../utils'
+import {ApplyConfigResult, getLanguageFromId} from '../../utils'
 
-export const fixLanguageFields = async (schema: string, documents: Ti18nDocument[]) => {
-  const sanityClient = getSanityClient()
-  const config = getConfig(schema)
+export function fixLanguageFields(
+  sanityClient: SanityClient,
+  config: ApplyConfigResult,
+  schemaRegistry: Schema,
+  documents: Ti18nDocument[]
+): Promise<void[]> {
   const langFieldName = config.fieldNames?.lang
-  await Promise.all(
+  return Promise.all(
     documents.map(async (d) => {
-      const schemaObject = getSchema<Ti18nSchema>(d._type)
+      const schemaObject = schemaRegistry.get(d._type) as Ti18nSchema
       const base =
         (typeof schemaObject.i18n === 'object' ? schemaObject.i18n.base : undefined) || config.base
       if (!d[langFieldName]) {

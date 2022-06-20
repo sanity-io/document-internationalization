@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useRef} from 'react'
-import documentStore from 'part:@sanity/base/datastore/document'
+import {useEffect, useState, useRef} from 'react'
 import {catchError, distinctUntilChanged} from 'rxjs/operators'
 import isEqual from 'react-fast-compare'
+import {useDocumentStore} from 'sanity/_unstable'
 
 type Params = Record<string, string | number | boolean | string[]>
 
@@ -23,7 +23,7 @@ type Observable = {
 const DEFAULT_PARAMS = {}
 const DEFAULT_OPTIONS = {apiVersion: `v2022-05-09`}
 
-export default function useListeningQuery(
+export function useListeningQuery(
   query: string,
   params: Params = DEFAULT_PARAMS,
   options: ListenQueryOptions = DEFAULT_OPTIONS
@@ -32,6 +32,8 @@ export default function useListeningQuery(
   const [error, setError] = useState(false)
   const [data, setData] = useState(null)
   const subscription = useRef<null | Observable>(null)
+
+  const documentStore = useDocumentStore()
 
   useEffect(() => {
     if (query) {

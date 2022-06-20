@@ -1,5 +1,11 @@
 # Document Internationalization Plugin for Sanity.io
 
+> **NOTE**
+>
+> This is the **Sanity Studio v3 version** of sanity-plugin-latex-input.
+>
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/latex-input).
+
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
 ![Document Level Internationalization UI](docs/img/document-level-translation.gif)
@@ -27,7 +33,11 @@ This plugin adds features to the Studio to improve handling **document-level tra
 
 For **field-level translations** you should use the [@sanity/language-filter plugin](https://www.npmjs.com/package/@sanity/language-filter).
 
+*Studio V3 note*: language-filter is not available for V3 yet.
+
 ### Many projects use both!
+
+*Studio V3 note*: language-filter is not available for V3 yet.
 
 An example of document-level translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
 
@@ -35,19 +45,23 @@ A good use of field-level translation could be a `person` schema. It could have 
 
 ## Installation
 
-With the [Sanity CLI installed](https://www.sanity.io/docs/getting-started-with-sanity-cli), from the same directory as the Studio run:
+From the same directory as the Studio run:
 
-```
-sanity install @sanity/document-internationalization
+```sh
+npm install --save @sanity/document-internationalization@studio-v3
 ```
 
-Ensure that `@sanity/document-internationalization` is listed in `plugins` inside `sanity.json`.
+or
+
+```sh
+yarn add @sanity/document-internationalization@studio-v3
+```
+
 
 The plugin is now installed, but you will need to complete the following steps to see the Document Translation UI:
 
 ## Setup next steps
-
-1. [Configuration options](docs/configuration-options.md)  
+1. [Enabling and configuring the plugin](docs/enabling-and-configuring.md)  
    To declare available Languages and other settings
 2. [Activating internationalization on schema](docs/activating-internationalization-on-schema.md)  
    To enable all the above features on schema

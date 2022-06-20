@@ -1,17 +1,17 @@
 import React from 'react'
+import {useConfig} from '../../hooks'
 import {I18nDelimiter, I18nPrefix, IdStructure, ReferenceBehavior} from '../../constants'
-import {ILanguageObject, ITranslationRef, Ti18nDocument} from '../../types'
+import {ILanguageObject, ITranslationRef, Ti18nConfig, Ti18nDocument} from '../../types'
 import {
   getBaseIdFromId,
   getBaseLanguage,
-  getConfig,
   getLanguagesFromOption,
-  getSanityClient,
+  useSanityClient,
 } from '../../utils'
 
-export const useDocumentsInformation = (schema: string) => {
-  const config = React.useMemo(() => getConfig(schema), [schema])
-  const sanityClientRef = React.useRef(getSanityClient())
+export const useDocumentsInformation = (pluginConfig: Ti18nConfig, schema: string) => {
+  const client = useSanityClient()
+  const config = useConfig(pluginConfig, schema)
   const [pending, setPending] = React.useState(false)
   const [documents, setDocuments] = React.useState<Ti18nDocument[]>([])
   const [languages, setLanguages] = React.useState<ILanguageObject[]>([])
@@ -35,9 +35,9 @@ export const useDocumentsInformation = (schema: string) => {
     async (selectedSchema: string) => {
       setPending(true)
       const [langs, result] = await Promise.all([
-        getLanguagesFromOption(config.languages),
-        sanityClientRef.current.fetch<Ti18nDocument[]>(
-          `*[_type == $type && !(_id in path('drafts.**'))]{
+        getLanguagesFromOption(client, config, config.languages),
+        client.fetch<Ti18nDocument[]>(
+          `*[_type == $type]{
             _id,
             _type,
             ${config.fieldNames.lang},
@@ -51,7 +51,7 @@ export const useDocumentsInformation = (schema: string) => {
       setDocuments(result)
       setPending(false)
     },
-    [pending, config, documents, sanityClientRef.current]
+    [config, client]
   )
 
   const documentsSummaryInformation = React.useMemo(() => {

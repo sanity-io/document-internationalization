@@ -1,15 +1,15 @@
+import {SanityClient} from '@sanity/client'
+import type {ApplyConfigResult} from '../utils'
 import {I18nDelimiter, IdStructure} from '../constants'
 import {Ti18nDocument} from '../types'
 import {buildDocId} from './buildDocId'
-import {getConfig} from './getConfig'
-import {getSanityClient} from './getSanityClient'
 
 export const getTranslationsFor = async (
+  client: SanityClient,
+  config: ApplyConfigResult,
   baseDocumentId: string,
   includeDrafts = false
 ): Promise<Ti18nDocument[]> => {
-  const config = getConfig()
-  const client = getSanityClient()
   if (config.idStructure === IdStructure.DELIMITER) {
     const segments = baseDocumentId.split('-')
     segments[segments.length - 1] = `${segments[segments.length - 1]}${I18nDelimiter}*`
@@ -19,6 +19,7 @@ export const getTranslationsFor = async (
         : `*[_id match $segments && !(_id in path('drafts.**'))]`,
       {segments}
     )
+
     return documents
       ? documents.filter(
           (d) =>
@@ -30,8 +31,8 @@ export const getTranslationsFor = async (
   const documents = await client.fetch<Ti18nDocument[]>(
     includeDrafts ? '*[_id in path($path) || _id in path($draftPath)]' : '*[_id in path($path)]',
     {
-      path: buildDocId(baseDocumentId, '*'),
-      draftPath: `drafts.${buildDocId(baseDocumentId, '*')}`,
+      path: buildDocId(config, baseDocumentId, '*'),
+      draftPath: `drafts.${buildDocId(config, baseDocumentId, '*')}`,
     }
   )
   return documents ?? []

@@ -4,7 +4,7 @@ As mentioned in the README, the object level translations will be deprecated in 
 ## Current situation
 For this migration guide, let's assume we are starting from the following configuration.
 
-**config/intl-input.json**
+**documentI18n config**
 ```json
 {
     "idStructure": "subpath",
@@ -38,13 +38,14 @@ export default {
 ## Updating the schema with pre-defined language fields
 As described in the [official guide for field level translations](https://www.sanity.io/docs/localization#cd568b11a09c), we should define the localized fields as separate objects. The easiest way to go about this for our example situation would be as follows.
 
-First of all let's move the `i18nfields` object to a separate object type using our existing language configuration. For simplicity we will be re-using the existing `intl-input` config.  
+First of all let's move the `i18nfields` object to a separate object type using our existing language configuration. 
+For simplicity we will be re-using the existing `intl-input` config.  
 
 *Keep in mind field names can not contain dashes (`-`) so we will be replacing them with underscores (`_`). The plugin currently does this for you*
 
 **schemas/homepage-i18nfields.js**
 ```js
-import i18nconfig from 'config:@sanity/document-internationalization';
+import {i18nconfig} from './file-with-i18n-plugin-config';
 
 export default {
   type: 'object',
@@ -90,7 +91,7 @@ One solution is fieldsets. Using this option we will be able to initially "hide 
 To do this we will need to update our `homepage-i18nfields` schema:
 **schemas/homepage-i18nfields.js**
 ```diff
-import i18nconfig from 'config:@sanity/document-internationalization';
+import {i18nconfig} from './file-with-i18n-plugin-config';
 
 export default {
   type: 'object',
@@ -120,6 +121,9 @@ Great! Our final UI will look something like this:
 ![Final UI](img/object-level-migration-2.gif)
 
 ## Option 2: Improving the UI using @sanity/language-filter
+
+*V3 NOTE*: language-filter is not available yet.
+
 Fieldsets are not the only way we can improve the Studio UI, we can also opt for the [`@sanity/language-filter` plugin](https://www.npmjs.com/package/@sanity/language-filter). Let's set it up and see what this solution would look like.
 
 For this option, we do not need to set-up any fieldsets, so if you had already you can remove them.

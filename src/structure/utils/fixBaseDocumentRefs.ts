@@ -1,14 +1,17 @@
+import {SanityClient} from '@sanity/client'
 import {ReferenceBehavior} from '../../constants'
 import {Ti18nDocument} from '../../types'
-import {createSanityReference, getBaseIdFromId, getConfig, getSanityClient} from '../../utils'
+import {ApplyConfigResult, createSanityReference, getBaseIdFromId} from '../../utils'
 
-export const fixBaseDocumentRefs = async (schema: string, translatedDocuments: Ti18nDocument[]) => {
-  const config = getConfig(schema)
-  const sanityClient = getSanityClient()
+export const fixBaseDocumentRefs = async (
+  sanityClient: SanityClient,
+  config: ApplyConfigResult,
+  translatedDocuments: Ti18nDocument[]
+): Promise<void> => {
   if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
     const baseRefFieldName = config.fieldNames.baseReference
     const transaction = sanityClient.transaction()
-    translatedDocuments.forEach(async (d) => {
+    translatedDocuments.forEach((d) => {
       if (!d[baseRefFieldName]) {
         const baseId = getBaseIdFromId(d._id)
         transaction.patch(d._id, {

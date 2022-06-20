@@ -1,23 +1,18 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import get from 'just-safe-get'
 import {Box, Button, Flex, Menu, MenuButton, PopoverProps, Text} from '@sanity/ui'
-import type {SchemaType} from '@sanity/types'
-import type {SanityDocument} from '@sanity/client'
+import type {SchemaType, SanityDocument} from 'sanity'
 import {ChevronDownIcon} from '@sanity/icons'
+import {useConfig} from '../../../hooks'
 import {SingleFlag} from '../SingleFlag'
-import {
-  buildDocId,
-  getBaseIdFromId,
-  getBaseLanguage,
-  getConfig,
-  getLanguageFromId,
-} from '../../../utils'
+import {buildDocId, getBaseIdFromId, getBaseLanguage, getLanguageFromId} from '../../../utils'
 import {useLanguages} from '../../hooks'
 import {UiMessages} from '../../../constants'
 import {IExtendedLanguageObject} from '../../../types'
-import useListeningQuery from '../../hooks/useListeningQuery'
+import {useListeningQuery} from '../../hooks/useListeningQuery'
 import {LanguageSelectList} from './LanguageSelectList'
 import {LanguageSelectContext} from './LanguageSelectContext'
+import {LanguageConfigContext} from './LanguageConfigContext'
 
 type Props = {
   schemaType: SchemaType
@@ -31,13 +26,15 @@ const POPOVER_PROPS: PopoverProps = {
 }
 
 export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
-  const config = React.useMemo(() => getConfig(schemaType.name), [schemaType.name])
-  const [pending, languages] = useLanguages(document)
+  const pluginConfig = useContext(LanguageConfigContext)
+  const config = useConfig(pluginConfig, schemaType.name)
+  const [pending, languages] = useLanguages(config, document)
 
   const baseLanguage = React.useMemo(
     () => getBaseLanguage(languages, config.base),
     [languages, config.base]
   )
+
   const currentLanguageCode = React.useMemo(
     () => getLanguageFromId(document._id) || (baseLanguage ? baseLanguage.id : null),
     [document._id, baseLanguage]
@@ -53,13 +50,13 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
 
   // Find and listen to changes on all potential language versions of documents
   const query = `*[_type == $type && _id in $ids]{
-    _id, 
+    _id,
     "${config.fieldNames.lang}": ${config.fieldNames.lang}
   }`
   const queryParams = React.useMemo(() => {
     const baseId = getBaseIdFromId(document._id)
     const publishedIds = languages.map((lang) =>
-      lang === baseLanguage ? baseId : buildDocId(baseId, lang.id)
+      lang === baseLanguage ? baseId : buildDocId(config, baseId, lang.id)
     )
     const draftIds = publishedIds.map((id) => `drafts.${id}`)
 
@@ -67,7 +64,7 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
       ids: [...publishedIds, ...draftIds],
       type: document._type,
     }
-  }, [baseLanguage, languages, document._id, document._type])
+  }, [config, baseLanguage, languages, document._id, document._type])
 
   const {loading, data} = useListeningQuery(query, queryParams)
 
@@ -86,15 +83,18 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     }
 
     // Prefer drafts if they exist
-    const filteredDocuments = data.reduce((acc, cur) => {
-      if (!cur._id.startsWith(`drafts.`)) {
-        const alsoHasDraft = data.some((doc) => doc._id === `drafts.${cur._id}`)
+    const filteredDocuments: SanityDocument[] = data.reduce(
+      (acc: SanityDocument[], cur: SanityDocument) => {
+        if (!cur._id.startsWith(`drafts.`)) {
+          const alsoHasDraft = data.some((doc: SanityDocument) => doc._id === `drafts.${cur._id}`)
 
-        return alsoHasDraft ? acc : [...acc, cur]
-      }
+          return alsoHasDraft ? acc : [...acc, cur]
+        }
 
-      return [...acc, cur]
-    }, [])
+        return [...acc, cur]
+      },
+      []
+    )
 
     const editStatePerLanguage = new Map()
     filteredDocuments.forEach((doc) => {

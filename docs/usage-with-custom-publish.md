@@ -9,7 +9,7 @@ In order to get the full functionality, you can make use of the `updateIntlField
 Example:
 
 ```js
-import {updateIntlFieldsForDocument} from '@sanity/document-internationalization/lib/utils'
+import {updateIntlFieldsForDocument} from '@sanity/document-internationalization'
 
 export const CustomPublishAction = ({id, type, onComplete}) => {
   const {publish} = useDocumentOperation(id, type)
@@ -31,44 +31,64 @@ It is also possible to import all actions "as-is" from the package to add to you
 Example:
 
 ```js
+import { documentI18n } from "@sanity/document-internationalization";
 import {
   PublishWithi18nAction,
   DeleteWithi18nAction,
   DuplicateWithi18nAction,
-} from '@sanity/document-internationalization/lib/actions'
-import defaultResolve from 'part:@sanity/base/document-actions'
+} from '@sanity/document-internationalization'
 
-// @README https://www.sanity.io/docs/document-actions
-export default function resolveDocumentActions(props) {
-  return [
-    ...defaultResolve(props),
-    PublishWithi18nAction,
-    DeleteWithi18nAction,
-    DuplicateWithi18nAction,
-  ]
-}
+
+export default createConfig({
+  // ...
+  plugins: [
+    documentI18n({ /* ... */}),
+  ],
+
+  document: {
+    actions: (prev, context) => {
+      return [
+        ...prev,
+        PublishWithi18nAction,
+        DeleteWithi18nAction,
+        DuplicateWithi18nAction,
+      ]
+    }
+  },
+})
 ```
 
-If you do not have a custom publish action defined and want to use the publish action from this plugin, you should replace the default publish action from Sanity core with the imported `PublishWithi18nAction` from this plugin. Doing so will replace the default publish action on the "publish" button in the Sanity studio.
+If you do not have a custom publish action defined and want to use the publish action from this plugin,
+you should replace the default publish action from Sanity core with the imported `PublishWithi18nAction` from this plugin.
+Doing so will replace the default publish action on the "publish" button in the Sanity studio.
 
 Example:
 
 ```js
+import { documentI18n } from "@sanity/document-internationalization";
 import {
   PublishWithi18nAction,
   DeleteWithi18nAction,
   DuplicateWithi18nAction,
-} from '@sanity/document-internationalization/lib/actions'
-import defaultResolve, { PublishAction } from 'part:@sanity/base/document-actions'
+} from '@sanity/document-internationalization'
 
-// @README https://www.sanity.io/docs/document-actions
-export default function resolveDocumentActions(props) {
-  return [
-    ...defaultResolve(props).map((Action) =>
-      Action === PublishAction ? PublishWithi18nAction : Action,
-    ),
-    DeleteWithi18nAction,
-    DuplicateWithi18nAction,
-  ]
-}
+
+export default createConfig({
+  // ...
+  plugins: [
+    documentI18n({ /* ... */}),
+  ],
+
+  document: {
+    actions: (prev, context) => {
+      return [
+        ...defaultResolve(props).map((Action) =>
+          Action.name === 'publish' ? PublishWithi18nAction : Action
+        ),
+        DeleteWithi18nAction,
+        DuplicateWithi18nAction,
+      ]
+    }
+  },
+})
 ```

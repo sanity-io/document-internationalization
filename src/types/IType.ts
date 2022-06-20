@@ -1,5 +1,5 @@
 import {TLanguagesOption} from './TLanguagesOption'
-import {ObjectSchemaTypeWithOptions} from '@sanity/types'
+import {ObjectSchemaTypeWithOptions} from 'sanity'
 export interface IField {
   name: string
   type: IType

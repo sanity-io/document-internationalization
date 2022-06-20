@@ -4,11 +4,13 @@
 
 ![Translation Maintenance](./img/maintenance-tab.png)
 
-The translation maintenance tab can be used to clean up and manage your Sanity data. This feature is disabled by default but can be enabled in the `document-internalization.json` file by setting the `withTranslationsMaintenance` key to `true`
-```json
-{
-  "withTranslationsMaintenance": true
-}
+The translation maintenance tab can be used to clean up and manage your Sanity data. 
+This feature is disabled by default but can be enabled by passing `withTranslationsMaintenance` key to `true` in plugin config.
+```js
+documentI18n({
+  base: 'en_US', // base should be explicitly, it will be used as a fallback for document types without base lang set
+  withTranslationsMaintenance: true
+})
 ```
 
 When enabled, it can help you out when you need to adjust data in bulk after changing the i18n configuration or simply when something went wrong. It can help with the following operations:

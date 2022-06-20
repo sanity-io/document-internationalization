@@ -1,39 +1,27 @@
 {
-    "compilerOptions": {
-      "module": "esnext",
-      "noImplicitAny": false,
-      "removeComments": true,
-      "noLib": false,
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "outDir": "./lib",
-      "declarationDir": "./lib",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "allowSyntheticDefaultImports": true,
-      "moduleResolution": "node",
-      "strictNullChecks": true,
-      "allowJs": true,
-      "target": "es2015",
-      "jsx": "react",
-      "rootDir": "./src",
-      "skipLibCheck": true,
-      "lib": [
-        "es2017.object",
-        "es2017",
-        "es2016",
-        "es2015",
-        "dom"
-      ]
-    },
-    "include": [
-      "./styled.d.ts",
-      "./src/.d.ts",
-      "./src/**/*.ts",
-      "./src/**/*.tsx"
-    ],
-    "exclude": [
-      "./node_modules"
-    ]
-  }
-  
+  "compilerOptions": {
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "strict": true,
+    "sourceMap": false,
+    "inlineSourceMap": false,
+    "downlevelIteration": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "outDir": "lib",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "checkJs": false,
+    "lib": ["es2017.object", "es2017", "es2016", "es2015", "dom"]
+  },
+  "include": ["./styled.d.ts",  "./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./node_modules"]
+}

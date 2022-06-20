@@ -16,3 +16,44 @@ S.listItem()
       .canHandleIntent(S.documentTypeList('lesson').getCanHandleIntent())
   )
 ```
+
+## getFilteredDocumentTypeListItems
+
+As a convenience for the above, `getFilteredDocumentTypeListItems` exists.
+It filters all default document lists down to base languages
+
+
+(S, {schema)
+
+```js
+import { documentI18n } from "@sanity/document-internationalization";
+import {
+  PublishWithi18nAction,
+  DeleteWithi18nAction,
+  DuplicateWithi18nAction,
+} from '@sanity/document-internationalization'
+
+export default createConfig({
+  // ...
+  plugins: [
+    documentI18n({ /* ... */}),
+    deskTool({
+      structure: (S, {schema, client}) => {
+        const docTypeListItems = getFilteredDocumentTypeListItems({
+          S,
+          schema,
+          config: i18nConfig,
+        });
+
+        return S.list()
+          .title("Content")
+          .items([
+            //anything else
+            ...docTypeListItems,
+            //anything else
+           ])
+      },
+    }),
+  ],
+})
+```

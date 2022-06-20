@@ -1,4 +1,4 @@
-import {Path, isKeyedObject} from '@sanity/types'
+import {Path, isKeyedObject} from 'sanity'
 
 export function serializePath(path: Path): string {
   return path.reduce<string>((target, part, i) => {

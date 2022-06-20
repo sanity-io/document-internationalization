@@ -1,25 +1,26 @@
-import React from 'react'
-import schemas from 'part:@sanity/base/schema'
-import {Ti18nSchema} from '../../../types'
-import {Autocomplete, Stack, Text, Card} from '@sanity/ui'
+import React, {forwardRef, Ref, useMemo} from 'react'
+import {Autocomplete, Card, Stack, Text} from '@sanity/ui'
 import {EarthGlobeIcon} from '@sanity/icons'
-import Preview from 'part:@sanity/base/preview'
+import {DefaultPreview as Preview} from 'sanity/_unstable'
+import {useSchema} from 'sanity'
+import {Ti18nSchema} from '../../../types'
 import {UiMessages} from '../../../constants'
 
+type PreviewMedia = React.ComponentProps<typeof Preview>['media']
 type Props = {
   value: string
   onChange: (value: string) => void
   onOpen: () => void
 }
 
-export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
-  value,
-  onChange,
-  onOpen,
-}) => {
-  const i18nSchemas = React.useMemo(
-    () => schemas._original.types.filter((s) => !!s.i18n) as Ti18nSchema[],
-    []
+export const MaintenanceTabTypeSelector = forwardRef(function MaintenanceTabTypeSelector(
+  {value, onChange, onOpen}: Props,
+  ref: Ref<HTMLInputElement>
+) {
+  const schema = useSchema()
+  const i18nSchemas = useMemo(
+    () => schema._original?.types.filter((s: unknown) => !!(s as Ti18nSchema).i18n),
+    [schema]
   )
 
   return (
@@ -27,10 +28,11 @@ export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
       <Text>{UiMessages.translationsMaintenance.selectSchemaPlaceholder}</Text>
       <Card>
         <Autocomplete
+          ref={ref}
           fontSize={[2, 2, 3]}
           icon={EarthGlobeIcon}
           id="i18n-schema-selector"
-          options={i18nSchemas.map((option) => ({
+          options={i18nSchemas?.map((option) => ({
             value: option.name,
             payload: option,
           }))}
@@ -42,9 +44,9 @@ export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
           renderOption={({payload}) => (
             <Card padding={2} radius={2} as="button">
               <Preview
-                style={{userSelect: `none`}}
-                type={payload}
-                value={{title: payload.title, media: payload.icon}}
+                layout="default"
+                title={payload.title}
+                media={payload.icon as PreviewMedia}
               />
             </Card>
           )}
@@ -52,4 +54,4 @@ export const MaintenanceTabTypeSelector: React.FunctionComponent<Props> = ({
       </Card>
     </Stack>
   )
-}
+})

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {PropsWithChildren} from 'react'
 import {Box, Text} from '@sanity/ui'
 
-export const LanguageSelectLabel: React.FC = ({children}) => {
+export function LanguageSelectLabel({children}: PropsWithChildren<Record<never, never>>) {
   return (
     <Box padding={2}>
       <Text muted size={1}>

@@ -1,18 +1,20 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import omit from 'just-omit'
 import {hues} from '@sanity/color'
 import {Text, Button, Badge, Flex, useToast, MenuItem, Box} from '@sanity/ui'
 import {AddIcon, SpinnerIcon} from '@sanity/icons'
 import styled, {css, keyframes} from 'styled-components'
-import {usePaneRouter} from '@sanity/desk-tool'
-import {RouterContext} from '@sanity/state-router/lib/RouterContext'
-import {useEditState} from '@sanity/react-hooks'
+import {useEditState} from 'sanity'
+import {usePaneRouter} from 'sanity/desk'
+import {RouterContext} from 'sanity/_unstable'
+import {useConfig} from '../../../hooks'
 import {SingleFlag} from '../SingleFlag'
 import type {IExtendedLanguageObject} from '../../../types'
 import {UiMessages} from '../../../constants'
-import {buildDocId, getBaseIdFromId, getConfig, getSanityClient} from '../../../utils'
+import {buildDocId, getBaseIdFromId, useSanityClient} from '../../../utils'
 import {SplitPaneIcon} from '../SplitPaneIcon'
 import {LanguageSelectContext} from './LanguageSelectContext'
+import {LanguageConfigContext} from './LanguageConfigContext'
 
 type Props = {
   status: 'draft' | 'published' | 'missing'
@@ -62,6 +64,8 @@ const MenuItemSelectedButton = styled.button`
 
 export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
   const toast = useToast()
+  const pluginConfig = useContext(LanguageConfigContext)
+  const client = useSanityClient()
   const {currentDocumentId, currentDocumentType, baseLanguage} =
     React.useContext(LanguageSelectContext)
 
@@ -69,16 +73,17 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
     throw new Error('No document in view')
   }
 
+  const config = useConfig(pluginConfig, currentDocumentType)
   const routerContext = React.useContext(RouterContext)
   const {routerPanesState, groupIndex, replaceCurrent} = usePaneRouter()
   const [pending, setPending] = React.useState(false)
-  const config = React.useMemo(() => getConfig(currentDocumentType), [currentDocumentType])
+
   const baseId = React.useMemo(() => getBaseIdFromId(currentDocumentId), [currentDocumentId])
   const flagCode = React.useMemo(() => language.id.split(/[_-]/).pop(), [language.id])
 
   const translatedId = React.useMemo(
-    () => (language.id === baseLanguage?.id ? baseId : buildDocId(baseId, language.id)),
-    [baseId, language.id, baseLanguage]
+    () => (language.id === baseLanguage?.id ? baseId : buildDocId(config, baseId, language.id)),
+    [config, baseId, language.id, baseLanguage]
   )
   const baseDocumentEditState = useEditState(baseId, currentDocumentType)
   const baseTranslationBadgeLabel = React.useMemo(() => {
@@ -103,6 +108,9 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
 
   const openDocumentInSidePane = React.useCallback(
     (id: string, type: string) => {
+      if (!routerContext) {
+        return
+      }
       const panes = [...routerPanesState]
       panes.splice(groupIndex + 1, 0, [
         {
@@ -112,7 +120,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       ])
 
       const href = routerContext.resolvePathFromState({panes})
-      routerContext.navigateUrl(href)
+      routerContext.navigateUrl({path: href})
     },
     [routerContext, routerPanesState, groupIndex]
   )
@@ -124,7 +132,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       const langFieldName = config.fieldNames.lang
       const referencesFieldName = config.fieldNames.references
       const baseFieldName = config.fieldNames.baseReference
-      await getSanityClient().createIfNotExists({
+      await client.createIfNotExists({
         _id: `drafts.${translatedId}`,
         _type: currentDocumentType,
 
@@ -157,7 +165,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       toast.push({
         closable: true,
         status: 'error',
-        title: err.toString(),
+        title: (err as Error).toString(),
       })
     } finally {
       setPending(false)
@@ -175,6 +183,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
     toast,
     baseLanguage,
     openDocumentInCurrentPane,
+    client,
   ])
 
   const handleOpenClick = React.useCallback(() => {

@@ -10,7 +10,7 @@ module.exports = {
     browser: true,
   },
   settings: {
-    react: {version: '16.9.0'},
+    react: {version: '17'},
   },
   extends: [
     'sanity',

@@ -1,26 +1,33 @@
 import {SanityDocument} from '@sanity/client'
-import {useEditState} from '@sanity/react-hooks'
-import shouldReloadFn from 'part:@sanity/document-internationalization/languages/should-reload?'
-import {useCallback, useEffect, useMemo, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
+import {useEditState} from 'sanity'
 import {ILanguageObject} from '../../types'
-import {getConfig, getLanguagesFromOption} from '../../utils'
+import {getLanguagesFromOption, useSanityClient, ApplyConfigResult} from '../../utils'
 
-export function useLanguages(document: SanityDocument): [boolean, ILanguageObject[]] {
-  const config = useMemo(() => getConfig(document._type), [document._type])
+export function useLanguages(
+  config: ApplyConfigResult,
+  document: SanityDocument
+): [boolean, ILanguageObject[]] {
+  const client = useSanityClient()
   const {draft, published} = useEditState(document._id.replace(/^drafts\./, ''), document._type)
   const [pending, setPending] = useState(false)
   const [languages, setLanguages] = useState<ILanguageObject[]>([])
 
   const loadOrReloadLanguages = useCallback(async () => {
     const shouldReload =
-      languages.length === 0 || (shouldReloadFn && shouldReloadFn(draft ?? published))
+      languages.length === 0 || (config.shouldReload && config.shouldReload(draft ?? published))
     if (shouldReload) {
       setPending(true)
-      const languageObjects = await getLanguagesFromOption(config.languages, draft ?? published)
+      const languageObjects = await getLanguagesFromOption(
+        client,
+        config,
+        config.languages,
+        draft ?? published
+      )
       setLanguages(languageObjects)
       setPending(false)
     }
-  }, [draft, published, config, languages])
+  }, [client, config, draft, published, languages])
 
   useEffect(() => {
     loadOrReloadLanguages()

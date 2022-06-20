@@ -1,16 +1,74 @@
-# Configuration options
+# Enabling and configuring the plugin
 
-To configure the plugin you can customize the config file called `document-internationalization.json` in your studio's `config/@sanity` folder. When you installed the plugin, a default one should have been created.
+To enable the plugin you will be modifying your `sanity.config.ts` (or `sanity.config.js` file).
+We will assume the following starting scenario:
+```js
+import {deskTool} from 'sanity/desk'
 
-At a minimum the file must exist and can be an empty object
-
-`./config/@sanity/document-internationalization.json`
-
-```json
-{}
+export default createConfig({
+  plugins: [deskTool()]
+})
 ```
 
-This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. These defaults can be overridden on each schema.
+## The automatic way
+The simplest way to enable and configure the plugin is to use the exported `withDocumentI18nPlugin` method.
+This function wraps your `plugins` array and will automatically add the i18n plugin as well as the desk tool plugin (assuming you don't need any custom desk structure options)
+
+Your configuration file will look something like this:
+
+```js
+import { withDocumentI18nPlugin } from '@sanity/document-internationalization'
+
+export default createConfig({
+  // ...
+  plugins: withDocumentI18nPlugin([
+    // ... other plugins
+  ], {
+    // .. your i18n config
+  })
+})
+```
+
+## The manual way
+If you need to customize your desk structure you will need to manually configure the `deskTool` plugin.
+This is still done with the `withDocumentI18nPlugin` function but you will pass a function as the first argument as opposed to the plugins array itself and you will also need to disable the automatic inclusion of the desk tool plugin.
+The function will receive the i18n config as it's first argument, this is to make sure you won't need to duplicate your config.
+Lastly to configure the desk tool you can use the `getDocumentList` function.
+If you need even more control, you can refer to the more advanced [desk structure documentation](./desk-structure.md)
+
+```js
+import {deskTool} from 'sanity/desk'
+import {withDocumentI18nPlugin, getDocumentList} from '@sanity/document-internationalization'
+
+export default createConfig({
+  // ...
+  plugins: withDocumentI18nPlugin((pluginConfig) => ([
+    // ... other plugins
+    deskTool({
+      structure: (S, {schema}) => getDocumentList({S, schema, config: pluginConfig}),
+    })
+  ]), {
+    includeDeskTool: false,
+    // .. your i18n config
+  })
+})
+
+export default createConfig({
+  // ...
+  plugins: [
+    documentI18n(
+      {
+        // .. config goes here
+      }
+    ),
+  ] 
+})
+```
+
+This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. 
+These defaults can be overridden on each schema.
+
+## Configuration options
 
 ### `base`
 
@@ -80,26 +138,33 @@ This option configures the field names used by the plugin
 
 ## Complete example
 
-```json
-{
-  "base": "en-us",
-  "languages": [
-    {
-      "title": "English (US)",
-      "id": "en-us"
-    },
-    {
-      "title": "Dutch (NL)",
-      "id": "nl-nl"
-    }
-  ],
-  "idStructure": "delimiter",
-  "referenceBehavior": "strong",
-  "withTranslationsMaintenance": false,
-  "fieldNames": {
-    "lang": "__i18n_lang",
-    "references": "__i18n_refs",
-    "baseReference": "__i18n_base"
-  }
-}
+```js
+import { documentI18n } from "@sanity/document-internationalization";
+
+export default createConfig({
+  // ...
+  plugins: [
+    documentI18n({
+      "base": "en-us",
+      "languages": [
+        {
+          "title": "English (US)",
+          "id": "en-us"
+        },
+        {
+          "title": "Dutch (NL)",
+          "id": "nl-nl"
+        }
+      ],
+      "idStructure": "delimiter",
+      "referenceBehavior": "strong",
+      "withTranslationsMaintenance": false,
+      "fieldNames": {
+        "lang": "__i18n_lang",
+        "references": "__i18n_refs",
+        "baseReference": "__i18n_base"
+      }
+    })
+  ]
+})
 ```

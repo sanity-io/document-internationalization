@@ -4,7 +4,7 @@
 If you are using document level translations you will notice some difference in the new plugin. In order to make the transition as smooth as possible here is a list of what's changed and what you need to do
 
 ### 1. The config filename has changed
-You should rename your `intl-input.json` config file to `document-internationalization.json`.
+You should move your `intl-input.json` config over to the js-plugin format.
 
 ### 2. Delimiter based IDs are now the default again
 After consideration with the team, we have decided to make `delimiter` based IDs the default structure again. `subpath` based IDs will still be supported but are now opt-in only. If you are using subpaths you have 2 options:
@@ -29,7 +29,8 @@ The "name" field is now called "id". The old field will still be supported but y
 You will need to update your config to reflect this change.
 
 ### 5. Studio parts have been renamed
-If you had implemented any of the previous plugin's studio parts you will need to rename the implementations.
+If you had implemented any of the previous plugin's studio parts you will provide them as js config to the plugin;
+`languagesLoader`, `shouldReload` and `customFlagComponents` respectivly.
 ```diff
 [
   {
