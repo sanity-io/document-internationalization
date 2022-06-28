@@ -1,4 +1,4 @@
-export {IdStructure} from './constants'
+export * from './constants'
 export * from './actions'
 export * from './structure'
 export * from './validators'
