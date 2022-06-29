@@ -124,6 +124,8 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       const langFieldName = config.fieldNames.lang
       const referencesFieldName = config.fieldNames.references
       const baseFieldName = config.fieldNames.baseReference
+      const referenceBehavior = config.referenceBehavior
+
       await getSanityClient().createIfNotExists({
         _id: `drafts.${translatedId}`,
         _type: currentDocumentType,
@@ -140,6 +142,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
               [baseFieldName]: {
                 _type: 'reference',
                 _ref: baseDocument._id.replace(`drafts.*`, ``),
+                _weak: referenceBehavior === 'weak'
               },
             }
           : {}),
