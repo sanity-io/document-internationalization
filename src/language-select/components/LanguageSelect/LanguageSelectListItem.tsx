@@ -142,7 +142,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
               [baseFieldName]: {
                 _type: 'reference',
                 _ref: baseDocument._id.replace(`drafts.*`, ``),
-                _weak: referenceBehavior === 'weak'
+                _weak: referenceBehavior === 'weak',
               },
             }
           : {}),
