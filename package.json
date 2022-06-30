@@ -1,6 +1,6 @@
 {
   "name": "@sanity/document-internationalization",
-  "version": "1.0.0-v3-studio.5",
+  "version": "1.0.0-v3-studio.6",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
