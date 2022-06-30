@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.3.3
+* Fixes [#59](https://github.com/sanity-io/document-internationalization/issues/59) - Missing `_weak` field in base reference
+
 ## v0.1.7
 * For base I18n documents the default "Delete" action will now be replaced with the Delete (incl. translations)" action. The default "Delete" action does not make sense for base documents in any scenario as it results in broken references.
 
