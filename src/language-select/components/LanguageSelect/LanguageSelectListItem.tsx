@@ -10,7 +10,7 @@ import {RouterContext} from 'sanity/_unstable'
 import {useConfig} from '../../../hooks'
 import {SingleFlag} from '../SingleFlag'
 import type {IExtendedLanguageObject} from '../../../types'
-import {UiMessages} from '../../../constants'
+import {ReferenceBehavior, UiMessages} from '../../../constants'
 import {buildDocId, getBaseIdFromId, useSanityClient} from '../../../utils'
 import {SplitPaneIcon} from '../SplitPaneIcon'
 import {LanguageSelectContext} from './LanguageSelectContext'
@@ -132,6 +132,7 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       const langFieldName = config.fieldNames.lang
       const referencesFieldName = config.fieldNames.references
       const baseFieldName = config.fieldNames.baseReference
+      const referenceBehavior = config.referenceBehavior
       await client.createIfNotExists({
         _id: `drafts.${translatedId}`,
         _type: currentDocumentType,
@@ -143,11 +144,12 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
         [langFieldName]: language.id,
 
         // Set base language reference
-        ...(baseDocument?._id
+        ...(baseDocument?._id && referenceBehavior !== ReferenceBehavior.DISABLED
           ? {
               [baseFieldName]: {
                 _type: 'reference',
                 _ref: baseDocument._id.replace(`drafts.*`, ``),
+                _weak: referenceBehavior === ReferenceBehavior.WEAK,
               },
             }
           : {}),
@@ -171,11 +173,8 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
       setPending(false)
     }
   }, [
-    baseDocumentEditState.draft,
-    baseDocumentEditState.published,
-    config.fieldNames.lang,
-    config.fieldNames.references,
-    config.fieldNames.baseReference,
+    config,
+    baseDocumentEditState,
     translatedId,
     currentDocumentType,
     language.id,
