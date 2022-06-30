@@ -1,5 +1,11 @@
 # Document Internationalization Plugin for Sanity.io
 
+> **NOTE**
+>
+> This is the **Sanity Studio V2 version** of Document Internationalization Plugin.
+>
+> For the V3 version, please refer to the [v3-branch](https://github.com/sanity-io/document-internationalization/tree/v3).
+
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
 ![Document Level Internationalization UI](docs/img/document-level-translation.gif)

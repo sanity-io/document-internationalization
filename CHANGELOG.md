@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v0.3.4
+* Updated docs regarding V3 studio
+
 ## v0.3.3
 * Fixes [#59](https://github.com/sanity-io/document-internationalization/issues/59) - Missing `_weak` field in base reference
 
