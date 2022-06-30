@@ -2,9 +2,9 @@
 
 > **NOTE**
 >
-> This is the **Sanity Studio v3 version** of sanity-plugin-latex-input.
+> This is the **Sanity Studio v3 version** of Document Internationalization Plugin.
 >
-> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/latex-input).
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization).
 
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
