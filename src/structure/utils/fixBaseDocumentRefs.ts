@@ -5,6 +5,7 @@ import {createSanityReference, getBaseIdFromId, getConfig, getSanityClient} from
 export const fixBaseDocumentRefs = async (schema: string, translatedDocuments: Ti18nDocument[]) => {
   const config = getConfig(schema)
   const sanityClient = getSanityClient()
+
   if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
     const baseRefFieldName = config.fieldNames.baseReference
     const transaction = sanityClient.transaction()
