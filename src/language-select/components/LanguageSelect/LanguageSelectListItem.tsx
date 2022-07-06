@@ -148,8 +148,16 @@ export const LanguageSelectListItem: React.FC<Props> = ({status, language}) => {
           ? {
               [baseFieldName]: {
                 _type: 'reference',
-                _ref: baseDocument._id.replace(`drafts.*`, ``),
-                _weak: referenceBehavior === ReferenceBehavior.WEAK,
+                _ref: baseDocument._id.replace(`drafts.`, ``),
+                _weak: true,
+                _strengthenOnPublish: {
+                  type: currentDocumentType,
+                  weak: referenceBehavior === 'weak',
+                  template: {
+                    id: currentDocumentType,
+                    params: undefined,
+                  },
+                },
               },
             }
           : {}),
