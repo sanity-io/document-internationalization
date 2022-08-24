@@ -4,11 +4,11 @@ import {ITranslationRef} from '../types'
 import {ReferenceBehavior} from '../constants'
 import {ApplyConfigResult} from '../utils'
 import {getLanguagesFromOption} from './getLanguagesFromOption'
-import {getLanguageFromId} from './getLanguageFromId'
 import {getBaseLanguage} from './getBaseLanguage'
 import {getTranslationsFor} from './getTranslationsForId'
 import {getBaseIdFromId} from './getBaseIdFromId'
 import {createSanityReference} from './createSanityReference'
+import {getLanguageFromDocument} from './getLanguageFromDocument'
 
 // @TODO make this into a hook so the hook
 // can look up the existance of a base document on its own
@@ -25,7 +25,8 @@ export async function updateIntlFieldsForDocument(
   const refsFieldName = config.fieldNames.references
   const baseRefFieldName = config.fieldNames.baseReference
   const langs = await getLanguagesFromOption(client, config, config.languages, document)
-  const languageId = getLanguageFromId(id) || getBaseLanguage(langs, config.base)?.id
+  const languageId =
+    getLanguageFromDocument(document, config) || getBaseLanguage(langs, config.base)?.id
 
   // Update I18n field for current document
   const currentDocumentTransaction = client.transaction()
@@ -54,7 +55,7 @@ export async function updateIntlFieldsForDocument(
       if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
         translatedRefs = compact(
           translatedDocuments.map((doc) => {
-            const lang = getLanguageFromId(doc._id)
+            const lang = getLanguageFromDocument(doc, config)
             if (!lang) return null
             return {
               _key: lang,

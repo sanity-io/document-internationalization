@@ -5,7 +5,7 @@ import type {SchemaType, SanityDocument} from 'sanity'
 import {ChevronDownIcon} from '@sanity/icons'
 import {useConfig} from '../../../hooks'
 import {SingleFlag} from '../SingleFlag'
-import {buildDocId, getBaseIdFromId, getBaseLanguage, getLanguageFromId} from '../../../utils'
+import {buildDocId, getBaseIdFromId, getBaseLanguage, getLanguageFromDocument} from '../../../utils'
 import {useLanguages} from '../../hooks'
 import {UiMessages} from '../../../constants'
 import {IExtendedLanguageObject} from '../../../types'
@@ -36,8 +36,8 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
   )
 
   const currentLanguageCode = React.useMemo(
-    () => getLanguageFromId(document._id) || (baseLanguage ? baseLanguage.id : null),
-    [document._id, baseLanguage]
+    () => getLanguageFromDocument(document, config) || (baseLanguage ? baseLanguage.id : null),
+    [document, baseLanguage, config]
   )
   const currentLanguageObject = React.useMemo(
     () => languages.find((lang) => lang.id === currentLanguageCode),

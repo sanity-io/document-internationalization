@@ -1,18 +1,16 @@
 import {DocumentBadgeComponent} from 'sanity/desk'
 import {useConfig} from '../hooks'
-import {getLanguageFromId} from '../utils'
+import {getLanguageFromDocument} from '../utils'
 import {Ti18nConfig} from '../types'
 
 export function createLanguageBadge(pluginConfig: Ti18nConfig): DocumentBadgeComponent {
   const LanguageBadge: DocumentBadgeComponent = (props) => {
     const config = useConfig(pluginConfig, props.type)
     const doc = props.draft || props.published
-    const idLang = getLanguageFromId(props.id)
-    const fieldName = config.fieldNames.lang
-    const label = (doc && (doc[fieldName] as string)) || idLang
-    if (label) {
+    const lang = doc ? getLanguageFromDocument(doc, config) : null
+    if (lang) {
       return {
-        label: label,
+        label: lang,
         color: 'success',
       }
     }

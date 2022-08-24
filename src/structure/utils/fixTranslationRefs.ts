@@ -7,7 +7,7 @@ import {
   batch,
   createSanityReference,
   getBaseIdFromId,
-  getLanguageFromId,
+  getLanguageFromDocument,
 } from '../../utils'
 
 export const fixTranslationRefs = (
@@ -28,7 +28,7 @@ export const fixTranslationRefs = (
       if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
         translatedRefs = compact(
           relevantTranslations.map((doc) => {
-            const lang = getLanguageFromId(doc._id)
+            const lang = getLanguageFromDocument(doc, config)
             if (!lang) return null
             return {
               _key: lang,

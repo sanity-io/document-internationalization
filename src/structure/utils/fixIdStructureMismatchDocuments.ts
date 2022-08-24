@@ -7,7 +7,7 @@ import {
   buildDocId,
   createSanityReference,
   getBaseIdFromId,
-  getLanguageFromId,
+  getLanguageFromDocument,
 } from '../../utils'
 
 export const fixIdStructureMismatchDocuments = async (
@@ -37,7 +37,7 @@ export const fixIdStructureMismatchDocuments = async (
       const transaction = sanityClient.transaction()
       documentsChunk.forEach((d) => {
         const baseId = getBaseIdFromId(d._id)
-        const lang = getLanguageFromId(d._id)
+        const lang = getLanguageFromDocument(d, config)
         if (lang) {
           const newId = buildDocId(config, baseId, lang)
           transaction.createIfNotExists({
