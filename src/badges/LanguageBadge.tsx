@@ -1,14 +1,13 @@
 import {IResolverProps} from '../types'
-import {getLanguageFromId, getSchema, getConfig} from '../utils'
+import {getConfig, getLanguageFromDocument} from '../utils'
 
 export const LanguageBadge = (props: IResolverProps) => {
   const config = getConfig(props.type)
   const doc = props.draft || props.published
-  const idLang = getLanguageFromId(props.id)
-  const fieldName = config.fieldNames.lang
-  if ((doc && doc[fieldName]) || idLang) {
+  const lang = doc ? getLanguageFromDocument(doc, config) : null
+  if (lang) {
     return {
-      label: (doc && doc[fieldName]) || idLang,
+      label: lang,
       color: 'success',
     }
   }

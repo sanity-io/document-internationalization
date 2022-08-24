@@ -6,14 +6,14 @@ import {
   createSanityReference,
   getBaseIdFromId,
   getConfig,
-  getLanguageFromId,
+  getLanguageFromDocument,
   getSanityClient,
 } from '../../utils'
 
 export const fixIdStructureMismatchDocuments = async (
   schema: string,
   documents: Ti18nDocument[]
-) => {
+): Promise<void> => {
   const config = getConfig()
   const sanityClient = getSanityClient()
   const refsFieldName = config.fieldNames.references
@@ -37,7 +37,7 @@ export const fixIdStructureMismatchDocuments = async (
       const transaction = sanityClient.transaction()
       documentsChunk.forEach((d) => {
         const baseId = getBaseIdFromId(d._id)
-        const lang = getLanguageFromId(d._id)
+        const lang = getLanguageFromDocument(d, config)
         if (lang) {
           const newId = buildDocId(baseId, lang)
           transaction.createIfNotExists({
