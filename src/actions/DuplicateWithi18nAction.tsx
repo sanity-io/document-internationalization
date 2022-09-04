@@ -4,7 +4,7 @@ import {useClient, useDocumentOperation} from 'sanity'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import type {DocumentActionComponent, DocumentActionDescription} from 'sanity/desk'
-import {buildDocId, getBaseIdFromId, getLanguageFromId, getTranslationsFor} from '../utils'
+import {buildDocId, getBaseIdFromId, getLanguageFromDocument, getTranslationsFor} from '../utils'
 import {IUseDocumentOperationResult, Ti18nConfig} from '../types'
 import {UiMessages} from '../constants'
 import {useConfig} from '../hooks'
@@ -39,7 +39,7 @@ export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentAction
         })
         translations.forEach((t) => {
           const isDraft = t._id.startsWith('drafts.')
-          const newId = buildDocId(config, dupeId, getLanguageFromId(t._id))
+          const newId = buildDocId(config, dupeId, getLanguageFromDocument(t, config))
           transaction.create({
             ...t,
             _id: isDraft ? `drafts.${newId}` : newId,

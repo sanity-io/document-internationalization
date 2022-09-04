@@ -16,6 +16,8 @@ export function fixLanguageFields(
       const base =
         (typeof schemaObject.i18n === 'object' ? schemaObject.i18n.base : undefined) || config.base
       if (!d[langFieldName]) {
+        // @README keep the language from ID behavior
+        // because in this case we expect the language field not to be available
         const language = getLanguageFromId(d._id) || base
         await sanityClient
           .patch(d._id, {
