@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.3.6
+* Updates the internal logic to derive the language from the given field name as opposed to the ID.
+
+## v0.3.5
+* Fix how translation draft references are created so that they can be deleted
+
 ## v0.3.4
 * Updated docs regarding V3 studio
 

@@ -9,7 +9,8 @@ import {
   getBaseIdFromId,
   getTranslationsFor,
   buildDocId,
-  getLanguageFromId,
+  getLanguageFromDocument,
+  getConfig,
 } from '../utils'
 import {IUseDocumentOperationResult} from '../types'
 import {UiMessages} from '../constants'
@@ -24,6 +25,7 @@ const DISABLED_REASON_TITLE = {
 
 export const DuplicateWithi18nAction: DocumentActionComponent = ({id, type, draft, published}) => {
   const toast = useToast()
+  const config = React.useMemo(() => getConfig(type), [type])
   const client = getSanityClient()
   const baseDocumentId = getBaseIdFromId(id)
   const {duplicate: duplicateOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult
@@ -42,7 +44,7 @@ export const DuplicateWithi18nAction: DocumentActionComponent = ({id, type, draf
       })
       translations.forEach((t) => {
         const isDraft = t._id.startsWith('drafts.')
-        const newId = buildDocId(dupeId, getLanguageFromId(t._id))
+        const newId = buildDocId(dupeId, getLanguageFromDocument(t, config))
         transaction.create({
           ...t,
           _id: isDraft ? `drafts.${newId}` : newId,
@@ -54,7 +56,7 @@ export const DuplicateWithi18nAction: DocumentActionComponent = ({id, type, draf
       toast.push(err.message)
     }
     setDuplicating(false)
-  }, [client, toast, baseDocumentId, type, draft, published])
+  }, [client, toast, config, baseDocumentId, type, draft, published])
 
   return {
     icon: ContentCopyIcon,

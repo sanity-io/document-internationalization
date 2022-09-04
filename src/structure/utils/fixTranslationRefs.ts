@@ -6,7 +6,7 @@ import {
   createSanityReference,
   getBaseIdFromId,
   getConfig,
-  getLanguageFromId,
+  getLanguageFromDocument,
   getSanityClient,
 } from '../../utils'
 
@@ -14,7 +14,7 @@ export const fixTranslationRefs = async (
   schema: string,
   baseDocuments: Ti18nDocument[],
   translatedDocuments: Ti18nDocument[]
-) => {
+): Promise<void> => {
   const sanityClient = getSanityClient()
   const config = getConfig(schema)
   const refsFieldName = config.fieldNames.references
@@ -28,7 +28,7 @@ export const fixTranslationRefs = async (
       if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
         translatedRefs = _.compact(
           relevantTranslations.map((doc) => {
-            const lang = getLanguageFromId(doc._id)
+            const lang = getLanguageFromDocument(doc, config)
             if (!lang) return null
             return {
               _key: lang,

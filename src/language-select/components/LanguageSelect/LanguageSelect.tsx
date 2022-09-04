@@ -10,7 +10,7 @@ import {
   getBaseIdFromId,
   getBaseLanguage,
   getConfig,
-  getLanguageFromId,
+  getLanguageFromDocument,
 } from '../../../utils'
 import {useLanguages} from '../../hooks'
 import {UiMessages} from '../../../constants'
@@ -39,8 +39,8 @@ export const LanguageSelect: React.FC<Props> = ({schemaType, document}) => {
     [languages, config.base]
   )
   const currentLanguageCode = React.useMemo(
-    () => getLanguageFromId(document._id) || (baseLanguage ? baseLanguage.id : null),
-    [document._id, baseLanguage]
+    () => getLanguageFromDocument(document, config) || (baseLanguage ? baseLanguage.id : null),
+    [document, baseLanguage, config]
   )
   const currentLanguageObject = React.useMemo(
     () => languages.find((lang) => lang.id === currentLanguageCode),
