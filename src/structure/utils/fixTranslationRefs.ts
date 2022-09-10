@@ -1,6 +1,7 @@
+import type {SanityDocument} from '@sanity/client'
 import _ from 'lodash'
 import {ReferenceBehavior} from '../../constants'
-import {ITranslationRef, Ti18nDocument} from '../../types'
+import {ITranslationRef} from '../../types'
 import {
   batch,
   createSanityReference,
@@ -12,8 +13,8 @@ import {
 
 export const fixTranslationRefs = async (
   schema: string,
-  baseDocuments: Ti18nDocument[],
-  translatedDocuments: Ti18nDocument[]
+  baseDocuments: SanityDocument[],
+  translatedDocuments: SanityDocument[]
 ): Promise<void> => {
   const sanityClient = getSanityClient()
   const config = getConfig(schema)

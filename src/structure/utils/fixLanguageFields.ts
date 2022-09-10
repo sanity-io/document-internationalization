@@ -1,7 +1,11 @@
-import {Ti18nDocument, Ti18nSchema} from '../../types'
+import type {SanityDocument} from '@sanity/client'
+import {Ti18nSchema} from '../../types'
 import {getConfig, getLanguageFromId, getSanityClient, getSchema} from '../../utils'
 
-export const fixLanguageFields = async (schema: string, documents: Ti18nDocument[]) => {
+export const fixLanguageFields = async (
+  schema: string,
+  documents: SanityDocument[]
+): Promise<void> => {
   const sanityClient = getSanityClient()
   const config = getConfig(schema)
   const langFieldName = config.fieldNames?.lang

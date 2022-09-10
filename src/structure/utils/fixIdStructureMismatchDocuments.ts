@@ -1,6 +1,6 @@
+import type {SanityDocument} from '@sanity/client'
 import chunk from 'just-split'
 import {ReferenceBehavior} from '../../constants'
-import {Ti18nDocument} from '../../types'
 import {
   buildDocId,
   createSanityReference,
@@ -12,7 +12,7 @@ import {
 
 export const fixIdStructureMismatchDocuments = async (
   schema: string,
-  documents: Ti18nDocument[]
+  documents: SanityDocument[]
 ): Promise<void> => {
   const config = getConfig()
   const sanityClient = getSanityClient()
