@@ -1,10 +1,10 @@
+import chunk from 'lodash/chunk'
 import compact from 'lodash/compact'
-import {SanityClient} from '@sanity/client'
+import {SanityClient, Transaction, SanityDocument} from '@sanity/client'
+import type {Reference} from 'sanity'
 import {ReferenceBehavior} from '../../constants'
-import {ITranslationRef, Ti18nDocument} from '../../types'
 import {
   ApplyConfigResult,
-  batch,
   createSanityReference,
   getBaseIdFromId,
   getLanguageFromDocument,
@@ -13,15 +13,15 @@ import {
 export const fixTranslationRefs = (
   sanityClient: SanityClient,
   config: ApplyConfigResult,
-  baseDocuments: Ti18nDocument[],
-  translatedDocuments: Ti18nDocument[]
+  baseDocuments: SanityDocument[],
+  translatedDocuments: SanityDocument[]
   // eslint-disable-next-line max-params
-): Promise<void> => {
+): Transaction[] => {
   const refsFieldName = config.fieldNames.references
-  return batch(baseDocuments, async (chunk) => {
+  const transactions = chunk(baseDocuments, 50).map((documentsChunk) => {
     const transaction = sanityClient.transaction()
-    chunk.forEach((d) => {
-      let translatedRefs: ITranslationRef[] = []
+    documentsChunk.forEach((d) => {
+      let translatedRefs: Reference[] = []
       const relevantTranslations = translatedDocuments.filter(
         (dx) => getBaseIdFromId(dx._id) === d._id
       )
@@ -44,6 +44,7 @@ export const fixTranslationRefs = (
         set: {[refsFieldName]: translatedRefs},
       })
     })
-    await transaction.commit()
+    return transaction
   })
+  return transactions
 }

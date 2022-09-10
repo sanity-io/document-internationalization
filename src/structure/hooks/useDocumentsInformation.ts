@@ -36,16 +36,9 @@ export const useDocumentsInformation = (pluginConfig: Ti18nConfig, schema: strin
       setPending(true)
       const [langs, result] = await Promise.all([
         getLanguagesFromOption(client, config, config.languages),
-        client.fetch<Ti18nDocument[]>(
-          `*[_type == $type]{
-            _id,
-            _type,
-            ${config.fieldNames.lang},
-            ${config.fieldNames.references},
-            ${config.fieldNames.baseReference}
-          }`,
-          {type: selectedSchema}
-        ),
+        client.fetch<Ti18nDocument[]>(`*[_type == $type && !(_id in path('drafts.**'))]`, {
+          type: selectedSchema,
+        }),
       ])
       setLanguages(langs)
       setDocuments(result)
