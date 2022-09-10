@@ -38,13 +38,7 @@ export const useDocumentsInformation = (schema: string) => {
       const [langs, result] = await Promise.all([
         getLanguagesFromOption(config.languages),
         sanityClientRef.current.fetch<SanityDocument[]>(
-          `*[_type == $type && !(_id in path('drafts.**'))]{
-            _id,
-            _type,
-            ${config.fieldNames.lang},
-            ${config.fieldNames.references},
-            ${config.fieldNames.baseReference}
-          }`,
+          `*[_type == $type && !(_id in path('drafts.**'))]`,
           {type: selectedSchema}
         ),
       ])
