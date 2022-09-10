@@ -1,10 +1,10 @@
-import type {SanityDocument} from '@sanity/client'
+import type {SanityDocument, Transaction} from '@sanity/client'
 import {getBaseLanguage, getConfig, getLanguagesFromOption, getSanityClient} from '../../utils'
 
 export const fixBaseLanguageMismatch = async (
   schema: string,
   basedocuments: SanityDocument[]
-): Promise<void> => {
+): Promise<Transaction> => {
   const sanityClient = getSanityClient()
   const config = getConfig(schema)
   const languages = await getLanguagesFromOption(config.languages)
@@ -18,5 +18,5 @@ export const fixBaseLanguageMismatch = async (
       })
     }
   })
-  await transaction.commit()
+  return transaction
 }

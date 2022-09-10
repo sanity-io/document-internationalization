@@ -1,11 +1,11 @@
-import type {SanityDocument} from '@sanity/client'
+import type {SanityDocument, Transaction} from '@sanity/client'
 import type {Reference} from '@sanity/types'
 import {getConfig, getSanityClient} from '../../utils'
 
-export const fixOrphanedDocuments = async (
+export const fixOrphanedDocuments = (
   basedocuments: SanityDocument[],
   translatedDocuments: SanityDocument[]
-): Promise<void> => {
+): Transaction => {
   const sanityClient = getSanityClient()
   const transaction = sanityClient.transaction()
   translatedDocuments.forEach((d) => {
@@ -18,5 +18,5 @@ export const fixOrphanedDocuments = async (
     )
     if (!base) transaction.delete(d._id)
   })
-  await transaction.commit()
+  return transaction
 }

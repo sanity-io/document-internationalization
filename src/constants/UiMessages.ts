@@ -34,6 +34,13 @@ export const UiMessages = {
     referenceBehaviorMismatch: 'document(s) with mismatched reference behaviors',
     baseLanguageMismatch: 'base document(s) with mismatched language field',
     fix: 'Fix',
+    pendingTransactionDialog: {
+      header: 'Confirm pending transaction',
+      caution:
+        'Before continuing please review the transactions. Keep in mind, the translation maintenance functionality may remove or update many documents at once. It is recommended to back-up your dataset before performing data maintenance',
+      cancel: 'Cancel',
+      confirm: 'Confirm operation',
+    },
   },
   errors: {
     baseDocumentNotPublished:

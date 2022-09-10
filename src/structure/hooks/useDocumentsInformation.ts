@@ -52,7 +52,7 @@ export const useDocumentsInformation = (schema: string) => {
       setDocuments(result)
       setPending(false)
     },
-    [pending, config, documents, sanityClientRef.current]
+    [config]
   )
 
   const documentsSummaryInformation = React.useMemo(() => {

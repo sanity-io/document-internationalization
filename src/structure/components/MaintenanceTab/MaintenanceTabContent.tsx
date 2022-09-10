@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {useCallback, useState} from 'react'
+import {Stack, Box, Container, Dialog, Button, Flex, Grid, Text, Card, Code} from '@sanity/ui'
+import {Transaction} from '@sanity/client'
+import styled from 'styled-components'
 import {MaintenanceTabTypeSelector} from '../MaintenanceTabTypeSelector'
 import {useDocumentsInformation} from '../../hooks'
 import {MaintenanceTabResult} from '../MaintenanceTabResult'
@@ -10,7 +13,22 @@ import {
   fixOrphanedDocuments,
   fixTranslationRefs,
 } from '../../utils'
-import {Stack, Box, Container} from '@sanity/ui'
+import {UiMessages} from '../../../constants'
+
+const StyledCodeCard = styled(Card)`
+  grid-column-start: 1;
+  grid-row-start: 1;
+`
+
+const StyledCode = styled(Code)`
+  word-break: break-word;
+  white-space: break-spaces;
+`
+
+const StyledDownloadCodeFlex = styled(Flex)`
+  grid-column-start: 1;
+  grid-row-start: 1;
+`
 
 export const MaintenanceTabContent = () => {
   const [selectedSchema, setSelectedSchema] = React.useState('')
@@ -23,55 +41,85 @@ export const MaintenanceTabContent = () => {
     documentsSummaryInformation,
     fetchInformation,
   } = useDocumentsInformation(selectedSchema)
+  const [pendingTransactions, setPendingTransactions] = useState<Transaction[] | null>(null)
 
-  const onSchemaTypeChange = React.useCallback(
-    (schemaName: string) => setSelectedSchema(schemaName),
-    [selectedSchema]
-  )
+  const onSchemaTypeChange = useCallback((schemaName: string) => setSelectedSchema(schemaName), [])
 
-  const handleOpen = React.useCallback(() => setSelectedSchema(''), [selectedSchema])
+  const handleOpen = useCallback(() => setSelectedSchema(''), [])
 
-  const onFixIdStructureMismatchDocuments = React.useCallback(async () => {
-    setPending(true)
-    await fixIdStructureMismatchDocuments(selectedSchema, documents)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, documents, fetchInformation])
+  const handleFixIdStructureMismatchDocuments = useCallback(() => {
+    setPendingTransactions(fixIdStructureMismatchDocuments(selectedSchema, documents))
+  }, [selectedSchema, documents])
 
-  const onFixMissingLanguageFields = React.useCallback(async () => {
-    setPending(true)
-    await fixLanguageFields(selectedSchema, documents)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, documents, fetchInformation])
+  const handleFixMissingLanguageFields = useCallback(() => {
+    setPendingTransactions([fixLanguageFields(selectedSchema, documents)])
+  }, [selectedSchema, documents])
 
-  const onFixTranslationRefs = React.useCallback(async () => {
-    setPending(true)
-    await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
-
-  const onFixBaseDocumntRefs = React.useCallback(async () => {
-    setPending(true)
-    await fixBaseDocumentRefs(selectedSchema, translatedDocuments)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, translatedDocuments])
-
-  const onFixOrphanDocuments = React.useCallback(async () => {
-    setPending(true)
-    await fixOrphanedDocuments(baseDocuments, translatedDocuments)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, translatedDocuments, fetchInformation])
-
-  const onFixReferenceBehaviorMismatch = React.useCallback(async () => {
-    setPending(true)
-    await fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments)
-    await fetchInformation(selectedSchema)
+  const handleFixTranslationRefs = useCallback(() => {
+    setPendingTransactions(fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments))
   }, [selectedSchema, baseDocuments, translatedDocuments])
 
-  const onFixBaseLanguageMismatch = React.useCallback(async () => {
+  const handleFixBaseDocumntRefs = useCallback(() => {
+    setPendingTransactions([fixBaseDocumentRefs(selectedSchema, translatedDocuments)])
+  }, [selectedSchema, translatedDocuments])
+
+  const handleFixOrphanDocuments = useCallback(() => {
+    setPendingTransactions([fixOrphanedDocuments(baseDocuments, translatedDocuments)])
+  }, [baseDocuments, translatedDocuments])
+
+  const handleFixReferenceBehaviorMismatch = useCallback(() => {
+    setPendingTransactions(fixTranslationRefs(selectedSchema, baseDocuments, translatedDocuments))
+  }, [selectedSchema, baseDocuments, translatedDocuments])
+
+  const handleFixBaseLanguageMismatch = useCallback(async () => {
+    setPendingTransactions([await fixBaseLanguageMismatch(selectedSchema, baseDocuments)])
+  }, [selectedSchema, baseDocuments])
+
+  const handleDownloadCode = useCallback(() => {
+    if (pendingTransactions) {
+      const json = JSON.stringify(
+        pendingTransactions.map((transaction) => transaction.toJSON()),
+        null,
+        2
+      )
+      const blob = new Blob([json], {
+        type: 'application/json',
+      })
+
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'transactions.json'
+      a.style.display = 'none'
+      document.body.appendChild(a)
+      a.click()
+      URL.revokeObjectURL(url)
+    }
+  }, [pendingTransactions])
+
+  const handleCancelPendingTransaction = useCallback(() => {
+    setPendingTransactions(null)
+  }, [setPendingTransactions])
+
+  const handleConfirmPendingTransaction = useCallback(async () => {
     setPending(true)
-    await fixBaseLanguageMismatch(selectedSchema, baseDocuments)
-    await fetchInformation(selectedSchema)
-  }, [selectedSchema, baseDocuments, fetchInformation])
+    try {
+      // run all transactions
+      if (pendingTransactions) {
+        await pendingTransactions.reduce<Promise<void>>(async (prev, transaction) => {
+          await prev
+          await transaction.commit()
+        }, Promise.resolve())
+        await fetchInformation(selectedSchema)
+        setPendingTransactions(null)
+      }
+    } catch (err) {
+      console.error(err)
+      // @TODO show error
+    } finally {
+      setPending(false)
+    }
+  }, [setPending, fetchInformation, selectedSchema, pendingTransactions])
 
   return (
     <Container width={1}>
@@ -90,48 +138,103 @@ export const MaintenanceTabContent = () => {
                 pending={pending}
                 count={documentsSummaryInformation.idStructureMismatch.length}
                 labelName="idStructureMismatch"
-                onClick={onFixIdStructureMismatchDocuments}
+                onClick={handleFixIdStructureMismatchDocuments}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.missingLanguageField.length}
                 labelName="missingLanguageField"
-                onClick={onFixMissingLanguageFields}
+                onClick={handleFixMissingLanguageFields}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.missingDocumentRefs.length}
                 labelName="missingDocumentRefs"
-                onClick={onFixTranslationRefs}
+                onClick={handleFixTranslationRefs}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.missingBaseDocumentRefs.length}
                 labelName="missingBaseDocumentRefs"
-                onClick={onFixBaseDocumntRefs}
+                onClick={handleFixBaseDocumntRefs}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.orphanDocuments.length}
                 labelName="orphanDocuments"
-                onClick={onFixOrphanDocuments}
+                onClick={handleFixOrphanDocuments}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.referenceBehaviorMismatch.length}
                 labelName="referenceBehaviorMismatch"
-                onClick={onFixReferenceBehaviorMismatch}
+                onClick={handleFixReferenceBehaviorMismatch}
               />
               <MaintenanceTabResult
                 pending={pending}
                 count={documentsSummaryInformation.baseLanguageMismatch.length}
                 labelName="baseLanguageMismatch"
-                onClick={onFixBaseLanguageMismatch}
+                onClick={handleFixBaseLanguageMismatch}
               />
             </Stack>
           </Box>
         )}
       </Stack>
+      {!!pendingTransactions?.length && (
+        <Dialog
+          id="confirm-pending-transactions"
+          width={2}
+          header={UiMessages.translationsMaintenance.pendingTransactionDialog.header}
+          onClose={handleCancelPendingTransaction}
+          footer={
+            <Flex padding={3} justify="flex-end">
+              <Grid autoFlow="column" autoCols="auto" gap={2}>
+                <Button
+                  tone="default"
+                  loading={pending}
+                  disabled={pending}
+                  text={UiMessages.translationsMaintenance.pendingTransactionDialog.cancel}
+                  onClick={handleCancelPendingTransaction}
+                />
+                <Button
+                  tone="critical"
+                  loading={pending}
+                  disabled={pending}
+                  text={UiMessages.translationsMaintenance.pendingTransactionDialog.confirm}
+                  onClick={handleConfirmPendingTransaction}
+                />
+              </Grid>
+            </Flex>
+          }
+        >
+          <Stack padding={3} space={3}>
+            <Card padding={3} radius={2} shadow={1} tone="caution">
+              <Text size={2}>
+                {UiMessages.translationsMaintenance.pendingTransactionDialog.caution}
+              </Text>
+            </Card>
+            <Grid cols={1}>
+              <StyledCodeCard padding={3} radius={2} shadow={1} tone="default">
+                <StyledCode language="json">
+                  {JSON.stringify(
+                    pendingTransactions.map((transaction) => transaction.toJSON()),
+                    null,
+                    2
+                  )}
+                </StyledCode>
+              </StyledCodeCard>
+              <StyledDownloadCodeFlex
+                padding={2}
+                justify="flex-end"
+                align="flex-start"
+                onClick={handleDownloadCode}
+              >
+                <Button text="Download" />
+              </StyledDownloadCodeFlex>
+            </Grid>
+          </Stack>
+        </Dialog>
+      )}
     </Container>
   )
 }

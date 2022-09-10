@@ -1,17 +1,17 @@
-import type {SanityDocument} from '@sanity/client'
+import type {SanityDocument, Transaction} from '@sanity/client'
 import {ReferenceBehavior} from '../../constants'
 import {createSanityReference, getBaseIdFromId, getConfig, getSanityClient} from '../../utils'
 
-export const fixBaseDocumentRefs = async (
+export const fixBaseDocumentRefs = (
   schema: string,
   translatedDocuments: SanityDocument[]
-): Promise<void> => {
+): Transaction => {
   const config = getConfig(schema)
   const sanityClient = getSanityClient()
+  const transaction = sanityClient.transaction()
 
   if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
     const baseRefFieldName = config.fieldNames.baseReference
-    const transaction = sanityClient.transaction()
     translatedDocuments.forEach((d) => {
       if (!d[baseRefFieldName]) {
         const baseId = getBaseIdFromId(d._id)
@@ -25,6 +25,7 @@ export const fixBaseDocumentRefs = async (
         })
       }
     })
-    await transaction.commit()
   }
+
+  return transaction
 }
