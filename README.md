@@ -5,19 +5,19 @@ This is a complete rewrite of the original v0 Document Internationalization plug
 - Start new documents in any language and create references later
 - Storing translation references in a separate "meta" document
 - Updates to one document no longer effect the change history of other translations
-- No use of Document Actions
+- Does not depend on Document Actions or View Panes
 - Configurable "language" field on documents
 
 ## Installation
 
 ```
-npm install --save @sanity/document-internationalization
+npm install --save @sanity/document-internationalization@studio-v3-plugin-v1
 ```
 
 or
 
 ```
-yarn add @sanity/document-internationalization
+yarn add @sanity/document-internationalization@studio-v3-plugin-v1
 ```
 
 ## Usage
