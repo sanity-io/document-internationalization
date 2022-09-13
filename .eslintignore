@@ -1,8 +1,0 @@
-/node_modules/
-/lib/
-.eslintrc.js
-commitlint.config.js
-lib
-lint-staged.config.js
-*.md
-*.yml

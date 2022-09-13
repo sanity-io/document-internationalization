@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   publish:
@@ -21,5 +21,5 @@ jobs:
       - run: npm install
       - uses: JS-DevTools/npm-publish@v1
         with:
-          tag: studio-v3
+          tag: studio-v3-plugin-v1
           token: ${{ secrets.NPM_TOKEN }}
