@@ -84,6 +84,7 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
             // },
             options: {
               collapsed: false,
+              // @ts-ignore
               filter: ({parent}: {parent: {_key: string}}) => {
                 if (!parent?._key) {
                   return null
