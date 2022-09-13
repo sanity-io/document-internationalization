@@ -41,7 +41,7 @@
     "@sanity/incompatible-plugin": "^1.0.1",
     "@sanity/ui": "^0.38.2",
     "@sanity/uuid": "^3.0.1",
-    "sanity-plugin-internationalized-array": "file:.yalc/sanity-plugin-internationalized-array",
+    "sanity-plugin-internationalized-array": "^1.1.0",
     "sanity-plugin-utils": "^0.0.1"
   },
   "devDependencies": {
