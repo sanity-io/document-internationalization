@@ -1,7 +1,9 @@
 node_modules
 lib
 yarn.lock
-package-lock.json
+
+# dont ignore this, need it for stable CI
+#package-lock.json
 /**/*/.DS_Store
 .idea/
 
