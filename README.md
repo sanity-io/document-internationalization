@@ -1,16 +1,17 @@
 # @sanity/document-internationalization
 
-⚠️ This is presently a POC for a future version of this plugin. It should not be used in Production and may significantly change.
+⚠️ This is only a POC for a future version of this plugin. It should not be used in Production and may significantly change.
 
----
+![v3 Studio with @sanity/document-internationalization v1 Installed](/img/v3-studio-with-doc-intl-v1.png)
 
-A complete rewrite of the original v0 Document Internationalization plugin, exclusively for Sanity Studio v3. The major differences include:
+A complete rewrite of the original v0 Document Internationalization plugin, exclusively for Sanity Studio v3. The major benefits include:
 
-- Start new documents in any language and create references later
-- Storing translation references in a separate "meta" document
-- Updates to one document no longer effect the change history of other translations
-- Does not depend on Document Actions or View Panes
+- Start new documents in any language and create linking references later
+- Stores translation references in a separate "meta" document
+- Updates to one translation no longer effect the change history of others
+- Does not require or modify on Document Actions
 - Configurable "language" field on documents
+- Built-in static and parameterized initial value templates for new documents
 
 ## Installation
 
@@ -42,7 +43,7 @@ export const createConfig({
         {id: 'nn', title: 'Norwegian (Nynorsk)'},
         {id: 'en', title: 'English'}
       ],
-      schemaTypes: ['product', 'post'],
+      schemaTypes: ['lesson'],
       // Optional
       languageField: `language` // defauts to "language"
     })
@@ -50,10 +51,10 @@ export const createConfig({
 })
 ```
 
-The schema types that use document internationalization should also have a string field with the same name configured in the `languageField` setting. You can hide this field since the plugin will handle writing patches to it.
+The schema types that use document internationalization must also have a string field with the same name configured in the `languageField` setting. You can hide this field since the plugin will handle writing patches to it.
 
 ```ts
-// ./schema/product.ts
+// ./schema/lesson.ts
 
 // ...all other settings
 defineField({
@@ -62,6 +63,60 @@ defineField({
   readOnly: true,
   hidden: true,
 })
+```
+
+## Querying with GROQ
+
+To query a single document and all its translations, we use the `references()` function in GROQ.
+
+```json
+// All `lesson` documents of a single language
+*[_type == "lesson" && language == $language]{
+  // Just these fields
+  title,
+  slug,
+  language,
+  // Get the translations metadata
+  // And resolve the `value` field in each array item
+  "_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
+    title,
+    slug,
+    language
+  },
+}
+```
+
+## Querying with GraphQL
+
+Fortunately the Sanity GraphQL API contains a similar filter for document references.
+
+```graphql
+# In this example we retrieve a lesson by its `slug.current` field value
+query GetLesson($language: String!, $slug: String!) {
+  allLesson(limit: 1, where: {language: {eq: $language}, slug: {current: {eq: $slug}}}) {
+    _id
+    title
+    language
+    slug {
+      current
+    }
+  }
+}
+
+# And then can run this query to find translation metadata documents that use its ID
+query GetTranslations($id: ID!) {
+  allTranslationMetadata(where: {_: {references: $id}}) {
+    translations {
+      _key
+      value {
+        title
+        slug {
+          current
+        }
+      }
+    }
+  }
+}
 ```
 
 ## License

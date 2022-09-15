@@ -88,6 +88,9 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
               name: 'reference',
               type: 'reference',
               to: schemaTypes.map((type) => ({type: type})),
+              // TODO: Add a validation rule to *ensure* the document's language matches the array key
+              // Reference filters don't actually enforce validation!
+              // validation: (Rule) => Rule.custom(),
               options: {
                 collapsed: false,
                 // TODO: Update type once it knows the values of this filter
