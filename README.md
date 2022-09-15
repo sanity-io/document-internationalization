@@ -119,6 +119,19 @@ query GetTranslations($id: ID!) {
 }
 ```
 
+## Migrating from v0
+
+There are two scripts in the `./migrations` folder of this repository. They contain scripts which should help move your content over – however they may require updating to match your current settings.
+
+**These have not been thoroughly tested on all platforms. Use at your own risk. Please take a backup before proceeding.**
+
+- `./migrations/renameField.ts` will update the language field on translated documents
+- `./migrations/createMetadata.ts` will create metadata documents for the arrays of references and unset those fields from translated documents
+
+## Roadmap
+
+The major missing feature at this time is asynchronously loading languages. There may be others.
+
 ## License
 
 MIT © Simeon Griggs
