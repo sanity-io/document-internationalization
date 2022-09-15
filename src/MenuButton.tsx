@@ -30,6 +30,7 @@ export default function MenuButton(props: MenuButtonProps) {
   const source = draft || published
 
   const sourceLanguageId = source?.[languageField] as string | undefined
+  const sourceLanguageIsValid = supportedLanguages.some((l) => l.id === sourceLanguageId)
 
   const content = (
     <Box overflow="auto">
@@ -42,7 +43,7 @@ export default function MenuButton(props: MenuButtonProps) {
           {supportedLanguages.length > 0 ? (
             <>
               {supportedLanguages.map((language, langIndex) =>
-                !loading && sourceLanguageId ? (
+                !loading && sourceLanguageId && sourceLanguageIsValid ? (
                   <LanguageOption
                     key={language.id}
                     index={langIndex}
@@ -65,17 +66,41 @@ export default function MenuButton(props: MenuButtonProps) {
                     documentId={documentId}
                     schemaType={schemaType}
                     language={language}
+                    // Only allow language patch change to:
+                    // - Keys not in metadata
+                    // - The key of this document in the metadata
+                    disabled={
+                      metadata?.translations
+                        .filter((t) => t?.value?._ref !== documentId)
+                        .some((t) => t._key === language.id) ?? false
+                    }
                   />
                 )
               )}
-              {!loading && !sourceLanguageId ? (
-                <Box padding={3}>
-                  <Text size={1} align="center">
-                    Choose a language to <br />
-                    apply to <strong>this</strong> Document
-                  </Text>
-                </Box>
-              ) : null}
+              {/* Once metadata is loaded, there may be issues */}
+              {loading ? null : (
+                <>
+                  {/* Current document has no language field */}
+                  {sourceLanguageId ? null : (
+                    <Card tone="caution" padding={3}>
+                      <Text size={1} align="center">
+                        Choose a language to <br />
+                        apply to <strong>this</strong> Document
+                      </Text>
+                    </Card>
+                  )}
+                  {/* Current document has an invalid language field */}
+                  {sourceLanguageId && !sourceLanguageIsValid ? (
+                    <Card tone="caution" padding={3}>
+                      <Text size={1} align="center">
+                        Change the current language value <code>{sourceLanguageId}</code>
+                        <br />
+                        to one of the supported languages
+                      </Text>
+                    </Card>
+                  ) : null}
+                </>
+              )}
             </>
           ) : null}
           <LanguageManage id={metadata?._id} />
@@ -90,7 +115,9 @@ export default function MenuButton(props: MenuButtonProps) {
         text="Translations"
         mode="bleed"
         disabled={!source}
-        tone={!source || (!loading && sourceLanguageId) ? undefined : `caution`}
+        tone={
+          !source || (!loading && sourceLanguageId && sourceLanguageIsValid) ? undefined : `caution`
+        }
         icon={TranslateIcon}
         onClick={handleClick}
         ref={setButton}

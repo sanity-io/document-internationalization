@@ -1,6 +1,10 @@
 # @sanity/document-internationalization
 
-This is a complete rewrite of the original v0 Document Internationalization plugin, exclusively for Sanity Studio v3. The major differences include:
+⚠️ This is presently a POC for a future version of this plugin. It should not be used in Production and may significantly change.
+
+---
+
+A complete rewrite of the original v0 Document Internationalization plugin, exclusively for Sanity Studio v3. The major differences include:
 
 - Start new documents in any language and create references later
 - Storing translation references in a separate "meta" document

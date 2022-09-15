@@ -11,10 +11,11 @@ type LanguagePatchProps = {
   documentId: string
   schemaType: string
   source: SanityDocument | null
+  disabled: boolean
 }
 
 export default function LanguagePatch(props: LanguagePatchProps) {
-  const {language, languageField, documentId, schemaType, source} = props
+  const {language, languageField, documentId, schemaType, source, disabled = false} = props
   const client = useClient()
   const toast = useToast()
 
@@ -56,6 +57,7 @@ export default function LanguagePatch(props: LanguagePatchProps) {
       text={language.title}
       icon={ChevronRightIcon}
       onClick={() => handleClick()}
+      disabled={disabled}
     />
   )
 }

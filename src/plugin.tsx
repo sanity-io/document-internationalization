@@ -34,7 +34,6 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
         const {schemaType, documentId} = ctx
 
         // TODO: Memoize this function
-        // IWBN: If we could get the current document value here
         return schemaTypes.includes(schemaType)
           ? [...prev, () => renderLanguageFilter(schemaType, documentId)]
           : prev
@@ -49,13 +48,13 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
     },
     schema: {
       // Create the metadata document type
-      types: [metadata],
+      types: [metadata(schemaTypes)],
 
       // For every schema type this plugin is enabled on
       // Create an initial value template to set the language
       templates: (prev, {schema}) => {
-        const pluginTemplates = schemaTypes.map((schemaType) => ({
-          id: `${schemaType}-with-language`,
+        const parameterizedTemplates = schemaTypes.map((schemaType) => ({
+          id: `${schemaType}-parameterized`,
           title: `${schema?.get(schemaType)?.title ?? schemaType}: with Language`,
           schemaType,
           parameters: [{name: `languageId`, title: `Language ID`, type: `string`}],
@@ -64,39 +63,59 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
           }),
         }))
 
-        return [...prev, ...pluginTemplates]
+        const staticTemplates = schemaTypes.flatMap((schemaType) => {
+          return supportedLanguages.map((language) => ({
+            id: `${schemaType}-${language.id}`,
+            title: `${language.title} Lesson`,
+            schemaType,
+            value: {
+              [languageField]: language.id,
+            },
+          }))
+        })
+
+        return [...prev, ...parameterizedTemplates, ...staticTemplates]
       },
     },
     plugins: [
       // Translation metadata stores its references using this plugin
-      // It cuts down on attribute usage and gives UI conveniences
-      // To add new languages
+      // It cuts down on attribute usage and gives UI conveniences to add new translations
       internationalizedArray({
         languages: supportedLanguages,
         fieldTypes: [
-          defineField({
-            name: 'reference',
-            type: 'reference',
-            to: schemaTypes.map((type) => ({type})),
-            // initialValue: (iv) => {
-            // console.log(`iv`, iv)
-            // return {[languageField]: `nah`}
-            // },
-            options: {
-              collapsed: false,
-              // @ts-ignore
-              filter: ({parent}: {parent: {_key: string}}) => {
-                if (!parent?._key) {
-                  return null
-                }
+          defineField(
+            {
+              name: 'reference',
+              type: 'reference',
+              to: schemaTypes.map((type) => ({type: type})),
+              options: {
+                collapsed: false,
+                // TODO: Update type once it knows the values of this filter
+                // @ts-ignore
+                filter: ({parent, document}) => {
+                  if (!parent?._key) {
+                    return null
+                  }
 
-                return {
-                  filter: `${languageField} == $language`,
-                  params: {language: parent._key},
-                }
+                  const language = parent._key
+                  const {schemaType} = document
+
+                  if (schemaType) {
+                    return {
+                      filter: `_type == $schemaType && ${languageField} == $language`,
+                      params: {schemaType, language},
+                    }
+                  }
+
+                  return {
+                    filter: `${languageField} == $language`,
+                    params: {language},
+                  }
+                },
               },
             },
-          }),
+            {strict: false}
+          ),
         ],
       }),
     ],

@@ -2,8 +2,8 @@
   "version": "v1",
   "packages": {
     "sanity-plugin-internationalized-array": {
-      "signature": "b586c6b1f31cfbff5a987af02b34451e",
-      "replaced": "^1.0.0"
+      "signature": "de99af2d70775eecb4509df89aaaa9b7",
+      "replaced": "^1.1.1"
     }
   }
 }

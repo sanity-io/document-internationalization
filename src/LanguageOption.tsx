@@ -77,7 +77,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
     transaction.create(newTranslationDocument)
 
-    const metadataId = metadata?._id ?? `translation.${uuid()}`
+    const metadataId = metadata?._id ?? uuid()
     const newTranslationReference = createReference(
       language.id,
       newTranslationDocument._id.replace(`drafts.`, ``),
@@ -86,8 +86,6 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
     // Create translation metadata document if it doesn't already exist
     if (metadataExists) {
-      console.log(`Adding translation to existing metadata document`)
-      // const path = `translations[_key == "${id}"]`
       const path = `translations[${index - 1}]`
       const metadataPatch = client
         .patch(metadataId)
@@ -96,7 +94,6 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
       transaction.patch(metadataPatch)
     } else {
-      console.log(`Creating translation metadata document with source + new translation`)
       // Source language relies on a field named `language` on the document
       const sourceReference = sourceLanguageId
         ? createReference(sourceLanguageId, sourceId, schemaType)
@@ -131,7 +128,18 @@ export default function LanguageOption(props: LanguageOptionProps) {
           description: err.message,
         })
       })
-  }, [client, documentId, index, language, metadata, schemaType, sourceId, sourceLanguageId, toast])
+  }, [
+    client,
+    documentId,
+    index,
+    language,
+    languageField,
+    metadata?._id,
+    schemaType,
+    sourceId,
+    sourceLanguageId,
+    toast,
+  ])
 
   return (
     <Button
