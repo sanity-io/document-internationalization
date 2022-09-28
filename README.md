@@ -69,7 +69,7 @@ defineField({
 
 To query a single document and all its translations, we use the `references()` function in GROQ.
 
-```
+```json5
 // All `lesson` documents of a single language
 *[_type == "lesson" && language == $language]{
   // Just these fields

@@ -5,6 +5,7 @@ const client = sanityClient({
   projectId: '6h1mv88x',
   dataset: 'production-v3',
   apiVersion: `2022-06-01`,
+  // eslint-disable-next-line no-process-env
   token: process.env.SANITY_TOKEN,
 })
 
@@ -44,10 +45,12 @@ const migrateNextBatch = async () => {
   const documents = await fetchDocuments()
   const patches = buildPatches(documents)
   if (patches.length === 0) {
-    console.log('No more documents to migrate!')
+    // eslint-disable-next-line no-console
+    console.debug('No more documents to migrate!')
     return null
   }
-  console.log(
+  // eslint-disable-next-line no-console
+  console.debug(
     `Migrating batch:\n %s`,
     patches.map((patch) => `${patch.id} => ${JSON.stringify(patch.patch)}`).join('\n')
   )
@@ -58,5 +61,6 @@ const migrateNextBatch = async () => {
 
 migrateNextBatch().catch((err) => {
   console.error(err)
+  // eslint-disable-next-line no-process-exit
   process.exit(1)
 })

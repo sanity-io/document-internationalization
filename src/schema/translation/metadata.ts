@@ -3,6 +3,9 @@ import {TranslateIcon} from '@sanity/icons'
 
 import {METADATA_SCHEMA_NAME} from '../../constants'
 
+// eslint-disable-next-line no-warning-comments
+// FIXME: TS having a hard time determining the return type here. Likely a V3 type problem.
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default (schemaTypes: string[]) =>
   defineType({
     type: 'document',
