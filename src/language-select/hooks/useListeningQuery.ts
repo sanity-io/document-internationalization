@@ -1,7 +1,7 @@
 import {useEffect, useState, useRef} from 'react'
 import {catchError, distinctUntilChanged} from 'rxjs/operators'
 import isEqual from 'react-fast-compare'
-import {useDocumentStore} from 'sanity/_unstable'
+import {useDocumentStore} from 'sanity'
 
 type Params = Record<string, string | number | boolean | string[]>
 

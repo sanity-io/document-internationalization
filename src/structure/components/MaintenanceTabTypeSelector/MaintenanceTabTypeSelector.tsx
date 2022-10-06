@@ -1,8 +1,7 @@
 import React, {forwardRef, Ref, useMemo} from 'react'
 import {Autocomplete, Card, Stack, Text} from '@sanity/ui'
 import {EarthGlobeIcon} from '@sanity/icons'
-import {DefaultPreview as Preview} from 'sanity/_unstable'
-import {useSchema} from 'sanity'
+import {useSchema, DefaultPreview as Preview} from 'sanity'
 import {Ti18nSchema} from '../../../types'
 import {UiMessages} from '../../../constants'
 

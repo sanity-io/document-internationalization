@@ -15,16 +15,18 @@ export const documentI18n = createPlugin<Ti18nConfig>((config) => {
     },
 
     form: {
-      renderInput: (props, next) => {
-        const {value} = props
-        if (
-          (props.schemaType as Ti18nSchema).i18n &&
-          typeof value === 'object' &&
-          (value as Record<string, unknown>)?._id
-        ) {
-          return <LanguageSelectWrapped next={next} config={config} {...props} />
-        }
-        return undefined
+      components: {
+        input(props) {
+          const {value} = props
+          if (
+            (props.schemaType as Ti18nSchema).i18n &&
+            typeof value === 'object' &&
+            (value as Record<string, unknown>)?._id
+          ) {
+            return <LanguageSelectWrapped config={config} {...props} />
+          }
+          return props.renderDefault(props)
+        },
       },
     },
   }

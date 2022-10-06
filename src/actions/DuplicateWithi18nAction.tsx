@@ -3,7 +3,7 @@ import {CopyIcon} from '@sanity/icons'
 import {useDocumentOperation} from 'sanity'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import type {DocumentActionComponent, DocumentActionDescription} from 'sanity/desk'
+import type {DocumentActionComponent, DocumentActionDescription} from 'sanity'
 import {
   buildDocId,
   getBaseIdFromId,

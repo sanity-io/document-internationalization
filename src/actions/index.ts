@@ -1,5 +1,4 @@
-import {type DocumentActionComponent, PublishAction, DeleteAction} from 'sanity/desk'
-import {type DocumentActionsContext} from 'sanity'
+import {type DocumentActionsContext, type DocumentActionComponent} from 'sanity'
 import {Ti18nConfig, Ti18nSchema} from '../types'
 import {getBaseIdFromId} from '../utils'
 import {createPublishAction} from './PublishWithi18nAction'
@@ -20,8 +19,8 @@ export const resolveActions = (
 
   if (isI18n) {
     actions = actions.map((Action) => {
-      const isPublishAction = Action === PublishAction
-      const isDeleteAction = Action === DeleteAction
+      const isPublishAction = Action.action === 'publish'
+      const isDeleteAction = Action.action === 'delete'
 
       if (isPublishAction) {
         return createPublishAction(pluginConfig)
