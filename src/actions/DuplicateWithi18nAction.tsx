@@ -1,10 +1,16 @@
 import React from 'react'
 import {CopyIcon} from '@sanity/icons'
-import {useClient, useDocumentOperation} from 'sanity'
+import {useDocumentOperation} from 'sanity'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import type {DocumentActionComponent, DocumentActionDescription} from 'sanity/desk'
-import {buildDocId, getBaseIdFromId, getLanguageFromDocument, getTranslationsFor} from '../utils'
+import type {DocumentActionComponent, DocumentActionDescription} from 'sanity'
+import {
+  buildDocId,
+  getBaseIdFromId,
+  getLanguageFromDocument,
+  getTranslationsFor,
+  useSanityClient,
+} from '../utils'
 import {IUseDocumentOperationResult, Ti18nConfig} from '../types'
 import {UiMessages} from '../constants'
 import {useConfig} from '../hooks'
@@ -20,7 +26,7 @@ const DISABLED_REASON_TITLE = {
 export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
   return ({id, type, draft, published}): DocumentActionDescription => {
     const toast = useToast()
-    const client = useClient()
+    const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
     const baseDocumentId = getBaseIdFromId(id)
     const {duplicate: duplicateOp} = useDocumentOperation(id, type) as IUseDocumentOperationResult

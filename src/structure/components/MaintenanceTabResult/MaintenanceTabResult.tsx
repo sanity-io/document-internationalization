@@ -21,7 +21,11 @@ export const MaintenanceTabResult: React.FC<Props> = ({
       <Flex align="center">
         <Box flex={1}>
           <Text muted={count <= 0}>
-            {count} {labelName ? UiMessages.translationsMaintenance[labelName] : children}
+            <span>{count}</span>
+            <span>&nbsp;</span>
+            <span>
+              {labelName ? String(UiMessages.translationsMaintenance[labelName]) : children}
+            </span>
           </Text>
         </Box>
 

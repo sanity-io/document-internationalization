@@ -1,4 +1,4 @@
-import type {UniqueCheckerFn} from 'sanity'
+import type {SlugIsUniqueValidator} from 'sanity'
 import type {SanityClient} from '@sanity/client'
 import {I18nDelimiter} from '../constants'
 import {getBaseIdFromId, serializePath} from '../utils'
@@ -6,7 +6,7 @@ import {getBaseIdFromId, serializePath} from '../utils'
 /**
  * @README most of this is taken from the deafultUnique function in @sanity/validation
  */
-export function createIsSlugUnique(client: SanityClient): UniqueCheckerFn {
+export function createIsSlugUnique(client: SanityClient): SlugIsUniqueValidator {
   return (slug, context) => {
     const {document, path, type} = context
     const schemaOptions = type?.options as {disableArrayWarning?: boolean} | undefined

@@ -2,15 +2,9 @@ import * as React from 'react'
 
 import {useToast} from '@sanity/ui'
 import {CheckmarkIcon, PublishIcon} from '@sanity/icons'
-import {
-  useClient,
-  useDocumentOperation,
-  useEditState,
-  useSyncState,
-  useValidationStatus,
-} from 'sanity'
-import type {DocumentActionComponent, DocumentActionDescription} from 'sanity/desk'
-import {getBaseIdFromId, updateIntlFieldsForDocument} from '../utils'
+import {useDocumentOperation, useEditState, useSyncState, useValidationStatus} from 'sanity'
+import type {DocumentActionComponent, DocumentActionDescription} from 'sanity'
+import {getBaseIdFromId, updateIntlFieldsForDocument, useSanityClient} from '../utils'
 import {ReferenceBehavior, UiMessages} from '../constants'
 import {IEditState, IUseDocumentOperationResult, Ti18nConfig} from '../types'
 import {useConfig, useDelayedFlag} from '../hooks'
@@ -18,7 +12,7 @@ import {useConfig, useDelayedFlag} from '../hooks'
 export function createPublishAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
   return ({type, id, onComplete}): DocumentActionDescription => {
     const toast = useToast()
-    const client = useClient()
+    const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
     const baseDocumentId = getBaseIdFromId(id)
     const updatingIntlFieldsPromiseRef = React.useRef<Promise<void> | null>(null)
@@ -76,7 +70,7 @@ export function createPublishAction(pluginConfig: Ti18nConfig): DocumentActionCo
         })
       }
       setUpdatingIntlFields(false)
-    }, [toast, draft, published, client, baseDocumentEditState.published])
+    }, [toast, draft, published, client, baseDocumentEditState.published, config])
 
     const onHandle = React.useCallback(() => {
       setPublishState('publishing')
@@ -90,7 +84,7 @@ export function createPublishAction(pluginConfig: Ti18nConfig): DocumentActionCo
       } else {
         publish.execute()
       }
-    }, [id, baseDocumentId, type, publish, config, baseDocumentEditState.published])
+    }, [id, baseDocumentId, publish, config, baseDocumentEditState.published])
 
     React.useEffect(() => {
       const didPublish = publishState === 'publishing' && !draft

@@ -1,4 +1,4 @@
-import {DocumentBadgeComponent} from 'sanity/desk'
+import {DocumentBadgeComponent} from 'sanity'
 import {useConfig} from '../hooks'
 import {getLanguageFromDocument} from '../utils'
 import {Ti18nConfig} from '../types'

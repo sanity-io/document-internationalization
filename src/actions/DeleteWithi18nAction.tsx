@@ -1,11 +1,11 @@
 import React from 'react'
 import {TrashIcon} from '@sanity/icons'
-import {ConfirmDeleteDialog} from 'sanity/_unstable'
-import {useClient, useDocumentOperation, useEditState, useSchema, useSyncState} from 'sanity'
+import {useDocumentOperation, useEditState, useSyncState} from 'sanity'
+import {ConfirmDeleteDialog} from 'sanity/desk'
 import {useToast} from '@sanity/ui'
-import type {DocumentActionComponent, DocumentActionDescription} from 'sanity/desk'
+import type {DocumentActionComponent, DocumentActionDescription} from 'sanity'
 import {IEditState, IUseDocumentOperationResult, Ti18nConfig} from '../types'
-import {getBaseIdFromId, getTranslationsFor} from '../utils'
+import {getBaseIdFromId, getTranslationsFor, useSanityClient} from '../utils'
 import {UiMessages} from '../constants'
 import {useConfig} from '../hooks'
 
@@ -19,7 +19,7 @@ const DISABLED_REASON_TITLE = {
 export function createDeleteAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
   return function DeleteWith18nAction({id, type, onComplete}): DocumentActionDescription {
     const toast = useToast()
-    const client = useClient()
+    const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
     const baseDocumentId = React.useMemo(() => getBaseIdFromId(id), [id])
     const baseDocumentEditState = useEditState(baseDocumentId, type) as IEditState
