@@ -1,6 +1,6 @@
+import type {SanityDocument, Transaction} from '@sanity/client'
 import chunk from 'just-split'
 import {ReferenceBehavior} from '../../constants'
-import {Ti18nDocument} from '../../types'
 import {
   buildDocId,
   createSanityReference,
@@ -10,10 +10,10 @@ import {
   getSanityClient,
 } from '../../utils'
 
-export const fixIdStructureMismatchDocuments = async (
+export const fixIdStructureMismatchDocuments = (
   schema: string,
-  documents: Ti18nDocument[]
-): Promise<void> => {
+  documents: SanityDocument[]
+): Transaction[] => {
   const config = getConfig()
   const sanityClient = getSanityClient()
   const refsFieldName = config.fieldNames.references
@@ -26,48 +26,47 @@ export const fixIdStructureMismatchDocuments = async (
       set: {[refsFieldName]: []},
     })
   })
-  await removeOldRefsTransaction.commit()
 
   // create new document ids
-  await Promise.all(
-    chunk(
-      documents.filter((d) => d._id !== getBaseIdFromId(d._id)),
-      100
-    ).map(async (documentsChunk) => {
-      const transaction = sanityClient.transaction()
-      documentsChunk.forEach((d) => {
-        const baseId = getBaseIdFromId(d._id)
-        const lang = getLanguageFromDocument(d, config)
-        if (lang) {
-          const newId = buildDocId(baseId, lang)
-          transaction.createIfNotExists({
-            ...d,
-            _id: newId,
-            _type: schema,
-          })
-          transaction.delete(d._id)
+  const newDocumentTransactions = chunk(
+    documents.filter((d) => d._id !== getBaseIdFromId(d._id)),
+    100
+  ).map((documentsChunk) => {
+    const transaction = sanityClient.transaction()
+    documentsChunk.forEach((d) => {
+      const baseId = getBaseIdFromId(d._id)
+      const lang = getLanguageFromDocument(d, config)
+      if (lang) {
+        const newId = buildDocId(baseId, lang)
+        transaction.createIfNotExists({
+          ...d,
+          _id: newId,
+          _type: schema,
+        })
+        transaction.delete(d._id)
 
-          // patch base document with updated refs
-          if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
-            transaction.patch(baseId, {setIfMissing: {[refsFieldName]: []}})
-            transaction.patch(baseId, {
-              insert: {
-                after: `${refsFieldName}[-1]`,
-                items: [
-                  {
-                    _key: lang,
-                    ...createSanityReference(
-                      newId,
-                      config.referenceBehavior === ReferenceBehavior.WEAK
-                    ),
-                  },
-                ],
-              },
-            })
-          }
+        // patch base document with updated refs
+        if (config.referenceBehavior !== ReferenceBehavior.DISABLED) {
+          transaction.patch(baseId, {setIfMissing: {[refsFieldName]: []}})
+          transaction.patch(baseId, {
+            insert: {
+              after: `${refsFieldName}[-1]`,
+              items: [
+                {
+                  _key: lang,
+                  ...createSanityReference(
+                    newId,
+                    config.referenceBehavior === ReferenceBehavior.WEAK
+                  ),
+                },
+              ],
+            },
+          })
         }
-      })
-      await transaction.commit()
+      }
     })
-  )
+    return transaction
+  })
+
+  return [removeOldRefsTransaction, ...newDocumentTransactions]
 }

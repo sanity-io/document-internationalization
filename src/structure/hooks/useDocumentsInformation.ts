@@ -1,6 +1,7 @@
+import type {SanityDocument} from '@sanity/client'
 import React from 'react'
 import {I18nDelimiter, I18nPrefix, IdStructure, ReferenceBehavior} from '../../constants'
-import {ILanguageObject, ITranslationRef, Ti18nDocument} from '../../types'
+import {ILanguageObject, ITranslationRef} from '../../types'
 import {
   getBaseIdFromId,
   getBaseLanguage,
@@ -13,7 +14,7 @@ export const useDocumentsInformation = (schema: string) => {
   const config = React.useMemo(() => getConfig(schema), [schema])
   const sanityClientRef = React.useRef(getSanityClient())
   const [pending, setPending] = React.useState(false)
-  const [documents, setDocuments] = React.useState<Ti18nDocument[]>([])
+  const [documents, setDocuments] = React.useState<SanityDocument[]>([])
   const [languages, setLanguages] = React.useState<ILanguageObject[]>([])
   const baseDocuments = React.useMemo(() => {
     if (config.idStructure === IdStructure.DELIMITER)
@@ -36,14 +37,8 @@ export const useDocumentsInformation = (schema: string) => {
       setPending(true)
       const [langs, result] = await Promise.all([
         getLanguagesFromOption(config.languages),
-        sanityClientRef.current.fetch<Ti18nDocument[]>(
-          `*[_type == $type && !(_id in path('drafts.**'))]{
-            _id,
-            _type,
-            ${config.fieldNames.lang},
-            ${config.fieldNames.references},
-            ${config.fieldNames.baseReference}
-          }`,
+        sanityClientRef.current.fetch<SanityDocument[]>(
+          `*[_type == $type && !(_id in path('drafts.**'))]`,
           {type: selectedSchema}
         ),
       ])
@@ -51,7 +46,7 @@ export const useDocumentsInformation = (schema: string) => {
       setDocuments(result)
       setPending(false)
     },
-    [pending, config, documents, sanityClientRef.current]
+    [config]
   )
 
   const documentsSummaryInformation = React.useMemo(() => {

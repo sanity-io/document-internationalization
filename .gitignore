@@ -3,3 +3,4 @@ lib
 yarn.lock
 /**/*/.DS_Store
 .idea/
+.parcel-cache
