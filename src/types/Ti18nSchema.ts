@@ -4,7 +4,7 @@ import {Ti18nConfig} from './Ti18nConfig'
 declare module '@sanity/types' {
   // makes i18n property allowed on document when using defineTyp/defineField/defineArrayMember
   export interface DocumentDefinition {
-    i18n: boolean | Ti18nConfig
+    i18n?: boolean | Ti18nConfig
   }
 }
 
