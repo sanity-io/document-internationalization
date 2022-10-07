@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.7
+* Fixed issues with translation maintenance
+* Added transaction overview confirmation dialog for better transparency
+
 ## v0.3.6
 * Updates the internal logic to derive the language from the given field name as opposed to the ID.
 
