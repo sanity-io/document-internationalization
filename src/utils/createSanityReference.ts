@@ -1,4 +1,4 @@
-import {Reference} from 'sanity'
+import type {Reference} from 'sanity'
 
 type Ref = Omit<Reference, '_type'> & {_type: 'reference'}
 
