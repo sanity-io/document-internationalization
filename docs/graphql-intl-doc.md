@@ -8,7 +8,7 @@ The custom fields for document translation are not available in GraphQL by defau
 const schema = {
   i18n: {
     fieldNames: {
-      lang: 'i18n_lang'
+      lang: 'i18n_lang',
       baseReference: 'i18n_base',
       references: 'i18n_refs'
     }
