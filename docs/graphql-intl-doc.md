@@ -1,11 +1,16 @@
 # GraphQL support
 
-The custom fields for document translation are not available in GraphQL by default because they have to be defined in the schema. However it is not possible to define "system" type fields in a Sanity schema, due to this we need to take some steps to make this work correctly:
+The custom fields for document translation are not available in GraphQL by default because they have to be defined in the schema.
 
-1. Change the field names to **not** start with underscores as these are reserved names.
+Also, these field names cannot start with an underscore (`_`) as these are reserved for system fields.
+
+Here is an code example for a document schema named `product`, with hidden fields for the language and connected references metadata.
 
 ```js
-const schema = {
+{
+  name: 'product',
+  title: 'Product'
+  type: 'document',
   i18n: {
     fieldNames: {
       lang: 'i18n_lang'
@@ -13,14 +18,6 @@ const schema = {
       references: 'i18n_refs'
     }
   }
-}
-```
-
-2. We need to add them as actual fields in the schema
-
-```js
-const schema = {
-  type: 'schema',
   fields: [
     {
       name: 'i18n_lang',
@@ -30,6 +27,7 @@ const schema = {
     {
       name: 'i18n_base',
       type: 'reference',
+      to: [{type: 'product'}],
       hidden: true,
     },
     {
@@ -39,7 +37,7 @@ const schema = {
       of: [
         {
           type: 'reference',
-          to: [{type: 'schema'}],
+          to: [{type: 'product'}],
         },
       ],
     },
