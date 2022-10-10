@@ -9,11 +9,11 @@ Here is an code example for a document schema named `product`, with hidden field
 ```js
 {
   name: 'product',
-  title: 'Product'
+  title: 'Product',
   type: 'document',
   i18n: {
     fieldNames: {
-      lang: 'i18n_lang'
+      lang: 'i18n_lang',
       baseReference: 'i18n_base',
       references: 'i18n_refs'
     }
