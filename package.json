@@ -1,11 +1,12 @@
 {
   "name": "@sanity/document-internationalization",
   "version": "1.0.0-v3-studio.12",
+  "description": "> **NOTE**",
+  "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
   },
-  "author": "Sanity.io <hello@sanity.io>",
   "keywords": [
     "sanity",
     "cms",
@@ -16,16 +17,19 @@
     "i18n",
     "localization"
   ],
-  "source": "./src/index.tsx",
+  "source": "./src/index.ts",
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
-      "default": "./lib/esm/index.js"
+      "types": "./lib/src/index.d.ts",
+      "source": "./src/index.ts",
+      "import": "./lib/index.esm.js",
+      "require": "./lib/index.js",
+      "default": "./lib/index.esm.js"
     }
   },
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.esm.js",
+  "types": "./lib/src/index.d.ts",
   "files": [
     "src",
     "lib",
@@ -34,19 +38,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sanity-io/document-internationalization"
+    "url": "https://github.com/sanity-io/document-internationalization.git"
   },
   "bugs": {
     "url": "https://github.com/sanity-io/document-internationalization/issues"
   },
   "scripts": {
-    "lint": "npm run eslint -- .",
+    "lint": "eslint .",
     "eslint": "eslint --ext=.js,.jsx,.mjs,.ts,.tsx --quiet",
     "lint:fix": "eslint . --quiet --fix",
     "clean": "rimraf lib",
-    "prebuild": "npm run clean && plugin-kit verify-package --silent",
-    "build": "parcel build --no-cache",
-    "watch": "parcel watch",
+    "prebuild": "npm run clean && plugin-kit verify-package --silent && pkg-utils",
+    "build": "pkg-utils build",
+    "watch": "pkg-utils watch",
     "link-watch": "plugin-kit link-watch",
     "compile": "tsc --noEmit",
     "prepare": "husky install",
@@ -58,11 +62,11 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.1.0",
-    "@commitlint/config-conventional": "^15.0.0",
-    "@parcel/packager-ts": "^2.6.0",
-    "@parcel/transformer-typescript-types": "^2.6.0",
-    "@sanity/plugin-kit": "^1.1.0-ecosystem-preset.5",
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
+    "@sanity/pkg-utils": "^1.16.2",
+    "@sanity/plugin-kit": "^2.0.7",
+    "@sanity/semantic-release-preset": "^2.0.2",
     "@sanity/ui": "^1.0.0-beta.31",
     "@types/lodash": "^4.14.179",
     "@types/react": "^18.0.0",
@@ -70,31 +74,30 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/resize-observer-browser": "^0.1.5",
     "@types/styled-components": "^5.1.20",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "eslint": "^8.3.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-sanity": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-sanity": "^6.0.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-es5": "^1.5.0",
     "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.27.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "husky": "^7.0.0",
-    "lint-staged": "^12.1.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "lodash": "^4.17.21",
-    "parcel": "^2.6.0",
-    "prettier": "^2.5.0",
+    "prettier": "^2.7.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router": "^5.1.0",
     "react-router-dom": "^5.1.0",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.0",
-    "sanity": "3.0.0-dev-preview.22",
+    "sanity": "dev-preview || 3.0.0-rc.0",
     "styled-components": "^5.3.1",
-    "typescript": "4.7.4"
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
     "@sanity/ui": "^1.0.0-beta.31",
@@ -104,7 +107,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "rxjs": "^6.0.0",
-    "sanity": "dev-preview || 3.0.0-dev-preview.22",
+    "sanity": "dev-preview || 3.0.0-rc.0",
     "styled-components": "^5.0.0"
   },
   "dependencies": {
@@ -121,5 +124,6 @@
     "react-fast-compare": "^3.2.0",
     "react-twemoji": "^0.5.0",
     "twemoji": "^14.0.2"
-  }
+  },
+  "homepage": "https://github.com/sanity-io/document-internationalization#readme"
 }

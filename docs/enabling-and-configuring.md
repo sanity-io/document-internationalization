@@ -5,7 +5,7 @@ We will assume the following starting scenario:
 ```js
 import {deskTool} from 'sanity/desk'
 
-export default createConfig({
+export default defineConfig({
   plugins: [deskTool()]
 })
 ```
@@ -19,7 +19,7 @@ Your configuration file will look something like this:
 ```js
 import { withDocumentI18nPlugin } from '@sanity/document-internationalization'
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: withDocumentI18nPlugin([
     // ... other plugins
@@ -40,7 +40,7 @@ If you need even more control, you can refer to the more advanced [desk structur
 import {deskTool} from 'sanity/desk'
 import {withDocumentI18nPlugin, getDocumentList} from '@sanity/document-internationalization'
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: withDocumentI18nPlugin((pluginConfig) => ([
     // ... other plugins
@@ -53,7 +53,7 @@ export default createConfig({
   })
 })
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     documentI18n(
@@ -141,7 +141,7 @@ This option configures the field names used by the plugin
 ```js
 import { documentI18n } from "@sanity/document-internationalization";
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     documentI18n({

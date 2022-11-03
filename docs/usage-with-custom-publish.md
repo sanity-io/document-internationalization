@@ -39,7 +39,7 @@ import {
 } from '@sanity/document-internationalization'
 
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     documentI18n({ /* ... */}),
@@ -73,7 +73,7 @@ import {
 } from '@sanity/document-internationalization'
 
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     documentI18n({ /* ... */}),

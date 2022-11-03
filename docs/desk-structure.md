@@ -33,7 +33,7 @@ import {
   DuplicateWithi18nAction,
 } from '@sanity/document-internationalization'
 
-export default createConfig({
+export default defineConfig({
   // ...
   plugins: [
     documentI18n({ /* ... */}),

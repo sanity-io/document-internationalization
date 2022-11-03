@@ -1,6 +1,6 @@
 import type {SanityClient, SanityDocument, Transaction} from '@sanity/client'
 import type {Reference} from 'sanity'
-import type {ApplyConfigResult} from 'src/utils'
+import {ApplyConfigResult} from '../../utils'
 
 export const fixOrphanedDocuments = (
   sanityClient: SanityClient,

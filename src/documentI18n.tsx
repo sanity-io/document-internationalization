@@ -1,11 +1,11 @@
 import React from 'react'
-import {createPlugin} from 'sanity'
+import {definePlugin} from 'sanity'
 import {resolveActions} from './actions'
 import {createLanguageBadge} from './badges/LanguageBadge'
 import {LanguageSelectWrapped} from './language-select/components'
 import {Ti18nConfig, Ti18nSchema} from './types'
 
-export const documentI18n = createPlugin<Ti18nConfig>((config) => {
+export const documentI18n = definePlugin<Ti18nConfig>((config) => {
   return {
     name: 'document-i18n',
 
