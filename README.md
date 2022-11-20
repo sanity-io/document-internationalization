@@ -1,10 +1,7 @@
 # Document Internationalization Plugin for Sanity.io
 
-> **NOTE**
->
-> This is the **Sanity Studio v3 version** of Document Internationalization Plugin.
->
-> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization).
+> This is a **Sanity Studio v3** plugin.
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization/studio-v2).
 
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
@@ -53,13 +50,13 @@ We will be looking to restore the button placement during Studio V3 dev-preview.
 From the same directory as the Studio run:
 
 ```sh
-npm install --save @sanity/document-internationalization@studio-v3
+npm install --save @sanity/document-internationalization
 ```
 
 or
 
 ```sh
-yarn add @sanity/document-internationalization@studio-v3
+yarn add @sanity/document-internationalization
 ```
 
 
