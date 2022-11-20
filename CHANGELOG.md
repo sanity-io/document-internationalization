@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/sanity-io/document-internationalization/compare/v1.0.0...v1.0.1) (2022-11-20)
+
+### Bug Fixes
+
+- initial Sanity Studio v3 release replacing 1.0.0 which is incorrectly published ([d2f667f](https://github.com/sanity-io/document-internationalization/commit/d2f667f5761f909f4d9797a57619f3335b1ef7ba))
+
 ## 1.0.0 (2022-11-20)
 
 ### ⚠ BREAKING CHANGES
