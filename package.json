@@ -1,7 +1,7 @@
 {
   "name": "@sanity/document-internationalization",
   "version": "1.0.0",
-  "description": "> **NOTE**",
+  "description": "Provides document level translations for Sanity Studio",
   "keywords": [
     "sanity",
     "cms",
