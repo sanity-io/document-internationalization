@@ -2,10 +2,10 @@ name: CI & Release
 on:
   # Build on pushes to release branches
   push:
-    branches: [v3]
+    branches: [main,studio-v2]
   # Build on pull requests targeting release branches
   pull_request:
-    branches: [v3]
+    branches: [main,studio-v2]
   workflow_dispatch:
     inputs:
       release:
@@ -55,7 +55,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
+      - run: npm i
       - run: npm test --if-present
 
   release:
