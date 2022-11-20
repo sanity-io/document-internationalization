@@ -41,7 +41,7 @@ A good use of field-level translation could be a `person` schema. It could have 
 With the [Sanity CLI installed](https://www.sanity.io/docs/getting-started-with-sanity-cli), from the same directory as the Studio run:
 
 ```
-sanity install @sanity/document-internationalization
+sanity install @sanity/document-internationalization@studio-v2
 ```
 
 Ensure that `@sanity/document-internationalization` is listed in `plugins` inside `sanity.json`.
