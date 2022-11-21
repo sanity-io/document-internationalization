@@ -1,7 +1,7 @@
 # Document Internationalization Plugin for Sanity.io
 
 > This is a **Sanity Studio v3** plugin.
-> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization/studio-v2).
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2).
 
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
