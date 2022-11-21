@@ -4,9 +4,9 @@ import {Button, Badge, Box, Flex, Text, useToast, Spinner} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {SplitVerticalIcon, AddIcon, CheckmarkIcon} from '@sanity/icons'
 
-import {Language, Metadata, TranslationReference} from './types'
-import {METADATA_SCHEMA_NAME} from './constants'
-import {useOpenInNewPane} from './hooks/useOpenInNewPane'
+import {Language, Metadata, TranslationReference} from '../types'
+import {METADATA_SCHEMA_NAME} from '../constants'
+import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 
 type LanguageOptionProps = {
   language: Language
@@ -102,7 +102,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
       transaction.createIfNotExists({
         _id: metadataId,
         _type: METADATA_SCHEMA_NAME,
-        schemaType,
+        schemaTypes: [schemaType],
         translations: [newTranslationReference, sourceReference].filter(Boolean),
       })
     }

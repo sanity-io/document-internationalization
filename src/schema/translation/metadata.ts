@@ -3,8 +3,7 @@ import {TranslateIcon} from '@sanity/icons'
 
 import {METADATA_SCHEMA_NAME} from '../../constants'
 
-// eslint-disable-next-line no-warning-comments
-// FIXME: TS having a hard time determining the return type here. Likely a V3 type problem.
+// TODO: TS having a hard time determining the return type here. Likely a V3 type problem.
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default (schemaTypes: string[]) =>
   defineType({
@@ -19,24 +18,22 @@ export default (schemaTypes: string[]) =>
         type: 'internationalizedArrayReference',
       }),
       defineField({
-        name: 'schemaType',
+        name: 'schemaTypes',
         description:
-          'Used to scope the reference fields above to validate all translations share the same type. Field is locked once a value is selected.',
-        type: 'string',
-        options: {
-          list: schemaTypes,
-          layout: `radio`,
-        },
+          'Used to filter the reference fields above so all translations share the same types.',
+        type: 'array',
+        of: [{type: 'string'}],
+        options: {list: schemaTypes},
         readOnly: ({value}) => Boolean(value),
       }),
     ],
     preview: {
       select: {
         translations: 'translations',
-        schemaType: 'schemaType',
+        documentSchemaTypes: 'schemaTypes',
       },
       prepare(selection) {
-        const {translations, schemaType} = selection
+        const {translations, documentSchemaTypes} = selection
         const title =
           translations.length === 1 ? `1 Translation` : `${translations.length} Translations`
         const languageKeys = translations.length
@@ -44,7 +41,9 @@ export default (schemaTypes: string[]) =>
           : ``
         const subtitle = [
           languageKeys ? `(${languageKeys})` : null,
-          schemaType ? schemaType.toUpperCase() : `No Schema Defined`,
+          documentSchemaTypes?.length
+            ? documentSchemaTypes.map((s: string) => s.toUpperCase()).join(`, `)
+            : `No Schemas Defined`,
         ]
           .filter(Boolean)
           .join(` `)

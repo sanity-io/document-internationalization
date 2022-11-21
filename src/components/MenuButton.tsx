@@ -3,9 +3,9 @@ import {Text, Card, useClickOutside, Stack, Popover, Button, Box} from '@sanity/
 import {TranslateIcon} from '@sanity/icons'
 import {useEditState} from 'sanity'
 
-import {Language} from './types'
+import {Language} from '../types'
 import LanguageOption from './LanguageOption'
-import {useTranslationMetadata} from './hooks/useLanguageMetadata'
+import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import LanguageManage from './LanguageManage'
 import LanguagePatch from './LanguagePatch'
 
@@ -44,6 +44,8 @@ export default function MenuButton(props: MenuButtonProps) {
             <>
               {supportedLanguages.map((language, langIndex) =>
                 !loading && sourceLanguageId && sourceLanguageIsValid ? (
+                  // Button to duplicate this document to a new translation
+                  // And either create or update the metadata document
                   <LanguageOption
                     key={language.id}
                     index={langIndex}
@@ -59,6 +61,7 @@ export default function MenuButton(props: MenuButtonProps) {
                     translation={metadata?.translations.find((t) => t._key === language.id)}
                   />
                 ) : (
+                  // Button to set a language field on *this* document
                   <LanguagePatch
                     key={language.id}
                     languageField={languageField}
@@ -83,16 +86,16 @@ export default function MenuButton(props: MenuButtonProps) {
                   {/* Current document has no language field */}
                   {sourceLanguageId ? null : (
                     <Card tone="caution" padding={3}>
-                      <Text size={1} align="center">
+                      <Text size={1}>
                         Choose a language to <br />
-                        apply to <strong>this</strong> Document
+                        apply to <strong>this Document</strong>
                       </Text>
                     </Card>
                   )}
                   {/* Current document has an invalid language field */}
                   {sourceLanguageId && !sourceLanguageIsValid ? (
                     <Card tone="caution" padding={3}>
-                      <Text size={1} align="center">
+                      <Text size={1}>
                         Change the current language value <code>{sourceLanguageId}</code>
                         <br />
                         to one of the supported languages

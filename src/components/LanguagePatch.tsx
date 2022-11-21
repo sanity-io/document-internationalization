@@ -3,7 +3,7 @@ import {ChevronRightIcon} from '@sanity/icons'
 import {Button, useToast} from '@sanity/ui'
 import {SanityDocument, useClient} from 'sanity'
 
-import {Language} from './types'
+import {Language} from '../types'
 
 type LanguagePatchProps = {
   language: Language
@@ -58,6 +58,7 @@ export default function LanguagePatch(props: LanguagePatchProps) {
       icon={ChevronRightIcon}
       onClick={() => handleClick()}
       disabled={disabled}
+      justify="flex-start"
     />
   )
 }

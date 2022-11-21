@@ -1,28 +1,33 @@
-# @sanity/document-internationalization
+> **NOTE**
+>
+> This is the **Sanity Studio v3 version** of @sanity/document-internationalization.
+>
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization).
 
-⚠️ This is only a POC for a future version of this plugin. It should not be used in Production and may significantly change.
+# @sanity/document-internationalization
 
 ![v3 Studio with @sanity/document-internationalization v1 Installed](/img/v3-studio-with-doc-intl-v1.png)
 
-A complete rewrite of the original v0 Document Internationalization plugin, exclusively for Sanity Studio v3. The major benefits include:
+A complete rewrite of the original Document Internationalization plugin, exclusively for Sanity Studio v3. The major benefits include:
 
 - Start new documents in any language and create linking references later
 - Stores translation references in a separate "meta" document
-- Updates to one translation no longer effect the change history of others
-- Does not require or modify on Document Actions
+- Updates to one translation no longer affect the change history of others
+- Does not require custom Document Actions
+- Changes made to one translation do not patch changes to other documents
 - Configurable "language" field on documents
 - Built-in static and parameterized initial value templates for new documents
 
 ## Installation
 
 ```
-npm install --save @sanity/document-internationalization@studio-v3-plugin-v1
+npm install --save @sanity/document-internationalization@studio-v3-plugin-v2
 ```
 
 or
 
 ```
-yarn add @sanity/document-internationalization@studio-v3-plugin-v1
+yarn add @sanity/document-internationalization@studio-v3-plugin-v2
 ```
 
 ## Usage
@@ -46,6 +51,7 @@ export const createConfig({
       schemaTypes: ['lesson'],
       // Optional
       languageField: `language` // defauts to "language"
+      bulkPublish: true // defaults to false
     })
   ]
 })
@@ -136,3 +142,26 @@ The major missing feature at this time is asynchronously loading languages. Ther
 
 MIT © Simeon Griggs
 See LICENSE
+
+## License
+
+MIT-licensed. See LICENSE.
+
+## Develop & test
+
+This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
+with default configuration for build & watch scripts.
+
+See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
+on how to run this plugin with hotreload in the studio.
+
+### Release new version
+
+Run ["CI & Release" workflow](https://github.com/sanity-io/document-internationalization/actions/workflows/main.yml).
+Make sure to select the main branch and check "Release new version".
+
+Semantic release will only release on configured branches, so it is safe to run release on any branch.
+
+## License
+
+[MIT](LICENSE) © Simeon Griggs

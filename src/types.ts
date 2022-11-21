@@ -9,6 +9,7 @@ export type PluginConfig = {
   supportedLanguages: Language[]
   schemaTypes: string[]
   languageField?: string
+  bulkPublish?: boolean
 }
 
 export type TranslationReference = {

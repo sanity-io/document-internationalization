@@ -1,20 +1,27 @@
 import React from 'react'
-import {createPlugin, defineField} from 'sanity'
+import {definePlugin, defineField} from 'sanity'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
+import {Stack} from '@sanity/ui'
 
 import metadata from './schema/translation/metadata'
-import MenuButton from './MenuButton'
+import MenuButton from './components/MenuButton'
 import {PluginConfig} from './types'
 import {LanguageBadge} from './badges'
+import {METADATA_SCHEMA_NAME} from './constants'
+import BulkPublish from './components/BulkPublish'
 
 const DEFAULT_CONFIG = {
   supportedLanguages: [],
   schemaTypes: [],
   languageField: `language`,
+  bulkPublish: false,
 }
 
-export const documentInternationalization = createPlugin<PluginConfig>((config) => {
-  const {supportedLanguages, schemaTypes, languageField} = {...DEFAULT_CONFIG, ...config}
+export const documentInternationalization = definePlugin<PluginConfig>((config) => {
+  const {supportedLanguages, schemaTypes, languageField, bulkPublish} = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  }
 
   const renderLanguageFilter = (schemaType: string, documentId?: string) => {
     return (
@@ -29,23 +36,53 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
 
   return {
     name: '@sanity/document-internationalization',
+
+    // Adds:
+    // - A bulk-publishing UI component to the form
+    // - Will only work for projects on a compatible plan
+    form: {
+      components: {
+        input: (props) => {
+          if (
+            bulkPublish &&
+            props.id === 'root' &&
+            props.schemaType.name === METADATA_SCHEMA_NAME
+          ) {
+            return (
+              <Stack space={5}>
+                <BulkPublish {...props} />
+                {props.renderDefault(props)}
+              </Stack>
+            )
+          }
+
+          return props.renderDefault(props)
+        },
+      },
+    },
+
+    // Adds:
+    // - The `Translations` dropdown to the editing form
+    // - `Badges` to documents with a language value
     document: {
       unstable_languageFilter: (prev, ctx) => {
         const {schemaType, documentId} = ctx
 
-        // TODO: Memoize this function
         return schemaTypes.includes(schemaType)
           ? [...prev, () => renderLanguageFilter(schemaType, documentId)]
           : prev
       },
-      badges: (prev, context) => {
-        if (!schemaTypes.includes(context.schemaType)) {
+      badges: (prev, {schemaType}) => {
+        if (!schemaTypes.includes(schemaType)) {
           return prev
         }
 
         return [(props) => LanguageBadge(props, supportedLanguages, languageField), ...prev]
       },
     },
+
+    // Adds:
+    // - The `Translations metadata` document type to the schema
     schema: {
       // Create the metadata document type
       types: [metadata(schemaTypes)],
@@ -77,12 +114,17 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
         return [...prev, ...parameterizedTemplates, ...staticTemplates]
       },
     },
+
+    // Uses:
+    // - `sanity-plugin-internationalized-array` to maintain the translations array
     plugins: [
       // Translation metadata stores its references using this plugin
       // It cuts down on attribute usage and gives UI conveniences to add new translations
       internationalizedArray({
         languages: supportedLanguages,
         fieldTypes: [
+          // TODO: The plugin should allow this kind of input
+          // @ts-ignore
           defineField(
             {
               name: 'reference',
@@ -101,12 +143,11 @@ export const documentInternationalization = createPlugin<PluginConfig>((config) 
                   }
 
                   const language = parent._key
-                  const {schemaType} = document
 
-                  if (schemaType) {
+                  if (document.schemaTypes) {
                     return {
-                      filter: `_type == $schemaType && ${languageField} == $language`,
-                      params: {schemaType, language},
+                      filter: `_type in $schemaTypes && ${languageField} == $language`,
+                      params: {schemaTypes: document.schemaTypes, language},
                     }
                   }
 

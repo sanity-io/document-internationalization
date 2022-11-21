@@ -1,6 +1,6 @@
 import React from 'react'
 import {usePaneRouter} from 'sanity/desk'
-import {RouterContext} from 'sanity'
+import {RouterContext} from 'sanity/router'
 
 export function useOpenInNewPane(id?: string, type?: string) {
   const routerContext = React.useContext(RouterContext)
