@@ -1,11 +1,6 @@
 {
   "name": "@sanity/document-internationalization",
   "version": "0.3.7",
-  "license": "MIT",
-  "engines": {
-    "node": ">=14"
-  },
-  "author": "Sanity.io <hello@sanity.io>",
   "keywords": [
     "sanity",
     "cms",
@@ -16,19 +11,21 @@
     "i18n",
     "localization"
   ],
+  "bugs": {
+    "url": "https://github.com/sanity-io/document-internationalization/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:sanity-io/document-internationalization"
+  },
+  "license": "MIT",
+  "author": "Sanity.io <hello@sanity.io>",
   "files": [
     "lib/",
     "doc/",
     "config.dist.json",
     "sanity.json"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sanity-io/document-internationalization"
-  },
-  "bugs": {
-    "url": "https://github.com/sanity-io/document-internationalization/issues"
-  },
   "scripts": {
     "lint": "npm run eslint -- .",
     "eslint": "eslint --ext=.js,.jsx,.mjs,.ts,.tsx --quiet",
@@ -52,6 +49,23 @@
       "pre-commit": "npm run lint:fix"
     }
   },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "eslint . --quiet --fix"
+    ]
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "@cprecioso/country-flag-emoji": "^1.0.0",
+    "html-react-parser": "^1.4.12",
+    "just-omit": "^2.0.1",
+    "just-safe-get": "^4.0.1",
+    "just-split": "^3.0.1",
+    "pinst": "^2.1.6",
+    "react-twemoji": "^0.5.0",
+    "regenerator-runtime": "^0.13.7",
+    "twemoji": "^14.0.2"
+  },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
@@ -61,6 +75,8 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.12.7",
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
@@ -73,6 +89,7 @@
     "@sanity/icons": "^1.2.5",
     "@sanity/language-filter": "^2.28.0",
     "@sanity/react-hooks": "^2.20.0",
+    "@sanity/semantic-release-preset": "^2.0.1",
     "@sanity/state-router": "^2.0.0",
     "@sanity/structure": "^2.20.0",
     "@sanity/types": "^2.19.0",
@@ -133,21 +150,7 @@
     "rxjs": "^6.0.0",
     "styled-components": "^5.0.0"
   },
-  "dependencies": {
-    "@babel/runtime": "^7.12.5",
-    "@cprecioso/country-flag-emoji": "^1.0.0",
-    "html-react-parser": "^1.4.12",
-    "just-omit": "^2.0.1",
-    "just-safe-get": "^4.0.1",
-    "just-split": "^3.0.1",
-    "pinst": "^2.1.6",
-    "react-twemoji": "^0.5.0",
-    "regenerator-runtime": "^0.13.7",
-    "twemoji": "^14.0.2"
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint . --quiet --fix"
-    ]
+  "engines": {
+    "node": ">=14"
   }
 }

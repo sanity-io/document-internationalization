@@ -40,11 +40,16 @@ A good use of field-level translation could be a `person` schema. It could have 
 
 With the [Sanity CLI installed](https://www.sanity.io/docs/getting-started-with-sanity-cli), from the same directory as the Studio run:
 
-```
-sanity install @sanity/document-internationalization@studio-v2
+```sh
+yarn add @sanity/document-internationalization@studio-v2
 ```
 
-Ensure that `@sanity/document-internationalization` is listed in `plugins` inside `sanity.json`.
+Next, add `"@sanity/document-internationalization"` to `sanity.json` plugins array:
+```json
+"plugins": [
+  "@sanity/document-internationalization"
+]
+```
 
 The plugin is now installed, but you will need to complete the following steps to see the Document Translation UI:
 
