@@ -24,7 +24,9 @@
     "lib/",
     "doc/",
     "config.dist.json",
-    "sanity.json"
+    "sanity.json",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "lint": "npm run eslint -- .",
