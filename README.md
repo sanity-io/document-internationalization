@@ -1,19 +1,19 @@
-> **NOTE**
->
-> This is the **Sanity Studio v3 version** of @sanity/document-internationalization.
->
-> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization).
+- This is a completely new, **Sanity Studio v3 exclusive version** of @sanity/document-internationalization released as v2.0.0 which contains new features and requires content migrations to upgrade from previous versions. There is example code below.
+
+- For the **Studio v3 compatible version** of the original plugin, please install v1.0.0 and above.
+
+- For the **Studio v2 version** (plugin version 0), please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization) and install v0.0.0 and above.
 
 # @sanity/document-internationalization
 
 ![v3 Studio with @sanity/document-internationalization v1 Installed](/img/v3-studio-with-doc-intl-v1.png)
 
-A complete rewrite of the original Document Internationalization plugin, exclusively for Sanity Studio v3. The major benefits include:
+A complete rewrite of the original Document Internationalization plugin, exclusively for Sanity Studio v3. Major benefits from the previous versions include:
 
-- Start new documents in any language and create linking references later
-- Stores translation references in a separate "meta" document
+- Create new documents in any language and link references later
+- Translation references are written to a separate "meta" document
 - Updates to one translation no longer affect the change history of others
-- Does not require custom Document Actions
+- Does not require custom - nor modify the built-in - Document Actions
 - Changes made to one translation do not patch changes to other documents
 - Configurable "language" field on documents
 - Built-in static and parameterized initial value templates for new documents
@@ -35,6 +35,8 @@ yarn add @sanity/document-internationalization@studio-v3-plugin-v2
 Add it as a plugin in sanity.config.ts (or .js):
 
 ```ts
+
+// sanity.config.ts
  import {createConfig} from 'sanity'
  import {documentInternationalization} from '@sanity/document-internationalization'
 
@@ -57,7 +59,7 @@ export const createConfig({
 })
 ```
 
-The schema types that use document internationalization must also have a string field with the same name configured in the `languageField` setting. You can hide this field since the plugin will handle writing patches to it.
+The schema types that use document internationalization must also have a `string` field type with the same name configured in the `languageField` setting. You can hide this field since the plugin will handle writing patches to it.
 
 ```ts
 // ./schema/lesson.ts
@@ -125,11 +127,11 @@ query GetTranslations($id: ID!) {
 }
 ```
 
-## Migrating from v0
+## Migrating from v0 / v1
 
 There are two scripts in the `./migrations` folder of this repository. They contain scripts which should help move your content over – however they may require updating to match your current settings.
 
-**These have not been thoroughly tested on all platforms. Use at your own risk. Please take a backup before proceeding.**
+**These have not been thoroughly tested on all platforms. Please take a backup before proceeding. Test on a duplicate dataset.**
 
 - `./migrations/renameField.ts` will update the language field on translated documents
 - `./migrations/createMetadata.ts` will create metadata documents for the arrays of references and unset those fields from translated documents

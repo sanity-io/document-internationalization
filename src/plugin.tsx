@@ -138,11 +138,14 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
                 // TODO: Update type once it knows the values of this filter
                 // @ts-ignore
                 filter: ({parent, document}) => {
-                  if (!parent?._key) {
-                    return null
-                  }
+                  if (!parent) return null
 
-                  const language = parent._key
+                  // I'm not sure in what instance there's an array of parents
+                  // But the Type suggests it's possible
+                  const parentArray = Array.isArray(parent) ? parent : [parent]
+                  const language = !parentArray.find((p) => p._key)?._key
+
+                  if (!language) return null
 
                   if (document.schemaTypes) {
                     return {
