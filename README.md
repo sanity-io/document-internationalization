@@ -18,7 +18,7 @@ A complete rewrite of the original Document Internationalization plugin, exclusi
 - Configurable "language" field on documents
 - Built-in static and parameterized initial value templates for new documents
 
-## Install
+## Installation
 
 ```
 npm install --save @sanity/document-internationalization@studio-v3-plugin-v2
