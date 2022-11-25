@@ -144,7 +144,6 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
                   // But the Type suggests it's possible
                   const parentArray = Array.isArray(parent) ? parent : [parent]
                   const language = parentArray.find((p) => p._key)
-                  console.log({parentArray, languageField})
 
                   if (!language?._key) return null
 
