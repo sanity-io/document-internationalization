@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/sanity-io/document-internationalization/compare/v1.0.1...v1.0.2) (2022-11-25)
+
+### Bug Fixes
+
+- **deps:** sanity ^3.0.0 (works with rc.3) ([6af3ba2](https://github.com/sanity-io/document-internationalization/commit/6af3ba26f355acc466da5f1912a01560cc7c8535))
+
 ## [1.0.1](https://github.com/sanity-io/document-internationalization/compare/v1.0.0...v1.0.1) (2022-11-20)
 
 ### Bug Fixes
