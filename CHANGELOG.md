@@ -5,6 +5,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.2](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.1...v2.0.0-studio-v3-plugin-v2.2) (2022-11-25)
+
+### Bug Fixes
+
+- reference filter ([ef940ea](https://github.com/sanity-io/document-internationalization/commit/ef940eaab0acdef0d94cd4bb4ff0b4269852fe34))
+- reference filter ([4529828](https://github.com/sanity-io/document-internationalization/commit/45298280ae805f459a425da11d2b96093e7cf4cc))
+- update intl array version ([ce425fc](https://github.com/sanity-io/document-internationalization/commit/ce425fc84dbe4224870878b57754ad8d26ca7824))
+
 ## [2.0.0-studio-v3-plugin-v2.1](https://github.com/sanity-io/document-internationalization/compare/v1.0.1...v2.0.0-studio-v3-plugin-v2.1) (2022-11-22)
 
 ### ⚠ BREAKING CHANGES
