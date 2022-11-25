@@ -100,7 +100,7 @@ export function createDeleteAction(pluginConfig: Ti18nConfig): DocumentActionCom
           DISABLED_REASON_TITLE[deleteOp.disabled as keyof typeof DISABLED_REASON_TITLE]) ||
         '',
       label: isDeleting ? UiMessages.deleteAll.deleting : UiMessages.deleteAll.buttonTitle,
-      modal: isConfirmDialogOpen && {
+      dialog: isConfirmDialogOpen && {
         type: 'dialog',
         onClose: onComplete,
         content: (
