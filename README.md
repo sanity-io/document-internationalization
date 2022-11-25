@@ -150,6 +150,7 @@ There are two scripts in the `./migrations` folder of this repository. They cont
 - [ ] Asynchronous language plugin config option
 - [ ] Export a validator to allow the same slug on connected translations
 - [ ] Guidance to copy/paste changes between documents
+- [ ] Guidance on handling singletons
 - [ ] Add extra fields to the metadata document
 
 ## License

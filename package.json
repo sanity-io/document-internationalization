@@ -51,7 +51,7 @@
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "1.0.0-beta.32",
     "@sanity/uuid": "^3.0.1",
-    "sanity-plugin-internationalized-array": "^1.3.3",
+    "sanity-plugin-internationalized-array": "^1.4.0",
     "sanity-plugin-utils": "^1.0.0"
   },
   "devDependencies": {

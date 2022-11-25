@@ -143,20 +143,21 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
                   // I'm not sure in what instance there's an array of parents
                   // But the Type suggests it's possible
                   const parentArray = Array.isArray(parent) ? parent : [parent]
-                  const language = !parentArray.find((p) => p._key)?._key
+                  const language = parentArray.find((p) => p._key)
+                  console.log({parentArray, languageField})
 
-                  if (!language) return null
+                  if (!language?._key) return null
 
                   if (document.schemaTypes) {
                     return {
                       filter: `_type in $schemaTypes && ${languageField} == $language`,
-                      params: {schemaTypes: document.schemaTypes, language},
+                      params: {schemaTypes: document.schemaTypes, language: language._key},
                     }
                   }
 
                   return {
                     filter: `${languageField} == $language`,
-                    params: {language},
+                    params: {language: language._key},
                   }
                 },
               },
