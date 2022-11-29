@@ -1,4 +1,4 @@
-# @sanity/document-internationalization
+# @sanity/document-internationalization 
 
 - This is a completely new, **Sanity Studio v3 exclusive version** of @sanity/document-internationalization released as v2.0.0 which contains new features and requires content migrations to upgrade from previous versions. There is example code below.
 
