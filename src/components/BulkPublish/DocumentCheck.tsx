@@ -3,7 +3,7 @@ import {Card, Spinner} from '@sanity/ui'
 import {
   useEditState,
   useValidationStatus,
-  SanityPreview as Preview,
+  Preview,
   SchemaType,
   useSchema,
 } from 'sanity'
