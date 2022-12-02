@@ -1,16 +1,16 @@
-import React, {useCallback, useState} from 'react'
+import React, {useCallback, useMemo, useState} from 'react'
 import {Text, Card, useClickOutside, Stack, Popover, Button, Box} from '@sanity/ui'
 import {TranslateIcon} from '@sanity/icons'
 import {useEditState} from 'sanity'
-
-import {Language} from '../types'
 import LanguageOption from './LanguageOption'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import LanguageManage from './LanguageManage'
 import LanguagePatch from './LanguagePatch'
+import type {SupportedLanguagesConfig} from '../types'
+import {useLanguages} from '../hooks/useLanguages'
 
 type MenuButtonProps = {
-  supportedLanguages: Language[]
+  supportedLanguages: SupportedLanguagesConfig
   schemaType: string
   documentId: string
   languageField: string
@@ -21,6 +21,7 @@ export default function MenuButton(props: MenuButtonProps) {
 
   const [open, setOpen] = useState(false)
   const handleClick = useCallback(() => setOpen((o) => !o), [])
+  const [languagesPending, languagesList] = useLanguages(supportedLanguages)
   const [button, setButton] = useState<HTMLElement | null>(null)
   const [popover, setPopover] = useState<HTMLElement | null>(null)
   const handleClickOutside = useCallback(() => setOpen(false), [])
@@ -30,7 +31,10 @@ export default function MenuButton(props: MenuButtonProps) {
   const source = draft || published
 
   const sourceLanguageId = source?.[languageField] as string | undefined
-  const sourceLanguageIsValid = supportedLanguages.some((l) => l.id === sourceLanguageId)
+  const sourceLanguageIsValid = useMemo(
+    () => languagesList.some((l) => l.id === sourceLanguageId),
+    [languagesList, sourceLanguageId]
+  )
 
   const content = (
     <Box overflow="auto">
@@ -40,9 +44,9 @@ export default function MenuButton(props: MenuButtonProps) {
         </Card>
       ) : (
         <Stack padding={1} space={1}>
-          {supportedLanguages.length > 0 ? (
+          {languagesList.length > 0 ? (
             <>
-              {supportedLanguages.map((language, langIndex) =>
+              {languagesList.map((language, langIndex) =>
                 !loading && sourceLanguageId && sourceLanguageIsValid ? (
                   // Button to duplicate this document to a new translation
                   // And either create or update the metadata document
@@ -117,7 +121,8 @@ export default function MenuButton(props: MenuButtonProps) {
       <Button
         text="Translations"
         mode="bleed"
-        disabled={!source}
+        disabled={!source || languagesPending}
+        loading={languagesPending}
         tone={
           !source || (!loading && sourceLanguageId && sourceLanguageIsValid) ? undefined : `caution`
         }

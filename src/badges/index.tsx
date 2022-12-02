@@ -1,17 +1,19 @@
 import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
+import {useLanguages} from '../hooks/useLanguages'
 
-import {Language} from '../types'
+import type {SupportedLanguagesConfig} from '../types'
 
 export function LanguageBadge(
   props: DocumentBadgeProps,
-  supportedLanguages: Language[],
+  supportedLanguages: SupportedLanguagesConfig,
   languageField: string
 ): DocumentBadgeDescription | null {
+  const [pending, languagesList] = useLanguages(supportedLanguages)
   const source = props?.draft || props?.published
   const languageId = source?.[languageField]
-  const language = supportedLanguages.find((l) => l.id === languageId)
+  const language = languagesList.find((l) => l.id === languageId)
 
-  if (!language) {
+  if (!language || pending) {
     return null
   }
 

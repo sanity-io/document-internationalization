@@ -90,6 +90,11 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
       // For every schema type this plugin is enabled on
       // Create an initial value template to set the language
       templates: (prev, {schema}) => {
+        // @TODO to support async languages and templates we need to fetch the languages async here
+        // I am not sure if this would even be possible in templates - at least not in its current form
+        const languagesList = Array.isArray(supportedLanguages)
+          ? supportedLanguages
+          : [] // await supportedLanguages()
         const parameterizedTemplates = schemaTypes.map((schemaType) => ({
           id: `${schemaType}-parameterized`,
           title: `${schema?.get(schemaType)?.title ?? schemaType}: with Language`,
@@ -101,7 +106,7 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
         }))
 
         const staticTemplates = schemaTypes.flatMap((schemaType) => {
-          return supportedLanguages.map((language) => ({
+          return languagesList.map((language) => ({
             id: `${schemaType}-${language.id}`,
             title: `${language.title} Lesson`,
             schemaType,
