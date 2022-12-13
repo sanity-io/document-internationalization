@@ -1,12 +1,6 @@
 import React from 'react'
 import {Card, Spinner} from '@sanity/ui'
-import {
-  useEditState,
-  useValidationStatus,
-  Preview,
-  SchemaType,
-  useSchema,
-} from 'sanity'
+import {useEditState, useValidationStatus, Preview, SchemaType, useSchema} from 'sanity'
 
 type DocumentCheckProps = {
   id: string

@@ -4,6 +4,7 @@ import {Button, useToast} from '@sanity/ui'
 import {SanityDocument, useClient} from 'sanity'
 
 import {Language} from '../types'
+import {API_VERSION} from '../constants'
 
 type LanguagePatchProps = {
   language: Language
@@ -12,11 +13,20 @@ type LanguagePatchProps = {
   schemaType: string
   source: SanityDocument | null
   disabled: boolean
+  apiVersion?: string
 }
 
 export default function LanguagePatch(props: LanguagePatchProps) {
-  const {language, languageField, documentId, schemaType, source, disabled = false} = props
-  const client = useClient()
+  const {
+    apiVersion = API_VERSION,
+    language,
+    languageField,
+    documentId,
+    schemaType,
+    source,
+    disabled = false,
+  } = props
+  const client = useClient({apiVersion})
   const toast = useToast()
 
   const handleClick = React.useCallback(() => {

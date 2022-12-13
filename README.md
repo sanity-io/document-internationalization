@@ -43,7 +43,6 @@ yarn add @sanity/document-internationalization@studio-v3-plugin-v2
 Add it as a plugin in sanity.config.ts (or .js):
 
 ```ts
-
 // sanity.config.ts
  import {createConfig} from 'sanity'
  import {documentInternationalization} from '@sanity/document-internationalization'
@@ -52,16 +51,20 @@ export const createConfig({
   // ...
   plugins: [
     documentInternationalization({
-      // Required
+      // Required, either:
+      // An array of supported languages
       supportedLanguages: [
         {id: 'nb', title: 'Norwegian (Bokmål)'},
         {id: 'nn', title: 'Norwegian (Nynorsk)'},
         {id: 'en', title: 'English'}
       ],
+      // OR a function that takes the client and returns a promise of an array of supported languages
+      supportedLanguages: (client) => client.fetch(`*[_type == "language"]{id, title}`),
+      // Required
       schemaTypes: ['lesson'],
       // Optional
       languageField: `language` // defauts to "language"
-      // Requires access to the Publishing API
+      // Optional, requires access to the Publishing API
       bulkPublish: true // defaults to false
     })
   ]
@@ -147,7 +150,8 @@ There are two scripts in the `./migrations` folder of this repository. They cont
 
 ## Roadmap
 
-- [ ] Asynchronous language plugin config option
+- [ ] Stabilize bulk publishing feature
+- [x] Asynchronous language plugin config option
 - [ ] Export a validator to allow the same slug on connected translations
 - [ ] Guidance to copy/paste changes between documents
 - [ ] Guidance on handling singletons

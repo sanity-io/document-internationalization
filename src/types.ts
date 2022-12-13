@@ -1,12 +1,14 @@
-import {SanityDocumentLike} from 'sanity'
+import type {SanityDocumentLike, SanityClient} from 'sanity'
 
 export type Language = {
-  id: string
+  id: Intl.UnicodeBCP47LocaleIdentifier
   title: string
 }
 
+export type SupportedLanguages = Language[] | ((client: SanityClient) => Promise<Language[]>)
+
 export type PluginConfig = {
-  supportedLanguages: Language[]
+  supportedLanguages: SupportedLanguages
   schemaTypes: string[]
   languageField?: string
   bulkPublish?: boolean

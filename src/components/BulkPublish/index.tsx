@@ -10,17 +10,19 @@ import {
   useWorkspace,
 } from 'sanity'
 import DocumentCheck from './DocumentCheck'
+import {API_VERSION} from '../../constants'
 
 export type TranslationReference = KeyedObject & TypedObject & {value: Reference}
 
 export type TranslationMetadataDocument = SanityDocument & {
   translations: TranslationReference[]
   schemaTypes: string[]
+  apiVersion?: string
 }
 
 export default function BulkPublish(props: InputProps) {
-  const {translations} = props.value as TranslationMetadataDocument
-  const client = useClient({apiVersion: `v2022-11-21`})
+  const {apiVersion = API_VERSION, translations} = props.value as TranslationMetadataDocument
+  const client = useClient({apiVersion})
   const {projectId, dataset} = useWorkspace()
   const toast = useToast()
   const [invalidIds, setInvalidIds] = React.useState<string[]>([])

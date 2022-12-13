@@ -5,7 +5,7 @@ import {uuid} from '@sanity/uuid'
 import {SplitVerticalIcon, AddIcon, CheckmarkIcon} from '@sanity/icons'
 
 import {Language, Metadata, TranslationReference} from '../types'
-import {METADATA_SCHEMA_NAME} from '../constants'
+import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 
 type LanguageOptionProps = {
@@ -20,6 +20,7 @@ type LanguageOptionProps = {
   sourceLanguageId?: string
   metadata?: Metadata | null
   translation?: TranslationReference
+  apiVersion?: string
 }
 
 function createReference(key: string, ref: string, type: string) {
@@ -38,6 +39,7 @@ function createReference(key: string, ref: string, type: string) {
 
 export default function LanguageOption(props: LanguageOptionProps) {
   const {
+    apiVersion = API_VERSION,
     index,
     language,
     languageField,
@@ -50,7 +52,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
     metadata,
     translation,
   } = props
-  const client = useClient()
+  const client = useClient({apiVersion})
   const toast = useToast()
 
   const open = useOpenInNewPane(translation?.value?._ref, schemaType)

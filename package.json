@@ -51,8 +51,8 @@
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "^1.0.0",
     "@sanity/uuid": "^3.0.1",
-    "sanity-plugin-internationalized-array": "^1.4.1",
-    "sanity-plugin-utils": "^1.0.0"
+    "sanity-plugin-internationalized-array": "^1.5.0",
+    "sanity-plugin-utils": "^1.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.2.0",

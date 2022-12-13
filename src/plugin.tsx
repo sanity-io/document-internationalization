@@ -50,7 +50,7 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
           ) {
             return (
               <Stack space={5}>
-                <BulkPublish {...props} />
+                {/* <BulkPublish {...props} /> */}
                 {props.renderDefault(props)}
               </Stack>
             )
@@ -90,6 +90,11 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
       // For every schema type this plugin is enabled on
       // Create an initial value template to set the language
       templates: (prev, {schema}) => {
+        // Templates are not setup for async languages
+        if (!Array.isArray(supportedLanguages)) {
+          return prev
+        }
+
         const parameterizedTemplates = schemaTypes.map((schemaType) => ({
           id: `${schemaType}-parameterized`,
           title: `${schema?.get(schemaType)?.title ?? schemaType}: with Language`,
@@ -103,7 +108,7 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
         const staticTemplates = schemaTypes.flatMap((schemaType) => {
           return supportedLanguages.map((language) => ({
             id: `${schemaType}-${language.id}`,
-            title: `${language.title} ${schemaType}`,
+            title: `${language.title} ${schema?.get(schemaType)?.title ?? schemaType}`,
             schemaType,
             value: {
               [languageField]: language.id,

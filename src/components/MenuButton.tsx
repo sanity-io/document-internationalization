@@ -1,23 +1,37 @@
+import {suspend} from 'suspend-react'
 import React, {useCallback, useState} from 'react'
 import {Text, Card, useClickOutside, Stack, Popover, Button, Box} from '@sanity/ui'
 import {TranslateIcon} from '@sanity/icons'
-import {useEditState} from 'sanity'
+import {useClient, useEditState, useWorkspace} from 'sanity'
 
-import {Language} from '../types'
+import {SupportedLanguages} from '../types'
 import LanguageOption from './LanguageOption'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import LanguageManage from './LanguageManage'
 import LanguagePatch from './LanguagePatch'
+import {API_VERSION} from '../constants'
 
 type MenuButtonProps = {
-  supportedLanguages: Language[]
+  supportedLanguages: SupportedLanguages
   schemaType: string
   documentId: string
   languageField: string
+  apiVersion?: string
 }
 
 export default function MenuButton(props: MenuButtonProps) {
-  const {supportedLanguages, schemaType, documentId, languageField} = props
+  const {apiVersion = API_VERSION, schemaType, documentId, languageField} = props
+
+  const client = useClient({apiVersion})
+  const supportedLanguages = Array.isArray(props.supportedLanguages)
+    ? props.supportedLanguages
+    : // eslint-disable-next-line require-await
+      suspend(async () => {
+        if (typeof props.supportedLanguages === 'function') {
+          return props.supportedLanguages(client)
+        }
+        return props.supportedLanguages
+      }, [])
 
   const [open, setOpen] = useState(false)
   const handleClick = useCallback(() => setOpen((o) => !o), [])
@@ -31,6 +45,17 @@ export default function MenuButton(props: MenuButtonProps) {
 
   const sourceLanguageId = source?.[languageField] as string | undefined
   const sourceLanguageIsValid = supportedLanguages.some((l) => l.id === sourceLanguageId)
+  const allLanguagesAreValid = React.useMemo(() => {
+    const valid = supportedLanguages.every((l) => l.id && l.title)
+    if (!valid) {
+      console.warn(
+        `Not all languages are valid. It should be an array of objects with an "id" and "title" property. Or a function that returns an array of objects with an "id" and "title" property.`,
+        supportedLanguages
+      )
+    }
+
+    return valid
+  }, [supportedLanguages])
 
   const content = (
     <Box overflow="auto">
@@ -47,13 +72,13 @@ export default function MenuButton(props: MenuButtonProps) {
                   // Button to duplicate this document to a new translation
                   // And either create or update the metadata document
                   <LanguageOption
-                    key={language.id}
+                    key={language.id || language.title || `lang-${langIndex}`}
                     index={langIndex}
                     language={language}
                     languageField={languageField}
                     schemaType={schemaType}
                     documentId={documentId}
-                    disabled={loading}
+                    disabled={loading || !allLanguagesAreValid}
                     current={language.id === sourceLanguageId}
                     metadata={metadata}
                     sourceId={documentId}
@@ -63,7 +88,7 @@ export default function MenuButton(props: MenuButtonProps) {
                 ) : (
                   // Button to set a language field on *this* document
                   <LanguagePatch
-                    key={language.id}
+                    key={language.id || language.title || `lang-${langIndex}`}
                     languageField={languageField}
                     source={source}
                     documentId={documentId}
@@ -73,9 +98,11 @@ export default function MenuButton(props: MenuButtonProps) {
                     // - Keys not in metadata
                     // - The key of this document in the metadata
                     disabled={
-                      metadata?.translations
-                        .filter((t) => t?.value?._ref !== documentId)
-                        .some((t) => t._key === language.id) ?? false
+                      (!allLanguagesAreValid ||
+                        metadata?.translations
+                          .filter((t) => t?.value?._ref !== documentId)
+                          .some((t) => t._key === language.id)) ??
+                      false
                     }
                   />
                 )
@@ -83,6 +110,12 @@ export default function MenuButton(props: MenuButtonProps) {
               {/* Once metadata is loaded, there may be issues */}
               {loading ? null : (
                 <>
+                  {/* Not all languages are valid */}
+                  {allLanguagesAreValid ? null : (
+                    <Card tone="caution" padding={3}>
+                      <Text size={1}>Not all language objects are valid. See the console.</Text>
+                    </Card>
+                  )}
                   {/* Current document has no language field */}
                   {sourceLanguageId ? null : (
                     <Card tone="caution" padding={3}>
