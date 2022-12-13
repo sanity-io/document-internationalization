@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.4](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.3...v2.0.0-studio-v3-plugin-v2.4) (2022-12-13)
+
+### Features
+
+- supported languages now takes a function ([d8bab26](https://github.com/sanity-io/document-internationalization/commit/d8bab26ab4d44a6d868b1af0dece0034c48c30bf))
+
+### Bug Fixes
+
+- remove 'lesson' text from templates ([e7718ed](https://github.com/sanity-io/document-internationalization/commit/e7718eda6e584b36805f4cfbd42e03b3455e2946))
+
 ## [2.0.0-studio-v3-plugin-v2.3](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.2...v2.0.0-studio-v3-plugin-v2.3) (2022-11-29)
 
 ### Bug Fixes
