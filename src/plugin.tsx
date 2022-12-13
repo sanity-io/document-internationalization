@@ -103,7 +103,7 @@ export const documentInternationalization = definePlugin<PluginConfig>((config) 
         const staticTemplates = schemaTypes.flatMap((schemaType) => {
           return supportedLanguages.map((language) => ({
             id: `${schemaType}-${language.id}`,
-            title: `${language.title} Lesson`,
+            title: `${language.title} ${schemaType}`,
             schemaType,
             value: {
               [languageField]: language.id,

@@ -1,6 +1,6 @@
 # @sanity/document-internationalization 
 
-- This is a completely new, **Sanity Studio v3 exclusive version** of @sanity/document-internationalization released as v2.0.0 which contains new features and requires content migrations to upgrade from previous versions. There is example code below.
+- This is a completely new, **Sanity Studio v3 exclusive version** of @sanity/document-internationalization released as v2.0.0 which contains new features and requires content migrations to upgrade from previous versions. There is an example code below.
 
 - For the **Studio v3 compatible version** of the original plugin, please install v1.0.0 and above.
 
@@ -172,10 +172,10 @@ on how to run this plugin with hotreload in the studio.
 
 ### Release new version
 
-Run ["CI & Release" workflow](https://github.com/sanity-io/document-internationalization/actions/workflows/main.yml).
+Run the ["CI & Release" workflow](https://github.com/sanity-io/document-internationalization/actions/workflows/main.yml).
 Make sure to select the main branch and check "Release new version".
 
-Semantic release will only release on configured branches, so it is safe to run release on any branch.
+The semantic release will only release on configured branches, so it is safe to run the release on any branch.
 
 ## License
 
