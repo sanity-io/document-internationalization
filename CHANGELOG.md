@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.5](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.4...v2.0.0-studio-v3-plugin-v2.5) (2022-12-19)
+
+### Bug Fixes
+
+- scroll translations menu when it overflows ([4b451a3](https://github.com/sanity-io/document-internationalization/commit/4b451a3cad41dc906088bf4e910676b98c0a0822))
+
 ## [2.0.0-studio-v3-plugin-v2.4](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.3...v2.0.0-studio-v3-plugin-v2.4) (2022-12-13)
 
 ### Features
