@@ -58,7 +58,7 @@ export default function MenuButton(props: MenuButtonProps) {
   }, [supportedLanguages])
 
   const content = (
-    <Box overflow="auto">
+    <Box>
       {error ? (
         <Card tone="critical" padding={2}>
           <Text>Error: {error}</Text>
@@ -146,7 +146,7 @@ export default function MenuButton(props: MenuButtonProps) {
   )
 
   return (
-    <Popover constrainSize content={content} open={open} portal ref={setPopover}>
+    <Popover constrainSize content={content} open={open} portal ref={setPopover} overflow="auto">
       <Button
         text="Translations"
         mode="bleed"
