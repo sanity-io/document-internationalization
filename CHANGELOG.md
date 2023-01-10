@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/sanity-io/document-internationalization/compare/v1.0.2...v1.0.3) (2023-01-10)
+
+### Bug Fixes
+
+- maxcdn replaced with cdnjs.cloudflare ([e558819](https://github.com/sanity-io/document-internationalization/commit/e5588193af3193f6108006bedbb39348ed1146cf))
+
 ## [1.0.2](https://github.com/sanity-io/document-internationalization/compare/v1.0.1...v1.0.2) (2022-11-25)
 
 ### Bug Fixes
