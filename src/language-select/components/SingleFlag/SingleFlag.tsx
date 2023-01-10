@@ -16,10 +16,16 @@ const EmojiBox = styled(Box)`
   transform: translateY(1px);
 `
 
+function flagIcon(flagEmoji: string | undefined) {
+  const flagHtml = twemoji.parse(flagEmoji ?? `🇺🇳`, {folder: 'svg', ext: '.svg'})
+  // temporary fix because maxcdn has stopped supporting twemoji
+  // https://github.com/twitter/twemoji/issues/580#issuecomment-1377111079
+  return parse(flagHtml.replace('twemoji.maxcdn.com/v', 'cdnjs.cloudflare.com/ajax/libs/twemoji'))
+}
+
 export const SingleFlag: React.FunctionComponent<Props> = ({code, langCulture}) => {
   const flagEmoji = useMemo(() => code && getFlag(code), [code])
-  const flagHtml = twemoji.parse(flagEmoji ?? `🇺🇳`, {folder: 'svg', ext: '.svg'})
-  const flagReact = parse(flagHtml)
+  const flagReact = flagIcon(flagEmoji)
 
   const CustomFlagComponent = useMemo(() => {
     if (langCulture && customFlagComponents) {
