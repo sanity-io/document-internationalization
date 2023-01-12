@@ -34,8 +34,6 @@ For **field-level translations** you should use the [@sanity/language-filter plu
 
 ### Many projects use both!
 
-*Studio V3 note*: language-filter is not available for V3 yet.
-
 An example of document-level translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
 
 A good use of field-level translation could be a `person` schema. It could have the same `name` and `image` in every language, but only the `biography` would need translating.
