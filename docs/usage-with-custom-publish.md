@@ -9,7 +9,7 @@ In order to get the full functionality, you can make use of the `updateIntlField
 Example:
 
 ```js
-import {updateIntlFieldsForDocument} from '@sanity/document-internationalization'
+import {updateIntlFieldsForDocument} from '@sanity/document-internationalization/src/utils'
 
 export const CustomPublishAction = ({id, type, onComplete}) => {
   const {publish} = useDocumentOperation(id, type)
