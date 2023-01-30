@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/sanity-io/document-internationalization/compare/v1.0.3...v1.0.4) (2023-01-30)
+
+### Bug Fixes
+
+- add updateIntlFieldsForDocument and hooks exports ([b1fd39e](https://github.com/sanity-io/document-internationalization/commit/b1fd39ed7b0535a8986af9a665d25e59afaecd7d))
+
 ## [1.0.3](https://github.com/sanity-io/document-internationalization/compare/v1.0.2...v1.0.3) (2023-01-10)
 
 ### Bug Fixes
