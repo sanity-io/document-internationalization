@@ -2,21 +2,27 @@
 
 To enable the plugin you will be modifying your `sanity.config.ts` (or `sanity.config.js` file).
 We will assume the following starting scenario:
+
 ```js
-import {deskTool} from 'sanity/desk'
+// ./sanity.config.ts
+import { deskTool } from 'sanity/desk'
 
 export default defineConfig({
   plugins: [deskTool()]
 })
 ```
 
-## The automatic way
+## Automatic setup
+
 The simplest way to enable and configure the plugin is to use the exported `withDocumentI18nPlugin` method.
+
 This function wraps your `plugins` array and will automatically add the i18n plugin as well as the desk tool plugin (assuming you don't need any custom desk structure options)
 
 Your configuration file will look something like this:
 
 ```js
+// ./sanity.config.ts
+import { deskTool } from 'sanity/desk'
 import { withDocumentI18nPlugin } from '@sanity/document-internationalization'
 
 export default defineConfig({
@@ -24,16 +30,21 @@ export default defineConfig({
   plugins: withDocumentI18nPlugin([
     // ... other plugins
   ], {
-    // .. your i18n config
+    // .. your i18n config, example:
+    // languages: ['en', 'fr'],
   })
 })
 ```
 
-## The manual way
+## Manual setup
+
 If you need to customize your desk structure you will need to manually configure the `deskTool` plugin.
+
 This is still done with the `withDocumentI18nPlugin` function but you will pass a function as the first argument as opposed to the plugins array itself and you will also need to disable the automatic inclusion of the desk tool plugin.
+
 The function will receive the i18n config as it's first argument, this is to make sure you won't need to duplicate your config.
 Lastly to configure the desk tool you can use the `getDocumentList` function.
+
 If you need even more control, you can refer to the more advanced [desk structure documentation](./desk-structure.md)
 
 ```js
@@ -49,24 +60,51 @@ export default defineConfig({
     })
   ]), {
     includeDeskTool: false,
-    // .. your i18n config
+    // .. your i18n config, example:
+    // languages: ['en', 'fr'],
   })
 })
+```
 
+Lastly, it's also possible to load the plugin standalone.
+
+```js
 export default defineConfig({
   // ...
   plugins: [
-    documentI18n(
-      {
-        // .. config goes here
-      }
-    ),
+    documentI18n({
+      // .. your i18n config, example:
+      // languages: ['en', 'fr'],
+    }),
   ] 
 })
 ```
 
-This sets a static, global set of defaults which are invoked on every schema that contains `i18n: true`. 
-These defaults can be overridden on each schema.
+This sets a static, global set of default languages which are invoked on every schema that contains `i18n: true`.  For example:
+
+```js
+// ./schemas/post.js
+
+export default defineType({
+  name: 'post',
+  title: 'Post',
+  type: 'document',
+  i18n: true,
+  fields: [ /* schema fields */ ]
+})
+```
+
+These defaults can be overridden on each schema, by loading a language configuration object in that same i18n key.  For example:
+
+```js
+export default defineType({
+  name: 'post',
+  title: 'Post',
+  type: 'document',
+  i18n: { languages: ['en', 'fr', 'es'] },
+  fields: [ /* schema fields */ ]
+})
+```
 
 ## Configuration options
 
