@@ -11,7 +11,7 @@ import {createSanityReference} from './createSanityReference'
 import {getLanguageFromDocument} from './getLanguageFromDocument'
 
 // @TODO make this into a hook so the hook
-// can look up the existance of a base document on its own
+// can look up the existence of a base document on its own
 export async function updateIntlFieldsForDocument(
   client: SanityClient,
   config: ApplyConfigResult,
@@ -46,8 +46,9 @@ export async function updateIntlFieldsForDocument(
   })
   await currentDocumentTransaction.commit()
 
-  // update base document reference if required
-  if (baseDocument) {
+  // update base document reference if baseDocument is provided
+  // and if this function was called on a translation
+  if (isTranslation && baseDocument) {
     const translatedDocuments = await getTranslationsFor(client, config, baseDocumentId)
     if (translatedDocuments.length > 0) {
       const baseDocumentTransaction = client.transaction()
