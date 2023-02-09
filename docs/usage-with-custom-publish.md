@@ -119,7 +119,7 @@ export default defineConfig({
   document: {
     actions: (prev, context) => {
       return [
-        ...defaultResolve(props).map((Action) =>
+        ...prev.map((Action) =>
           Action.action === 'publish' ? createPublishAction(i18nConfig) : Action
         ),
         createDeleteAction(i18nConfig),
