@@ -17,7 +17,7 @@ const DISABLED_REASON_TITLE = {
 }
 
 export function createDeleteAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
-  return function DeleteWith18nAction({id, type, onComplete}): DocumentActionDescription {
+  const Action: DocumentActionComponent = ({id, type, onComplete}): DocumentActionDescription => {
     const toast = useToast()
     const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
@@ -115,4 +115,9 @@ export function createDeleteAction(pluginConfig: Ti18nConfig): DocumentActionCom
       },
     }
   }
+
+  // Reset the `action` name for the newly created i18n action
+  Action.action = 'delete'
+
+  return Action
 }
