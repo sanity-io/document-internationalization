@@ -31,6 +31,9 @@ export const getFlagCode = (code = ``): string => {
     // Return :flag-al: (Albania) for `sq` language code
     case `sq`:
       return `al`
+    // Return :flag-dk: for Danish
+    case 'da':
+      return 'dk'
 
     default:
       return code
