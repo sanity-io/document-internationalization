@@ -10,7 +10,7 @@ import {IEditState, IUseDocumentOperationResult, Ti18nConfig} from '../types'
 import {useConfig, useDelayedFlag} from '../hooks'
 
 export function createPublishAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
-  return ({type, id, onComplete}): DocumentActionDescription => {
+  const Action: DocumentActionComponent = ({type, id, onComplete}): DocumentActionDescription => {
     const toast = useToast()
     const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
@@ -115,4 +115,9 @@ export function createPublishAction(pluginConfig: Ti18nConfig): DocumentActionCo
       onHandle,
     }
   }
+
+  // Reset the `action` name for the newly created i18n action
+  Action.action = 'publish'
+
+  return Action
 }

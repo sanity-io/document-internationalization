@@ -24,7 +24,12 @@ const DISABLED_REASON_TITLE = {
 }
 
 export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
-  return ({id, type, draft, published}): DocumentActionDescription => {
+  const Action: DocumentActionComponent = ({
+    id,
+    type,
+    draft,
+    published,
+  }): DocumentActionDescription => {
     const toast = useToast()
     const client = useSanityClient()
     const config = useConfig(pluginConfig, type)
@@ -74,4 +79,9 @@ export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentAction
       onHandle: onDuplicate,
     }
   }
+
+  // Reset the `action` name for the newly created i18n action
+  Action.action = 'duplicate'
+
+  return Action
 }
