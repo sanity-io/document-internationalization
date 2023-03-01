@@ -5,6 +5,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.0](https://github.com/sanity-io/document-internationalization/compare/v1.0.5...v1.1.0) (2023-03-01)
+
+### Features
+
+- reinstate 'action' property names of i18n actions ([#107](https://github.com/sanity-io/document-internationalization/issues/107)) ([5a50dfa](https://github.com/sanity-io/document-internationalization/commit/5a50dfaa3b968738a41db7a0a0f85b85277c7e8c))
+
+### Bug Fixes
+
+- **docs:** Example get translated documents by current doc id ([#21](https://github.com/sanity-io/document-internationalization/issues/21)) ([8f88b9a](https://github.com/sanity-io/document-internationalization/commit/8f88b9abe8995eed5496d3c3c09e81aaa92dce61))
+- getFlagCode da = dk-flag ([#108](https://github.com/sanity-io/document-internationalization/issues/108)) ([4a66df3](https://github.com/sanity-io/document-internationalization/commit/4a66df3f96c985c82efc9d8877d122e9fd844077))
+
 ## [1.0.5](https://github.com/sanity-io/document-internationalization/compare/v1.0.4...v1.0.5) (2023-02-09)
 
 ### Bug Fixes
