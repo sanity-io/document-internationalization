@@ -4,7 +4,7 @@
 If you are using document level translations you will notice some difference in the new plugin. In order to make the transition as smooth as possible here is a list of what's changed and what you need to do
 
 ### 1. The config filename has changed
-You should rename your `intl-input.json` config file to `document-internationalization.json`.
+You should move your `intl-input.json` config over to the js-plugin format.
 
 ### 2. Delimiter based IDs are now the default again
 After consideration with the team, we have decided to make `delimiter` based IDs the default structure again. `subpath` based IDs will still be supported but are now opt-in only. If you are using subpaths you have 2 options:
@@ -18,7 +18,7 @@ After consideration with the team, we have decided to make `delimiter` based IDs
 
 2. Switch to delimiter based IDs
    1. Check if you have explicitly specified `subpath` in your intl config. If you have, you can either remove it or replace it with `delimiter`
-   2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all verion history**
+   2. You can use the maintenance tab to migrate your documents to the new ID structure, however keep in mind because this is an ID change you will **lose all version history**
 
 
 
@@ -29,7 +29,8 @@ The "name" field is now called "id". The old field will still be supported but y
 You will need to update your config to reflect this change.
 
 ### 5. Studio parts have been renamed
-If you had implemnted any of the previous plugin's studio parts you will need to rename the implementations.
+If you had implemented any of the previous plugin's studio parts you will provide them as js config to the plugin;
+`languagesLoader`, `shouldReload` and `customFlagComponents` respectivly.
 ```diff
 [
   {
@@ -76,3 +77,6 @@ In the new plugin you will find it has been simplified to just be an array of re
 ```
 
 Any existing documents will remain unchanged unless "fixed" using the translation maintenance. Old documents will show up as having missing references.
+
+### 8. The desk structure has changed
+The `getDocumentNodeViewsForSchemaType` function has been removed as it is not required anymore. The language selector has been updated to better align with the official language-filter plugin for field level translations. This does mean it is not required to implement `getDefaultDocumentNode` any more as the new UI does not require a custom desk structure but rather integrates with the studio natively.

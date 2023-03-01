@@ -2,35 +2,58 @@
 
 [See the Sanity docs on how to to setup Desk Structure](https://www.sanity.io/guides/getting-started-with-structure-builder) if you do not already have Desk Structure customised in your project.
 
-Once your Studio has its own Desk Structure, you can configure the plugin in two ways:
-
-## Method 1: Default implementation
-
-Use this method if you don't already have a custom desk structure of your own.
+Once your Studio has its own Desk Structure, you'll want to filter down any Lists for internationalized schema types to just base language documents:
 
 ```js
-import * as Structure from '@sanity/document-internationalization/lib/structure'
-
-export const getDefaultDocumentNode = Structure.getDefaultDocumentNode
-export default Structure.default
+S.listItem()
+  .title(`Lesson`)
+  .child(
+    S.documentList()
+      .title(`Lesson documents`)
+      .schemaType('lesson')
+      .filter('_type == "lesson" && __i18n_lang == $baseLanguage')
+      .params({baseLanguage: `en_US`})
+      .canHandleIntent(S.documentTypeList('lesson').getCanHandleIntent())
+  )
 ```
 
-## Method 2: Manual implemntation
+## getFilteredDocumentTypeListItems
 
-Use this method if you need to combine your own desk structure implementation with the plugin.
+As a convenience for the above, `getFilteredDocumentTypeListItems` exists.
+It filters all default document lists down to base languages
+
+
+(S, {schema)
 
 ```js
-import * as Structure from '@sanity/document-internationalization/lib/structure'
+import { documentI18n } from "@sanity/document-internationalization";
+import {
+  PublishWithi18nAction,
+  DeleteWithi18nAction,
+  DuplicateWithi18nAction,
+} from '@sanity/document-internationalization'
 
-export const getDefaultDocumentNode = (props) => {
-  if (props.schemaType === 'myschema') {
-    return S.document().views(Structure.getDocumentNodeViewsForSchemaType(props.schemaType))
-  }
-  return S.document()
-}
+export default defineConfig({
+  // ...
+  plugins: [
+    documentI18n({ /* ... */}),
+    deskTool({
+      structure: (S, {schema, client}) => {
+        const docTypeListItems = getFilteredDocumentTypeListItems({
+          S,
+          schema,
+          config: i18nConfig,
+        });
 
-export default () => {
-  const items = Structure.getFilteredDocumentTypeListItems()
-  return S.list().id('__root__').title('Content').items(items)
-}
+        return S.list()
+          .title("Content")
+          .items([
+            //anything else
+            ...docTypeListItems,
+            //anything else
+           ])
+      },
+    }),
+  ],
+})
 ```

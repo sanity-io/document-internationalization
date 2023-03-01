@@ -1,15 +1,22 @@
-import {Ti18nDocument} from '../../types'
-import {getSanityClient} from '../../utils'
+import type {SanityClient, SanityDocument, Transaction} from '@sanity/client'
+import type {Reference} from 'sanity'
+import {ApplyConfigResult} from '../../utils'
 
-export const fixOrphanedDocuments = async (
-  basedocuments: Ti18nDocument[],
-  translatedDocuments: Ti18nDocument[]
-) => {
-  const sanityClient = getSanityClient()
-  await Promise.all(
-    translatedDocuments.map(async (d) => {
-      const base = basedocuments.find((doc) => d._id.startsWith(doc._id))
-      if (!base) await sanityClient.delete(d._id)
-    })
-  )
+export const fixOrphanedDocuments = (
+  sanityClient: SanityClient,
+  config: ApplyConfigResult,
+  basedocuments: SanityDocument[],
+  translatedDocuments: SanityDocument[]
+): Transaction => {
+  const transaction = sanityClient.transaction()
+  translatedDocuments.forEach((d) => {
+    const base = basedocuments.find(
+      (doc) =>
+        (Array.isArray(d?.[config.fieldNames.references]) &&
+          d?.[config.fieldNames.references]?.some((ref: Reference) => ref._ref === d._id)) ||
+        doc._id === d?.[config.fieldNames.baseReference]?._ref
+    )
+    if (!base) transaction.delete(d._id)
+  })
+  return transaction
 }

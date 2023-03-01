@@ -1,5 +1,8 @@
 # Document Internationalization Plugin for Sanity.io
 
+> This is a **Sanity Studio v3** plugin.
+> For the v2 version, please refer to the [v2-branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2).
+
 [![npm version](https://img.shields.io/npm/v/@sanity/document-internationalization.svg?style=flat)](https://www.npmjs.com/package/@sanity/document-internationalization)
 
 ![Document Level Internationalization UI](docs/img/document-level-translation.gif)
@@ -21,7 +24,7 @@ There are two popular methods of internationalization in Sanity Studio:
 
 This plugin adds features to the Studio to improve handling **document-level translations**.
 
-- A View Pane to create language versions of each Document
+- A Language Selector to create and browse language-specific versions of each Document
 - Document Actions to update base and translated documents to ensure references stay in tact
 - Document Badges to highlight the language version of a document
 
@@ -35,24 +38,28 @@ A good use of field-level translation could be a `person` schema. It could have 
 
 ## Installation
 
-With the [Sanity CLI installed](https://www.sanity.io/docs/getting-started-with-sanity-cli), from the same directory as the Studio run:
+From the same directory as the Studio run:
 
-```
-sanity install @sanity/document-internationalization
+```sh
+npm install --save @sanity/document-internationalization
 ```
 
-Ensure that `@sanity/document-internationalization` is listed in `plugins` inside `sanity.json`.
+or
+
+```sh
+yarn add @sanity/document-internationalization
+```
+
 
 The plugin is now installed, but you will need to complete the following steps to see the Document Translation UI:
 
 ## Setup next steps
-
-1. [Customise Desk Structure](docs/desk-structure.md)  
-   To setup the 'Translations' View Pane on Documents
-2. [Configuration options](docs/configuration-options.md)  
+1. [Enabling and configuring the plugin](docs/enabling-and-configuring.md)  
    To declare available Languages and other settings
-3. [Activating internationalization on schema](docs/activating-internationalization-on-schema.md)  
+2. [Activating internationalization on schema](docs/activating-internationalization-on-schema.md)  
    To enable all the above features on schema
+3. [Customise Desk Structure](docs/desk-structure.md)  
+   To filter documents down to the base language version
 
 ## Other documentation
 
@@ -62,10 +69,31 @@ The plugin is now installed, but you will need to complete the following steps t
 4. [GraphQL support](docs/graphql-intl-doc.md)
 5. [Advanced languages](docs/advanced-languages.md)
 6. [Usage with custom publish action](docs/usage-with-custom-publish.md)
-7. [GROQ query examples](/docs/groq-query-examples.md)
+7. [If you don't see the plugin document actions](docs/usage-with-custom-publish.md#add-additional-actions)
+8. [GROQ query examples](/docs/groq-query-examples.md)
 
 ## Migrating from sanity-plugin-intl-input
 
 While most of the UI is the same in the official version of this plugin there are some breaking changes you should be aware of before migrating:
 
 [Coming from sanity-plugin-intl-input](docs/coming-from-sanity-plugin-intl-input.md)
+
+
+## License
+
+MIT-licensed. See LICENSE.
+
+## Develop & test
+
+This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit)
+with default configuration for build & watch scripts.
+
+See [Testing a plugin in Sanity Studio](https://github.com/sanity-io/plugin-kit#testing-a-plugin-in-sanity-studio)
+on how to run this plugin with hotreload in the studio.
+
+### Release new version
+
+Run ["CI & Release" workflow](https://github.com/sanity-io/document-internationalization/actions/workflows/main.yml).
+Make sure to select the main branch and check "Release new version".
+
+Semantic release will only release on configured branches, so it is safe to run release on any branch.

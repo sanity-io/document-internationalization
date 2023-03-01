@@ -1,6 +1,6 @@
 import {I18nPrefix, I18nDelimiter} from '../constants'
 
-export const getLanguageFromId = (id: string) => {
+export const getLanguageFromId = (id: string): string | undefined => {
   // subpath
   const rx = new RegExp(`${I18nPrefix}\\.[^.]+\\.([^.]+)`)
   const match = id.match(rx)
@@ -9,5 +9,5 @@ export const getLanguageFromId = (id: string) => {
   // delimiter
   const split = id.split(I18nDelimiter)
   if (split.length > 1) return split[1]
-  return null
+  return undefined
 }

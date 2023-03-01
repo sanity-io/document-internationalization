@@ -1,8 +1,0 @@
-{
-  "extends": ["stylelint-prettier/recommended"],
-  "plugins": [
-    "stylelint-scss"
-  ],
-  "ignoreFiles": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
-  "customSyntax": "postcss-scss"
-}

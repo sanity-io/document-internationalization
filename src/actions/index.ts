@@ -1,22 +1,42 @@
-import 'regenerator-runtime' // eslint-disable-line
-import {IResolverProps, Ti18nSchema} from '../types'
-import defaultResolve, {PublishAction} from 'part:@sanity/base/document-actions'
-import {PublishWithi18nAction} from './PublishWithi18nAction'
-import {getSchema, getBaseIdFromId} from '../utils'
-import {DeleteWithi18nAction} from './DeleteWithi18nAction'
-import {DuplicateWithi18nAction} from './DuplicateWithi18nAction'
+import {type DocumentActionsContext, type DocumentActionComponent} from 'sanity'
+import {Ti18nConfig, Ti18nSchema} from '../types'
+import {getBaseIdFromId} from '../utils'
+import {createPublishAction} from './PublishWithi18nAction'
+import {createDeleteAction} from './DeleteWithi18nAction'
+import {createDuplicateAction} from './DuplicateWithi18nAction'
 
-export {PublishWithi18nAction, DeleteWithi18nAction, DuplicateWithi18nAction}
+export {createPublishAction, createDeleteAction, createDuplicateAction}
 
-export default (props: IResolverProps) => {
-  const schema: Ti18nSchema = getSchema(props.type)
-  const isI18n = schema && schema.i18n
-  const actions = defaultResolve(props).map((Action) => {
-    return Action === PublishAction && isI18n ? PublishWithi18nAction : Action
-  })
-  if (isI18n && props.id == getBaseIdFromId(props.id)) {
-    actions.push(DuplicateWithi18nAction)
-    actions.push(DeleteWithi18nAction)
+export const resolveActions = (
+  prev: DocumentActionComponent[],
+  {schema, schemaType, documentId}: DocumentActionsContext,
+  pluginConfig: Ti18nConfig
+): DocumentActionComponent[] => {
+  const type: Ti18nSchema = schema.get(schemaType) as Ti18nSchema
+  const isI18n = type && type.i18n
+  const isBase = documentId === getBaseIdFromId(documentId)
+  let actions = prev
+
+  if (isI18n) {
+    actions = actions.map((Action) => {
+      const isPublishAction = Action.action === 'publish'
+      const isDeleteAction = Action.action === 'delete'
+
+      if (isPublishAction) {
+        return createPublishAction(pluginConfig)
+      }
+
+      if (isDeleteAction && isBase) {
+        return createDeleteAction(pluginConfig)
+      }
+
+      return Action
+    })
+
+    if (isBase) {
+      actions.push(createDuplicateAction(pluginConfig))
+    }
   }
+
   return actions
 }

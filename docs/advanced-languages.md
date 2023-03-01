@@ -18,67 +18,62 @@ languages: {
 
 ## Custom loader functionality
 
-If you require even more control over your languages you can also provide a loader function. To do this you need to implement the `@sanity/document-internationalization/languages/loader` part in your Sanity Studio.
+If you require even more control over your languages you can also provide a loader function. 
+To do this you need to provide a `languagesLoader` function through plugin config.
 
-This implementation should be a function which receives the default list of languages and the current document as parameters. It should return a list of normalized languages (`id` + `title`) and it can be `async`
-
-`sanity.json`
-
-```json
-{
-  "parts": [
-    {
-      "implements": "part:@sanity/document-internationalization/languages/loader",
-      "path": "./loader.js"
-    }
-  ]
-}
-```
-
-```js
-// loader.js
-
-export default async (languages, document) => {
-  return languages
-}
-```
-
-One thing to keep in mind is that the languages will not be reloaded everytime the document updates. It is however possible to define an additional `part` to customize this behavior.
-
-To do this you need to implement the `@sanity/document-internationalization/languages/should-reload` part. This needs to export a function which accepts the document as input and returns a boolean defining whether to reload the languages or not. This function can not be `async`.
+This implementation should be a function which receives the default list of languages and the current document as parameters. 
+It should return a list of normalized languages (`id` + `title`) and it can be `async`
 
 `sanity.json`
 
-```json
-{
-  "parts": [
-    {
-      "implements": "part:@sanity/document-internationalization/languages/should-reload",
-      "path": "./should-reload.js"
-    }
-  ]
-}
+```js
+documentI18n({
+  // ... other config
+  languagesLoader: async (languages, doc) => {
+    // perhaps await some remote service
+    return [{
+      id: 'languageId',
+      title: 'languageTitle'
+    }]
+  } 
+})
 ```
 
-```js
-// should-reload.js
+One thing to keep in mind is that the languages will not be reloaded every time the document updates. 
+It is however possible to provide additional configuration customize this behavior.
 
-export default (document) => {
-  return false
-}
+To do this you need to provide the `shouldReload` config prop. 
+The function should accept the document as input and return a boolean defining whether to reload the languages or not.
+This function can _not_ be `async`.
+
+`sanity.json`
+
+```js
+documentI18n({
+  // ... other config
+  shouldReload: (doc) => {
+    return false
+  }  
+})
 ```
 
 ## Override flag icons
 
-Sometimes it is necessary to override the default flag logic. To do this you can implement the `part:@sanity/document-internationalization/ui/flags` studio part as follows:
+Sometimes it is necessary to override the default flag logic. 
+To do this you `customFlagComponents`plugin prop.
 
 ```js
-// flags.js
 import React from 'react'
+import {MyFlag} from './MyFlag'
 
-export const lang_CULTURE = ({code}) => <MyFlag />
+documentI18n({
+  // ... other config
+  customFlagComponents: {
+    'lang_CULTURE': ({code, langCulture, className}) => <MyFlag />
+  }
+})
 ```
 
-Your custom component will receive either the language or culture code (as we render 2 flags by default). If your i18n config does not define cultures it will just receive the language code and we only display a singular flag.
 
-**Remark:** The plugin expects the custom flag components to be named exports from your part implementation, but you could have your locales defined as follows `en-US`. In this case the language can not be used as a variable name so the plugin will look for `en_US` instead, replacing all non alphabetical characters with a `_`
+Your custom component will receive either the language or culture code (as we render 2 flags by default). 
+If your i18n config does not define cultures it will just receive the language code and we only display a singular flag.

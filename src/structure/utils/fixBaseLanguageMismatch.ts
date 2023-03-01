@@ -1,16 +1,21 @@
-import {Ti18nDocument} from '../../types'
-import {getConfig, getSanityClient} from '../../utils'
+import type {SanityDocument, SanityClient, Transaction} from '@sanity/client'
+import {ApplyConfigResult, getBaseLanguage, getLanguagesFromOption} from '../../utils'
 
-export const fixBaseLanguageMismatch = async (schema: string, basedocuments: Ti18nDocument[]) => {
-  const sanityClient = getSanityClient()
-  const config = getConfig(schema)
+export const fixBaseLanguageMismatch = async (
+  sanityClient: SanityClient,
+  config: ApplyConfigResult,
+  basedocuments: SanityDocument[]
+): Promise<Transaction> => {
+  const languages = await getLanguagesFromOption(sanityClient, config, config.languages)
+  const baseLanguage = getBaseLanguage(languages, config.base)
+  const langFieldName = config.fieldNames.lang
   const transaction = sanityClient.transaction()
   basedocuments.forEach((doc) => {
-    if (doc.__i18n_lang !== config.base) {
+    if (doc[langFieldName] !== baseLanguage?.id) {
       transaction.patch(doc._id, {
-        set: {__i18n_lang: config.base}, // eslint-disable-line
+        set: {[langFieldName]: baseLanguage?.id}, // eslint-disable-line
       })
     }
   })
-  await transaction.commit()
+  return transaction
 }

@@ -1,15 +1,15 @@
 import {getEmojiFlag} from '@cprecioso/country-flag-emoji'
-import {allEmojiFlagCodes} from '../structure/components/LangCultureFlagsBlock/allEmojiFlagCodes'
+import {SupportedEmojiFlagCodes} from '../constants'
 
 // Get flag from a valid country code
-export const getFlag = (code = ``) => {
+export const getFlag = (code = ``): string => {
   if (!code) {
     return ``
   }
 
   const flagCode = getFlagCode(code)
 
-  if (!allEmojiFlagCodes.includes(flagCode.toUpperCase())) {
+  if (!SupportedEmojiFlagCodes.includes(flagCode.toUpperCase())) {
     return ``
   }
 
@@ -19,15 +19,18 @@ export const getFlag = (code = ``) => {
 }
 
 // Convert some language codes to country codes
-export const getFlagCode = (code = ``) => {
+export const getFlagCode = (code = ``): string => {
   if (!code) {
     return ``
   }
 
-  switch (code) {
+  switch (code.toLocaleLowerCase()) {
+    // Return :flag-gb: for English
     case `en`:
-    case `EN`:
       return `gb`
+    // Return :flag-al: (Albania) for `sq` language code
+    case `sq`:
+      return `al`
 
     default:
       return code
