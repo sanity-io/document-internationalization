@@ -26,19 +26,35 @@ It filters all default document lists down to base languages
 (S, {schema)
 
 ```js
-import { documentI18n } from "@sanity/document-internationalization";
-import {
-  PublishWithi18nAction,
-  DeleteWithi18nAction,
-  DuplicateWithi18nAction,
+import { 
+  documentI18n,
+  getFilteredDocumentTypeListItems
 } from '@sanity/document-internationalization'
+
+const i18nConfig = {
+  // The language configuration you used for documentI18n()
+  /* 
+   * base: "it",
+   * languages: [
+   *   {
+   *     title: "Italiano",
+   *     id: "it"
+   *   },
+   *   {
+   *     title: "English (US)",
+   *     id: "en-us"
+   *   }
+   * ],
+     ...
+   */
+}
 
 export default defineConfig({
   // ...
   plugins: [
-    documentI18n({ /* ... */}),
+    documentI18n({ /* i18nConfig... */}),
     deskTool({
-      structure: (S, {schema, client}) => {
+      structure: (S, {schema}) => {
         const docTypeListItems = getFilteredDocumentTypeListItems({
           S,
           schema,
