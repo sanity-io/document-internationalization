@@ -5,6 +5,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/sanity-io/document-internationalization/compare/v1.1.0...v1.1.1) (2023-03-30)
+
+### Bug Fixes
+
+- **deps:** upgrade rxjs ([c7ecec6](https://github.com/sanity-io/document-internationalization/commit/c7ecec670786c1db09c5310851c66f3d8bd4955d))
+- **docs:** corrected path in groq query example ([aaabfb2](https://github.com/sanity-io/document-internationalization/commit/aaabfb29eca46befbc0c13775c7586b14b454ba5))
+- **docs:** missing comma ([e15eb2f](https://github.com/sanity-io/document-internationalization/commit/e15eb2f9d24e39c25a87c3879583127bee9780ff))
+
 ## [1.1.0](https://github.com/sanity-io/document-internationalization/compare/v1.0.5...v1.1.0) (2023-03-01)
 
 ### Features
