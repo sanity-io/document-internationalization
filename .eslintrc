@@ -9,6 +9,15 @@
     "sanity/typescript",
     "sanity/react",
     "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended"
-  ]
+    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier"
+  ],
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
+  }
 }

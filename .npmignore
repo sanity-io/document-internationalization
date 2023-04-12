@@ -1,5 +1,6 @@
 /test
 /coverage
+/demo
 .editorconfig
 .eslintrc
 .gitignore
@@ -7,4 +8,3 @@
 .prettierrc
 .travis.yml
 .nyc_output
-img
