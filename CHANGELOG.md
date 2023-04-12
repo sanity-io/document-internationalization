@@ -5,6 +5,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.6](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.5...v2.0.0-studio-v3-plugin-v2.6) (2023-04-12)
+
+### Bug Fixes
+
+- lint and satisfy type ([963b51f](https://github.com/sanity-io/document-internationalization/commit/963b51f251efeb2e8403caf7cbbebad978c69ac6))
+- restore updated changelog ([192cdc8](https://github.com/sanity-io/document-internationalization/commit/192cdc8fc1a9e83e0ef37ad38b99ba58dcf6740c))
+- update config files from semantic-release preset ([4ee7b5c](https://github.com/sanity-io/document-internationalization/commit/4ee7b5c22043bc09785828936effff944adcc52c))
+- update dependencies to solve ELSPROBLEMS ([19bd956](https://github.com/sanity-io/document-internationalization/commit/19bd956edb6098c944e23f91b98c62024735b196))
+
 ## [2.0.0-studio-v3-plugin-v2.5](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.4...v2.0.0-studio-v3-plugin-v2.5) (2022-12-19)
 
 ### Bug Fixes
