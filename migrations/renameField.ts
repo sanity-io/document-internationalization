@@ -37,7 +37,10 @@ const buildPatches = (docs: SanityDocumentLike[]) =>
   }))
 
 const createTransaction = (patches) =>
-  patches.reduce((tx, patch) => tx.patch(patch.id, patch.patch), client.transaction())
+  patches.reduce(
+    (tx, patch) => tx.patch(patch.id, patch.patch),
+    client.transaction()
+  )
 
 const commitTransaction = (tx) => tx.commit()
 
@@ -52,7 +55,9 @@ const migrateNextBatch = async () => {
   // eslint-disable-next-line no-console
   console.debug(
     `Migrating batch:\n %s`,
-    patches.map((patch) => `${patch.id} => ${JSON.stringify(patch.patch)}`).join('\n')
+    patches
+      .map((patch) => `${patch.id} => ${JSON.stringify(patch.patch)}`)
+      .join('\n')
   )
   const transaction = createTransaction(patches)
   await commitTransaction(transaction)
