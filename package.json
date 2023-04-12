@@ -73,12 +73,16 @@
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "^2.3.0",
     "react": "^18",
+    "react-dom": "^18",
+    "react-is": "^18",
     "rimraf": "^3.0.2",
     "sanity": "^3.0.0",
     "typescript": "^4.9.3"
   },
   "peerDependencies": {
     "react": "^18",
+    "react-dom": "^18",
+    "react-is": "^18",
     "sanity": "^3.0.0"
   },
   "engines": {
