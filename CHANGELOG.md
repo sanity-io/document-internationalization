@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.7](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.6...v2.0.0-studio-v3-plugin-v2.7) (2023-04-13)
+
+### Bug Fixes
+
+- update dependencies ([e977f4a](https://github.com/sanity-io/document-internationalization/commit/e977f4ad4bbe17dc2ff43390146afbf401bea7de))
+
 ## [2.0.0-studio-v3-plugin-v2.6](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.5...v2.0.0-studio-v3-plugin-v2.6) (2023-04-12)
 
 ### Bug Fixes
