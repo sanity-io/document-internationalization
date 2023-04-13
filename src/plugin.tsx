@@ -1,12 +1,5 @@
 import {Stack} from '@sanity/ui'
-import React from 'react'
-import {
-  defineField,
-  definePlugin,
-  isArray,
-  isSanityDocument,
-  KeyedObject,
-} from 'sanity'
+import {defineField, definePlugin, isSanityDocument} from 'sanity'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 
 import {LanguageBadge} from './badges'
@@ -57,14 +50,15 @@ export const documentInternationalization = definePlugin<PluginConfig>(
               isSanityDocument(props?.value)
             ) {
               const metadataId = props?.value?._id
-              const translations = (props?.value?.translations as any[]) ?? []
+              const translations =
+                (props?.value?.translations as TranslationReference[]) ?? []
               const weakAndTypedTranslations = translations.filter(
                 (t) => t?.value?._weak && t.value?._strengthenOnPublish
               )
 
               return (
                 <Stack space={5}>
-                  {/* {bulkPublish ? <BulkPublish {...props} /> : null} */}
+                  {bulkPublish ? <BulkPublish {...props} /> : null}
                   {weakAndTypedTranslations.length > 0 ? (
                     <OptimisticallyStrengthen
                       metadataId={metadataId}

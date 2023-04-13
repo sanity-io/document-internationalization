@@ -21,7 +21,10 @@ export type PluginConfig = {
   bulkPublish?: boolean
 }
 
-export type TranslationReference = KeyedObject & {value: Reference}
+export type TranslationReference = KeyedObject & {
+  _type: 'internationalizedArrayReferenceValue'
+  value: Reference
+}
 
 export type Metadata = SanityDocumentLike & {
   translations: TranslationReference[]

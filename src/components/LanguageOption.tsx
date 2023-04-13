@@ -32,7 +32,11 @@ type LanguageOptionProps = {
   apiVersion?: string
 }
 
-function createReference(key: string, ref: string, type: string) {
+function createReference(
+  key: string,
+  ref: string,
+  type: string
+): TranslationReference {
   return {
     _key: key,
     _type: 'internationalizedArrayReferenceValue',
