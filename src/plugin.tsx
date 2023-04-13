@@ -1,11 +1,18 @@
 import {Stack} from '@sanity/ui'
 import React from 'react'
-import {defineField, definePlugin} from 'sanity'
+import {
+  defineField,
+  definePlugin,
+  isArray,
+  isSanityDocument,
+  KeyedObject,
+} from 'sanity'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 
 import {LanguageBadge} from './badges'
 import BulkPublish from './components/BulkPublish'
 import MenuButton from './components/MenuButton'
+import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
 import {METADATA_SCHEMA_NAME} from './constants'
 import metadata from './schema/translation/metadata'
 import {PluginConfig} from './types'
@@ -45,13 +52,25 @@ export const documentInternationalization = definePlugin<PluginConfig>(
         components: {
           input: (props) => {
             if (
-              bulkPublish &&
               props.id === 'root' &&
-              props.schemaType.name === METADATA_SCHEMA_NAME
+              props.schemaType.name === METADATA_SCHEMA_NAME &&
+              isSanityDocument(props?.value)
             ) {
+              const metadataId = props?.value?._id
+              const translations = (props?.value?.translations as any[]) ?? []
+              const weakAndTypedTranslations = translations.filter(
+                (t) => t?.value?._weak && t.value?._strengthenOnPublish
+              )
+
               return (
                 <Stack space={5}>
-                  {/* <BulkPublish {...props} /> */}
+                  {/* {bulkPublish ? <BulkPublish {...props} /> : null} */}
+                  {weakAndTypedTranslations.length > 0 ? (
+                    <OptimisticallyStrengthen
+                      metadataId={metadataId}
+                      translations={weakAndTypedTranslations}
+                    />
+                  ) : null}
                   {props.renderDefault(props)}
                 </Stack>
               )

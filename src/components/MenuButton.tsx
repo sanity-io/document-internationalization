@@ -170,7 +170,6 @@ export default function MenuButton(props: MenuButtonProps) {
 
   const issueWithTranslations =
     !loading && sourceLanguageId && !sourceLanguageIsValid
-  console.log({sourceLanguageId, sourceLanguageIsValid, issueWithTranslations})
 
   return (
     <Popover

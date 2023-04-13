@@ -1,9 +1,8 @@
-import React from 'react'
 import {CogIcon} from '@sanity/icons'
 import {Button} from '@sanity/ui'
 
-import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 import {METADATA_SCHEMA_NAME} from '../constants'
+import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 
 type LanguageManageProps = {
   id?: string

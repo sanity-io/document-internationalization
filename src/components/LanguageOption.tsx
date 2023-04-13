@@ -35,6 +35,7 @@ type LanguageOptionProps = {
 function createReference(key: string, ref: string, type: string) {
   return {
     _key: key,
+    _type: 'internationalizedArrayReferenceValue',
     value: {
       _type: 'reference',
       _ref: ref,
