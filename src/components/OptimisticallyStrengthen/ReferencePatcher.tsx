@@ -3,7 +3,7 @@ import {PatchEvent, unset, useClient, useEditState} from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
 
 import {API_VERSION} from '../../constants'
-import {TranslationReference} from '../BulkPublish'
+import {TranslationReference} from '../../types'
 
 type ReferencePatcherProps = {
   translation: TranslationReference
