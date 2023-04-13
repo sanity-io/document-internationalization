@@ -1,12 +1,21 @@
-import React, {useCallback} from 'react'
-import {useClient} from 'sanity'
-import {Button, Badge, Box, Flex, Text, useToast, Spinner} from '@sanity/ui'
+import {AddIcon, CheckmarkIcon, SplitVerticalIcon} from '@sanity/icons'
+import {
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Spinner,
+  Text,
+  Tooltip,
+  useToast,
+} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import {SplitVerticalIcon, AddIcon, CheckmarkIcon} from '@sanity/icons'
+import {useCallback} from 'react'
+import {useClient} from 'sanity'
 
-import {Language, Metadata, TranslationReference} from '../types'
 import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
+import {Language, Metadata, TranslationReference} from '../types'
 
 type LanguageOptionProps = {
   language: Language
@@ -23,9 +32,14 @@ type LanguageOptionProps = {
   apiVersion?: string
 }
 
-function createReference(key: string, ref: string, type: string) {
+function createReference(
+  key: string,
+  ref: string,
+  type: string
+): TranslationReference {
   return {
     _key: key,
+    _type: 'internationalizedArrayReferenceValue',
     value: {
       _type: 'reference',
       _ref: ref,
@@ -68,9 +82,12 @@ export default function LanguageOption(props: LanguageOptionProps) {
     const documentIds = documentId.startsWith(`drafts.`)
       ? [documentId, documentId.replace(`drafts.`, ``)]
       : [documentId, `drafts.${documentId}`]
-    const latestDocument = await client.fetch(`*[_id in $ids]|order(_updatedAt desc)[0]`, {
-      ids: documentIds,
-    })
+    const latestDocument = await client.fetch(
+      `*[_id in $ids]|order(_updatedAt desc)[0]`,
+      {
+        ids: documentIds,
+      }
+    )
     const newTranslationDocument = {
       ...latestDocument,
       _id: `drafts.${uuid()}`,
@@ -105,7 +122,9 @@ export default function LanguageOption(props: LanguageOptionProps) {
         _id: metadataId,
         _type: METADATA_SCHEMA_NAME,
         schemaTypes: [schemaType],
-        translations: [newTranslationReference, sourceReference].filter(Boolean),
+        translations: [newTranslationReference, sourceReference].filter(
+          Boolean
+        ),
       })
     }
 
@@ -143,26 +162,57 @@ export default function LanguageOption(props: LanguageOptionProps) {
     toast,
   ])
 
+  let message
+
+  if (current) {
+    message = `Current document`
+  } else if (translation) {
+    message = `Open ${language.title} translation`
+  } else if (!translation) {
+    message = `Create new ${language.title} translation`
+  }
+
   return (
-    <Button
-      onClick={translation ? handleOpen : handleCreate}
-      mode={current ? `default` : `bleed`}
-      disabled={disabled || current}
-    >
-      <Flex gap={3} align="center">
-        {disabled ? (
-          <Spinner />
-        ) : (
-          <Text size={2}>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {translation ? <SplitVerticalIcon /> : current ? <CheckmarkIcon /> : <AddIcon />}
+    <Tooltip
+      content={
+        <Box padding={2}>
+          <Text muted size={1}>
+            {message}
           </Text>
-        )}
-        <Box flex={1}>
-          <Text>{language.title}</Text>
         </Box>
-        <Badge tone={disabled || current ? `default` : `primary`}>{language.id}</Badge>
-      </Flex>
-    </Button>
+      }
+      fallbackPlacements={['right', 'left']}
+      placement="top"
+      portal
+    >
+      <Button
+        onClick={translation ? handleOpen : handleCreate}
+        mode={current && disabled ? `default` : `bleed`}
+        disabled={disabled || current}
+      >
+        <Flex gap={3} align="center">
+          {disabled ? (
+            <Spinner />
+          ) : (
+            <Text size={2}>
+              {/* eslint-disable-next-line no-nested-ternary */}
+              {translation ? (
+                <SplitVerticalIcon />
+              ) : current ? (
+                <CheckmarkIcon />
+              ) : (
+                <AddIcon />
+              )}
+            </Text>
+          )}
+          <Box flex={1}>
+            <Text>{language.title}</Text>
+          </Box>
+          <Badge tone={disabled || current ? `default` : `primary`}>
+            {language.id}
+          </Badge>
+        </Flex>
+      </Button>
+    </Tooltip>
   )
 }

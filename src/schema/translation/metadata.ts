@@ -18,7 +18,7 @@ export default (schemaTypes: string[]): DocumentDefinition =>
       defineField({
         name: 'schemaTypes',
         description:
-          'Used to filter the reference fields above so all translations share the same types.',
+          'Optional: Used to filter the reference fields above so all translations share the same types.',
         type: 'array',
         // For some reason TS dislikes this line because of the DocumentDefinition return type
         // @ts-expect-error

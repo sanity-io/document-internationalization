@@ -1,4 +1,4 @@
-# @sanity/document-internationalization 
+# @sanity/document-internationalization
 
 - This is a completely new, **Sanity Studio v3 exclusive version** of @sanity/document-internationalization released as v2.0.0 which contains new features and requires content migrations to upgrade from previous versions. There is an example code below.
 
@@ -113,7 +113,10 @@ Fortunately, the Sanity GraphQL API contains a similar filter for document refer
 ```graphql
 # In this example we retrieve a lesson by its `slug.current` field value
 query GetLesson($language: String!, $slug: String!) {
-  allLesson(limit: 1, where: {language: {eq: $language}, slug: {current: {eq: $slug}}}) {
+  allLesson(
+    limit: 1
+    where: {language: {eq: $language}, slug: {current: {eq: $slug}}}
+  ) {
     _id
     title
     language
@@ -150,7 +153,7 @@ There are two scripts in the `./migrations` folder of this repository. They cont
 
 ## Roadmap
 
-- [ ] Stabilize bulk publishing feature
+- [x] Stabilize bulk publishing feature
 - [x] Asynchronous language plugin config option
 - [ ] Export a validator to allow the same slug on connected translations
 - [ ] Guidance to copy/paste changes between documents
