@@ -1,10 +1,10 @@
+import {EditIcon} from '@sanity/icons'
+import {Badge, Box, Button, Flex, Text, useToast} from '@sanity/ui'
 import React from 'react'
-import {ChevronRightIcon} from '@sanity/icons'
-import {Button, useToast} from '@sanity/ui'
 import {SanityDocument, useClient} from 'sanity'
 
-import {Language} from '../types'
 import {API_VERSION} from '../constants'
+import {Language} from '../types'
 
 type LanguagePatchProps = {
   language: Language
@@ -63,12 +63,20 @@ export default function LanguagePatch(props: LanguagePatchProps) {
 
   return (
     <Button
-      mode="ghost"
-      text={language.title}
-      icon={ChevronRightIcon}
-      onClick={() => handleClick()}
+      mode="bleed"
+      onClick={handleClick}
       disabled={disabled}
       justify="flex-start"
-    />
+    >
+      <Flex gap={3} align="center">
+        <Text size={2}>
+          <EditIcon />
+        </Text>
+        <Box flex={1}>
+          <Text>{language.title}</Text>
+        </Box>
+        <Badge>{language.id}</Badge>
+      </Flex>
+    </Button>
   )
 }
