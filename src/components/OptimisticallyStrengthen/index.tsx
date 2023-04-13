@@ -1,4 +1,4 @@
-import {TranslationReference} from '../BulkPublish'
+import {TranslationReference} from '../../types'
 import ReferencePatcher from './ReferencePatcher'
 
 type OptimisticallyStrengthenProps = {
