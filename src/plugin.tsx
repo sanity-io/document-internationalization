@@ -13,9 +13,9 @@ import {LanguageBadge} from './badges'
 import BulkPublish from './components/BulkPublish'
 import MenuButton from './components/MenuButton'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
-import {METADATA_SCHEMA_NAME} from './constants'
+import {API_VERSION, METADATA_SCHEMA_NAME} from './constants'
 import metadata from './schema/translation/metadata'
-import {PluginConfig} from './types'
+import {PluginConfig, TranslationReference} from './types'
 
 const DEFAULT_CONFIG = {
   supportedLanguages: [],
@@ -162,9 +162,28 @@ export const documentInternationalization = definePlugin<PluginConfig>(
                 name: 'reference',
                 type: 'reference',
                 to: schemaTypes.map((type) => ({type})),
-                // TODO: Add a validation rule to *ensure* the document's language matches the array key
                 // Reference filters don't actually enforce validation!
-                // validation: (Rule) => Rule.custom(),
+                validation: (Rule) =>
+                  Rule.custom(async (item: TranslationReference, context) => {
+                    if (!item.value?._ref || !item._key) {
+                      return true
+                    }
+
+                    const client = context.getClient({apiVersion: API_VERSION})
+                    const valueLanguage = await client.fetch(
+                      `*[_id in [$ref, $draftRef]][0].${languageField}`,
+                      {
+                        ref: item.value._ref,
+                        draftRef: `drafts.${item.value._ref}`,
+                      }
+                    )
+
+                    if (valueLanguage && valueLanguage === item._key) {
+                      return true
+                    }
+
+                    return `Referenced document does not have the correct language value`
+                  }),
                 options: {
                   collapsed: false,
                   // TODO: Update type once it knows the values of this filter

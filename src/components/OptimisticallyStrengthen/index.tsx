@@ -1,9 +1,8 @@
-import {KeyedObject, Reference} from 'sanity'
-
+import {TranslationReference} from '../BulkPublish'
 import ReferencePatcher from './ReferencePatcher'
 
 type OptimisticallyStrengthenProps = {
-  translations: (KeyedObject & {value: Reference})[]
+  translations: TranslationReference[]
   metadataId: string
 }
 

@@ -1,18 +1,12 @@
 import React from 'react'
-import {
-  KeyedObject,
-  PatchEvent,
-  Reference,
-  unset,
-  useClient,
-  useEditState,
-} from 'sanity'
+import {PatchEvent, unset, useClient, useEditState} from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
 
 import {API_VERSION} from '../../constants'
+import {TranslationReference} from '../BulkPublish'
 
 type ReferencePatcherProps = {
-  translation: KeyedObject & {value: Reference}
+  translation: TranslationReference
   documentType: string
   metadataId: string
 }

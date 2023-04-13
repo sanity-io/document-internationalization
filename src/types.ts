@@ -1,4 +1,9 @@
-import type {SanityClient, SanityDocumentLike} from 'sanity'
+import type {
+  KeyedObject,
+  Reference,
+  SanityClient,
+  SanityDocumentLike,
+} from 'sanity'
 
 export type Language = {
   id: Intl.UnicodeBCP47LocaleIdentifier
@@ -16,13 +21,7 @@ export type PluginConfig = {
   bulkPublish?: boolean
 }
 
-export type TranslationReference = {
-  _key: string
-  value?: {
-    _ref: string
-    _type: 'reference'
-  }
-}
+export type TranslationReference = KeyedObject & {value: Reference}
 
 export type Metadata = SanityDocumentLike & {
   translations: TranslationReference[]
