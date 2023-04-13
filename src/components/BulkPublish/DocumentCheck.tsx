@@ -1,49 +1,72 @@
-import React from 'react'
 import {Card, Spinner} from '@sanity/ui'
-import {useEditState, useValidationStatus, Preview, SchemaType, useSchema} from 'sanity'
+import React from 'react'
+import {Preview, useEditState, useSchema, useValidationStatus} from 'sanity'
 
 type DocumentCheckProps = {
   id: string
-  addId: (id: string) => void
-  removeId: (id: string) => void
+  addInvalidId: (id: string) => void
+  removeInvalidId: (id: string) => void
+  addDraftId: (id: string) => void
+  removeDraftId: (id: string) => void
 }
 
 // Check if the document has a draft
 // Check if that draft is valid
 // Report back to parent that it can be added to bulk publish
 export default function DocumentCheck(props: DocumentCheckProps) {
-  const {id, addId, removeId} = props
+  const {id, addInvalidId, removeInvalidId, addDraftId, removeDraftId} = props
   const editState = useEditState(id, ``)
-  const validationStatus = useValidationStatus(id, ``)
+  const {isValidating, validation} = useValidationStatus(id, ``)
   const schema = useSchema()
 
   const validationHasErrors = React.useMemo(() => {
     return (
-      validationStatus.validation.length > 0 &&
-      validationStatus.validation.find((item) => item.level === 'error')
+      !isValidating &&
+      validation.length > 0 &&
+      validation.some((item) => item.level === 'error')
     )
-  }, [validationStatus])
+  }, [isValidating, validation])
 
   React.useEffect(() => {
     if (validationHasErrors) {
-      addId(id)
+      addInvalidId(id)
     } else {
-      removeId(id)
+      removeInvalidId(id)
     }
-  }, [addId, id, removeId, validationHasErrors])
+
+    if (editState.draft) {
+      addDraftId(id)
+    } else {
+      removeDraftId(id)
+    }
+  }, [
+    addDraftId,
+    addInvalidId,
+    editState.draft,
+    id,
+    removeDraftId,
+    removeInvalidId,
+    validationHasErrors,
+  ])
 
   // We only care about drafts
   if (!editState.draft) {
     return null
   }
 
+  const schemaType = schema.get(editState.draft._type)
+
   return (
-    <Card border padding={2} tone={validationHasErrors ? `critical` : `positive`}>
-      {editState.published ? (
+    <Card
+      border
+      padding={2}
+      tone={validationHasErrors ? `critical` : `positive`}
+    >
+      {editState.draft && schemaType ? (
         <Preview
           layout="default"
-          value={editState.published}
-          schemaType={schema.get(editState.published._type) as SchemaType}
+          value={editState.draft}
+          schemaType={schemaType}
         />
       ) : (
         <Spinner />

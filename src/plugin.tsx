@@ -58,7 +58,9 @@ export const documentInternationalization = definePlugin<PluginConfig>(
 
               return (
                 <Stack space={5}>
-                  {bulkPublish ? <BulkPublish {...props} /> : null}
+                  {bulkPublish ? (
+                    <BulkPublish translations={translations} />
+                  ) : null}
                   {weakAndTypedTranslations.length > 0 ? (
                     <OptimisticallyStrengthen
                       metadataId={metadataId}
@@ -159,7 +161,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
                 // Reference filters don't actually enforce validation!
                 validation: (Rule) =>
                   Rule.custom(async (item: TranslationReference, context) => {
-                    if (!item.value?._ref || !item._key) {
+                    if (!item?.value?._ref || !item?._key) {
                       return true
                     }
 

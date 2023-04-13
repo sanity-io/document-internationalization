@@ -1,42 +1,45 @@
+import {Button, Card, Stack, Text, useToast} from '@sanity/ui'
 import React, {useCallback} from 'react'
-import {Box, Text, Stack, Button, useToast} from '@sanity/ui'
-import {
-  InputProps,
-  Reference,
-  SanityDocument,
-  KeyedObject,
-  TypedObject,
-  useClient,
-  useWorkspace,
-} from 'sanity'
-import DocumentCheck from './DocumentCheck'
+import {TextWithTone, useClient, useWorkspace} from 'sanity'
+
 import {API_VERSION} from '../../constants'
+import {TranslationReference} from '../../types'
+import DocumentCheck from './DocumentCheck'
 
-export type TranslationReference = KeyedObject & TypedObject & {value: Reference}
-
-export type TranslationMetadataDocument = SanityDocument & {
+export type BulkPublishProps = {
   translations: TranslationReference[]
-  schemaTypes: string[]
-  apiVersion?: string
 }
 
-export default function BulkPublish(props: InputProps) {
-  const {apiVersion = API_VERSION, translations} = props.value as TranslationMetadataDocument
-  const client = useClient({apiVersion})
+// A root-level component with UI for hitting the Publishing API
+export default function BulkPublish(props: BulkPublishProps) {
+  const {translations} = props
+  const client = useClient({apiVersion: API_VERSION})
   const {projectId, dataset} = useWorkspace()
   const toast = useToast()
-  const [invalidIds, setInvalidIds] = React.useState<string[]>([])
+  const [invalidIds, setInvalidIds] = React.useState<string[] | null>(null)
 
-  const addId = useCallback((id: string) => {
-    setInvalidIds((ids) => [...ids, id])
+  const addInvalidId = useCallback((id: string) => {
+    setInvalidIds((ids) => (ids ? Array.from(new Set([...ids, id])) : [id]))
   }, [])
 
-  const removeId = useCallback((id: string) => {
-    setInvalidIds((ids) => ids.filter((i) => i !== id))
+  const removeInvalidId = useCallback((id: string) => {
+    setInvalidIds((ids) => (ids ? ids.filter((i) => i !== id) : []))
+  }, [])
+
+  const [draftIds, setDraftIds] = React.useState<string[]>([])
+
+  const addDraftId = useCallback((id: string) => {
+    setDraftIds((ids) => Array.from(new Set([...ids, id])))
+  }, [])
+
+  const removeDraftId = useCallback((id: string) => {
+    setDraftIds((ids) => ids.filter((i) => i !== id))
   }, [])
 
   const handleBulkPublish = useCallback(() => {
-    const body = translations.map((translation) => ({documentId: translation.value._ref}))
+    const body = translations.map((translation) => ({
+      documentId: translation.value._ref,
+    }))
     client
       .request({
         uri: `/publish/${projectId}/${dataset}`,
@@ -60,43 +63,71 @@ export default function BulkPublish(props: InputProps) {
       })
   }, [translations, client, projectId, dataset, toast])
 
-  // TODO: Hide all this if none of the documents have drafts
   return translations?.length > 0 ? (
-    <Stack space={4}>
+    <Card padding={4} border radius={2}>
       <Stack space={3}>
         <Text weight="bold" size={1}>
           Bulk publishing
         </Text>
-        <Text>
-          There{' '}
-          {translations.length === 1 ? `is 1 document` : `are ${translations.length} documents`}.
-        </Text>
-        {invalidIds.length > 0 ? (
-          <Text weight="medium">
-            {invalidIds.length === 1 ? `1 draft has` : `${invalidIds.length} drafts have`}{' '}
-            validation issues that must addressed first.
-          </Text>
+        {draftIds.length > 0 ? (
+          <Stack space={2}>
+            <Text size={1}>
+              There{' '}
+              {draftIds.length === 1
+                ? `is 1 draft document`
+                : `are ${draftIds.length} draft documents`}
+              .
+            </Text>
+            {invalidIds && invalidIds.length > 0 ? (
+              <TextWithTone tone="caution" size={1}>
+                {invalidIds && invalidIds.length === 1
+                  ? `1 draft document has`
+                  : `${
+                      invalidIds && invalidIds.length
+                    } draft documents have`}{' '}
+                validation issues that must addressed first
+              </TextWithTone>
+            ) : (
+              <TextWithTone tone="positive" size={1}>
+                All drafts are valid and can be bulk published
+              </TextWithTone>
+            )}
+          </Stack>
+        ) : null}
+        <Stack space={1}>
+          {translations
+            .filter((translation) => translation?.value?._ref)
+            .map((translation) => (
+              <DocumentCheck
+                key={translation._key}
+                id={translation.value._ref}
+                addInvalidId={addInvalidId}
+                removeInvalidId={removeInvalidId}
+                addDraftId={addDraftId}
+                removeDraftId={removeDraftId}
+              />
+            ))}
+        </Stack>
+        {draftIds.length > 0 ? (
+          <Button
+            mode="ghost"
+            tone={invalidIds && invalidIds?.length > 0 ? 'caution' : 'positive'}
+            text={
+              draftIds.length === 1
+                ? `Publish draft document`
+                : `Bulk publish ${draftIds.length} draft documents`
+            }
+            onClick={handleBulkPublish}
+            disabled={
+              Boolean(invalidIds && invalidIds?.length > 0) || !draftIds.length
+            }
+          />
         ) : (
-          <Text>They are all valid.</Text>
+          <Text muted size={1}>
+            No draft documents to publish
+          </Text>
         )}
       </Stack>
-      <Stack space={2}>
-        {translations.map((translation) => (
-          <DocumentCheck
-            key={translation._key}
-            id={translation.value._ref}
-            addId={addId}
-            removeId={removeId}
-          />
-        ))}
-      </Stack>
-      <Button
-        text={`Simultaneously Publish ${
-          translations.length === 1 ? `1 Document` : `${translations.length} Documents`
-        }`}
-        onClick={handleBulkPublish}
-        disabled={Boolean(invalidIds.length)}
-      />
-    </Stack>
+    </Card>
   ) : null
 }
