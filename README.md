@@ -11,7 +11,7 @@
     - [Querying with GROQ](#querying-with-groq)
     - [Querying with GraphQL](#querying-with-graphql)
     - [Allowing the same slug on different language versions](#allowing-the-same-slug-on-different-language-versions)
-  - [Note on Document counts](#note-on-document-counts)
+  - [Note on document quotas](#note-on-document-quotas)
   - [Content migrations](#content-migrations)
   - [License](#license)
   - [Develop \& test](#develop--test)
@@ -68,7 +68,7 @@ yarn add @sanity/document-internationalization@studio-v3-plugin-v2
 
 ## Usage
 
-Add it as a plugin in sanity.config.ts (or .js):
+Add it as a plugin in `sanity.config.ts` (or .js):
 
 ### Basic configuration
 
@@ -76,8 +76,9 @@ The only required configuration is the `supportedLanguages` array and the `schem
 
 ```ts
 // sanity.config.ts
- import {createConfig} from 'sanity'
- import {documentInternationalization} from '@sanity/document-internationalization'
+
+import {createConfig} from 'sanity'
+import {documentInternationalization} from '@sanity/document-internationalization'
 
 export const createConfig({
   // ... all other config
@@ -100,8 +101,9 @@ The plugin also supports asynchronously retrieving languages from the dataset, m
 
 ```ts
 // sanity.config.ts
- import {createConfig} from 'sanity'
- import {documentInternationalization} from '@sanity/document-internationalization'
+
+import {createConfig} from 'sanity'
+import {documentInternationalization} from '@sanity/document-internationalization'
 
 export const createConfig({
   // ... all other config
@@ -260,7 +262,7 @@ export async function isUniqueOtherThanLanguage(slug: string, context: SlugValid
 }
 ```
 
-## Note on Document counts
+## Note on document quotas
 
 In previous versions of this plugin, translations were stored as an array of references on the actual documents. This required a base language, lead to messy transaction histories and made deleting documents difficult.
 
