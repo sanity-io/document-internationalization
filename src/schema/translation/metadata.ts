@@ -1,9 +1,17 @@
 import {TranslateIcon} from '@sanity/icons'
-import {defineField, defineType, DocumentDefinition} from 'sanity'
+import {
+  defineField,
+  defineType,
+  DocumentDefinition,
+  FieldDefinition,
+} from 'sanity'
 
 import {METADATA_SCHEMA_NAME} from '../../constants'
 
-export default (schemaTypes: string[]): DocumentDefinition =>
+export default (
+  schemaTypes: string[],
+  metadataFields: FieldDefinition[]
+): DocumentDefinition =>
   defineType({
     type: 'document',
     name: METADATA_SCHEMA_NAME,
@@ -26,6 +34,7 @@ export default (schemaTypes: string[]): DocumentDefinition =>
         options: {list: schemaTypes},
         readOnly: ({value}) => Boolean(value),
       }),
+      ...metadataFields,
     ],
     preview: {
       select: {
