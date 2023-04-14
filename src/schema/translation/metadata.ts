@@ -55,8 +55,8 @@ export default (
         const subtitle = [
           languageKeys ? `(${languageKeys})` : null,
           documentSchemaTypes?.length
-            ? documentSchemaTypes.map((s: string) => s.toUpperCase()).join(`, `)
-            : `No Schemas Defined`,
+            ? documentSchemaTypes.map((s: string) => s).join(`, `)
+            : ``,
         ]
           .filter(Boolean)
           .join(` `)

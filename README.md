@@ -7,8 +7,10 @@
     - [Basic configuration](#basic-configuration)
     - [Advanced configuration](#advanced-configuration)
     - [Language field](#language-field)
-  - [Querying with GROQ](#querying-with-groq)
-  - [Querying with GraphQL](#querying-with-graphql)
+  - [Code examples](#code-examples)
+    - [Querying with GROQ](#querying-with-groq)
+    - [Querying with GraphQL](#querying-with-graphql)
+    - [Allowing the same slug on different language versions](#allowing-the-same-slug-on-different-language-versions)
   - [Note on Document counts](#note-on-document-counts)
   - [Content migrations](#content-migrations)
   - [License](#license)
@@ -157,7 +159,9 @@ defineField({
 })
 ```
 
-## Querying with GROQ
+## Code examples
+
+### Querying with GROQ
 
 To query a single document and all its translations, we use the `references()` function in GROQ.
 
@@ -178,7 +182,7 @@ To query a single document and all its translations, we use the `references()` f
 }
 ```
 
-## Querying with GraphQL
+### Querying with GraphQL
 
 Fortunately, the Sanity GraphQL API contains a similar filter for document references.
 
@@ -211,6 +215,48 @@ query GetTranslations($id: ID!) {
       }
     }
   }
+}
+```
+
+### Allowing the same slug on different language versions
+
+Often your translated documents will share the same slug. You might wish to move this into the metadata document itself using the `metadataFields` option in the plugin. Alternatively, you can customize the `isUnique` function on a [slug type field](https://www.sanity.io/docs/slug-type#isUnique-**3dd89e75a768**).
+
+```ts
+// Add the isUnique option to your slug field
+defineField({
+  name: 'slug',
+  type: 'slug',
+  options: {
+    isUnique: isUniqueOtherThanLanguage
+  },
+}),
+
+// Create the function
+// This checks that there are no other documents
+// With this published or draft _id
+// Or this schema type
+// With the same slug and language
+export async function isUniqueOtherThanLanguage(slug: string, context: SlugValidationContext) {
+  const {document, getClient} = context
+  if (!document) {
+    return false
+  }
+  const client = getClient({apiVersion: '2022-12-07'})
+  const id = document._id.replace(/^drafts\./, '')
+  const params = {
+    draft: `drafts.${id}`,
+    published: id,
+    language: document.language,
+    slug,
+  }
+  const query = `!defined(*[
+    !(_id in [$draft, $published]) &&
+    slug.current == $slug &&
+    language == $language
+  ][0]._id)`
+  const result = await client.fetch(query, params)
+  return result
 }
 ```
 

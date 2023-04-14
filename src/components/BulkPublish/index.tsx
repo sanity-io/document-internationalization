@@ -1,10 +1,11 @@
-import {Button, Card, Stack, Text, useToast} from '@sanity/ui'
+import {Button, Card, Inline, Stack, Text, useToast} from '@sanity/ui'
 import React, {useCallback} from 'react'
 import {TextWithTone, useClient, useWorkspace} from 'sanity'
 
 import {API_VERSION} from '../../constants'
 import {TranslationReference} from '../../types'
 import DocumentCheck from './DocumentCheck'
+import Info from './Info'
 
 export type BulkPublishProps = {
   translations: TranslationReference[]
@@ -66,9 +67,12 @@ export default function BulkPublish(props: BulkPublishProps) {
   return translations?.length > 0 ? (
     <Card padding={4} border radius={2}>
       <Stack space={3}>
-        <Text weight="bold" size={1}>
-          Bulk publishing
-        </Text>
+        <Inline space={3}>
+          <Text weight="bold" size={1}>
+            Bulk publishing
+          </Text>
+          <Info />
+        </Inline>
         {draftIds.length > 0 ? (
           <Stack space={2}>
             <Text size={1}>
