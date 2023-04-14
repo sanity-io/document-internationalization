@@ -15,11 +15,18 @@ const DEFAULT_CONFIG = {
   schemaTypes: [],
   languageField: `language`,
   bulkPublish: false,
+  metadataFields: [],
 }
 
 export const documentInternationalization = definePlugin<PluginConfig>(
   (config) => {
-    const {supportedLanguages, schemaTypes, languageField, bulkPublish} = {
+    const {
+      supportedLanguages,
+      schemaTypes,
+      languageField,
+      bulkPublish,
+      metadataFields,
+    } = {
       ...DEFAULT_CONFIG,
       ...config,
     }
@@ -104,7 +111,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
       // - The `Translations metadata` document type to the schema
       schema: {
         // Create the metadata document type
-        types: [metadata(schemaTypes)],
+        types: [metadata(schemaTypes, metadataFields)],
 
         // For every schema type this plugin is enabled on
         // Create an initial value template to set the language

@@ -1,4 +1,5 @@
 import type {
+  FieldDefinition,
   KeyedObject,
   Reference,
   SanityClient,
@@ -19,6 +20,7 @@ export type PluginConfig = {
   schemaTypes: string[]
   languageField?: string
   bulkPublish?: boolean
+  metadataFields?: FieldDefinition[]
 }
 
 export type TranslationReference = KeyedObject & {
