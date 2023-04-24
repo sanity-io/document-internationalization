@@ -5,6 +5,34 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.9](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.8...v2.0.0-studio-v3-plugin-v2.9) (2023-04-14)
+
+### Features
+
+- more explainer text in the plugin and readme ([f3e9ce9](https://github.com/sanity-io/document-internationalization/commit/f3e9ce94aae89dee38e7d2b16ed77d1110b3d7ca))
+- readme update, metadata fields ([1365109](https://github.com/sanity-io/document-internationalization/commit/136510916dc2ca2bba4f527a130a47ef80ea5b11))
+
+## [2.0.0-studio-v3-plugin-v2.8](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.7...v2.0.0-studio-v3-plugin-v2.8) (2023-04-13)
+
+### Features
+
+- auto-strengthen published references ([b8c752f](https://github.com/sanity-io/document-internationalization/commit/b8c752f5e6b15191887160b99b765b7643cb39f7))
+- updated bulk publishing UI ([082ffd1](https://github.com/sanity-io/document-internationalization/commit/082ffd14762e1d0f2d18cf68a0176f71fffa4b32))
+- validate correct language in references ([af91456](https://github.com/sanity-io/document-internationalization/commit/af9145673ae204a956ff593f9ab8c655ef61406b))
+
+### Bug Fixes
+
+- clean up types ([d01adb9](https://github.com/sanity-io/document-internationalization/commit/d01adb9cc76d16b3ee758ace68e1f74319df4e6e))
+- type import ([03af0d1](https://github.com/sanity-io/document-internationalization/commit/03af0d12dc6e8a20ff265f1e10b02aa90f27a1ca))
+- type import ([17229a7](https://github.com/sanity-io/document-internationalization/commit/17229a7781a05a73f9621e2bf5b887be0cad3b1a))
+- ui consistency ([c54deff](https://github.com/sanity-io/document-internationalization/commit/c54deffd7f2d95b0c347bdfddd8cdc444b3aff04))
+
+## [2.0.0-studio-v3-plugin-v2.7](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.6...v2.0.0-studio-v3-plugin-v2.7) (2023-04-13)
+
+### Bug Fixes
+
+- update dependencies ([e977f4a](https://github.com/sanity-io/document-internationalization/commit/e977f4ad4bbe17dc2ff43390146afbf401bea7de))
+
 ## [2.0.0-studio-v3-plugin-v2.6](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.5...v2.0.0-studio-v3-plugin-v2.6) (2023-04-12)
 
 ### Bug Fixes
