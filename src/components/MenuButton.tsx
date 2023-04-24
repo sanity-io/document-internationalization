@@ -8,14 +8,14 @@ import {
   Text,
   useClickOutside,
 } from '@sanity/ui'
-import React, {useCallback, useState} from 'react'
+import {uuid} from '@sanity/uuid'
+import React, {useCallback, useMemo, useState} from 'react'
 import {useClient, useEditState} from 'sanity'
 import {suspend} from 'suspend-react'
 
 import {API_VERSION} from '../constants'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import {SupportedLanguages} from '../types'
-import ConstrainedBox from './ConstrainedBox'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
 import LanguagePatch from './LanguagePatch'
@@ -48,20 +48,30 @@ export default function MenuButton(props: MenuButtonProps) {
         return props.supportedLanguages
       }, [])
 
+  // UI Handlers
   const [open, setOpen] = useState(false)
   const handleClick = useCallback(() => setOpen((o) => !o), [])
   const [button, setButton] = useState<HTMLElement | null>(null)
   const [popover, setPopover] = useState<HTMLElement | null>(null)
   const handleClickOutside = useCallback(() => setOpen(false), [])
   useClickOutside(handleClickOutside, [button, popover])
+
+  // Get metadata from content lake
   const {data, loading, error} = useTranslationMetadata(documentId)
-  console.log(data, documentId)
   const metadata = Array.isArray(data) && data.length ? data[0] : null
+
+  // Optimistically set a metadata ID for a newly created metadata document
+  // Cannot rely on metadata._id because from useTranslationMetadata
+  // As the document store might not have returned it before creating another translation
+  const metadataId = useMemo(() => metadata?._id ?? uuid(), [metadata])
+
+  // Duplicate a new language version from the most recent version of this document
   const {draft, published} = useEditState(documentId, schemaType)
   const source = draft || published
 
+  // Check for data issues
   const documentIsInOneMetadataDocument = React.useMemo(() => {
-    return Array.isArray(data) && data.length === 1
+    return Array.isArray(data) && data.length <= 1
   }, [data])
   const sourceLanguageId = source?.[languageField] as string | undefined
   const sourceLanguageIsValid = supportedLanguages.some(
@@ -94,7 +104,7 @@ export default function MenuButton(props: MenuButtonProps) {
               {loading ? null : (
                 <>
                   {/* Not all languages are valid */}
-                  {documentIsInOneMetadataDocument ? null : (
+                  {data && documentIsInOneMetadataDocument ? null : (
                     <Warning>
                       {/* TODO: Surface these documents to the user */}
                       This document has been found in more than one Translations
@@ -123,13 +133,13 @@ export default function MenuButton(props: MenuButtonProps) {
                   ) : null}
                 </>
               )}
-              {supportedLanguages.map((language, langIndex) =>
+              {supportedLanguages.map((language, languageIndex) =>
                 !loading && sourceLanguageId && sourceLanguageIsValid ? (
                   // Button to duplicate this document to a new translation
                   // And either create or update the metadata document
                   <LanguageOption
-                    key={language.id || language.title || `lang-${langIndex}`}
-                    index={langIndex}
+                    key={language.id}
+                    index={languageIndex}
                     language={language}
                     languageField={languageField}
                     schemaType={schemaType}
@@ -137,16 +147,14 @@ export default function MenuButton(props: MenuButtonProps) {
                     disabled={loading || !allLanguagesAreValid}
                     current={language.id === sourceLanguageId}
                     metadata={metadata}
-                    sourceId={documentId}
+                    metadataId={metadataId}
+                    source={source}
                     sourceLanguageId={sourceLanguageId}
-                    translation={metadata?.translations.find(
-                      (t) => t._key === language.id
-                    )}
                   />
                 ) : (
                   // Button to set a language field on *this* document
                   <LanguagePatch
-                    key={language.id || language.title || `lang-${langIndex}`}
+                    key={language.id}
                     languageField={languageField}
                     source={source}
                     documentId={documentId}
