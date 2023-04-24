@@ -10,13 +10,7 @@ import {
   useClickOutside,
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import React, {
-  FormEvent,
-  FormEventHandler,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import {FormEvent, useCallback, useMemo, useState} from 'react'
 import {useClient, useEditState} from 'sanity'
 import {suspend} from 'suspend-react'
 
@@ -94,14 +88,14 @@ export default function MenuButton(props: MenuButtonProps) {
   const source = draft || published
 
   // Check for data issues
-  const documentIsInOneMetadataDocument = React.useMemo(() => {
+  const documentIsInOneMetadataDocument = useMemo(() => {
     return Array.isArray(data) && data.length <= 1
   }, [data])
   const sourceLanguageId = source?.[languageField] as string | undefined
   const sourceLanguageIsValid = supportedLanguages.some(
     (l) => l.id === sourceLanguageId
   )
-  const allLanguagesAreValid = React.useMemo(() => {
+  const allLanguagesAreValid = useMemo(() => {
     const valid = supportedLanguages.every((l) => l.id && l.title)
     if (!valid) {
       console.warn(

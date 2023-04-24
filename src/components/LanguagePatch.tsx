@@ -1,6 +1,6 @@
 import {EditIcon} from '@sanity/icons'
 import {Badge, Box, Button, Flex, Text, useToast} from '@sanity/ui'
-import React from 'react'
+import {useCallback} from 'react'
 import {SanityDocument, useClient} from 'sanity'
 
 import {API_VERSION} from '../constants'
@@ -20,7 +20,7 @@ export default function LanguagePatch(props: LanguagePatchProps) {
   const client = useClient({apiVersion})
   const toast = useToast()
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = useCallback(() => {
     if (!source) {
       throw new Error(`Cannot patch missing document`)
     }

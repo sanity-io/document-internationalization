@@ -37,7 +37,7 @@ export default function BulkPublish(props: BulkPublishProps) {
     setInvalidIds((ids) => (ids ? ids.filter((i) => i !== id) : []))
   }, [])
 
-  const [draftIds, setDraftIds] = React.useState<string[]>([])
+  const [draftIds, setDraftIds] = useState<string[]>([])
 
   const addDraftId = useCallback((id: string) => {
     setDraftIds((ids) => Array.from(new Set([...ids, id])))

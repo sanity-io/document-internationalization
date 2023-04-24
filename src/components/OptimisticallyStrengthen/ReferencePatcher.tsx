@@ -1,4 +1,4 @@
-import React from 'react'
+import {useEffect} from 'react'
 import {PatchEvent, unset, useClient, useEditState} from 'sanity'
 import {useDocumentPane} from 'sanity/desk'
 
@@ -18,7 +18,7 @@ export default function ReferencePatcher(props: ReferencePatcherProps) {
   const client = useClient({apiVersion: API_VERSION})
   const {onChange} = useDocumentPane()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       // We have a reference
       translation.value._ref &&
