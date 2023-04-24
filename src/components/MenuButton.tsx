@@ -15,9 +15,11 @@ import {suspend} from 'suspend-react'
 import {API_VERSION} from '../constants'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import {SupportedLanguages} from '../types'
+import ConstrainedBox from './ConstrainedBox'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
 import LanguagePatch from './LanguagePatch'
+import Warning from './Warning'
 
 type MenuButtonProps = {
   supportedLanguages: SupportedLanguages
@@ -52,14 +54,15 @@ export default function MenuButton(props: MenuButtonProps) {
   const [popover, setPopover] = useState<HTMLElement | null>(null)
   const handleClickOutside = useCallback(() => setOpen(false), [])
   useClickOutside(handleClickOutside, [button, popover])
-  const {
-    data: metadata,
-    loading,
-    error,
-  } = useTranslationMetadata(documentId, schemaType)
+  const {data, loading, error} = useTranslationMetadata(documentId)
+  console.log(data, documentId)
+  const metadata = Array.isArray(data) && data.length ? data[0] : null
   const {draft, published} = useEditState(documentId, schemaType)
   const source = draft || published
 
+  const documentIsInOneMetadataDocument = React.useMemo(() => {
+    return Array.isArray(data) && data.length === 1
+  }, [data])
   const sourceLanguageId = source?.[languageField] as string | undefined
   const sourceLanguageIsValid = supportedLanguages.some(
     (l) => l.id === sourceLanguageId
@@ -91,31 +94,32 @@ export default function MenuButton(props: MenuButtonProps) {
               {loading ? null : (
                 <>
                   {/* Not all languages are valid */}
+                  {documentIsInOneMetadataDocument ? null : (
+                    <Warning>
+                      {/* TODO: Surface these documents to the user */}
+                      This document has been found in more than one Translations
+                      Metadata documents
+                    </Warning>
+                  )}
+                  {/* Not all languages are valid */}
                   {allLanguagesAreValid ? null : (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Not all language objects are valid. See the console.
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Not all language objects are valid. See the console.
+                    </Warning>
                   )}
                   {/* Current document has no language field */}
                   {sourceLanguageId ? null : (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Choose a language to <br />
-                        apply to <strong>this Document</strong>
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Choose a language to apply to{' '}
+                      <strong>this Document</strong>
+                    </Warning>
                   )}
                   {/* Current document has an invalid language field */}
                   {sourceLanguageId && !sourceLanguageIsValid ? (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Select a supported language.
-                        <br />
-                        Current language value: <code>{sourceLanguageId}</code>
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Select a supported language. Current language value:{' '}
+                      <code>{sourceLanguageId}</code>
+                    </Warning>
                   ) : null}
                 </>
               )}

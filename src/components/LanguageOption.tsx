@@ -129,7 +129,9 @@ export default function LanguageOption(props: LanguageOptionProps) {
     }
 
     transaction
-      .commit()
+      .commit
+      // {visibility: `async`}
+      ()
       .then(() => {
         // openDocumentInSidePane(metadataId, `translation.metadata`)
         return toast.push({
