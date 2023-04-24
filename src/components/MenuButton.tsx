@@ -84,6 +84,7 @@ export default function MenuButton(props: MenuButtonProps) {
         </Card>
       ) : (
         <Stack padding={1} space={1}>
+          <LanguageManage id={metadata?._id} />
           {supportedLanguages.length > 0 ? (
             <>
               {/* Once metadata is loaded, there may be issues */}
@@ -162,7 +163,6 @@ export default function MenuButton(props: MenuButtonProps) {
               )}
             </>
           ) : null}
-          <LanguageManage id={metadata?._id} />
         </Stack>
       )}
     </Box>
