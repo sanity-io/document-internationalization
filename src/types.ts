@@ -3,7 +3,6 @@ import type {
   KeyedObject,
   Reference,
   SanityClient,
-  SanityDocumentLike,
 } from 'sanity'
 
 export type Language = {
