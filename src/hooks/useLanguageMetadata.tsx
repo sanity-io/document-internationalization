@@ -3,7 +3,15 @@ import {useListeningQuery} from 'sanity-plugin-utils'
 import {METADATA_SCHEMA_NAME} from '../constants'
 import {Metadata} from '../types'
 
-const query = `*[_type == $translationSchema && references($id)]`
+// Using references() seemed less reliable for updating the listener
+// results than querying raw values in the array
+// AFAIK: references is _faster_ when querying with GROQ
+// const query = `*[_type == $translationSchema && references($id)]`
+const query = `*[_type == $translationSchema && $id in translations[].value._ref]{
+  _id,
+  _createdAt,
+  translations
+}`
 
 export function useTranslationMetadata(id: string): {
   data: Metadata[] | null

@@ -9,41 +9,27 @@ import {Language} from '../types'
 type LanguagePatchProps = {
   language: Language
   languageField: string
-  documentId: string
-  schemaType: string
   source: SanityDocument | null
   disabled: boolean
   apiVersion?: string
 }
 
 export default function LanguagePatch(props: LanguagePatchProps) {
-  const {
-    apiVersion = API_VERSION,
-    language,
-    languageField,
-    documentId,
-    schemaType,
-    source,
-    disabled = false,
-  } = props
+  const {apiVersion = API_VERSION, language, languageField, source} = props
+  const disabled = props.disabled || !source
   const client = useClient({apiVersion})
   const toast = useToast()
 
   const handleClick = React.useCallback(() => {
-    const currentId = source ? source._id : `draft.${documentId}`
-    const transaction = client.transaction()
-
     if (!source) {
-      transaction.createIfNotExists({
-        _id: currentId,
-        _type: schemaType,
-      })
+      throw new Error(`Cannot patch missing document`)
     }
 
-    const patch = client.patch(currentId).set({[languageField]: language.id})
-    transaction.patch(patch)
+    const currentId = source._id
 
-    transaction
+    client
+      .patch(currentId)
+      .set({[languageField]: language.id})
       .commit()
       .then(() => {
         toast.push({
@@ -59,7 +45,7 @@ export default function LanguagePatch(props: LanguagePatchProps) {
           status: `error`,
         })
       })
-  }, [source, documentId, client, languageField, language, schemaType, toast])
+  }, [source, client, languageField, language, toast])
 
   return (
     <Button

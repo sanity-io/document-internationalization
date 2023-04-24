@@ -15,46 +15,26 @@ import {SanityDocument, useClient} from 'sanity'
 
 import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
+import {createReference} from '../lib/createReference'
 import {Language, Metadata, TranslationReference} from '../types'
 
 type LanguageOptionProps = {
   language: Language
   languageField: string
-  index: number
   schemaType: string
   documentId: string
   disabled: boolean
   current: boolean
   source: SanityDocument | null
-  metadataId: string
+  metadataId: string | null
   metadata?: Metadata | null
   sourceLanguageId?: string
   apiVersion?: string
 }
 
-function createReference(
-  key: string,
-  ref: string,
-  type: string
-): TranslationReference {
-  return {
-    _key: key,
-    _type: 'internationalizedArrayReferenceValue',
-    value: {
-      _type: 'reference',
-      _ref: ref,
-      _weak: true,
-      _strengthenOnPublish: {
-        type,
-      },
-    },
-  }
-}
-
 export default function LanguageOption(props: LanguageOptionProps) {
   const {
     apiVersion = API_VERSION,
-    index,
     language,
     languageField,
     schemaType,
@@ -65,7 +45,8 @@ export default function LanguageOption(props: LanguageOptionProps) {
     metadata,
     metadataId,
   } = props
-  const disabled = props.disabled || current || !source || !sourceLanguageId
+  const disabled =
+    props.disabled || current || !source || !sourceLanguageId || !metadataId
   const translation: TranslationReference | undefined = metadata?.translations
     .length
     ? metadata.translations.find((t) => t._key === language.id)
@@ -85,50 +66,56 @@ export default function LanguageOption(props: LanguageOptionProps) {
       throw new Error(`Cannot create translation without source language ID`)
     }
 
+    if (!metadataId) {
+      throw new Error(`Cannot create translation without a metadata ID`)
+    }
+
     const transaction = client.transaction()
 
-    // 1. Duplicate current document
-    // 2. Update language
-    // 3. Add to translation metadata
+    // 1. Duplicate source document
     const newTranslationDocumentId = uuid()
     const newTranslationDocument = {
       ...source,
       _id: `drafts.${newTranslationDocumentId}`,
+      // 2. Update language of the translation
       [languageField]: language.id,
     }
 
     transaction.create(newTranslationDocument)
 
-    const newTranslationReference = createReference(
-      language.id,
-      newTranslationDocumentId,
-      schemaType
-    )
-
+    // 3. Maybe create the metadata document
     const sourceReference = createReference(
       sourceLanguageId,
       documentId,
       schemaType
     )
-
-    transaction.createIfNotExists({
+    const newTranslationReference = createReference(
+      language.id,
+      newTranslationDocumentId,
+      schemaType
+    )
+    const newMetadataDocument = {
       _id: metadataId,
       _type: METADATA_SCHEMA_NAME,
       schemaTypes: [schemaType],
       translations: [sourceReference],
-    })
+    }
 
-    // Create translation metadata document if it doesn't already exist
-    const path = `translations[${index - 1}]`
+    transaction.createIfNotExists(newMetadataDocument)
+
+    // 4. Patch translation to metadata document
+    // Note: If the document was only just created in the operation above
+    // This patch operation will have no effect
     const metadataPatch = client
       .patch(metadataId)
-      .setIfMissing({translations: []})
-      .insert(`before`, path, [newTranslationReference])
+      .setIfMissing({translations: [sourceReference]})
+      .insert(`after`, `translations[-1]`, [newTranslationReference])
 
     transaction.patch(metadataPatch)
 
+    // 5. Commit!
     transaction
-      .commit({visibility: `async`})
+      .commit()
       .then(() => {
         const metadataExisted = Boolean(metadata?._createdAt)
 
@@ -152,7 +139,6 @@ export default function LanguageOption(props: LanguageOptionProps) {
   }, [
     client,
     documentId,
-    index,
     language.id,
     language.title,
     languageField,

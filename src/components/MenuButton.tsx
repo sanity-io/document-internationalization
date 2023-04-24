@@ -61,9 +61,16 @@ export default function MenuButton(props: MenuButtonProps) {
   const metadata = Array.isArray(data) && data.length ? data[0] : null
 
   // Optimistically set a metadata ID for a newly created metadata document
-  // Cannot rely on metadata._id because from useTranslationMetadata
+  // Cannot rely on generated metadata._id from useTranslationMetadata
   // As the document store might not have returned it before creating another translation
-  const metadataId = useMemo(() => metadata?._id ?? uuid(), [metadata])
+  const metadataId = useMemo(() => {
+    if (loading) {
+      return null
+    }
+
+    // Once created, these two values should be the same anyway
+    return metadata?._id ?? uuid()
+  }, [loading, metadata?._id])
 
   // Duplicate a new language version from the most recent version of this document
   const {draft, published} = useEditState(documentId, schemaType)
@@ -133,13 +140,12 @@ export default function MenuButton(props: MenuButtonProps) {
                   ) : null}
                 </>
               )}
-              {supportedLanguages.map((language, languageIndex) =>
+              {supportedLanguages.map((language) =>
                 !loading && sourceLanguageId && sourceLanguageIsValid ? (
                   // Button to duplicate this document to a new translation
                   // And either create or update the metadata document
                   <LanguageOption
                     key={language.id}
-                    index={languageIndex}
                     language={language}
                     languageField={languageField}
                     schemaType={schemaType}
@@ -157,14 +163,13 @@ export default function MenuButton(props: MenuButtonProps) {
                     key={language.id}
                     languageField={languageField}
                     source={source}
-                    documentId={documentId}
-                    schemaType={schemaType}
                     language={language}
                     // Only allow language patch change to:
                     // - Keys not in metadata
                     // - The key of this document in the metadata
                     disabled={
-                      (!allLanguagesAreValid ||
+                      (loading ||
+                        !allLanguagesAreValid ||
                         metadata?.translations
                           .filter((t) => t?.value?._ref !== documentId)
                           .some((t) => t._key === language.id)) ??

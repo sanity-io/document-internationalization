@@ -1,5 +1,5 @@
-import {Button, Card, Inline, Stack, Text, useToast} from '@sanity/ui'
-import React, {useCallback} from 'react'
+import {Button, Card, Dialog, Inline, Stack, Text, useToast} from '@sanity/ui'
+import React, {useCallback, useState} from 'react'
 import {TextWithTone, useClient, useWorkspace} from 'sanity'
 
 import {API_VERSION} from '../../constants'
@@ -17,7 +17,17 @@ export default function BulkPublish(props: BulkPublishProps) {
   const client = useClient({apiVersion: API_VERSION})
   const {projectId, dataset} = useWorkspace()
   const toast = useToast()
-  const [invalidIds, setInvalidIds] = React.useState<string[] | null>(null)
+  const [invalidIds, setInvalidIds] = useState<string[] | null>(null)
+  const [checkedIds, setCheckedIds] = useState<string[]>([])
+
+  const onCheckComplete = useCallback((id: string) => {
+    setCheckedIds((ids) => Array.from(new Set([...ids, id])))
+  }, [])
+
+  // Handle dialog
+  const [open, setOpen] = useState(false)
+  const onOpen = useCallback(() => setOpen(true), [])
+  const onClose = useCallback(() => setOpen(false), [])
 
   const addInvalidId = useCallback((id: string) => {
     setInvalidIds((ids) => (ids ? Array.from(new Set([...ids, id])) : [id]))
@@ -47,7 +57,7 @@ export default function BulkPublish(props: BulkPublishProps) {
         method: 'POST',
         body,
       })
-      .then((res) => {
+      .then(() => {
         toast.push({
           status: 'success',
           title: 'Success',
@@ -64,6 +74,14 @@ export default function BulkPublish(props: BulkPublishProps) {
       })
   }, [translations, client, projectId, dataset, toast])
 
+  const disabled =
+    // Not all documents have been checked
+    checkedIds.length !== translations.length ||
+    // Some document(s) are invalid
+    Boolean(invalidIds && invalidIds?.length > 0) ||
+    // No documents are drafts
+    !draftIds.length
+
   return translations?.length > 0 ? (
     <Card padding={4} border radius={2}>
       <Stack space={3}>
@@ -73,63 +91,88 @@ export default function BulkPublish(props: BulkPublishProps) {
           </Text>
           <Info />
         </Inline>
-        {draftIds.length > 0 ? (
-          <Stack space={2}>
-            <Text size={1}>
-              There{' '}
-              {draftIds.length === 1
-                ? `is 1 draft document`
-                : `are ${draftIds.length} draft documents`}
-              .
-            </Text>
-            {invalidIds && invalidIds.length > 0 ? (
-              <TextWithTone tone="caution" size={1}>
-                {invalidIds && invalidIds.length === 1
-                  ? `1 draft document has`
-                  : `${
-                      invalidIds && invalidIds.length
-                    } draft documents have`}{' '}
-                validation issues that must addressed first
-              </TextWithTone>
-            ) : (
-              <TextWithTone tone="positive" size={1}>
-                All drafts are valid and can be bulk published
-              </TextWithTone>
-            )}
-          </Stack>
-        ) : null}
-        <Stack space={1}>
-          {translations
-            .filter((translation) => translation?.value?._ref)
-            .map((translation) => (
-              <DocumentCheck
-                key={translation._key}
-                id={translation.value._ref}
-                addInvalidId={addInvalidId}
-                removeInvalidId={removeInvalidId}
-                addDraftId={addDraftId}
-                removeDraftId={removeDraftId}
-              />
-            ))}
-        </Stack>
-        {draftIds.length > 0 ? (
+
+        <Stack>
           <Button
+            onClick={onOpen}
+            text="Prepare bulk publishing"
             mode="ghost"
-            tone={invalidIds && invalidIds?.length > 0 ? 'caution' : 'positive'}
-            text={
-              draftIds.length === 1
-                ? `Publish draft document`
-                : `Bulk publish ${draftIds.length} draft documents`
-            }
-            onClick={handleBulkPublish}
-            disabled={
-              Boolean(invalidIds && invalidIds?.length > 0) || !draftIds.length
-            }
           />
-        ) : (
-          <Text muted size={1}>
-            No draft documents to publish
-          </Text>
+        </Stack>
+
+        {open && (
+          <Dialog
+            header="Bulk publishing"
+            id="bulk-publish-dialog"
+            onClose={onClose}
+            zOffset={1000}
+            width={3}
+          >
+            <Stack space={4} padding={4}>
+              {draftIds.length > 0 ? (
+                <Stack space={2}>
+                  <Text size={1}>
+                    There{' '}
+                    {draftIds.length === 1
+                      ? `is 1 draft document`
+                      : `are ${draftIds.length} draft documents`}
+                    .
+                  </Text>
+                  {invalidIds && invalidIds.length > 0 ? (
+                    <TextWithTone tone="critical" size={1}>
+                      {invalidIds && invalidIds.length === 1
+                        ? `1 draft document has`
+                        : `${
+                            invalidIds && invalidIds.length
+                          } draft documents have`}{' '}
+                      validation issues that must addressed first
+                    </TextWithTone>
+                  ) : (
+                    <TextWithTone tone="positive" size={1}>
+                      All drafts are valid and can be bulk published
+                    </TextWithTone>
+                  )}
+                </Stack>
+              ) : null}
+
+              <Stack space={1}>
+                {translations
+                  .filter((translation) => translation?.value?._ref)
+                  .map((translation) => (
+                    <DocumentCheck
+                      key={translation._key}
+                      id={translation.value._ref}
+                      onCheckComplete={onCheckComplete}
+                      addInvalidId={addInvalidId}
+                      removeInvalidId={removeInvalidId}
+                      addDraftId={addDraftId}
+                      removeDraftId={removeDraftId}
+                    />
+                  ))}
+              </Stack>
+              {draftIds.length > 0 ? (
+                <Button
+                  mode="ghost"
+                  tone={
+                    invalidIds && invalidIds?.length > 0
+                      ? 'caution'
+                      : 'positive'
+                  }
+                  text={
+                    draftIds.length === 1
+                      ? `Publish draft document`
+                      : `Bulk publish ${draftIds.length} draft documents`
+                  }
+                  onClick={handleBulkPublish}
+                  disabled={disabled}
+                />
+              ) : (
+                <Text muted size={1}>
+                  No draft documents to publish
+                </Text>
+              )}
+            </Stack>
+          </Dialog>
         )}
       </Stack>
     </Card>
