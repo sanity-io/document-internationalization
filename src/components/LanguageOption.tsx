@@ -15,8 +15,8 @@ import {SanityDocument, useClient} from 'sanity'
 
 import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
-import {createReference} from '../lib/createReference'
 import {Language, Metadata, TranslationReference} from '../types'
+import {createReference} from '../utils/createReference'
 
 type LanguageOptionProps = {
   language: Language
