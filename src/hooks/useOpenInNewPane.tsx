@@ -1,12 +1,12 @@
-import React from 'react'
+import {useCallback, useContext} from 'react'
 import {usePaneRouter} from 'sanity/desk'
 import {RouterContext} from 'sanity/router'
 
 export function useOpenInNewPane(id?: string, type?: string) {
-  const routerContext = React.useContext(RouterContext)
+  const routerContext = useContext(RouterContext)
   const {routerPanesState, groupIndex} = usePaneRouter()
 
-  const openInNewPane = React.useCallback(() => {
+  const openInNewPane = useCallback(() => {
     if (!routerContext || !id || !type) {
       return
     }

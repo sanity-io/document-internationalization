@@ -3,7 +3,6 @@ import type {
   KeyedObject,
   Reference,
   SanityClient,
-  SanityDocumentLike,
 } from 'sanity'
 
 export type Language = {
@@ -28,6 +27,8 @@ export type TranslationReference = KeyedObject & {
   value: Reference
 }
 
-export type Metadata = SanityDocumentLike & {
+export type Metadata = {
+  _id: string
+  _createdAt: string
   translations: TranslationReference[]
 }

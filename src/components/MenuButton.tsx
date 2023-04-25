@@ -6,9 +6,11 @@ import {
   Popover,
   Stack,
   Text,
+  TextInput,
   useClickOutside,
 } from '@sanity/ui'
-import React, {useCallback, useState} from 'react'
+import {uuid} from '@sanity/uuid'
+import {FormEvent, useCallback, useMemo, useState} from 'react'
 import {useClient, useEditState} from 'sanity'
 import {suspend} from 'suspend-react'
 
@@ -18,6 +20,7 @@ import {SupportedLanguages} from '../types'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
 import LanguagePatch from './LanguagePatch'
+import Warning from './Warning'
 
 type MenuButtonProps = {
   supportedLanguages: SupportedLanguages
@@ -46,25 +49,53 @@ export default function MenuButton(props: MenuButtonProps) {
         return props.supportedLanguages
       }, [])
 
+  // Search filter query
+  const [query, setQuery] = useState(``)
+  const handleQuery = useCallback((event: FormEvent<HTMLInputElement>) => {
+    if (event.currentTarget.value) {
+      setQuery(event.currentTarget.value)
+    } else {
+      setQuery(``)
+    }
+  }, [])
+
+  // UI Handlers
   const [open, setOpen] = useState(false)
   const handleClick = useCallback(() => setOpen((o) => !o), [])
   const [button, setButton] = useState<HTMLElement | null>(null)
   const [popover, setPopover] = useState<HTMLElement | null>(null)
   const handleClickOutside = useCallback(() => setOpen(false), [])
   useClickOutside(handleClickOutside, [button, popover])
-  const {
-    data: metadata,
-    loading,
-    error,
-  } = useTranslationMetadata(documentId, schemaType)
+
+  // Get metadata from content lake
+  const {data, loading, error} = useTranslationMetadata(documentId)
+  const metadata = Array.isArray(data) && data.length ? data[0] : null
+
+  // Optimistically set a metadata ID for a newly created metadata document
+  // Cannot rely on generated metadata._id from useTranslationMetadata
+  // As the document store might not have returned it before creating another translation
+  const metadataId = useMemo(() => {
+    if (loading) {
+      return null
+    }
+
+    // Once created, these two values should be the same anyway
+    return metadata?._id ?? uuid()
+  }, [loading, metadata?._id])
+
+  // Duplicate a new language version from the most recent version of this document
   const {draft, published} = useEditState(documentId, schemaType)
   const source = draft || published
 
+  // Check for data issues
+  const documentIsInOneMetadataDocument = useMemo(() => {
+    return Array.isArray(data) && data.length <= 1
+  }, [data])
   const sourceLanguageId = source?.[languageField] as string | undefined
   const sourceLanguageIsValid = supportedLanguages.some(
     (l) => l.id === sourceLanguageId
   )
-  const allLanguagesAreValid = React.useMemo(() => {
+  const allLanguagesAreValid = useMemo(() => {
     const valid = supportedLanguages.every((l) => l.id && l.title)
     if (!valid) {
       console.warn(
@@ -84,85 +115,98 @@ export default function MenuButton(props: MenuButtonProps) {
         </Card>
       ) : (
         <Stack padding={1} space={1}>
+          <LanguageManage id={metadata?._id} />
+          {supportedLanguages.length > 4 ? (
+            <TextInput
+              onChange={handleQuery}
+              value={query}
+              placeholder="Filter languages"
+            />
+          ) : null}
           {supportedLanguages.length > 0 ? (
             <>
               {/* Once metadata is loaded, there may be issues */}
               {loading ? null : (
                 <>
                   {/* Not all languages are valid */}
+                  {data && documentIsInOneMetadataDocument ? null : (
+                    <Warning>
+                      {/* TODO: Surface these documents to the user */}
+                      This document has been found in more than one Translations
+                      Metadata documents
+                    </Warning>
+                  )}
+                  {/* Not all languages are valid */}
                   {allLanguagesAreValid ? null : (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Not all language objects are valid. See the console.
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Not all language objects are valid. See the console.
+                    </Warning>
                   )}
                   {/* Current document has no language field */}
                   {sourceLanguageId ? null : (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Choose a language to <br />
-                        apply to <strong>this Document</strong>
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Choose a language to apply to{' '}
+                      <strong>this Document</strong>
+                    </Warning>
                   )}
                   {/* Current document has an invalid language field */}
                   {sourceLanguageId && !sourceLanguageIsValid ? (
-                    <Card tone="caution" padding={3}>
-                      <Text size={1}>
-                        Select a supported language.
-                        <br />
-                        Current language value: <code>{sourceLanguageId}</code>
-                      </Text>
-                    </Card>
+                    <Warning>
+                      Select a supported language. Current language value:{' '}
+                      <code>{sourceLanguageId}</code>
+                    </Warning>
                   ) : null}
                 </>
               )}
-              {supportedLanguages.map((language, langIndex) =>
-                !loading && sourceLanguageId && sourceLanguageIsValid ? (
-                  // Button to duplicate this document to a new translation
-                  // And either create or update the metadata document
-                  <LanguageOption
-                    key={language.id || language.title || `lang-${langIndex}`}
-                    index={langIndex}
-                    language={language}
-                    languageField={languageField}
-                    schemaType={schemaType}
-                    documentId={documentId}
-                    disabled={loading || !allLanguagesAreValid}
-                    current={language.id === sourceLanguageId}
-                    metadata={metadata}
-                    sourceId={documentId}
-                    sourceLanguageId={sourceLanguageId}
-                    translation={metadata?.translations.find(
-                      (t) => t._key === language.id
-                    )}
-                  />
-                ) : (
-                  // Button to set a language field on *this* document
-                  <LanguagePatch
-                    key={language.id || language.title || `lang-${langIndex}`}
-                    languageField={languageField}
-                    source={source}
-                    documentId={documentId}
-                    schemaType={schemaType}
-                    language={language}
-                    // Only allow language patch change to:
-                    // - Keys not in metadata
-                    // - The key of this document in the metadata
-                    disabled={
-                      (!allLanguagesAreValid ||
-                        metadata?.translations
-                          .filter((t) => t?.value?._ref !== documentId)
-                          .some((t) => t._key === language.id)) ??
-                      false
-                    }
-                  />
-                )
-              )}
+              {supportedLanguages
+                .filter((language) => {
+                  if (query) {
+                    return language.title
+                      .toLowerCase()
+                      .includes(query.toLowerCase())
+                  }
+                  return true
+                })
+                .map((language) =>
+                  !loading && sourceLanguageId && sourceLanguageIsValid ? (
+                    // Button to duplicate this document to a new translation
+                    // And either create or update the metadata document
+                    <LanguageOption
+                      key={language.id}
+                      language={language}
+                      languageField={languageField}
+                      schemaType={schemaType}
+                      documentId={documentId}
+                      disabled={loading || !allLanguagesAreValid}
+                      current={language.id === sourceLanguageId}
+                      metadata={metadata}
+                      metadataId={metadataId}
+                      source={source}
+                      sourceLanguageId={sourceLanguageId}
+                    />
+                  ) : (
+                    // Button to set a language field on *this* document
+                    <LanguagePatch
+                      key={language.id}
+                      languageField={languageField}
+                      source={source}
+                      language={language}
+                      // Only allow language patch change to:
+                      // - Keys not in metadata
+                      // - The key of this document in the metadata
+                      disabled={
+                        (loading ||
+                          !allLanguagesAreValid ||
+                          metadata?.translations
+                            .filter((t) => t?.value?._ref !== documentId)
+                            .some((t) => t._key === language.id)) ??
+                        false
+                      }
+                    />
+                  )
+                )}
             </>
           ) : null}
-          <LanguageManage id={metadata?._id} />
         </Stack>
       )}
     </Box>

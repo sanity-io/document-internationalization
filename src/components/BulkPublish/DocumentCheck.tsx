@@ -1,9 +1,10 @@
 import {Card, Spinner} from '@sanity/ui'
-import React from 'react'
+import React, {useEffect, useMemo} from 'react'
 import {Preview, useEditState, useSchema, useValidationStatus} from 'sanity'
 
 type DocumentCheckProps = {
   id: string
+  onCheckComplete: (id: string) => void
   addInvalidId: (id: string) => void
   removeInvalidId: (id: string) => void
   addDraftId: (id: string) => void
@@ -14,12 +15,19 @@ type DocumentCheckProps = {
 // Check if that draft is valid
 // Report back to parent that it can be added to bulk publish
 export default function DocumentCheck(props: DocumentCheckProps) {
-  const {id, addInvalidId, removeInvalidId, addDraftId, removeDraftId} = props
+  const {
+    id,
+    onCheckComplete,
+    addInvalidId,
+    removeInvalidId,
+    addDraftId,
+    removeDraftId,
+  } = props
   const editState = useEditState(id, ``)
   const {isValidating, validation} = useValidationStatus(id, ``)
   const schema = useSchema()
 
-  const validationHasErrors = React.useMemo(() => {
+  const validationHasErrors = useMemo(() => {
     return (
       !isValidating &&
       validation.length > 0 &&
@@ -27,7 +35,7 @@ export default function DocumentCheck(props: DocumentCheckProps) {
     )
   }, [isValidating, validation])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (validationHasErrors) {
       addInvalidId(id)
     } else {
@@ -39,11 +47,17 @@ export default function DocumentCheck(props: DocumentCheckProps) {
     } else {
       removeDraftId(id)
     }
+
+    if (!isValidating) {
+      onCheckComplete(id)
+    }
   }, [
     addDraftId,
     addInvalidId,
     editState.draft,
     id,
+    isValidating,
+    onCheckComplete,
     removeDraftId,
     removeInvalidId,
     validationHasErrors,

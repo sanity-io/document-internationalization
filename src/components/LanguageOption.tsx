@@ -11,61 +11,46 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback} from 'react'
-import {useClient} from 'sanity'
+import {SanityDocument, useClient} from 'sanity'
 
 import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 import {Language, Metadata, TranslationReference} from '../types'
+import {createReference} from '../utils/createReference'
 
 type LanguageOptionProps = {
   language: Language
   languageField: string
-  index: number
   schemaType: string
   documentId: string
   disabled: boolean
   current: boolean
-  sourceId: string
-  sourceLanguageId?: string
+  source: SanityDocument | null
+  metadataId: string | null
   metadata?: Metadata | null
-  translation?: TranslationReference
+  sourceLanguageId?: string
   apiVersion?: string
-}
-
-function createReference(
-  key: string,
-  ref: string,
-  type: string
-): TranslationReference {
-  return {
-    _key: key,
-    _type: 'internationalizedArrayReferenceValue',
-    value: {
-      _type: 'reference',
-      _ref: ref,
-      _weak: true,
-      _strengthenOnPublish: {
-        type,
-      },
-    },
-  }
 }
 
 export default function LanguageOption(props: LanguageOptionProps) {
   const {
     apiVersion = API_VERSION,
-    index,
     language,
     languageField,
     schemaType,
     documentId,
-    disabled,
     current,
-    sourceId,
+    source,
     sourceLanguageId,
     metadata,
-    translation,
+    metadataId,
   } = props
+  const disabled =
+    props.disabled || current || !source || !sourceLanguageId || !metadataId
+  const translation: TranslationReference | undefined = metadata?.translations
+    .length
+    ? metadata.translations.find((t) => t._key === language.id)
+    : undefined
   const client = useClient({apiVersion})
   const toast = useToast()
 
@@ -73,69 +58,71 @@ export default function LanguageOption(props: LanguageOptionProps) {
   const handleOpen = useCallback(() => open(), [open])
 
   const handleCreate = useCallback(async () => {
-    const metadataExists = Boolean(metadata?._id)
+    if (!source) {
+      throw new Error(`Cannot create translation without source document`)
+    }
+
+    if (!sourceLanguageId) {
+      throw new Error(`Cannot create translation without source language ID`)
+    }
+
+    if (!metadataId) {
+      throw new Error(`Cannot create translation without a metadata ID`)
+    }
+
     const transaction = client.transaction()
 
-    // 1. Duplicate current document
-    // 2. Update language
-    // 3. Add to translation metadata
-    const documentIds = documentId.startsWith(`drafts.`)
-      ? [documentId, documentId.replace(`drafts.`, ``)]
-      : [documentId, `drafts.${documentId}`]
-    const latestDocument = await client.fetch(
-      `*[_id in $ids]|order(_updatedAt desc)[0]`,
-      {
-        ids: documentIds,
-      }
-    )
+    // 1. Duplicate source document
+    const newTranslationDocumentId = uuid()
     const newTranslationDocument = {
-      ...latestDocument,
-      _id: `drafts.${uuid()}`,
+      ...source,
+      _id: `drafts.${newTranslationDocumentId}`,
+      // 2. Update language of the translation
       [languageField]: language.id,
     }
 
     transaction.create(newTranslationDocument)
 
-    const metadataId = metadata?._id ?? uuid()
-    const newTranslationReference = createReference(
-      language.id,
-      newTranslationDocument._id.replace(`drafts.`, ``),
+    // 3. Maybe create the metadata document
+    const sourceReference = createReference(
+      sourceLanguageId,
+      documentId,
       schemaType
     )
-
-    // Create translation metadata document if it doesn't already exist
-    if (metadataExists) {
-      const path = `translations[${index - 1}]`
-      const metadataPatch = client
-        .patch(metadataId)
-        .setIfMissing({translations: []})
-        .insert(`before`, path, [newTranslationReference])
-
-      transaction.patch(metadataPatch)
-    } else {
-      // Source language relies on a field named `language` on the document
-      const sourceReference = sourceLanguageId
-        ? createReference(sourceLanguageId, sourceId, schemaType)
-        : null
-
-      transaction.createIfNotExists({
-        _id: metadataId,
-        _type: METADATA_SCHEMA_NAME,
-        schemaTypes: [schemaType],
-        translations: [newTranslationReference, sourceReference].filter(
-          Boolean
-        ),
-      })
+    const newTranslationReference = createReference(
+      language.id,
+      newTranslationDocumentId,
+      schemaType
+    )
+    const newMetadataDocument = {
+      _id: metadataId,
+      _type: METADATA_SCHEMA_NAME,
+      schemaTypes: [schemaType],
+      translations: [sourceReference],
     }
 
+    transaction.createIfNotExists(newMetadataDocument)
+
+    // 4. Patch translation to metadata document
+    // Note: If the document was only just created in the operation above
+    // This patch operation will have no effect
+    const metadataPatch = client
+      .patch(metadataId)
+      .setIfMissing({translations: [sourceReference]})
+      .insert(`after`, `translations[-1]`, [newTranslationReference])
+
+    transaction.patch(metadataPatch)
+
+    // 5. Commit!
     transaction
       .commit()
       .then(() => {
-        // openDocumentInSidePane(metadataId, `translation.metadata`)
+        const metadataExisted = Boolean(metadata?._createdAt)
+
         return toast.push({
           status: 'success',
-          title: `Created ${language.title} translation`,
-          description: metadataExists
+          title: `Created "${language.title}" translation`,
+          description: metadataExisted
             ? `Updated Translations Metadata`
             : `Created Translations Metadata`,
         })
@@ -152,12 +139,13 @@ export default function LanguageOption(props: LanguageOptionProps) {
   }, [
     client,
     documentId,
-    index,
-    language,
+    language.id,
+    language.title,
     languageField,
-    metadata?._id,
+    metadata?._createdAt,
+    metadataId,
     schemaType,
-    sourceId,
+    source,
     sourceLanguageId,
     toast,
   ])
@@ -188,10 +176,10 @@ export default function LanguageOption(props: LanguageOptionProps) {
       <Button
         onClick={translation ? handleOpen : handleCreate}
         mode={current && disabled ? `default` : `bleed`}
-        disabled={disabled || current}
+        disabled={disabled}
       >
         <Flex gap={3} align="center">
-          {disabled ? (
+          {disabled && !current ? (
             <Spinner />
           ) : (
             <Text size={2}>

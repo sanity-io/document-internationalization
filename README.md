@@ -241,10 +241,10 @@ defineField({
 // With the same slug and language
 export async function isUniqueOtherThanLanguage(slug: string, context: SlugValidationContext) {
   const {document, getClient} = context
-  if (!document) {
-    return false
+  if (!document?.language) {
+    return true
   }
-  const client = getClient({apiVersion: '2022-12-07'})
+  const client = getClient({apiVersion: '2023-04-24'})
   const id = document._id.replace(/^drafts\./, '')
   const params = {
     draft: `drafts.${id}`,
