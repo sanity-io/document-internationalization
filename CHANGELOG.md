@@ -5,6 +5,19 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.10](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.9...v2.0.0-studio-v3-plugin-v2.10) (2023-04-25)
+
+### Features
+
+- add search filter for more than 4 languages ([42e0705](https://github.com/sanity-io/document-internationalization/commit/42e070583616f38c637560a86cbef24bf0c2ce44))
+- better formatting for text warnings ([cdebc30](https://github.com/sanity-io/document-internationalization/commit/cdebc3085f2b30ad20ce088d5b81b6e2b7ec6cc5))
+
+### Bug Fixes
+
+- improve reliability of creating metadata ([9aa21f9](https://github.com/sanity-io/document-internationalization/commit/9aa21f99fe3e5e4e6c074f3e2728ca276b36a6a8))
+- modify how patches are written so they do not block one another ([41c83e7](https://github.com/sanity-io/document-internationalization/commit/41c83e7869b7be3762c495652af6a9140a6dab35))
+- utils import ([9412544](https://github.com/sanity-io/document-internationalization/commit/9412544a2f78857a2e3bc15bfd86a69bd793e588))
+
 ## [2.0.0-studio-v3-plugin-v2.9](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.8...v2.0.0-studio-v3-plugin-v2.9) (2023-04-14)
 
 ### Features
