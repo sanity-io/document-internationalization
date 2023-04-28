@@ -14,7 +14,7 @@ export type SupportedLanguages =
   | Language[]
   | ((client: SanityClient) => Promise<Language[]>)
 
-export type PluginConfig = {
+export type DocumentInternationalizationPluginConfig = {
   supportedLanguages: SupportedLanguages
   schemaTypes: string[]
   languageField?: string

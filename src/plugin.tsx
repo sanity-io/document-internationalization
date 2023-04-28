@@ -8,7 +8,11 @@ import MenuButton from './components/MenuButton'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
 import {API_VERSION, METADATA_SCHEMA_NAME} from './constants'
 import metadata from './schema/translation/metadata'
-import {PluginConfig, TranslationReference} from './types'
+import {
+  DocumentInternationalizationPluginConfig,
+  TranslationReference,
+} from './types'
+import {validateConfig} from './utils/validateConfig'
 
 const DEFAULT_CONFIG = {
   supportedLanguages: [],
@@ -18,18 +22,15 @@ const DEFAULT_CONFIG = {
   metadataFields: [],
 }
 
-export const documentInternationalization = definePlugin<PluginConfig>(
-  (config) => {
+export const documentInternationalization =
+  definePlugin<DocumentInternationalizationPluginConfig>((config) => {
     const {
       supportedLanguages,
       schemaTypes,
       languageField,
       bulkPublish,
       metadataFields,
-    } = {
-      ...DEFAULT_CONFIG,
-      ...config,
-    }
+    } = validateConfig({...DEFAULT_CONFIG, ...config})
 
     const renderLanguageFilter = (schemaType: string, documentId?: string) => {
       return (
@@ -226,5 +227,4 @@ export const documentInternationalization = definePlugin<PluginConfig>(
         }),
       ],
     }
-  }
-)
+  })
