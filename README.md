@@ -11,8 +11,9 @@
     - [Querying with GROQ](#querying-with-groq)
     - [Querying with GraphQL](#querying-with-graphql)
     - [Allowing the same slug on different language versions](#allowing-the-same-slug-on-different-language-versions)
+    - [Removing default "new document" templates](#removing-default-new-document-templates)
   - [Note on document quotas](#note-on-document-quotas)
-  - [Content migrations](#content-migrations)
+  - [Content **migrations**](#content-migrations)
   - [License](#license)
   - [Develop \& test](#develop--test)
     - [Release new version](#release-new-version)
@@ -262,6 +263,29 @@ export async function isUniqueOtherThanLanguage(slug: string, context: SlugValid
 }
 ```
 
+### Removing default "new document" templates
+
+This plugin will register [initial value templates](https://www.sanity.io/docs/initial-value-templates#b9a9011943da) for every schema type, to start a new document in each registered language. The built-in templates for starting new documents (with no language field value) will still be registered in the Studio.
+
+To remove them, customize your `sanity.config.ts` file. The example below removes the default "lesson" template from the Studio.
+
+```ts
+// ./sanity.config.ts
+
+export default defineConfig({
+  // ...all other settings
+  schema: {
+    // ...all other schema settings
+    templates: (prev) => {
+      // Remove the default "lesson" new document template
+      const prevFiltered = prev.filter((template) => template.id !== 'lesson')
+
+      return prevFiltered
+    },
+  },
+})
+```
+
 ## Note on document quotas
 
 In previous versions of this plugin, translations were stored as an array of references on the actual documents. This required a base language, lead to messy transaction histories and made deleting documents difficult.
@@ -270,7 +294,7 @@ In this version of the plugin, translations of a document are stored as an array
 
 This means if you have 100 documents and they are all translated into 3 languages, you will have 400 documents. Keep this in mind for extremely high-volume datasets.
 
-## Content migrations
+## Content **migrations**
 
 There are two scripts in the `./migrations` folder of this repository. They contain scripts that should help move your content over – however, they may require updating to match your current settings.
 
