@@ -6,7 +6,7 @@ import {
   FieldDefinition,
 } from 'sanity'
 
-import {METADATA_SCHEMA_NAME} from '../../constants'
+import {METADATA_SCHEMA_NAME, TRANSLATIONS_ARRAY_NAME} from '../../constants'
 
 export default (
   schemaTypes: string[],
@@ -20,7 +20,7 @@ export default (
     liveEdit: true,
     fields: [
       defineField({
-        name: 'translations',
+        name: TRANSLATIONS_ARRAY_NAME,
         type: 'internationalizedArrayReference',
       }),
       defineField({
@@ -38,11 +38,11 @@ export default (
     ],
     preview: {
       select: {
-        translations: 'translations',
+        translations: TRANSLATIONS_ARRAY_NAME,
         documentSchemaTypes: 'schemaTypes',
       },
       prepare(selection) {
-        const {translations, documentSchemaTypes} = selection
+        const {translations = [], documentSchemaTypes = []} = selection
         const title =
           translations.length === 1
             ? `1 Translation`

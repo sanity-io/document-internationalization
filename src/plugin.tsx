@@ -4,32 +4,23 @@ import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 
 import {LanguageBadge} from './badges'
 import BulkPublish from './components/BulkPublish'
+import {DocumentInternationalizationProvider} from './components/DocumentInternationalizationContext'
 import MenuButton from './components/MenuButton'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
-import {API_VERSION, METADATA_SCHEMA_NAME} from './constants'
+import {API_VERSION, DEFAULT_CONFIG, METADATA_SCHEMA_NAME} from './constants'
 import metadata from './schema/translation/metadata'
 import {PluginConfig, TranslationReference} from './types'
 
-const DEFAULT_CONFIG = {
-  supportedLanguages: [],
-  schemaTypes: [],
-  languageField: `language`,
-  bulkPublish: false,
-  metadataFields: [],
-}
-
 export const documentInternationalization = definePlugin<PluginConfig>(
   (config) => {
+    const pluginConfig = {...DEFAULT_CONFIG, ...config}
     const {
       supportedLanguages,
       schemaTypes,
       languageField,
       bulkPublish,
       metadataFields,
-    } = {
-      ...DEFAULT_CONFIG,
-      ...config,
-    }
+    } = pluginConfig
 
     const renderLanguageFilter = (schemaType: string, documentId?: string) => {
       return (
@@ -44,6 +35,13 @@ export const documentInternationalization = definePlugin<PluginConfig>(
 
     return {
       name: '@sanity/document-internationalization',
+
+      studio: {
+        components: {
+          layout: (props) =>
+            DocumentInternationalizationProvider({...props, pluginConfig}),
+        },
+      },
 
       // Adds:
       // - A bulk-publishing UI component to the form
