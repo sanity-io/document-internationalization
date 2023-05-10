@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.11](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.10...v2.0.0-studio-v3-plugin-v2.11) (2023-05-10)
+
+### Features
+
+- delete all translations document action ([f8ca5d3](https://github.com/sanity-io/document-internationalization/commit/f8ca5d387992126c807c81ad0249b75113b77a3f))
+- export DeleteTranslationAction ([a53f8e5](https://github.com/sanity-io/document-internationalization/commit/a53f8e5ad530f24831a103353532520e1f8d0742))
+
 ## [2.0.0-studio-v3-plugin-v2.10](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.9...v2.0.0-studio-v3-plugin-v2.10) (2023-04-25)
 
 ### Features
