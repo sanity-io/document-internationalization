@@ -12,6 +12,8 @@
     - [Querying with GraphQL](#querying-with-graphql)
     - [Allowing the same slug on different language versions](#allowing-the-same-slug-on-different-language-versions)
   - [Deleting documents](#deleting-documents)
+    - [Deleting a single translated document](#deleting-a-single-translated-document)
+    - [Deleting all translations](#deleting-all-translations)
   - [Note on document quotas](#note-on-document-quotas)
   - [Content migrations](#content-migrations)
   - [License](#license)
@@ -265,9 +267,11 @@ export async function isUniqueOtherThanLanguage(slug: string, context: SlugValid
 
 ## Deleting documents
 
+### Deleting a single translated document
+
 By default, this plugin creates a strong reference between a document and its connected translation metadata document. Because reference integrity is maintained by the API, you cannot delete a document that has a strong reference to it. To offset this difficulty, the plugin exports a document action that will allow you to remove the translation reference from the action, before proceeding to delete the document. It is not added by default to your schema types.
 
-![5e0afc304ec466756b58bced492518ae](https://github.com/sanity-io/document-internationalization/assets/9684022/edccb456-f6e1-4782-9602-b279e9689357)
+![delete translation document action](https://github.com/sanity-io/document-internationalization/assets/9684022/edccb456-f6e1-4782-9602-b279e9689357)
 
 Import into your Studio's config file
 
@@ -292,6 +296,12 @@ export default defineConfig({
   },
 })
 ```
+
+### Deleting all translations
+
+The metadata document also contains a "Delete all translations" document action which is queued by default for only that schema type. It will delete all of the documents in the `translations` array of references, as well as the metadata document itself.
+
+![delete all translations document action](https://github.com/sanity-io/document-internationalization/assets/9684022/fda956f1-26e7-430a-aeef-1db4166e9cd6)
 
 ## Note on document quotas
 

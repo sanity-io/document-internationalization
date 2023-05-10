@@ -2,6 +2,7 @@ import {Stack} from '@sanity/ui'
 import {defineField, definePlugin, isSanityDocument} from 'sanity'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
 
+import {DeleteMetadataAction} from './actions/DeleteMetadataAction'
 import {LanguageBadge} from './badges'
 import BulkPublish from './components/BulkPublish'
 import {DocumentInternationalizationProvider} from './components/DocumentInternationalizationContext'
@@ -85,6 +86,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
       // Adds:
       // - The `Translations` dropdown to the editing form
       // - `Badges` to documents with a language value
+      // - The `DeleteMetadataAction` action to the metadata document type
       document: {
         unstable_languageFilter: (prev, ctx) => {
           const {schemaType, documentId} = ctx
@@ -102,6 +104,13 @@ export const documentInternationalization = definePlugin<PluginConfig>(
             (props) => LanguageBadge(props, supportedLanguages, languageField),
             ...prev,
           ]
+        },
+        actions: (prev, {schemaType}) => {
+          if (schemaType === METADATA_SCHEMA_NAME) {
+            return [...prev, DeleteMetadataAction]
+          }
+
+          return prev
         },
       },
 
