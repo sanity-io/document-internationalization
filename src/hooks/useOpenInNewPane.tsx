@@ -11,6 +11,12 @@ export function useOpenInNewPane(id?: string, type?: string) {
       return
     }
 
+    // No panes open, function might be called outside Desk
+    if (!routerPanesState.length) {
+      routerContext.navigateIntent('edit', {id, type})
+      return
+    }
+
     const panes = [...routerPanesState]
     panes.splice(groupIndex + 1, 0, [
       {

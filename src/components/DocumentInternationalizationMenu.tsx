@@ -11,43 +11,22 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {FormEvent, useCallback, useMemo, useState} from 'react'
-import {useClient, useEditState} from 'sanity'
-import {suspend} from 'suspend-react'
+import {useEditState} from 'sanity'
 
-import {API_VERSION} from '../constants'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
-import {SupportedLanguages} from '../types'
+import {DocumentInternationalizationMenuProps} from '../types'
+import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
 import LanguagePatch from './LanguagePatch'
 import Warning from './Warning'
 
-type MenuButtonProps = {
-  supportedLanguages: SupportedLanguages
-  schemaType: string
-  documentId: string
-  languageField: string
-  apiVersion?: string
-}
-
-export default function MenuButton(props: MenuButtonProps) {
-  const {
-    apiVersion = API_VERSION,
-    schemaType,
-    documentId,
-    languageField,
-  } = props
-
-  const client = useClient({apiVersion})
-  const supportedLanguages = Array.isArray(props.supportedLanguages)
-    ? props.supportedLanguages
-    : // eslint-disable-next-line require-await
-      suspend(async () => {
-        if (typeof props.supportedLanguages === 'function') {
-          return props.supportedLanguages(client)
-        }
-        return props.supportedLanguages
-      }, [])
+export function DocumentInternationalizationMenu(
+  props: DocumentInternationalizationMenuProps
+) {
+  const {schemaType, documentId} = props
+  const {languageField, supportedLanguages} =
+    useDocumentInternationalizationContext()
 
   // Search filter query
   const [query, setQuery] = useState(``)
@@ -108,10 +87,10 @@ export default function MenuButton(props: MenuButtonProps) {
   }, [supportedLanguages])
 
   const content = (
-    <Box>
+    <Card>
       {error ? (
         <Card tone="critical" padding={2}>
-          <Text>Error: {error}</Text>
+          <Text>There was an error returning translations metadata</Text>
         </Card>
       ) : (
         <Stack padding={1} space={1}>
@@ -209,11 +188,19 @@ export default function MenuButton(props: MenuButtonProps) {
           ) : null}
         </Stack>
       )}
-    </Box>
+    </Card>
   )
 
   const issueWithTranslations =
     !loading && sourceLanguageId && !sourceLanguageIsValid
+
+  if (!documentId) {
+    return null
+  }
+
+  if (!schemaType) {
+    return null
+  }
 
   return (
     <Popover
@@ -223,6 +210,7 @@ export default function MenuButton(props: MenuButtonProps) {
       portal
       ref={setPopover}
       overflow="auto"
+      tone="default"
     >
       <Button
         text="Translations"

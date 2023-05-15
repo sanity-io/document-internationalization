@@ -44,6 +44,7 @@
     "link-watch": "plugin-kit link-watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
     "prepare": "husky install",
     "prepublishOnly": "run-s build",
     "watch": "pkg-utils watch --strict"
@@ -54,7 +55,7 @@
     "@sanity/ui": "^1.2.2",
     "@sanity/uuid": "^3.0.1",
     "sanity-plugin-internationalized-array": "^1.6.0",
-    "sanity-plugin-utils": "^1.5.0"
+    "sanity-plugin-utils": "^1.6.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

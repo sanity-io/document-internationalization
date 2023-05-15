@@ -16,7 +16,7 @@ const query = `*[_type == $translationSchema && $id in translations[].value._ref
 export function useTranslationMetadata(id: string): {
   data: Metadata[] | null
   loading: boolean
-  error: boolean
+  error: boolean | unknown | ProgressEvent
 } {
   const {data, loading, error} = useListeningQuery<Metadata[]>(query, {
     params: {id, translationSchema: METADATA_SCHEMA_NAME},

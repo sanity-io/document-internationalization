@@ -7,6 +7,9 @@
     - [Basic configuration](#basic-configuration)
     - [Advanced configuration](#advanced-configuration)
     - [Language field](#language-field)
+  - [Importing plugin components](#importing-plugin-components)
+    - [useDocumentInternationalizationContext](#usedocumentinternationalizationcontext)
+    - [DocumentInternationalizationMenu](#documentinternationalizationmenu)
   - [Code examples](#code-examples)
     - [Querying with GROQ](#querying-with-groq)
     - [Querying with GraphQL](#querying-with-graphql)
@@ -142,6 +145,11 @@ export const createConfig({
       metadataFields: [
         defineField({ name: 'slug', type: 'slug' })
       ],
+
+      // Optional
+      // Define API Version for all queries
+      // https://www.sanity.io/docs/api-versioning
+      apiVersion: '2021-03-25'
     })
   ]
 })
@@ -162,6 +170,43 @@ defineField({
   readOnly: true,
   hidden: true,
 })
+```
+
+## Importing plugin components
+
+Some components and functions from the plugin are exported for you to use throughout the Studio. For example, a custom Tool that lists documents but also needs to pull from available languages, create new translations, show the language of an existing document and link to the metadata document.
+
+![custom-tool](https://github.com/sanity-io/document-internationalization/assets/9684022/66c1cd3d-a964-4632-b57c-998a49a2c9b6)
+
+### useDocumentInternationalizationContext
+
+The `useDocumentInternationalizationContext` hook can be used to access all plugin configuration values, including the result of `supportedLanguages` if it is an async function.
+
+```tsx
+import {useDocumentInternationalizationContext} from '@sanity/document-internationalization'
+
+export function MyComponent({doc}: {doc: SanityDocument}) {
+  const {languageField} = useDocumentInternationalizationContext()
+
+  return <Badge>{doc[languageField] ?? `No Language`}</Badge>
+}
+```
+
+### DocumentInternationalizationMenu
+
+The menu button shown at the top of documents can be imported anywhere and requires the published document ID of a document and its schema type to set the language of the document and handle creating new translations and the metadata document.
+
+```tsx
+import {DocumentInternationalizationMenu} from '@sanity/document-internationalization'
+
+export function MyComponent({_id, _type}) {
+  return (
+    <DocumentInternationalizationMenu
+      documentId={_id.replace(`drafts.`, ``)}
+      schemaType={_type}
+    />
+  )
+}
 ```
 
 ## Code examples
