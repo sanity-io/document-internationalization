@@ -44,6 +44,7 @@
     "link-watch": "plugin-kit link-watch",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
     "prepare": "husky install",
     "prepublishOnly": "run-s build",
     "watch": "pkg-utils watch --strict"

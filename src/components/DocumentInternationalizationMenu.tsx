@@ -90,7 +90,7 @@ export function DocumentInternationalizationMenu(
     <Card>
       {error ? (
         <Card tone="critical" padding={2}>
-          <Text>Error: {error}</Text>
+          <Text>There was an error returning translations metadata</Text>
         </Card>
       ) : (
         <Stack padding={1} space={1}>
