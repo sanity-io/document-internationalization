@@ -8740,8 +8740,9 @@
     "lodash.get" "^4.4.2"
     "suspend-react" "^0.0.8"
 
-"sanity-plugin-utils@^1.5.0":
-  "resolved" "file:.yalc/sanity-plugin-utils"
+"sanity-plugin-utils@^1.6.1":
+  "integrity" "sha512-iuslQj2eA7sHLhYXryoR+mvU3kVmws7dvAxsA0Wa+Pt5oXBhSEGB4vkp3VtdXMh94hHUDulvm2+r9rNrJ2LyUA=="
+  "resolved" "https://registry.npmjs.org/sanity-plugin-utils/-/sanity-plugin-utils-1.6.1.tgz"
   "version" "1.6.1"
   dependencies:
     "@sanity/icons" "^2.2.2"
