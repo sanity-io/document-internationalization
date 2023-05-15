@@ -5,6 +5,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.12](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.11...v2.0.0-studio-v3-plugin-v2.12) (2023-05-15)
+
+### Features
+
+- export components and context ([ae0f4ff](https://github.com/sanity-io/document-internationalization/commit/ae0f4ff8cbe0be9c9f7f6336a0577c6aaa298f34))
+
+### Bug Fixes
+
+- query return type ([8d92a1a](https://github.com/sanity-io/document-internationalization/commit/8d92a1a7f255e73cc7a9d09fc56dd80d1fd2eb50))
+- re-install plugin utils ([0a6f74e](https://github.com/sanity-io/document-internationalization/commit/0a6f74e9833e59310250ef53c5d7175d12fefdb8))
+- update type ([f3a382b](https://github.com/sanity-io/document-internationalization/commit/f3a382ba1f1afac94490b73d78e2b5e4fbe28f7d))
+
 ## [2.0.0-studio-v3-plugin-v2.11](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.10...v2.0.0-studio-v3-plugin-v2.11) (2023-05-10)
 
 ### Features
