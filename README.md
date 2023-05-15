@@ -174,7 +174,9 @@ defineField({
 
 ## Importing plugin components
 
-Some components and functions from the plugin are exported for you to use throughout the Studio.
+Some components and functions from the plugin are exported for you to use throughout the Studio. For example, a custom Tool that lists documents but also needs to pull from available languages, create new translations, show the language of an existing document and link to the metadata document.
+
+![custom-tool](https://github.com/sanity-io/document-internationalization/assets/9684022/66c1cd3d-a964-4632-b57c-998a49a2c9b6)
 
 ### useDocumentInternationalizationContext
 
