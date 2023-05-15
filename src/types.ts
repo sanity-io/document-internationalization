@@ -20,6 +20,14 @@ export type PluginConfig = {
   languageField?: string
   bulkPublish?: boolean
   metadataFields?: FieldDefinition[]
+  apiVersion?: string
+}
+
+// Context version of config
+// should have processed the
+// supportedLanguages function
+export type PluginConfigContext = Required<PluginConfig> & {
+  supportedLanguages: Language[]
 }
 
 export type TranslationReference = KeyedObject & {
@@ -31,4 +39,9 @@ export type Metadata = {
   _id: string
   _createdAt: string
   translations: TranslationReference[]
+}
+
+export type DocumentInternationalizationMenuProps = {
+  schemaType: string
+  documentId: string
 }

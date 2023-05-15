@@ -6,7 +6,7 @@ import {DeleteMetadataAction} from './actions/DeleteMetadataAction'
 import {LanguageBadge} from './badges'
 import BulkPublish from './components/BulkPublish'
 import {DocumentInternationalizationProvider} from './components/DocumentInternationalizationContext'
-import MenuButton from './components/MenuButton'
+import {DocumentInternationalizationMenu} from './components/DocumentInternationalizationMenu'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
 import {API_VERSION, DEFAULT_CONFIG, METADATA_SCHEMA_NAME} from './constants'
 import metadata from './schema/translation/metadata'
@@ -23,13 +23,11 @@ export const documentInternationalization = definePlugin<PluginConfig>(
       metadataFields,
     } = pluginConfig
 
-    const renderLanguageFilter = (schemaType: string, documentId?: string) => {
+    const renderLanguageFilter = (schemaType: string, documentId: string) => {
       return (
-        <MenuButton
-          supportedLanguages={supportedLanguages}
+        <DocumentInternationalizationMenu
           schemaType={schemaType}
-          documentId={documentId ?? ``}
-          languageField={languageField}
+          documentId={documentId}
         />
       )
     }
@@ -91,7 +89,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
         unstable_languageFilter: (prev, ctx) => {
           const {schemaType, documentId} = ctx
 
-          return schemaTypes.includes(schemaType)
+          return schemaTypes.includes(schemaType) && documentId
             ? [...prev, () => renderLanguageFilter(schemaType, documentId)]
             : prev
         },
@@ -100,10 +98,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
             return prev
           }
 
-          return [
-            (props) => LanguageBadge(props, supportedLanguages, languageField),
-            ...prev,
-          ]
+          return [(props) => LanguageBadge(props), ...prev]
         },
         actions: (prev, {schemaType}) => {
           if (schemaType === METADATA_SCHEMA_NAME) {

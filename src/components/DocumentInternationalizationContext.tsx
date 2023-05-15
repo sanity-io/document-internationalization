@@ -1,18 +1,15 @@
 import {useContext} from 'react'
 import {createContext} from 'react'
-import {LayoutProps} from 'sanity'
+import {LayoutProps, useClient} from 'sanity'
+import {suspend} from 'suspend-react'
 
 import {DEFAULT_CONFIG} from '../constants'
-import {PluginConfig} from '../types'
-
-export type DocumentInternationalizationContextValue = Required<PluginConfig>
+import {PluginConfig, PluginConfigContext} from '../types'
 
 const DocumentInternationalizationContext =
-  createContext<Required<DocumentInternationalizationContextValue>>(
-    DEFAULT_CONFIG
-  )
+  createContext<PluginConfigContext>(DEFAULT_CONFIG)
 
-export function useDocumentInternationalizationContext(id?: string) {
+export function useDocumentInternationalizationContext() {
   return useContext(DocumentInternationalizationContext)
 }
 
@@ -27,8 +24,22 @@ export function DocumentInternationalizationProvider(
   props: DocumentInternationalizationProviderProps
 ) {
   const {pluginConfig} = props
+
+  const client = useClient({apiVersion: pluginConfig.apiVersion})
+  const supportedLanguages = Array.isArray(pluginConfig.supportedLanguages)
+    ? pluginConfig.supportedLanguages
+    : // eslint-disable-next-line require-await
+      suspend(async () => {
+        if (typeof pluginConfig.supportedLanguages === 'function') {
+          return pluginConfig.supportedLanguages(client)
+        }
+        return pluginConfig.supportedLanguages
+      }, [])
+
   return (
-    <DocumentInternationalizationContext.Provider value={{...pluginConfig}}>
+    <DocumentInternationalizationContext.Provider
+      value={{...pluginConfig, supportedLanguages}}
+    >
       {props.renderDefault(props)}
     </DocumentInternationalizationContext.Provider>
   )

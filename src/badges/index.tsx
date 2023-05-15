@@ -1,13 +1,13 @@
 import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
 
-import {SupportedLanguages} from '../types'
+import {useDocumentInternationalizationContext} from '../components/DocumentInternationalizationContext'
 
 export function LanguageBadge(
-  props: DocumentBadgeProps,
-  supportedLanguages: SupportedLanguages,
-  languageField: string
+  props: DocumentBadgeProps
 ): DocumentBadgeDescription | null {
   const source = props?.draft || props?.published
+  const {languageField, supportedLanguages} =
+    useDocumentInternationalizationContext()
   const languageId = source?.[languageField]
 
   if (!languageId) {
