@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.13](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.12...v2.0.0-studio-v3-plugin-v2.13) (2023-05-23)
+
+### Features
+
+- add weakReferences config option ([deef693](https://github.com/sanity-io/document-internationalization/commit/deef693510dbf74bc13ecdc56e7fdc847e244207))
+
 ## [2.0.0-studio-v3-plugin-v2.12](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.11...v2.0.0-studio-v3-plugin-v2.12) (2023-05-15)
 
 ### Features
