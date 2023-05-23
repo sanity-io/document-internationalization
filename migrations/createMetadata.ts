@@ -1,4 +1,4 @@
-import {SanityDocumentLike} from 'sanity'
+import {Reference, SanityDocumentLike} from 'sanity'
 import {getCliClient} from 'sanity/cli'
 
 /**
@@ -13,7 +13,7 @@ import {getCliClient} from 'sanity/cli'
  * 2. Copy this file to the root of your Sanity Studio project
  *
  * 3. Update the `UNSET_REFS_FIELD`, `UNSET_BASE_FIELD`,
- * `SCHEMA_TYPE` and `WEAK_REFS` constants to match your use
+ * and `SCHEMA_TYPE` constants to match your use
  *
  * 4. Run the script (replace <schema-type> with the name of your schema type):
  * npx sanity@latest exec ./createMetadata.ts --with-user-token
@@ -34,9 +34,6 @@ const UNSET_BASE_FIELD = `__i18n_base`
 const LANGUAGE_FIELD = `__i18n_lang`
 // Operation will be scoped to just this one document type
 const SCHEMA_TYPE = `lesson`
-
-// Make references to translated documents weak?
-const WEAK_REFS = false
 
 // eslint-disable-next-line no-console
 console.log(
@@ -70,11 +67,7 @@ const buildPatches = (docs: SanityDocumentLike[]) =>
   }))
 
 type DocumentWithRefs = SanityDocumentLike & {
-  [UNSET_REFS_FIELD]: {
-    _key: string
-    _ref: string
-    _type: 'reference'
-  }[]
+  [UNSET_REFS_FIELD]: Reference[]
 }
 
 const buildMetadata = (docs: DocumentWithRefs[]) => {
@@ -88,15 +81,19 @@ const buildMetadata = (docs: DocumentWithRefs[]) => {
           value: {
             _type: 'reference',
             _ref: doc._id.replace(`drafts.`, ``),
-            ...(WEAK_REFS ? {_weak: true} : {}),
+            ...(doc[UNSET_REFS_FIELD].some(
+              (ref) => typeof ref._weak !== 'undefined'
+            )
+              ? {_weak: doc[UNSET_REFS_FIELD].find((ref) => ref._weak)?._weak}
+              : {}),
           },
         },
-        ...doc[UNSET_REFS_FIELD].map(({_ref, _key}) => ({
+        ...doc[UNSET_REFS_FIELD].map(({_ref, _key, _weak}) => ({
           _key,
           value: {
             _type: 'reference',
             _ref,
-            ...(WEAK_REFS ? {_weak: true} : {}),
+            ...(typeof _weak === 'undefined' ? {} : {_weak}),
           },
         })),
       ],
