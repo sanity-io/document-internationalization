@@ -153,7 +153,6 @@ export function DocumentInternationalizationMenu(
                     <LanguageOption
                       key={language.id}
                       language={language}
-                      languageField={languageField}
                       schemaType={schemaType}
                       documentId={documentId}
                       disabled={loading || !allLanguagesAreValid}
@@ -167,7 +166,6 @@ export function DocumentInternationalizationMenu(
                     // Button to set a language field on *this* document
                     <LanguagePatch
                       key={language.id}
-                      languageField={languageField}
                       source={source}
                       language={language}
                       // Only allow language patch change to:
