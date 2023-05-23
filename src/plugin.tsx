@@ -23,6 +23,12 @@ export const documentInternationalization = definePlugin<PluginConfig>(
       metadataFields,
     } = pluginConfig
 
+    if (schemaTypes.length === 0) {
+      throw new Error(
+        'You must specify at least one schema type on which to enable document internationalization. Update the `schemaTypes` option in te documentInternationalization() configuration.'
+      )
+    }
+
     const renderLanguageFilter = (schemaType: string, documentId: string) => {
       return (
         <DocumentInternationalizationMenu
@@ -57,7 +63,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
               const translations =
                 (props?.value?.translations as TranslationReference[]) ?? []
               const weakAndTypedTranslations = translations.filter(
-                (t) => t?.value?._weak && t.value?._strengthenOnPublish
+                ({value}) => value && value._weak && value._strengthenOnPublish
               )
 
               return (
@@ -167,6 +173,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
                 name: 'reference',
                 type: 'reference',
                 to: schemaTypes.map((type) => ({type})),
+                weak: pluginConfig.weakReferences,
                 // Reference filters don't actually enforce validation!
                 validation: (Rule) =>
                   Rule.custom(async (item: TranslationReference, context) => {
@@ -190,7 +197,6 @@ export const documentInternationalization = definePlugin<PluginConfig>(
                     return `Referenced document does not have the correct language value`
                   }),
                 options: {
-                  collapsed: false,
                   // TODO: Update type once it knows the values of this filter
                   // @ts-expect-error
                   filter: ({parent, document}) => {

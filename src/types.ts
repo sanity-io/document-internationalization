@@ -18,6 +18,7 @@ export type PluginConfig = {
   supportedLanguages: SupportedLanguages
   schemaTypes: string[]
   languageField?: string
+  weakReferences?: boolean
   bulkPublish?: boolean
   metadataFields?: FieldDefinition[]
   apiVersion?: string

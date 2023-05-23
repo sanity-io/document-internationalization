@@ -24,6 +24,7 @@ export default function ReferencePatcher(props: ReferencePatcherProps) {
       translation.value._ref &&
       // It's still weak and not-yet-strengthened
       translation.value._weak &&
+      // We also want to keep this check because maybe the user *configured* weak refs
       translation.value._strengthenOnPublish &&
       // The referenced document has just been published
       !editState.draft &&

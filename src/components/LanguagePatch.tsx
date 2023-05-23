@@ -3,19 +3,18 @@ import {Badge, Box, Button, Flex, Text, useToast} from '@sanity/ui'
 import {useCallback} from 'react'
 import {SanityDocument, useClient} from 'sanity'
 
-import {API_VERSION} from '../constants'
 import {Language} from '../types'
+import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 
 type LanguagePatchProps = {
   language: Language
-  languageField: string
   source: SanityDocument | null
   disabled: boolean
-  apiVersion?: string
 }
 
 export default function LanguagePatch(props: LanguagePatchProps) {
-  const {apiVersion = API_VERSION, language, languageField, source} = props
+  const {language, source} = props
+  const {apiVersion, languageField} = useDocumentInternationalizationContext()
   const disabled = props.disabled || !source
   const client = useClient({apiVersion})
   const toast = useToast()

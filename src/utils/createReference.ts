@@ -3,7 +3,8 @@ import {TranslationReference} from '../types'
 export function createReference(
   key: string,
   ref: string,
-  type: string
+  type: string,
+  strengthenOnPublish: boolean = true
 ): TranslationReference {
   return {
     _key: key,
@@ -12,9 +13,8 @@ export function createReference(
       _type: 'reference',
       _ref: ref,
       _weak: true,
-      _strengthenOnPublish: {
-        type,
-      },
+      // If the user has configured weakReferences, we won't want to strengthen them
+      ...(strengthenOnPublish ? {_strengthenOnPublish: {type}} : {}),
     },
   }
 }

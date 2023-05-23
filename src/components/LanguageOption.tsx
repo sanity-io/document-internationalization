@@ -17,10 +17,10 @@ import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 import {Language, Metadata, TranslationReference} from '../types'
 import {createReference} from '../utils/createReference'
+import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 
 type LanguageOptionProps = {
   language: Language
-  languageField: string
   schemaType: string
   documentId: string
   disabled: boolean
@@ -29,14 +29,11 @@ type LanguageOptionProps = {
   metadataId: string | null
   metadata?: Metadata | null
   sourceLanguageId?: string
-  apiVersion?: string
 }
 
 export default function LanguageOption(props: LanguageOptionProps) {
   const {
-    apiVersion = API_VERSION,
     language,
-    languageField,
     schemaType,
     documentId,
     current,
@@ -51,6 +48,8 @@ export default function LanguageOption(props: LanguageOptionProps) {
     .length
     ? metadata.translations.find((t) => t._key === language.id)
     : undefined
+  const {apiVersion, languageField, weakReferences} =
+    useDocumentInternationalizationContext()
   const client = useClient({apiVersion})
   const toast = useToast()
 
@@ -87,12 +86,14 @@ export default function LanguageOption(props: LanguageOptionProps) {
     const sourceReference = createReference(
       sourceLanguageId,
       documentId,
-      schemaType
+      schemaType,
+      !weakReferences
     )
     const newTranslationReference = createReference(
       language.id,
       newTranslationDocumentId,
-      schemaType
+      schemaType,
+      !weakReferences
     )
     const newMetadataDocument = {
       _id: metadataId,

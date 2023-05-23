@@ -89,6 +89,7 @@ export const createConfig({
   plugins: [
     // ... all other plugins
     documentInternationalization({
+      // Required configuration
       supportedLanguages: [
         {id: 'es', title: 'Spanish'},
         {id: 'en', title: 'English'}
@@ -134,6 +135,10 @@ export const createConfig({
       languageField: `language` // defauts to "language"
 
       // Optional
+      // Keep translations.metadata references weak
+      weakReferences: true // defaults to false
+
+      // Optional
       // Adds UI for publishing all translations at once. Requires access to the Scheduling API
       // https://www.sanity.io/docs/scheduling-api
       bulkPublish: true // defaults to false
@@ -147,7 +152,7 @@ export const createConfig({
       // Optional
       // Define API Version for all queries
       // https://www.sanity.io/docs/api-versioning
-      apiVersion: '2021-03-25'
+      apiVersion: '2023-05-22'
     })
   ]
 })
