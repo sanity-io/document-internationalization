@@ -18,7 +18,6 @@
     - [Deleting a single translated document](#deleting-a-single-translated-document)
     - [Deleting all translations](#deleting-all-translations)
   - [Note on document quotas](#note-on-document-quotas)
-  - [Content migrations](#content-migrations)
   - [License](#license)
   - [Develop \& test](#develop--test)
     - [Release new version](#release-new-version)
@@ -41,10 +40,9 @@ A complete rewrite of the original Document Internationalization plugin, exclusi
 
 If this is your first time installing Document Internationalization, skip to the [Install](#install) section.
 
-**I'm on Sanity Studio v3 and upgrading from plugin v1**
+**I'm on Sanity Studio v3 and upgrading from plugin v1.0.0 and above**
 
-- You will need to perform a content migration to upgrade.
-- See the [Content migrations](#content-migrations) section below.
+- You will need to perform a content migration to upgrade. [See the plugin upgrade documentation](./docs/00-upgrade-from-v1.md)
 - Your queries will also need to change, as translation references have moved. See the [Querying](#querying-with-groq) and [Querying with GraphQL](#querying-with-graphql) sections below. [GraphQL](#)
 
 **I'm on Sanity Studio v3 but will stay with the older plugin for now**
@@ -355,15 +353,6 @@ In previous versions of this plugin, translations were stored as an array of ref
 In this version of the plugin, translations of a document are stored as an array of references in a separate document of the type `translation.metadata`, and one is created for every document that has translations. A document with no translations will not have a metadata document.
 
 This means if you have 100 documents and they are all translated into 3 languages, you will have 400 documents. Keep this in mind for extremely high-volume datasets.
-
-## Content migrations
-
-There are two scripts in the `./migrations` folder of this repository. They contain scripts that should help move your content over – however, they may require updating to match your current settings.
-
-**These have not been thoroughly tested on all platforms. Please take a backup before proceeding. Test on a duplicate dataset.**
-
-- `./migrations/renameField.ts` will update the language field on translated documents
-- `./migrations/createMetadata.ts` will create metadata documents for the arrays of references and unset those fields from translated documents
 
 ## License
 
