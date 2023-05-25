@@ -1,5 +1,27 @@
 # Upgrading from v1 of @sanity/document-internationalization
 
+## Where you are now:
+
+**I'm on Sanity Studio v3 and upgrading from plugin v1.0.0 and above**
+
+- You will need to perform a content migration to upgrade. [See the plugin upgrade documentation](./docs/00-upgrade-from-v1.md)
+- Your queries will also need to change, as translation references have moved. See the [Querying](#querying-with-groq) and [Querying with GraphQL](#querying-with-graphql) sections below. [GraphQL](#)
+
+**I'm on Sanity Studio v3 but will stay with the older plugin for now**
+
+- Please refer to the [v2 branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2)
+- Install from `v1.0.0` and above
+- This version of the plugin will not be updated with new features
+
+**I'm on Sanity Studio v2**
+
+- Please refer to the [studio-v2 branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2)
+- Install from `v0.0.0` and above
+- This version of the plugin will not be updated with new features
+- You will not need to perform a content migration to move to Sanity Studio v3, if you install the v1 plugin.
+
+### Upgrading from v1 to v2
+
 Upgrading from v1 to v2 of this plugin will require:
 
 1. Migrations of internationalized documents in your dataset
@@ -8,12 +30,17 @@ Upgrading from v1 to v2 of this plugin will require:
 
 We have provided migration scripts and guidance on this page. Please submit an issue if anything is unclear.
 
-## How v2 is different from v1
+### How v2 is different from v1
 
-- There is no reliance on a "base" language. Documents can start in any language and be referenced as translations.
-- Translations are now stored in a `translation.metadata` document, rather than in hidden fields on the documents themselves.
-- It does not write language details to a document's `_id`. This behavior was changed in a previous version of the plugin. Matching against the string `_id` of a document is an unreliable and slow way to query for documents.
-- Document actions do not need to be customized in order for translations to be created.
+A complete rewrite of the original Document Internationalization plugin, exclusively for Sanity Studio v3. Major **benefits** from the previous versions include:
+
+- Create new documents in any language and link translated references later
+- Translation references are written to a separate "meta" document
+- Updates to one translation no longer affect the change history of others
+- Does not require custom - nor modify the built-in - [Document Actions](https://www.sanity.io/docs/document-actions)
+- Changes made to one translation do not patch changes to other documents
+- Configurable "language" field on documents
+- Built-in static and parameterized initial value templates for new documents
 
 ## 1. Migrating content
 
