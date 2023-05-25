@@ -1,8 +1,9 @@
 # @sanity/document-internationalization
 
 - [@sanity/document-internationalization](#sanitydocument-internationalization)
-  - [Upgrading](#upgrading)
+  - [Upgrade](#upgrade)
   - [Install](#install)
+  - [Documentation](#documentation)
   - [Usage](#usage)
     - [Basic configuration](#basic-configuration)
     - [Advanced configuration](#advanced-configuration)
@@ -36,7 +37,7 @@ A complete rewrite of the original Document Internationalization plugin, exclusi
 - Configurable "language" field on documents
 - Built-in static and parameterized initial value templates for new documents
 
-## Upgrading
+## Upgrade
 
 If this is your first time installing Document Internationalization, skip to the [Install](#install) section.
 
@@ -64,11 +65,11 @@ If this is your first time installing Document Internationalization, skip to the
 npm install --save @sanity/document-internationalization@studio-v3-plugin-v2
 ```
 
-or
+## Documentation
 
-```
-yarn add @sanity/document-internationalization@studio-v3-plugin-v2
-```
+- [Upgrading from v1](./docs/00-upgrade-from-v1.md)
+- [Creating translations of singleton documents](./docs/01-singleton-documents.md)
+- [Importing and creating documents](./docs/02-importing-and-creating-documents.md)
 
 ## Usage
 
@@ -76,7 +77,10 @@ Add it as a plugin in `sanity.config.ts` (or .js):
 
 ### Basic configuration
 
-The only required configuration is the `supportedLanguages` array and the `schemaTypes` array.
+The only required configuration is:
+
+- The `supportedLanguages` array and
+- The `schemaTypes` array
 
 ```ts
 // sanity.config.ts
