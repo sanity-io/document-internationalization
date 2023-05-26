@@ -1,5 +1,5 @@
 import {CogIcon} from '@sanity/icons'
-import {Button} from '@sanity/ui'
+import {Box, Button, Stack, Text, Tooltip} from '@sanity/ui'
 
 import {METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
@@ -13,12 +13,29 @@ export default function LanguageManage(props: LanguageManageProps) {
   const open = useOpenInNewPane(id, METADATA_SCHEMA_NAME)
 
   return (
-    <Button
-      disabled={!id}
-      mode="ghost"
-      text="Manage Translations"
-      icon={CogIcon}
-      onClick={() => open()}
-    />
+    <Tooltip
+      content={
+        id ? null : (
+          <Box padding={2}>
+            <Text muted size={1}>
+              Document has no other translations
+            </Text>
+          </Box>
+        )
+      }
+      fallbackPlacements={['right', 'left']}
+      placement="top"
+      portal
+    >
+      <Stack>
+        <Button
+          disabled={!id}
+          mode="ghost"
+          text="Manage Translations"
+          icon={CogIcon}
+          onClick={() => open()}
+        />
+      </Stack>
+    </Tooltip>
   )
 }

@@ -87,13 +87,13 @@ export function DocumentInternationalizationMenu(
   }, [supportedLanguages])
 
   const content = (
-    <Card>
+    <Box padding={1}>
       {error ? (
-        <Card tone="critical" padding={2}>
+        <Card tone="critical" padding={1}>
           <Text>There was an error returning translations metadata</Text>
         </Card>
       ) : (
-        <Stack padding={1} space={1}>
+        <Stack space={1}>
           <LanguageManage id={metadata?._id} />
           {supportedLanguages.length > 4 ? (
             <TextInput
@@ -186,7 +186,7 @@ export function DocumentInternationalizationMenu(
           ) : null}
         </Stack>
       )}
-    </Card>
+    </Box>
   )
 
   const issueWithTranslations =
