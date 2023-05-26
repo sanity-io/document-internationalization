@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0-studio-v3-plugin-v2.14](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.13...v2.0.0-studio-v3-plugin-v2.14) (2023-05-26)
+
+### Bug Fixes
+
+- padding in dropdown and extra tooltip ([8e6d515](https://github.com/sanity-io/document-internationalization/commit/8e6d515d837bb98366f9f0a97cbeb3007710acfa))
+
 ## [2.0.0-studio-v3-plugin-v2.13](https://github.com/sanity-io/document-internationalization/compare/v2.0.0-studio-v3-plugin-v2.12...v2.0.0-studio-v3-plugin-v2.13) (2023-05-23)
 
 ### Features
