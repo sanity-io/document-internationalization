@@ -20,7 +20,7 @@ All new rewrite exclusively for Sanity Studio v3!
   - [Develop \& test](#develop--test)
     - [Release new version](#release-new-version)
 
-![v3 Studio with @sanity/document-internationalization v1 Installed](/img/sanity-document-internationalization-v2.png)
+![v3 Studio with @sanity/document-internationalization v1 Installed](./docs/img/sanity-document-internationalization-v2.png)
 
 ## What this plugin solves
 
@@ -28,28 +28,28 @@ There are two popular methods of internationalization in Sanity Studio:
 
 - **Document-level translation**
   - A unique document version for every language
-  - Joined together by references and/or a predictable `_id`
+  - Joined together by references in a `translation.metadata` document
   - Best for documents that have unique, language-specific fields and no common content across languages
   - Best for translating content using Portable Text
 - **Field-level translation**
   - A single document with many languages of content
-  - Achieved by mapping over languages on each field, to create an object
+  - Achieved by mapping over languages on each field
   - Best for documents that have a mix of language-specific and common fields
   - Not recommended for Portable Text
 
 This plugin adds features to the Studio to improve handling **document-level translations**.
 
-- A Language Selector to create and browse language-specific versions of each Document
-- Document Actions to update base and translated documents to ensure references stay in tact
+- A Language Selector to create and browse language-specific versions of a Document
+- Hooks and components to use throughout your custom components to handle translations
 - Document Badges to highlight the language version of a document
 
-For **field-level translations** you should use the [@sanity/language-filter plugin](https://www.npmjs.com/package/@sanity/language-filter).
+For **field-level translations** you should use the [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array).
 
 ### Many projects use both!
 
-An example of document-level translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
+An example of **document-level** translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
 
-A good use of field-level translation could be a `person` schema. It could have the same `name` and `image` in every language, but only the `biography` would need translating.
+A good use of **field-level** translation could be a `person` schema. It could have the same `name` and `image` in every language, but only the `biography` would need translating.
 
 ## Upgrade
 
@@ -129,7 +129,7 @@ export const createConfig({
       languageField: `language` // defauts to "language"
 
       // Optional
-      // Keep translations.metadata references weak
+      // Keep translation.metadata references weak
       weakReferences: true // defaults to false
 
       // Optional
@@ -154,7 +154,7 @@ export const createConfig({
 
 ### Language field
 
-The schema types that use document internationalization must also have a `string` field type with the same name configured in the `languageField` setting. Unless you want content creators to be able to change the language of a document, you may hide this field since the plugin will handle writing patches to it.
+The schema types that use document internationalization must also have a `string` field type with the same name configured in the `languageField` setting. Unless you want content creators to be able to change the language of a document, you may hide or disable this field since the plugin will handle writing patches to it.
 
 ```ts
 // ./schema/lesson.ts
@@ -178,12 +178,11 @@ To query a single document and all its translations, we use the `references()` f
 ```json5
 // All `lesson` documents of a single language
 *[_type == "lesson" && language == $language]{
-  // Just these fields
   title,
   slug,
   language,
   // Get the translations metadata
-  // And resolve the `value` field in each array item
+  // And resolve the `value` reference field in each array item
   "_translations": *[_type == "translation.metadata" && references(^._id)].translations[].value->{
     title,
     slug,
