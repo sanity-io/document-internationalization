@@ -56,8 +56,6 @@ async function createSingletons() {
     return [metadata, ...translations]
   }).flat()
 
-  console.log(documents)
-
   const transaction = client.transaction()
 
   documents.forEach((doc) => {
@@ -67,6 +65,7 @@ async function createSingletons() {
   await transaction
     .commit()
     .then((res) => {
+      // eslint-disable-next-line no-console
       console.log(res)
     })
     .catch((err) => {
