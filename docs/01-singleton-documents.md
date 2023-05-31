@@ -13,7 +13,7 @@ For translated singletons you will need to:
 
 ## 1. Create the documents
 
-Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/createSingletons.ts](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/createSingletons.ts)
+Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/main/scripts/createSingletons.ts](https://github.com/sanity-io/document-internationalization/blob/main/scripts/createSingletons.ts)
 
 This script will create a document for each singleton you need, and a translations document that will be used to bind them together.
 

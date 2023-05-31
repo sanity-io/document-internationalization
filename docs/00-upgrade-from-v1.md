@@ -9,7 +9,7 @@
 
 **I'm on Sanity Studio v3 but will stay with the older plugin for now**
 
-- Please refer to the [v2 branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2)
+- Please refer to the [v1 branch](https://github.com/sanity-io/document-internationalization/tree/v1)
 - Install from `v1.0.0` and above
 - This version of the plugin will not be updated with new features
 
@@ -50,9 +50,9 @@ In this repository are two scripts to help migrate content. One is required, the
 
 Please backup your dataset before running migration scripts.
 
-Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/createMetadata.ts](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/createMetadata.ts)
+Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/main/scripts/createMetadata.ts](https://github.com/sanity-io/document-internationalization/blob/main/scripts/createMetadata.ts)
 
-The [createMetadata.ts](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/createMetadata.ts) script will look for all documents of a specific `_type` that contain the previous plugin's `__i18n_refs` array of references. Those arrays were written by the plugin and should look like this:
+The [createMetadata.ts](https://github.com/sanity-io/document-internationalization/blob/main/scripts/createMetadata.ts) script will look for all documents of a specific `_type` that contain the previous plugin's `__i18n_refs` array of references. Those arrays were written by the plugin and should look like this:
 
 ```json
 "__i18n_refs": [
@@ -108,13 +108,13 @@ Make sure to configure the new plugin with your existing `languageField` setting
 
 Please backup your dataset before running migration scripts.
 
-Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/renameLanguageField.ts](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/renameLanguageField.ts)
+Instructions for how to perform this migration are written in the script itself: [https://github.com/sanity-io/document-internationalization/blob/main/scripts/renameLanguageField.ts](https://github.com/sanity-io/document-internationalization/blob/main/scripts/renameLanguageField.ts)
 
 The previous plugin by default would write fields with double underscore prefixes (example: `__lang`) which did not work with GraphQL deployments.
 
 For data hygiene, you may prefer to have a normalized field name for the language field in your translated documents. The default field name for a document's language in the new plugin is `language`.
 
-[This script will update the field name](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/scripts/renameLanguageField.ts) `__i18n_lang` to `language` or can be customized to use the field name you used in the previous version of the plugin.
+[This script will update the field name](https://github.com/sanity-io/document-internationalization/blob/main/scripts/renameLanguageField.ts) `__i18n_lang` to `language` or can be customized to use the field name you used in the previous version of the plugin.
 
 ## 2. Updating `sanity.config.ts`
 
@@ -128,7 +128,7 @@ npm install @sanity/document-internationalization@latest
 
 The previous version of the plugin recommended you wrap your plugins array and modify your desk structure using the `withDocumentI18nPlugin()` function. This is no longer required.
 
-Update your plugins array to load the plugin like you would any other. For configuration options see the [plugin documentation](https://github.com/sanity-io/document-internationalization/blob/studio-v3-plugin-v2/README.md).:
+Update your plugins array to load the plugin like you would any other. For configuration options see the [plugin documentation](https://github.com/sanity-io/document-internationalization/blob/main/README.md).:
 
 >
 
@@ -210,4 +210,4 @@ You can now remove the `i18n` key from all document schemas, as the schema types
 
 The previous version of the plugin wrote language details to document `_id`s. This behavior was changed in a previous version of the plugin. Matching against the string `_id` of a document is an unreliable and slow way to query for documents.
 
-See the [GROQ and GraphQL examples in the README](https://github.com/sanity-io/document-internationalization/tree/studio-v3-plugin-v2#code-examples) for how to query for translations.
+See the [GROQ and GraphQL examples in the README](https://github.com/sanity-io/document-internationalization/tree/main#code-examples) for how to query for translations.

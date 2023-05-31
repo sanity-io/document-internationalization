@@ -58,7 +58,7 @@ See the Upgrade Guide for [v1](./docs/00-upgrade-from-v1.md) for instructions on
 ## Install
 
 ```
-npm install --save @sanity/document-internationalization@studio-v3-plugin-v2
+npm install --save @sanity/document-internationalization
 ```
 
 ## Usage
