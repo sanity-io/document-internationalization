@@ -9,7 +9,7 @@
 
 **I'm on Sanity Studio v3 but will stay with the older plugin for now**
 
-- Please refer to the [v2 branch](https://github.com/sanity-io/document-internationalization/tree/studio-v2)
+- Please refer to the [v1 branch](https://github.com/sanity-io/document-internationalization/tree/v1)
 - Install from `v1.0.0` and above
 - This version of the plugin will not be updated with new features
 
