@@ -1,9 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranches": ["v3"],
-  "extends": [
-    "github>sanity-io/renovate-presets//ecosystem/auto",
-    "github>sanity-io/renovate-presets//ecosystem/studio-v3",
-    ":reviewer(team:ecosystem)"
-  ]
+  "extends": ["config:base"]
 }
