@@ -245,6 +245,7 @@ For more advanced topics see the documentation. For installation see [Usage](#us
 - [Deleting translated documents](./docs/03-deleting-translated-documents.md)
 - [Importing plugin components](./docs/04-importing-plugin-components.md)
 - [Allowing the same slug on different language versions](./docs/05-allowing-the-same-slug-on-different-language-versions.md)
+- [Remove default new document template](./docs/06-remove-default-new-document-template.md)
 
 ## License
 
