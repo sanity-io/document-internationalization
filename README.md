@@ -1,10 +1,10 @@
 # @sanity/document-internationalization
 
-All new rewrite exclusively for Sanity Studio v3!
+All new rewrite exclusively for Sanity Studio v3
 
 - [@sanity/document-internationalization](#sanitydocument-internationalization)
   - [What this plugin solves](#what-this-plugin-solves)
-    - [Many projects use both!](#many-projects-use-both)
+    - [Many projects use both](#many-projects-use-both)
   - [Upgrade](#upgrade)
   - [Install](#install)
   - [Usage](#usage)
@@ -45,7 +45,7 @@ This plugin adds features to the Studio to improve handling **document-level tra
 
 For **field-level translations** you should use the [sanity-plugin-internationalized-array](https://github.com/sanity-io/sanity-plugin-internationalized-array).
 
-### Many projects use both!
+### Many projects use both
 
 An example of **document-level** translation could be a `lesson` schema, the `title`, `slug` and `content` fields would be unique in every language.
 
