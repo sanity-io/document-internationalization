@@ -53,7 +53,7 @@ A good use of **field-level** translation could be a `person` schema. It could h
 
 ## Upgrade
 
-See the Upgrade Guide for [v1](./docs/00-upgrade-from-v1.md) for instructions on how to upgrade from the original Document Internationalization plugin.
+[See the upgrade guide](./docs/00-upgrade-from-v1.md) for instructions on how to upgrade from the previous version of Document Internationalization.
 
 ## Install
 
