@@ -1,6 +1,7 @@
 import type {
   FieldDefinition,
   KeyedObject,
+  ObjectSchemaType,
   Reference,
   SanityClient,
 } from 'sanity'
@@ -43,6 +44,6 @@ export type Metadata = {
 }
 
 export type DocumentInternationalizationMenuProps = {
-  schemaType: string
+  schemaType: ObjectSchemaType
   documentId: string
 }

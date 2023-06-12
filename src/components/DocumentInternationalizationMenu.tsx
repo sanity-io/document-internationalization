@@ -10,7 +10,7 @@ import {
   useClickOutside,
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import {FormEvent, useCallback, useMemo, useState} from 'react'
+import {FormEvent, useCallback, useEffect, useMemo, useState} from 'react'
 import {useEditState} from 'sanity'
 
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
@@ -24,7 +24,8 @@ import Warning from './Warning'
 export function DocumentInternationalizationMenu(
   props: DocumentInternationalizationMenuProps
 ) {
-  const {schemaType, documentId} = props
+  const {documentId} = props
+  const schemaType = props.schemaType.name
   const {languageField, supportedLanguages} =
     useDocumentInternationalizationContext()
 
