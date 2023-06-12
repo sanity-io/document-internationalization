@@ -10,7 +10,7 @@ import {
   useClickOutside,
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import {FormEvent, useCallback, useEffect, useMemo, useState} from 'react'
+import {FormEvent, useCallback, useMemo, useState} from 'react'
 import {useEditState} from 'sanity'
 
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
