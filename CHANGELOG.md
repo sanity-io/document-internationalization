@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/sanity-io/document-internationalization/compare/v2.0.0...v2.0.1) (2023-06-12)
+
+### Bug Fixes
+
+- reduce listener calls with updated useListeningQuery ([0d81952](https://github.com/sanity-io/document-internationalization/commit/0d8195297b7ac14a13d2c8d36f8af34731505206))
+
 ## [2.0.0](https://github.com/sanity-io/document-internationalization/compare/v1.1.1...v2.0.0) (2023-06-01)
 
 ### ⚠ BREAKING CHANGES
