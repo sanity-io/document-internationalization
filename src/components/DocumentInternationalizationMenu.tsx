@@ -24,7 +24,8 @@ import Warning from './Warning'
 export function DocumentInternationalizationMenu(
   props: DocumentInternationalizationMenuProps
 ) {
-  const {schemaType, documentId} = props
+  const {documentId} = props
+  const schemaType = props.schemaType.name
   const {languageField, supportedLanguages} =
     useDocumentInternationalizationContext()
 

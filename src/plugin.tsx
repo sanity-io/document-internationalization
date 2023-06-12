@@ -25,16 +25,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
 
     if (schemaTypes.length === 0) {
       throw new Error(
-        'You must specify at least one schema type on which to enable document internationalization. Update the `schemaTypes` option in te documentInternationalization() configuration.'
-      )
-    }
-
-    const renderLanguageFilter = (schemaType: string, documentId: string) => {
-      return (
-        <DocumentInternationalizationMenu
-          schemaType={schemaType}
-          documentId={documentId}
-        />
+        'You must specify at least one schema type on which to enable document internationalization. Update the `schemaTypes` option in the documentInternationalization() configuration.'
       )
     }
 
@@ -96,7 +87,11 @@ export const documentInternationalization = definePlugin<PluginConfig>(
           const {schemaType, documentId} = ctx
 
           return schemaTypes.includes(schemaType) && documentId
-            ? [...prev, () => renderLanguageFilter(schemaType, documentId)]
+            ? [
+                ...prev,
+                (props) =>
+                  DocumentInternationalizationMenu({...props, documentId}),
+              ]
             : prev
         },
         badges: (prev, {schemaType}) => {
