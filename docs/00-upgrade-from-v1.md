@@ -197,7 +197,7 @@ documentInternationalization({
   ],
   schemaTypes: ['page'],
   // Optional:
-  weakReference: false, // default false
+  weakReferences: false, // default false
   languageField: 'language', // default "language"
 })
 ```
