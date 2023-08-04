@@ -23,7 +23,10 @@ export const DeleteMetadataAction: DocumentActionComponent = (props) => {
   const [isDialogOpen, setDialogOpen] = useState(false)
   const onClose = useCallback(() => setDialogOpen(false), [])
   const translations: TranslationReference[] = useMemo(
-    () => (doc ? (doc[TRANSLATIONS_ARRAY_NAME] as TranslationReference[]) : []),
+    () =>
+      doc && Array.isArray(doc[TRANSLATIONS_ARRAY_NAME])
+        ? (doc[TRANSLATIONS_ARRAY_NAME] as TranslationReference[])
+        : [],
     [doc]
   )
 
