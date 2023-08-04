@@ -69,9 +69,10 @@ jobs:
         node: [lts/*]
         # It makes sense to also test the oldest, and latest, versions of Node.js, on ubuntu-only since it's the fastest CI runner
         include:
-          - os: ubuntu-latest
-            # Test the oldest LTS release of Node that's still receiving bugfixes and security patches, versions older than that have reached End-of-Life
-            node: lts/-2
+          # lts/-2 is currently failing due to a platform issue
+          # - os: ubuntu-latest
+          #   # Test the oldest LTS release of Node that's still receiving bugfixes and security patches, versions older than that have reached End-of-Life
+          #   node: lts/-2
           - os: ubuntu-latest
             # Test the actively developed version that will become the latest LTS release next October
             node: current
