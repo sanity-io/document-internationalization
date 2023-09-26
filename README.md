@@ -14,6 +14,7 @@ All new rewrite exclusively for Sanity Studio v3
   - [Querying translations](#querying-translations)
     - [Querying with GROQ](#querying-with-groq)
     - [Querying with GraphQL](#querying-with-graphql)
+  - [Validations](#validations)
   - [Note on document quotas](#note-on-document-quotas)
   - [Documentation](#documentation)
   - [License](#license)
@@ -225,6 +226,26 @@ query GetTranslations($id: ID!) {
     }
   }
 }
+```
+
+## Validations
+
+This package also provides a document-level validation function to check whether any references point to content in a different language:
+
+```js
+import {defineType} from 'sanity'
+import {referenceLanguageValidator} from '@sanity/document-internationalization'
+
+export const article = defineType({
+  title: 'Article',
+  name: 'article',
+  type: 'document',
+  // ..rest of the schema definition
+  validation: (rule) =>
+    // You can decide whether this will trigger a warning
+    // or an error in the Studio
+    rule.custom(referenceLanguageValidator).warning(),
+})
 ```
 
 ## Note on document quotas
