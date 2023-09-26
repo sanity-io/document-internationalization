@@ -8,7 +8,12 @@ import BulkPublish from './components/BulkPublish'
 import {DocumentInternationalizationProvider} from './components/DocumentInternationalizationContext'
 import {DocumentInternationalizationMenu} from './components/DocumentInternationalizationMenu'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
-import {API_VERSION, DEFAULT_CONFIG, METADATA_SCHEMA_NAME} from './constants'
+import {
+  API_VERSION,
+  DEFAULT_CONFIG,
+  METADATA_SCHEMA_NAME,
+  PLUGIN_CONFIG,
+} from './constants'
 import metadata from './schema/translation/metadata'
 import {PluginConfig, TranslationReference} from './types'
 
@@ -28,6 +33,11 @@ export const documentInternationalization = definePlugin<PluginConfig>(
         'You must specify at least one schema type on which to enable document internationalization. Update the `schemaTypes` option in the documentInternationalization() configuration.'
       )
     }
+
+    // Set configuration on global object, to use elsewhere
+    Object.defineProperty(window, PLUGIN_CONFIG, {
+      value: Object.freeze(pluginConfig),
+    })
 
     return {
       name: '@sanity/document-internationalization',
