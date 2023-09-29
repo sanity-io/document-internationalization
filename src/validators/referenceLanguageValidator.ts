@@ -4,12 +4,19 @@ import {
   isKeyedObject,
   isReference,
   type Path,
-  type Reference,
   type SanityDocument,
 } from 'sanity'
-import {forEach as traverse, type TraverseContext} from 'traverse'
+import {reduce} from 'traverse'
 
 import {API_VERSION, PLUGIN_CONFIG} from '../constants'
+
+// Extend the declaration with an additional property
+declare module 'traverse' {
+  // eslint-disable-next-line no-unused-vars
+  interface TraverseContext {
+    sanityPath: Path
+  }
+}
 
 export const referenceLanguageValidator: CustomValidator<
   SanityDocument | undefined
@@ -24,74 +31,66 @@ export const referenceLanguageValidator: CustomValidator<
     perspective: 'previewDrafts',
   })
 
-  /**
-   * Tracks validation subroutines
-   */
-  const checks: Promise<Path | null>[] = []
-
-  /**
-   * Manage sending up to one requests per reference
-   */
-  const referenceRequestsById = new Map<Id, Promise<string | null>>()
-
-  async function validateReference(
-    this: TraverseContext,
-    reference: Reference,
-    onError: (path: Path) => Path = (path) => path
-  ) {
-    try {
-      const {_ref: id} = reference
-
-      // Check for a pending request for the same reference
-      if (!referenceRequestsById.has(id)) {
-        referenceRequestsById.set(
-          id,
-          client.fetch<string | null, {id: Id}>(
-            `*[_id == $id][0].${languageField}`,
-            {id},
-            {tag: 'validate-language'}
-          )
-        )
-      }
-
-      const referencedLanguage = await referenceRequestsById.get(id)!
-
-      return !(referencedLanguage && document?.[languageField]) ||
-        (referencedLanguage && referencedLanguage === document[languageField])
-        ? null
-        : onError(this.path as Path)
-    } catch (error) {
-      console.error(error)
-      return null
-    }
-  }
-
-  // Recursively visit every property in the object to find any document references
-  traverse(document, function (value) {
-    if (Array.isArray(value)) {
-      for (const element of value) {
-        if (isReference(element) && isKeyedObject(element)) {
-          checks.push(
-            validateReference.bind(this)(element, (path) =>
-              path.concat({_key: element._key})
-            )
-          )
+  // Traverse the document to find any references
+  // Can't use `@sanity/mutator` because we need
+  // to collect array element `_key`s for validation targets 👇🏻
+  const referencePathsById: Map<Id, Path[]> = reduce(
+    document,
+    // eslint-disable-next-line no-shadow
+    function (referencePathsById, value) {
+      try {
+        // Manually track validation path
+        if (this.isRoot) {
+          this.sanityPath = this.path
+        } else if (
+          // When encountering an array element, we need to get
+          // its `_key` to use in the validation path
+          this.parent &&
+          Array.isArray(this.parent.node) &&
+          isKeyedObject(value)
+        ) {
+          this.sanityPath = this.parent!.sanityPath.concat({_key: value._key})
+        } else {
+          this.sanityPath = this.parent!.sanityPath.concat(this.path.at(-1)!)
         }
+
+        if (isReference(value)) {
+          const {_ref: id} = value
+
+          if (referencePathsById.has(id)) {
+            const referencePaths = referencePathsById.get(id)!
+
+            // WARNING: mutating in place
+            referencePaths.push(this.sanityPath)
+          } else {
+            referencePathsById.set(id, [this.sanityPath])
+          }
+
+          // Don't need to traverse the reference's children
+          this.block()
+        }
+      } catch (error) {
+        console.error(error)
       }
 
-      // Prevents traversing array's elements (non-mutating)
-      this.delete(true)
-    }
-
-    if (isReference(value)) {
-      checks.push(validateReference.bind(this)(value))
-    }
-  })
-
-  const paths = (await Promise.all(checks)).filter(
-    // eslint-disable-next-line no-eq-null
-    (value): value is Path => value != null
+      return referencePathsById
+    },
+    new Map<Id, Path[]>()
   )
+
+  const references = referencePathsById.size
+    ? await client.fetch(`*[_id in $ids]{ _id, locale }`, {
+        ids: Array.from(referencePathsById.keys()),
+      })
+    : []
+
+  const paths = (Array.isArray(references) ? references : [])
+    .filter(
+      (reference) =>
+        languageField in reference &&
+        reference[languageField] != document[languageField]
+    )
+    .flatMap((reference) => referencePathsById.get(reference._id) ?? [])
 
   return paths.length
     ? {
