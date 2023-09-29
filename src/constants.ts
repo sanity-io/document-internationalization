@@ -12,3 +12,8 @@ export const DEFAULT_CONFIG: PluginConfigContext = {
   metadataFields: [],
   apiVersion: API_VERSION,
 }
+
+/**
+ * Used to add plugin configuration on `window`
+ */
+export const PLUGIN_CONFIG = Symbol('@sanity/document-internationalization')

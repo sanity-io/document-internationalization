@@ -3,3 +3,4 @@ export {useDocumentInternationalizationContext} from './components/DocumentInter
 export {DocumentInternationalizationMenu} from './components/DocumentInternationalizationMenu'
 export {documentInternationalization} from './plugin'
 export * from './types'
+export * from './validators'
