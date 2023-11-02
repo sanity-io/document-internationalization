@@ -5,6 +5,15 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/sanity-io/document-internationalization/compare/v2.0.1...v2.0.2) (2023-11-02)
+
+### Bug Fixes
+
+- **deps:** semver version ([87eb4cc](https://github.com/sanity-io/document-internationalization/commit/87eb4cc9b0180e48fd194e5cb34be1fbe9f1d8a9))
+- Fixes [#139](https://github.com/sanity-io/document-internationalization/issues/139) - desk tool crash ([82d23c9](https://github.com/sanity-io/document-internationalization/commit/82d23c9982133827f776f6bed6ad03569b218328))
+- force new release ([f144bef](https://github.com/sanity-io/document-internationalization/commit/f144bef912f12e1e4df18496b8b3d6abb3b55b52))
+- update pkg-utils and exports ([1d50d20](https://github.com/sanity-io/document-internationalization/commit/1d50d208f1175a68381d54655a68ad7b0ac2d718))
+
 ## [2.0.1](https://github.com/sanity-io/document-internationalization/compare/v2.0.0...v2.0.1) (2023-06-12)
 
 ### Bug Fixes
