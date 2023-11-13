@@ -11,8 +11,9 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {FormEvent, useCallback, useMemo, useState} from 'react'
-import {useEditState} from 'sanity'
+import {useEditState, useTranslation} from 'sanity'
 
+import {I18N_NAMESPACE} from '../constants'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import {DocumentInternationalizationMenuProps} from '../types'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
@@ -47,6 +48,8 @@ export function DocumentInternationalizationMenu(
   const handleClickOutside = useCallback(() => setOpen(false), [])
   useClickOutside(handleClickOutside, [button, popover])
 
+  const {t} = useTranslation(I18N_NAMESPACE)
+
   // Get metadata from content lake
   const {data, loading, error} = useTranslationMetadata(documentId)
   const metadata = Array.isArray(data) && data.length ? data[0] : null
@@ -79,19 +82,19 @@ export function DocumentInternationalizationMenu(
     const valid = supportedLanguages.every((l) => l.id && l.title)
     if (!valid) {
       console.warn(
-        `Not all languages are valid. It should be an array of objects with an "id" and "title" property. Or a function that returns an array of objects with an "id" and "title" property.`,
+        t('menu.warning.invalidLanguagesConsole'),
         supportedLanguages
       )
     }
 
     return valid
-  }, [supportedLanguages])
+  }, [supportedLanguages, t])
 
   const content = (
     <Box padding={1}>
       {error ? (
         <Card tone="critical" padding={1}>
-          <Text>There was an error returning translations metadata</Text>
+          <Text>{t('menu.error')}</Text>
         </Card>
       ) : (
         <Stack space={1}>
@@ -100,7 +103,7 @@ export function DocumentInternationalizationMenu(
             <TextInput
               onChange={handleQuery}
               value={query}
-              placeholder="Filter languages"
+              placeholder={t('menu.filter.placeholder')}
             />
           ) : null}
           {supportedLanguages.length > 0 ? (
@@ -112,27 +115,21 @@ export function DocumentInternationalizationMenu(
                   {data && documentIsInOneMetadataDocument ? null : (
                     <Warning>
                       {/* TODO: Surface these documents to the user */}
-                      This document has been found in more than one Translations
-                      Metadata documents
+                      {t('menu.warning.multipleMetadataDocuments')}
                     </Warning>
                   )}
                   {/* Not all languages are valid */}
                   {allLanguagesAreValid ? null : (
-                    <Warning>
-                      Not all language objects are valid. See the console.
-                    </Warning>
+                    <Warning>{t('menu.warning.invalidLanguages')}</Warning>
                   )}
                   {/* Current document has no language field */}
                   {sourceLanguageId ? null : (
-                    <Warning>
-                      Choose a language to apply to{' '}
-                      <strong>this Document</strong>
-                    </Warning>
+                    <Warning>{t('menu.warning.missingLanguage')}</Warning>
                   )}
                   {/* Current document has an invalid language field */}
                   {sourceLanguageId && !sourceLanguageIsValid ? (
                     <Warning>
-                      Select a supported language. Current language value:{' '}
+                      {t('menu.warning.invalidLanguage')}{' '}
                       <code>{sourceLanguageId}</code>
                     </Warning>
                   ) : null}
@@ -176,8 +173,8 @@ export function DocumentInternationalizationMenu(
                         (loading ||
                           !allLanguagesAreValid ||
                           metadata?.translations
-                            .filter((t) => t?.value?._ref !== documentId)
-                            .some((t) => t._key === language.id)) ??
+                            .filter((tr) => tr?.value?._ref !== documentId)
+                            .some((tr) => tr._key === language.id)) ??
                         false
                       }
                     />
@@ -212,7 +209,7 @@ export function DocumentInternationalizationMenu(
       tone="default"
     >
       <Button
-        text="Translations"
+        text={t('menu.button.text')}
         mode="bleed"
         disabled={!source}
         tone={

@@ -11,9 +11,9 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback} from 'react'
-import {SanityDocument, useClient} from 'sanity'
+import {SanityDocument, useClient, useTranslation} from 'sanity'
 
-import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
+import {I18N_NAMESPACE, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 import {Language, Metadata, TranslationReference} from '../types'
 import {createReference} from '../utils/createReference'
@@ -52,21 +52,22 @@ export default function LanguageOption(props: LanguageOptionProps) {
     useDocumentInternationalizationContext()
   const client = useClient({apiVersion})
   const toast = useToast()
+  const {t} = useTranslation(I18N_NAMESPACE)
 
   const open = useOpenInNewPane(translation?.value?._ref, schemaType)
   const handleOpen = useCallback(() => open(), [open])
 
-  const handleCreate = useCallback(async () => {
+  const handleCreate = useCallback(() => {
     if (!source) {
-      throw new Error(`Cannot create translation without source document`)
+      throw new Error(t('create.error.sourceMissing'))
     }
 
     if (!sourceLanguageId) {
-      throw new Error(`Cannot create translation without source language ID`)
+      throw new Error(t('create.error.sourceLanguageIDMissing'))
     }
 
     if (!metadataId) {
-      throw new Error(`Cannot create translation without a metadata ID`)
+      throw new Error(t('create.error.metadataIDMissing'))
     }
 
     const transaction = client.transaction()
@@ -122,10 +123,10 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
         return toast.push({
           status: 'success',
-          title: `Created "${language.title}" translation`,
+          title: t('create.success.toast.title', {language}),
           description: metadataExisted
-            ? `Updated Translations Metadata`
-            : `Created Translations Metadata`,
+            ? t('create.success.toast.description.updated')
+            : t('create.success.toast.description.created'),
         })
       })
       .catch((err) => {
@@ -133,32 +134,33 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
         return toast.push({
           status: 'error',
-          title: `Error creating translation`,
+          title: t('create.error.toast.title'),
           description: err.message,
         })
       })
   }, [
-    client,
-    documentId,
-    language.id,
-    language.title,
-    languageField,
-    metadata?._createdAt,
-    metadataId,
-    schemaType,
     source,
     sourceLanguageId,
+    metadataId,
+    client,
+    languageField,
+    language,
+    documentId,
+    schemaType,
+    weakReferences,
+    t,
+    metadata?._createdAt,
     toast,
   ])
 
   let message
 
   if (current) {
-    message = `Current document`
+    message = t('create.tooltip.current', {language})
   } else if (translation) {
-    message = `Open ${language.title} translation`
+    message = t('create.tooltip.open', {language})
   } else if (!translation) {
-    message = `Create new ${language.title} translation`
+    message = t('create.tooltip.create', {language})
   }
 
   return (

@@ -84,14 +84,14 @@
     "react-dom": "^18",
     "react-is": "^18",
     "rimraf": "^4.1.2",
-    "sanity": "^3.3.1",
+    "sanity": "i18n",
     "semantic-release": "^22.0.6",
     "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "@sanity/ui": "^1.2.2",
     "react": "^18",
-    "sanity": "^3.0.0",
+    "sanity": "i18n",
     "styled-components": "^5.3.6"
   },
   "engines": {

@@ -1,7 +1,8 @@
 import {CogIcon} from '@sanity/icons'
 import {Box, Button, Stack, Text, Tooltip} from '@sanity/ui'
+import {useTranslation} from 'sanity'
 
-import {METADATA_SCHEMA_NAME} from '../constants'
+import {I18N_NAMESPACE, METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 
 type LanguageManageProps = {
@@ -11,17 +12,19 @@ type LanguageManageProps = {
 export default function LanguageManage(props: LanguageManageProps) {
   const {id} = props
   const open = useOpenInNewPane(id, METADATA_SCHEMA_NAME)
+  const {t} = useTranslation(I18N_NAMESPACE)
+  const disabled = !id
 
   return (
     <Tooltip
       content={
-        id ? null : (
+        disabled ? (
           <Box padding={2}>
             <Text muted size={1}>
-              Document has no other translations
+              {t('menu.manageButton.disabled')}
             </Text>
           </Box>
-        )
+        ) : null
       }
       fallbackPlacements={['right', 'left']}
       placement="top"
@@ -29,10 +32,11 @@ export default function LanguageManage(props: LanguageManageProps) {
     >
       <Stack>
         <Button
-          disabled={!id}
+          disabled={disabled}
           mode="ghost"
-          text="Manage Translations"
+          text={t('menu.manageButton.text')}
           icon={CogIcon}
+          // eslint-disable-next-line react/jsx-no-bind
           onClick={() => open()}
         />
       </Stack>
