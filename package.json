@@ -12,16 +12,19 @@
     "i18n",
     "localization"
   ],
-  "homepage": "https://github.com/sanity-io/document-internationalization#readme",
+  "homepage": "https://github.com/justacodename/sanity-document-internationalization/issues#readme",
   "bugs": {
-    "url": "https://github.com/sanity-io/document-internationalization/issues"
+    "url": "https://github.com/justacodename/sanity-document-internationalization/issues/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:sanity-io/document-internationalization.git"
+    "url": "git@github.com:justacodename/sanity-document-internationalization.git"
   },
   "license": "MIT",
-  "author": "Sanity.io <hello@sanity.io>",
+  "authors": [
+    "Sanity.io <hello@sanity.io>",
+    "Justacodename <hi@justacodename.com>"
+  ],
   "exports": {
     ".": {
       "types": "./lib/src/index.d.ts",
@@ -126,5 +129,6 @@
   },
   "engines": {
     "node": ">=14"
-  }
+  },
+  "private": "true"
 }
