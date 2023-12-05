@@ -58,11 +58,6 @@
     "prepublishOnly": "npm run build",
     "watch": "pkg-utils watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint:fix"
-    }
-  },
   "dependencies": {
     "@cprecioso/country-flag-emoji": "^1.0.0",
     "@sanity/color": "^2.1.20",
@@ -80,8 +75,6 @@
     "twemoji": "^14.0.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.2.0",
-    "@commitlint/config-conventional": "^17.2.0",
     "@sanity/pkg-utils": "^1.17.2",
     "@sanity/plugin-kit": "^2.1.5",
     "@sanity/semantic-release-preset": "^2.0.2",
