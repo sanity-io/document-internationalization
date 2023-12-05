@@ -1,4 +1,4 @@
-import {SanityDocument, SchemaType} from 'sanity'
+import {SanityClient, SanityDocument, SchemaType} from 'sanity'
 import type {ComponentType, FC} from 'react'
 import {IdStructure, ReferenceBehavior} from '../constants'
 import {TLanguagesOption} from './TLanguagesOption'
@@ -22,6 +22,10 @@ export type Ti18nConfig = {
       i18n?: boolean | Ti18nConfig
     }
   }>
+  onTranslationCreate?: (
+    doc: Record<string, unknown> | undefined | null,
+    client: SanityClient
+  ) => Promise<Record<string, unknown>>
   customFlagComponents?: Record<
     string,
     ComponentType<{

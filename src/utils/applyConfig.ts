@@ -6,6 +6,7 @@ type ApplyConfigOptionalKeys =
   | 'languagesLoader'
   | 'fallbackLanguageSelect'
   | 'customFlagComponents'
+  | 'onTranslationCreate'
 export type ApplyConfigResult = Omit<
   Required<{
     [K in keyof Ti18nConfig]: Required<Ti18nConfig[K]>
@@ -27,6 +28,7 @@ export function applyConfig(
     shouldReload: baseConfig?.shouldReload,
     languagesLoader: baseConfig?.languagesLoader,
     fallbackLanguageSelect: baseConfig?.fallbackLanguageSelect,
+    onTranslationCreate: incomingConfig?.onTranslationCreate,
     customFlagComponents: baseConfig?.customFlagComponents,
     fieldNames: {
       lang: incomingConfig?.fieldNames?.lang || baseConfig?.fieldNames?.lang || '__i18n_lang',
