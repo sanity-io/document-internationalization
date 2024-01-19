@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/sanity-io/document-internationalization/compare/v2.0.2...v2.0.3) (2024-01-19)
+
+### Bug Fixes
+
+- update dependencies ([566fd7d](https://github.com/sanity-io/document-internationalization/commit/566fd7db86c70029b3491d0681e5946f4d262ac7))
+
 ## [2.0.2](https://github.com/sanity-io/document-internationalization/compare/v2.0.1...v2.0.2) (2023-11-02)
 
 ### Bug Fixes
