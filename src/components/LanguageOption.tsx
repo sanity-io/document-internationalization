@@ -11,17 +11,18 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback} from 'react'
-import {SanityDocument, useClient} from 'sanity'
+import {ObjectSchemaType, SanityDocument, useClient} from 'sanity'
 
-import {API_VERSION, METADATA_SCHEMA_NAME} from '../constants'
+import {METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
 import {Language, Metadata, TranslationReference} from '../types'
 import {createReference} from '../utils/createReference'
+import {removeExcludedPaths} from '../utils/excludePaths'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 
 type LanguageOptionProps = {
   language: Language
-  schemaType: string
+  schemaType: ObjectSchemaType
   documentId: string
   disabled: boolean
   current: boolean
@@ -53,7 +54,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
   const client = useClient({apiVersion})
   const toast = useToast()
 
-  const open = useOpenInNewPane(translation?.value?._ref, schemaType)
+  const open = useOpenInNewPane(translation?.value?._ref, schemaType.name)
   const handleOpen = useCallback(() => open(), [open])
 
   const handleCreate = useCallback(async () => {
@@ -73,12 +74,18 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
     // 1. Duplicate source document
     const newTranslationDocumentId = uuid()
-    const newTranslationDocument = {
+    let newTranslationDocument = {
       ...source,
       _id: `drafts.${newTranslationDocumentId}`,
       // 2. Update language of the translation
       [languageField]: language.id,
     }
+
+    // Remove fields / paths we don't want to duplicate
+    newTranslationDocument = removeExcludedPaths(
+      newTranslationDocument,
+      schemaType
+    ) as SanityDocument
 
     transaction.create(newTranslationDocument)
 
@@ -86,19 +93,19 @@ export default function LanguageOption(props: LanguageOptionProps) {
     const sourceReference = createReference(
       sourceLanguageId,
       documentId,
-      schemaType,
+      schemaType.name,
       !weakReferences
     )
     const newTranslationReference = createReference(
       language.id,
       newTranslationDocumentId,
-      schemaType,
+      schemaType.name,
       !weakReferences
     )
     const newMetadataDocument = {
       _id: metadataId,
       _type: METADATA_SCHEMA_NAME,
-      schemaTypes: [schemaType],
+      schemaTypes: [schemaType.name],
       translations: [sourceReference],
     }
 
