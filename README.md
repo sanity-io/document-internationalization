@@ -169,6 +169,23 @@ defineField({
 })
 ```
 
+### Excluding fields
+
+The default behaviour of this plugin when creating a new translation is to duplicate the originating document, which is useful for then translating the fields directly in the new document - perhaps with [Sanity AI Assist](https://github.com/sanity-io/assist). However, sometimes you may want to exclude certain fields from being copied to the new document. You can do this by updating your schema to exclude certain types or fields with `options.documentInternationalization.exclude`:
+
+```ts
+defineField({
+  name: 'title',
+  title: 'Title',
+  type: 'string',
+  options: {
+    documentInternationalization: {
+      exclude: true,
+    },
+  },
+}),
+```
+
 ## Querying translations
 
 ### Querying with GROQ

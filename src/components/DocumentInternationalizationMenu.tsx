@@ -25,7 +25,7 @@ export function DocumentInternationalizationMenu(
   props: DocumentInternationalizationMenuProps
 ) {
   const {documentId} = props
-  const schemaType = props.schemaType.name
+  const schemaType = props.schemaType
   const {languageField, supportedLanguages} =
     useDocumentInternationalizationContext()
 
@@ -64,7 +64,7 @@ export function DocumentInternationalizationMenu(
   }, [loading, metadata?._id])
 
   // Duplicate a new language version from the most recent version of this document
-  const {draft, published} = useEditState(documentId, schemaType)
+  const {draft, published} = useEditState(documentId, schemaType.name)
   const source = draft || published
 
   // Check for data issues
@@ -197,7 +197,7 @@ export function DocumentInternationalizationMenu(
     return null
   }
 
-  if (!schemaType) {
+  if (!schemaType || !schemaType.name) {
     return null
   }
 
