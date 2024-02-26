@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.0](https://github.com/sanity-io/document-internationalization/compare/v2.0.3...v2.1.0) (2024-02-26)
+
+### Features
+
+- exclude fields from duplication ([1cd96dc](https://github.com/sanity-io/document-internationalization/commit/1cd96dcc03754cf2dc03cee9239a3524b0751c88))
+
 ## [2.0.3](https://github.com/sanity-io/document-internationalization/compare/v2.0.2...v2.0.3) (2024-01-19)
 
 ### Bug Fixes
