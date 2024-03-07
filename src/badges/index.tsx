@@ -1,3 +1,4 @@
+import get from 'just-safe-get'
 import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
 
 import {useDocumentInternationalizationContext} from '../components/DocumentInternationalizationContext'
@@ -8,7 +9,7 @@ export function LanguageBadge(
   const source = props?.draft || props?.published
   const {languageField, supportedLanguages} =
     useDocumentInternationalizationContext()
-  const languageId = source?.[languageField]
+  const languageId = source ? get(source, languageField) : null
 
   if (!languageId) {
     return null

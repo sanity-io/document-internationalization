@@ -1,5 +1,6 @@
 import {TrashIcon} from '@sanity/icons'
 import {ButtonTone, useToast} from '@sanity/ui'
+import get from 'just-safe-get'
 import {useCallback, useState} from 'react'
 import {DocumentActionComponent, SanityDocument, useClient} from 'sanity'
 
@@ -16,7 +17,7 @@ export const DeleteTranslationAction: DocumentActionComponent = (props) => {
   const [isDialogOpen, setDialogOpen] = useState(false)
   const [translations, setTranslations] = useState<SanityDocument[]>([])
   const onClose = useCallback(() => setDialogOpen(false), [])
-  const documentLanguage = doc ? doc[languageField] : null
+  const documentLanguage = doc ? get(doc, languageField) : null
 
   const toast = useToast()
   const client = useClient({apiVersion: API_VERSION})
