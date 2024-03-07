@@ -21,6 +21,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
       languageField,
       bulkPublish,
       metadataFields,
+      initialValueTemplates,
     } = pluginConfig
 
     if (schemaTypes.length === 0) {
@@ -124,32 +125,40 @@ export const documentInternationalization = definePlugin<PluginConfig>(
             return prev
           }
 
-          const parameterizedTemplates = schemaTypes.map((schemaType) => ({
-            id: `${schemaType}-parameterized`,
-            title: `${
-              schema?.get(schemaType)?.title ?? schemaType
-            }: with Language`,
-            schemaType,
-            parameters: [
-              {name: `languageId`, title: `Language ID`, type: `string`},
-            ],
-            value: ({languageId}: {languageId: string}) => ({
-              [languageField]: languageId,
-            }),
-          }))
+          if (initialValueTemplates === false) {
+            return prev
+          }
 
-          const staticTemplates = schemaTypes.flatMap((schemaType) => {
-            return supportedLanguages.map((language) => ({
-              id: `${schemaType}-${language.id}`,
-              title: `${language.title} ${
+          if (initialValueTemplates !== 'static') {
+            const parameterizedTemplates = schemaTypes.map((schemaType) => ({
+              id: `${schemaType}-parameterized`,
+              title: `${
                 schema?.get(schemaType)?.title ?? schemaType
-              }`,
+              }: with Language`,
               schemaType,
-              value: {
-                [languageField]: language.id,
-              },
+              parameters: [
+                {name: `languageId`, title: `Language ID`, type: `string`},
+              ],
+              value: ({languageId}: {languageId: string}) => ({
+                [languageField]: languageId,
+              }),
             }))
-          })
+          }
+
+          if (initialValueTemplates !== 'parameterized') {
+            const staticTemplates = schemaTypes.flatMap((schemaType) => {
+              return supportedLanguages.map((language) => ({
+                id: `${schemaType}-${language.id}`,
+                title: `${language.title} ${
+                  schema?.get(schemaType)?.title ?? schemaType
+                }`,
+                schemaType,
+                value: {
+                  [languageField]: language.id,
+                },
+              }))
+            })
+          }
 
           return [...prev, ...parameterizedTemplates, ...staticTemplates]
         },
