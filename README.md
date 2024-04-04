@@ -164,7 +164,7 @@ The schema types that use document internationalization must also have a `string
 defineField({
   // should match 'languageField' plugin configuration setting, if customized
   name: 'language',
-  type: 
+  type: 'string',
   readOnly: true,
   hidden: true,
 }),
@@ -206,7 +206,6 @@ defineField({
 }
 
 ```
-
 
 ### Excluding fields
 
