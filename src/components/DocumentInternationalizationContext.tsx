@@ -1,6 +1,6 @@
 import {useContext} from 'react'
 import {createContext} from 'react'
-import {LayoutProps, useClient} from 'sanity'
+import {LayoutProps, useClient, useWorkspace} from 'sanity'
 import {suspend} from 'suspend-react'
 
 import {DEFAULT_CONFIG} from '../constants'
@@ -26,6 +26,7 @@ export function DocumentInternationalizationProvider(
   const {pluginConfig} = props
 
   const client = useClient({apiVersion: pluginConfig.apiVersion})
+  const workspace = useWorkspace()
   const supportedLanguages = Array.isArray(pluginConfig.supportedLanguages)
     ? pluginConfig.supportedLanguages
     : // eslint-disable-next-line require-await
@@ -34,7 +35,7 @@ export function DocumentInternationalizationProvider(
           return pluginConfig.supportedLanguages(client)
         }
         return pluginConfig.supportedLanguages
-      }, [])
+      }, [workspace])
 
   return (
     <DocumentInternationalizationContext.Provider
