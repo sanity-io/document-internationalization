@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/sanity-io/document-internationalization/compare/v2.1.0...v2.1.1) (2024-04-04)
+
+### Bug Fixes
+
+- reinit languages on workspace switch ([d1102cb](https://github.com/sanity-io/document-internationalization/commit/d1102cb1f04565fadfac98816d24bb2d571b3f4b))
+
 ## [2.1.0](https://github.com/sanity-io/document-internationalization/compare/v2.0.3...v2.1.0) (2024-02-26)
 
 ### Features
