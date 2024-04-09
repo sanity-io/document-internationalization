@@ -11,11 +11,11 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback} from 'react'
-import {ObjectSchemaType, SanityDocument, useClient} from 'sanity'
+import {type ObjectSchemaType, type SanityDocument, useClient} from 'sanity'
 
 import {METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
-import {Language, Metadata, TranslationReference} from '../types'
+import type {Language, Metadata, TranslationReference} from '../types'
 import {createReference} from '../utils/createReference'
 import {removeExcludedPaths} from '../utils/excludePaths'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
@@ -156,6 +156,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
     source,
     sourceLanguageId,
     toast,
+    weakReferences,
   ])
 
   let message
@@ -170,6 +171,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
   return (
     <Tooltip
+      animate
       content={
         <Box padding={2}>
           <Text muted size={1}>

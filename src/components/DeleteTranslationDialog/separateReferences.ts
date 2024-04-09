@@ -1,4 +1,4 @@
-import {SanityDocument} from 'sanity'
+import type {SanityDocument} from 'sanity'
 
 import {METADATA_SCHEMA_NAME} from '../../constants'
 

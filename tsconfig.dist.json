@@ -10,7 +10,6 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "./dist",
-    "jsx": "react-jsx",
     "emitDeclarationOnly": true
   }
 }

@@ -14,6 +14,7 @@ export default function LanguageManage(props: LanguageManageProps) {
 
   return (
     <Tooltip
+      animate
       content={
         id ? null : (
           <Box padding={2}>

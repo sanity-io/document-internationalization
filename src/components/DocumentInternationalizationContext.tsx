@@ -1,10 +1,10 @@
 import {useContext} from 'react'
 import {createContext} from 'react'
-import {LayoutProps, useClient, useWorkspace} from 'sanity'
+import {type LayoutProps, useClient, useWorkspace} from 'sanity'
 import {suspend} from 'suspend-react'
 
 import {DEFAULT_CONFIG} from '../constants'
-import {PluginConfig, PluginConfigContext} from '../types'
+import type {PluginConfig, PluginConfigContext} from '../types'
 
 const DocumentInternationalizationContext =
   createContext<PluginConfigContext>(DEFAULT_CONFIG)

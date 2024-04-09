@@ -1,9 +1,9 @@
 import {Button, Card, Dialog, Inline, Stack, Text, useToast} from '@sanity/ui'
-import React, {useCallback, useState} from 'react'
+import {useCallback, useState} from 'react'
 import {TextWithTone, useClient, useWorkspace} from 'sanity'
 
 import {API_VERSION} from '../../constants'
-import {TranslationReference} from '../../types'
+import type {TranslationReference} from '../../types'
 import DocumentCheck from './DocumentCheck'
 import Info from './Info'
 
@@ -102,6 +102,7 @@ export default function BulkPublish(props: BulkPublishProps) {
 
         {open && (
           <Dialog
+            animate
             header="Bulk publishing"
             id="bulk-publish-dialog"
             onClose={onClose}

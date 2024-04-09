@@ -1,11 +1,11 @@
 import {extractWithPath, Mutation} from '@sanity/mutator'
 import {
   isDocumentSchemaType,
-  ObjectSchemaType,
-  Path,
+  type ObjectSchemaType,
+  type Path,
   pathToString,
-  SanityDocument,
-  SchemaType,
+  type SanityDocument,
+  type SchemaType,
 } from 'sanity'
 
 export interface DocumentMember {
