@@ -123,5 +123,6 @@ jobs:
         # e.g. git tags were pushed but it exited before `npm publish`
         if: always()
         env:
+          NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
