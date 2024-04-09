@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/sanity-io/document-internationalization/compare/v2.1.1...v2.1.2) (2024-04-09)
+
+### Bug Fixes
+
+- add provenance ([e31635f](https://github.com/sanity-io/document-internationalization/commit/e31635fa09f9a7dda3141f6debb225fa4ba6b226))
+
 ## [2.1.1](https://github.com/sanity-io/document-internationalization/compare/v2.1.0...v2.1.1) (2024-04-04)
 
 ### Bug Fixes
