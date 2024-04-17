@@ -1,9 +1,9 @@
-import {Box, ButtonTone, Text, Tooltip} from '@sanity/ui'
-import React, {PropsWithChildren} from 'react'
+import {Box, type ButtonTone, Text, Tooltip} from '@sanity/ui'
+import type {ComponentType, PropsWithChildren} from 'react'
 import {TextWithTone} from 'sanity'
 
 type InfoIconProps = PropsWithChildren & {
-  icon: React.ComponentType
+  icon: ComponentType
   tone: ButtonTone
   text?: string
 }
@@ -14,6 +14,7 @@ export default function InfoIcon(props: InfoIconProps) {
 
   return (
     <Tooltip
+      animate
       portal
       content={
         children ? (

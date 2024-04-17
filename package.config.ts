@@ -5,9 +5,6 @@ export default defineConfig({
   dist: 'dist',
   tsconfig: 'tsconfig.dist.json',
 
-  // Avoid ttyl, os and other node specific deps
-  external: ['@sanity/mutator'],
-
   // Remove this block to enable strict export validation
   extract: {
     rules: {

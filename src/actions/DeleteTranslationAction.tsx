@@ -1,8 +1,12 @@
 import {TrashIcon} from '@sanity/icons'
-import {ButtonTone, useToast} from '@sanity/ui'
+import {type ButtonTone, useToast} from '@sanity/ui'
 import get from 'just-safe-get'
 import {useCallback, useState} from 'react'
-import {DocumentActionComponent, SanityDocument, useClient} from 'sanity'
+import {
+  type DocumentActionComponent,
+  type SanityDocument,
+  useClient,
+} from 'sanity'
 
 import DeleteTranslationDialog from '../components/DeleteTranslationDialog'
 import DeleteTranslationFooter from '../components/DeleteTranslationFooter'

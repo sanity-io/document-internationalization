@@ -1,6 +1,6 @@
 import {Card, Flex, Spinner, Stack, Text} from '@sanity/ui'
 import {useEffect, useMemo} from 'react'
-import {SanityDocument} from 'sanity'
+import type {SanityDocument} from 'sanity'
 import {useListeningQuery} from 'sanity-plugin-utils'
 
 import DocumentPreview from './DocumentPreview'

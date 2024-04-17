@@ -1,5 +1,5 @@
 import {Card, Spinner} from '@sanity/ui'
-import React, {useEffect, useMemo} from 'react'
+import {useEffect, useMemo} from 'react'
 import {Preview, useEditState, useSchema, useValidationStatus} from 'sanity'
 
 type DocumentCheckProps = {

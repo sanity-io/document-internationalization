@@ -169,7 +169,7 @@ defineField({
   hidden: true,
 }),
 
-// Nested value path name are also possible E.g:
+// Nested value paths name are also possible e.g:
 {
   name: 'option'
   type: 'object',

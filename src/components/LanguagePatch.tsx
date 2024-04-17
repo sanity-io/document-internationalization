@@ -1,9 +1,9 @@
 import {EditIcon} from '@sanity/icons'
 import {Badge, Box, Button, Flex, Text, useToast} from '@sanity/ui'
 import {useCallback} from 'react'
-import {SanityDocument, useClient} from 'sanity'
+import {type SanityDocument, useClient} from 'sanity'
 
-import {Language} from '../types'
+import type {Language} from '../types'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 
 type LanguagePatchProps = {

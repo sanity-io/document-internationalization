@@ -1,5 +1,5 @@
 import get from 'just-safe-get'
-import {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
+import type {DocumentBadgeDescription, DocumentBadgeProps} from 'sanity'
 
 import {useDocumentInternationalizationContext} from '../components/DocumentInternationalizationContext'
 

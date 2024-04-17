@@ -11,11 +11,11 @@ import {
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import get from 'just-safe-get'
-import {FormEvent, useCallback, useMemo, useState} from 'react'
+import {type FormEvent, useCallback, useMemo, useState} from 'react'
 import {useEditState} from 'sanity'
 
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
-import {DocumentInternationalizationMenuProps} from '../types'
+import type {DocumentInternationalizationMenuProps} from '../types'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
@@ -204,6 +204,7 @@ export function DocumentInternationalizationMenu(
 
   return (
     <Popover
+      animate
       constrainSize
       content={content}
       open={open}

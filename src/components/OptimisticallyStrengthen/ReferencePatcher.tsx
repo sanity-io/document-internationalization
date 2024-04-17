@@ -1,9 +1,9 @@
 import {useEffect} from 'react'
 import {PatchEvent, unset, useClient, useEditState} from 'sanity'
-import {useDocumentPane} from 'sanity/desk'
+import {useDocumentPane} from 'sanity/structure'
 
 import {API_VERSION} from '../../constants'
-import {TranslationReference} from '../../types'
+import type {TranslationReference} from '../../types'
 
 type ReferencePatcherProps = {
   translation: TranslationReference

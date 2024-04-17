@@ -1,4 +1,4 @@
-import {PluginConfigContext} from './types'
+import type {PluginConfigContext} from './types'
 
 export const METADATA_SCHEMA_NAME = `translation.metadata`
 export const TRANSLATIONS_ARRAY_NAME = `translations`

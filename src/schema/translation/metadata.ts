@@ -2,8 +2,8 @@ import {TranslateIcon} from '@sanity/icons'
 import {
   defineField,
   defineType,
-  DocumentDefinition,
-  FieldDefinition,
+  type DocumentDefinition,
+  type FieldDefinition,
 } from 'sanity'
 
 import {METADATA_SCHEMA_NAME, TRANSLATIONS_ARRAY_NAME} from '../../constants'
@@ -28,8 +28,6 @@ export default (
         description:
           'Optional: Used to filter the reference fields above so all translations share the same types.',
         type: 'array',
-        // For some reason TS dislikes this line because of the DocumentDefinition return type
-        // @ts-expect-error
         of: [{type: 'string'}],
         options: {list: schemaTypes},
         readOnly: ({value}) => Boolean(value),

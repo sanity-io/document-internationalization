@@ -5,6 +5,28 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.0](https://github.com/sanity-io/document-internationalization/compare/v2.1.2...v3.0.0) (2024-04-09)
+
+### ⚠ BREAKING CHANGES
+
+- add strict ESM support
+
+### Features
+
+- add strict ESM support ([f8ed232](https://github.com/sanity-io/document-internationalization/commit/f8ed23271e401ddf6079ff6090ff1e34165c5ff8))
+
+## [2.1.2](https://github.com/sanity-io/document-internationalization/compare/v2.1.1...v2.1.2) (2024-04-09)
+
+### Bug Fixes
+
+- add provenance ([e31635f](https://github.com/sanity-io/document-internationalization/commit/e31635fa09f9a7dda3141f6debb225fa4ba6b226))
+
+## [2.1.1](https://github.com/sanity-io/document-internationalization/compare/v2.1.0...v2.1.1) (2024-04-04)
+
+### Bug Fixes
+
+- reinit languages on workspace switch ([d1102cb](https://github.com/sanity-io/document-internationalization/commit/d1102cb1f04565fadfac98816d24bb2d571b3f4b))
+
 ## [2.1.0](https://github.com/sanity-io/document-internationalization/compare/v2.0.3...v2.1.0) (2024-02-26)
 
 ### Features

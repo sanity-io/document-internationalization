@@ -1,11 +1,11 @@
 import {TrashIcon} from '@sanity/icons'
-import {ButtonTone, useToast} from '@sanity/ui'
+import {type ButtonTone, useToast} from '@sanity/ui'
 import {useCallback, useMemo, useState} from 'react'
 import {
-  DocumentActionComponent,
-  KeyedObject,
-  Reference,
-  TypedObject,
+  type DocumentActionComponent,
+  type KeyedObject,
+  type Reference,
+  type TypedObject,
   useClient,
 } from 'sanity'
 
