@@ -3,8 +3,14 @@ import {CopyIcon} from '@sanity/icons'
 import {useDocumentOperation} from 'sanity'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import type {DocumentActionComponent, DocumentActionDescription} from 'sanity'
+import type {
+  DocumentActionComponent,
+  DocumentActionDescription,
+  Reference,
+  SanityDocument,
+} from 'sanity'
 import {
+  ApplyConfigResult,
   buildDocId,
   getBaseIdFromId,
   getLanguageFromDocument,
@@ -21,6 +27,27 @@ import {useConfig} from '../hooks'
 
 const DISABLED_REASON_TITLE = {
   NOTHING_TO_DUPLICATE: "This document doesn't yet exist so there's nothing to duplicate",
+}
+
+function buildDupeDocument(
+  base: SanityDocument,
+  config: ApplyConfigResult,
+  dupeId: string,
+  type: string
+): SanityDocument {
+  const referencesField = config.fieldNames.references
+  const baseReferences = base[referencesField] as Reference[]
+  const dupeReferences = baseReferences.map((ref) => ({
+    ...ref,
+    _ref: buildDocId(config, dupeId, ref._key),
+  }))
+
+  return {
+    ...base,
+    [referencesField]: dupeReferences,
+    _id: dupeId,
+    _type: type,
+  }
 }
 
 export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentActionComponent {
@@ -43,16 +70,27 @@ export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentAction
         const dupeId = uuid()
         const translations = await getTranslationsFor(client, config, baseDocumentId)
         const transaction = client.transaction()
-        transaction.create({
-          ...(draft ?? published),
-          _id: dupeId,
-          _type: type,
-        })
+        const baseDoc = draft ?? published
+        if (!baseDoc) throw new Error('no base doc defined')
+
+        transaction.create(
+          buildDupeDocument(
+            {
+              ...baseDoc,
+              _id: dupeId,
+              _type: type,
+            },
+            config,
+            dupeId,
+            type
+          )
+        )
         translations.forEach((t) => {
           const isDraft = t._id.startsWith('drafts.')
           const newId = buildDocId(config, dupeId, getLanguageFromDocument(t, config))
           transaction.create({
             ...t,
+            [config.fieldNames.baseReference]: {_ref: dupeId, _type: 'reference', _key: uuid()},
             _id: isDraft ? `drafts.${newId}` : newId,
           })
         })
