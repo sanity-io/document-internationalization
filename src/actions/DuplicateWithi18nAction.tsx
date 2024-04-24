@@ -90,7 +90,7 @@ export function createDuplicateAction(pluginConfig: Ti18nConfig): DocumentAction
           const newId = buildDocId(config, dupeId, getLanguageFromDocument(t, config))
           transaction.create({
             ...t,
-            [config.fieldNames.baseReference]: dupeId,
+            [config.fieldNames.baseReference]: {_ref: dupeId, _type: 'reference', _key: uuid()},
             _id: isDraft ? `drafts.${newId}` : newId,
           })
         })
