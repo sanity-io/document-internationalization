@@ -144,6 +144,10 @@ export const createConfig({
       ],
 
       // Optional
+      // Opt-out of static or parameterized initial value template generation
+      initialValueTemplates: false // defaults to true, also accepts "static", "parameterized" for just one or the other
+
+      // Optional
       // Define API Version for all queries
       // https://www.sanity.io/docs/api-versioning
       apiVersion: '2023-05-22'
