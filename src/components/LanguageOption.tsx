@@ -10,7 +10,7 @@ import {
   useToast,
 } from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
-import {useCallback} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {type ObjectSchemaType, type SanityDocument, useClient} from 'sanity'
 
 import {METADATA_SCHEMA_NAME} from '../constants'
@@ -43,8 +43,17 @@ export default function LanguageOption(props: LanguageOptionProps) {
     metadata,
     metadataId,
   } = props
+  /* When the user has clicked the Create button, the button should be disabled
+   * to prevent double-clicks from firing onCreate twice. This creates duplicate
+   * translation metadata entries, which editors will not be able to delete */
+  const [userHasClicked, setUserHasClicked] = useState(false)
   const disabled =
-    props.disabled || current || !source || !sourceLanguageId || !metadataId
+    props.disabled ||
+    userHasClicked ||
+    current ||
+    !source ||
+    !sourceLanguageId ||
+    !metadataId
   const translation: TranslationReference | undefined = metadata?.translations
     .length
     ? metadata.translations.find((t) => t._key === language.id)
@@ -56,6 +65,14 @@ export default function LanguageOption(props: LanguageOptionProps) {
 
   const open = useOpenInNewPane(translation?.value?._ref, schemaType.name)
   const handleOpen = useCallback(() => open(), [open])
+
+  /* Once a translation has been created, reset the userHasClicked state to false
+   * so they can click on it to navigate to the translation. If a translation already
+   * existed when this component was mounted, this will have no effect. */
+  const hasTranslation = Boolean(translation)
+  useEffect(() => {
+    setUserHasClicked(false)
+  }, [hasTranslation])
 
   const handleCreate = useCallback(async () => {
     if (!source) {
@@ -69,6 +86,8 @@ export default function LanguageOption(props: LanguageOptionProps) {
     if (!metadataId) {
       throw new Error(`Cannot create translation without a metadata ID`)
     }
+    /* Disable the create button while this request is pending */
+    setUserHasClicked(true)
 
     const transaction = client.transaction()
 
@@ -137,6 +156,9 @@ export default function LanguageOption(props: LanguageOptionProps) {
       })
       .catch((err) => {
         console.error(err)
+
+        /* Re-enable the create button if there was an error */
+        setUserHasClicked(false)
 
         return toast.push({
           status: 'error',
