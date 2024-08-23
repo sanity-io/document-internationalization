@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/sanity-io/document-internationalization/compare/v3.0.0...v3.0.1) (2024-08-23)
+
+### Bug Fixes
+
+- disable LanguageOption button double-clicks ([#190](https://github.com/sanity-io/document-internationalization/issues/190)) ([3fdaff6](https://github.com/sanity-io/document-internationalization/commit/3fdaff64af1df2879e7bf85f00ef895462359549))
+
 ## [3.0.0](https://github.com/sanity-io/document-internationalization/compare/v2.1.2...v3.0.0) (2024-04-09)
 
 ### ⚠ BREAKING CHANGES

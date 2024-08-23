@@ -1,6 +1,6 @@
 {
   "name": "@sanity/document-internationalization",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Create unique translations of a document based on its language, joined by a shared reference document.",
   "keywords": [
     "sanity",
