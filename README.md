@@ -11,6 +11,7 @@ All new rewrite exclusively for Sanity Studio v3
     - [Basic configuration](#basic-configuration)
     - [Advanced configuration](#advanced-configuration)
     - [Language field](#language-field)
+    - [Excluding fields](#excluding-fields)
   - [Querying translations](#querying-translations)
     - [Querying with GROQ](#querying-with-groq)
     - [Querying with GraphQL](#querying-with-graphql)
@@ -118,6 +119,7 @@ export const createConfig({
       ],
       // ...or a function that takes the client and returns a promise of an array of supported languages
       // MUST return an "id" and "title" as strings
+      // Note: Async language configuration cannot create templates for new documents
       // supportedLanguages: (client) => client.fetch(`*[_type == "language"]{id, title}`),
 
       // Required
