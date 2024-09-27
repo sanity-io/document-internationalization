@@ -161,7 +161,7 @@ export const createConfig({
 
 ### Language field
 
-The schema types that use document internationalization must also have a `string` field type with the same name configured in the `languageField` setting. Unless you want content creators to be able to change the language of a document, you may hide or disable this field since the plugin will handle writing patches to it.
+The schema types that use document internationalization must also have a `string` field type with the same path name configured in the `languageField` setting. Unless you want content creators to be able to change the language of a document, you may hide or disable this field since the plugin will handle writing patches to it.
 
 ```ts
 // ./schema/lesson.ts
@@ -173,7 +173,44 @@ defineField({
   type: 'string',
   readOnly: true,
   hidden: true,
-})
+}),
+
+// Nested value paths name are also possible e.g:
+{
+  name: 'option'
+  type: 'object',
+  fields: [
+    // ...other fields
+    // languageField: 'option.language'
+    defineField({
+      name: 'language',
+      type: 'string',
+      readOnly: true,
+      hidden: true,
+    }),
+  ],
+},
+
+// or in array...
+{
+  name: 'options',
+  type: 'array',
+  of: [
+    name: 'option'
+    type: 'object',
+    fields: [
+      // languageField: 'options[0].language'
+      defineField({
+        name: 'language',
+        type: 'string',
+        readOnly: true,
+        hidden: true,
+      }), 
+       // ...other fields
+    ],
+  ],
+}
+
 ```
 
 ### Excluding fields
