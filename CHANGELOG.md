@@ -5,6 +5,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.0](https://github.com/sanity-io/document-internationalization/compare/v3.0.1...v3.1.0) (2024-09-27)
+
+### Features
+
+- manage without translations ([578a9a0](https://github.com/sanity-io/document-internationalization/commit/578a9a023129f4be91250b0dcd443afe3492dd0a))
+- manage without translations ([#192](https://github.com/sanity-io/document-internationalization/issues/192)) ([bf301c5](https://github.com/sanity-io/document-internationalization/commit/bf301c5a2d1a97a0b7ca23728744b27583151ed4))
+
 ## [3.0.1](https://github.com/sanity-io/document-internationalization/compare/v3.0.0...v3.0.1) (2024-08-23)
 
 ### Bug Fixes
