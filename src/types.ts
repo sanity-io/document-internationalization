@@ -25,6 +25,7 @@ export type PluginConfig = {
   bulkPublish?: boolean
   metadataFields?: FieldDefinition[]
   apiVersion?: string
+  allowCreateMetaDoc?: boolean
 }
 
 // Context version of config

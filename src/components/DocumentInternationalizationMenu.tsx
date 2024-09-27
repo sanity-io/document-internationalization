@@ -95,7 +95,13 @@ export function DocumentInternationalizationMenu(
         </Card>
       ) : (
         <Stack space={1}>
-          <LanguageManage id={metadata?._id} />
+          <LanguageManage
+            id={metadata?._id}
+            documentId={documentId}
+            metadataId={metadataId}
+            schemaType={schemaType}
+            sourceLanguageId={sourceLanguageId}
+          />
           {supportedLanguages.length > 4 ? (
             <TextInput
               onChange={handleQuery}
