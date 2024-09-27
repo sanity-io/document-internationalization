@@ -11,4 +11,5 @@ export const DEFAULT_CONFIG: PluginConfigContext = {
   bulkPublish: false,
   metadataFields: [],
   apiVersion: API_VERSION,
+  allowCreateMetaDoc: false,
 }

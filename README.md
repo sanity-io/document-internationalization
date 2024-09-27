@@ -148,7 +148,12 @@ export const createConfig({
       // Optional
       // Define API Version for all queries
       // https://www.sanity.io/docs/api-versioning
-      apiVersion: '2023-05-22'
+      apiVersion: '2023-05-22',
+
+      // Optional
+      // Enable "manage translations" button without creating a translated version. Helpful if you have
+      // pre-existing documents that you need to tie together through the metadata document
+      allowCreateMetaDoc: true // defaults to false
     })
   ]
 })
