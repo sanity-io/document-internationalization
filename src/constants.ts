@@ -7,7 +7,7 @@ export const DEFAULT_CONFIG: PluginConfigContext = {
   supportedLanguages: [],
   schemaTypes: [],
   languageField: `language`,
-  weakReferences: false,
+  weakReferences: true,
   bulkPublish: false,
   metadataFields: [],
   apiVersion: API_VERSION,
