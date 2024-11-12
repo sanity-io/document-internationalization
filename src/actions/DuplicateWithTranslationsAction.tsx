@@ -1,4 +1,4 @@
-import {CopyIcon} from '@sanity/icons'
+import {CopyIcon, TranslateIcon} from '@sanity/icons'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback, useMemo, useState} from 'react'
@@ -21,10 +21,10 @@ import {useRouter} from 'sanity/router'
 import {structureLocaleNamespace} from 'sanity/structure'
 
 import {METADATA_SCHEMA_NAME, TRANSLATIONS_ARRAY_NAME} from '../constants'
+import {documenti18nLocaleNamespace} from '../i18n'
 
 const DISABLED_REASON_KEY = {
-  // TODO: add localization
-  I18N_METADATA_NOT_FOUND: 'This document does not have i18n metadata',
+  METADATA_NOT_FOUND: 'action.duplicate.disabled.missing-metadata',
   NOTHING_TO_DUPLICATE: 'action.duplicate.disabled.nothing-to-duplicate',
   NOT_READY: 'action.duplicate.disabled.not-ready',
 }
@@ -46,7 +46,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
   const metadataDocument = useI18nMetadata(id)
   const client = useClient(DEFAULT_STUDIO_CLIENT_OPTIONS)
   const toast = useToast()
-  const {t} = useTranslation(structureLocaleNamespace)
+  const {t: structureT} = useTranslation(structureLocaleNamespace)
+  const {t: documenti18nT} = useTranslation(documenti18nLocaleNamespace)
   const currentUser = useCurrentUser()
 
   const handle = useCallback(async () => {
@@ -174,7 +175,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: t('action.duplicate.label'),
+        label: documenti18nT('action.duplicate.label'),
         title: (
           <InsufficientPermissionsMessage
             context="duplicate-document"
@@ -186,34 +187,35 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
     if (!metadataDocument) {
       return {
-        icon: CopyIcon,
+        icon: TranslateIcon,
         disabled: true,
-        label: t('action.duplicate.label'),
-        title: DISABLED_REASON_KEY.I18N_METADATA_NOT_FOUND,
+        label: documenti18nT('action.duplicate.label'),
+        title: documenti18nT(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
       }
     }
 
     return {
-      icon: CopyIcon,
+      icon: TranslateIcon,
       disabled:
         isDuplicating || Boolean(duplicate.disabled) || isPermissionsLoading,
       label: isDuplicating
-        ? t('action.duplicate.running.label')
-        : t('action.duplicate.label'),
+        ? structureT('action.duplicate.running.label')
+        : documenti18nT('action.duplicate.label'),
       title: duplicate.disabled
-        ? t(DISABLED_REASON_KEY[duplicate.disabled])
+        ? structureT(DISABLED_REASON_KEY[duplicate.disabled])
         : '',
       onHandle: handle,
     }
   }, [
     currentUser,
+    documenti18nT,
     duplicate.disabled,
     handle,
     isDuplicating,
     isPermissionsLoading,
     metadataDocument,
     permissions?.granted,
-    t,
+    structureT,
   ])
 }
 
