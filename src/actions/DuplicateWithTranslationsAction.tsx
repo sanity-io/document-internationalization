@@ -2,7 +2,6 @@ import {CopyIcon, TranslateIcon} from '@sanity/icons'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback, useMemo, useState} from 'react'
-import {useObservable} from 'react-rx'
 import {filter, firstValueFrom} from 'rxjs'
 import {
   DEFAULT_STUDIO_CLIENT_OPTIONS,
@@ -21,10 +20,12 @@ import {useRouter} from 'sanity/router'
 import {structureLocaleNamespace} from 'sanity/structure'
 
 import {METADATA_SCHEMA_NAME, TRANSLATIONS_ARRAY_NAME} from '../constants'
+import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import {documenti18nLocaleNamespace} from '../i18n'
 
 const DISABLED_REASON_KEY = {
   METADATA_NOT_FOUND: 'action.duplicate.disabled.missing-metadata',
+  MULTIPLE_METADATA: 'action.duplicate.disabled.multiple-metadata',
   NOTHING_TO_DUPLICATE: 'action.duplicate.disabled.nothing-to-duplicate',
   NOT_READY: 'action.duplicate.disabled.not-ready',
 }
@@ -43,7 +44,11 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     type,
     permission: 'duplicate',
   })
-  const metadataDocument = useI18nMetadata(id)
+  const {data, loading: isMetadataDocumentLoading} = useTranslationMetadata(id)
+  const hasOneMetadataDocument = useMemo(() => {
+    return Array.isArray(data) && data.length <= 1
+  }, [data])
+  const metadataDocument = Array.isArray(data) && data.length ? data[0] : null
   const client = useClient(DEFAULT_STUDIO_CLIENT_OPTIONS)
   const toast = useToast()
   const {t: structureT} = useTranslation(structureLocaleNamespace)
@@ -62,10 +67,16 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       const translations = new Map<string, Id>()
       for (const translation of metadataDocument[TRANSLATIONS_ARRAY_NAME]) {
         const dupeId = uuid()
+        const translationLocale = translation._key
+        const translationId = translation.value?._ref
+
+        if (!translationId) {
+          throw new Error('Translation document not found')
+        }
 
         const {duplicate: duplicateTranslation} = await firstValueFrom(
           documentStore.pair
-            .editOperations(translation.documentId, type)
+            .editOperations(translationId, type)
             .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
         )
 
@@ -75,72 +86,70 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
         const duplicateTranslationSuccess = firstValueFrom(
           documentStore.pair
-            .operationEvents(translation.documentId, type)
+            .operationEvents(translationId, type)
             .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
         )
 
         duplicateTranslation.execute(dupeId)
         await duplicateTranslationSuccess
 
-        translations.set(translation.locale, dupeId)
+        translations.set(translationLocale, dupeId)
       }
+
+      // 2. Duplicate the metadata document
+      const {duplicate: duplicateMetadata} = await firstValueFrom(
+        documentStore.pair
+          .editOperations(metadataDocument._id, METADATA_SCHEMA_NAME)
+          .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
+      )
+
+      if (duplicateMetadata.disabled) {
+        throw new Error('Cannot duplicate document')
+      }
+
+      const duplicateMetadataSuccess = firstValueFrom(
+        documentStore.pair
+          .operationEvents(metadataDocument._id, METADATA_SCHEMA_NAME)
+          .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
+      )
 
       const dupeId = uuid()
 
-      {
-        // 2. Duplicate the metadata document
-        const {duplicate: duplicateMetadata} = await firstValueFrom(
-          documentStore.pair
-            .editOperations(metadataDocument._id, METADATA_SCHEMA_NAME)
-            .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
-        )
-
-        if (duplicateMetadata.disabled) {
-          throw new Error('Cannot duplicate document')
-        }
-
-        const duplicateMetadataSuccess = firstValueFrom(
-          documentStore.pair
-            .operationEvents(metadataDocument._id, METADATA_SCHEMA_NAME)
-            .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
-        )
-        duplicateMetadata.execute(dupeId)
-        await duplicateMetadataSuccess
-      }
+      duplicateMetadata.execute(dupeId)
+      await duplicateMetadataSuccess
 
       // 3. Patch the duplicated metadata document to update the references
       // TODO: use document store
-      {
-        // const { patch } = await firstValueFrom(
-        //   documentStore.pair
-        //     .editOperations(dupeId, METADATA_SCHEMA_NAME)
-        //     .pipe(filter((op) => op.patch.disabled !== "NOT_READY")),
-        // );
+      // const { patch } = await firstValueFrom(
+      //   documentStore.pair
+      //     .editOperations(dupeId, METADATA_SCHEMA_NAME)
+      //     .pipe(filter((op) => op.patch.disabled !== "NOT_READY")),
+      // );
 
-        // if (patch.disabled) {
-        //   throw new Error("Cannot patch document");
-        // }
+      // if (patch.disabled) {
+      //   throw new Error("Cannot patch document");
+      // }
 
-        // const patchSuccess = firstValueFrom(
-        //   documentStore.pair
-        //     .operationEvents(dupeId, METADATA_SCHEMA_NAME)
-        //     .pipe(filter((e) => e.op === "patch" && e.type === "success")),
-        // );
+      // const patchSuccess = firstValueFrom(
+      //   documentStore.pair
+      //     .operationEvents(dupeId, METADATA_SCHEMA_NAME)
+      //     .pipe(filter((e) => e.op === "patch" && e.type === "success")),
+      // );
 
-        const patch: PatchOperations = {
-          set: Object.fromEntries(
-            Array.from(translations.entries()).map(([locale, documentId]) => [
-              `${TRANSLATIONS_ARRAY_NAME}[_key == "${locale}"].value._ref`,
-              documentId,
-            ])
-          ),
-        }
-
-        // patch.execute(patches);
-        // await patchSuccess;
-        await client.transaction().patch(dupeId, patch).commit()
+      const patch: PatchOperations = {
+        set: Object.fromEntries(
+          Array.from(translations.entries()).map(([locale, documentId]) => [
+            `${TRANSLATIONS_ARRAY_NAME}[_key == "${locale}"].value._ref`,
+            documentId,
+          ])
+        ),
       }
 
+      // patch.execute(patches);
+      // await patchSuccess;
+      await client.transaction().patch(dupeId, patch).commit()
+
+      // 4. Navigate to the duplicated document
       navigateIntent('edit', {
         id: Array.from(translations.values()).at(0),
         type,
@@ -185,7 +194,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       }
     }
 
-    if (!metadataDocument) {
+    if (!isMetadataDocumentLoading && !metadataDocument) {
       return {
         icon: TranslateIcon,
         disabled: true,
@@ -194,10 +203,22 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       }
     }
 
+    if (!hasOneMetadataDocument) {
+      return {
+        icon: TranslateIcon,
+        disabled: true,
+        label: documenti18nT('action.duplicate.label'),
+        title: documenti18nT(DISABLED_REASON_KEY.MULTIPLE_METADATA),
+      }
+    }
+
     return {
       icon: TranslateIcon,
       disabled:
-        isDuplicating || Boolean(duplicate.disabled) || isPermissionsLoading,
+        isDuplicating ||
+        Boolean(duplicate.disabled) ||
+        isPermissionsLoading ||
+        isMetadataDocumentLoading,
       label: isDuplicating
         ? structureT('action.duplicate.running.label')
         : documenti18nT('action.duplicate.label'),
@@ -211,7 +232,9 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     documenti18nT,
     duplicate.disabled,
     handle,
+    hasOneMetadataDocument,
     isDuplicating,
+    isMetadataDocumentLoading,
     isPermissionsLoading,
     metadataDocument,
     permissions?.granted,
@@ -222,32 +245,3 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 DuplicateWithTranslationsAction.action = 'duplicate'
 // @ts-expect-error `displayName` is used by React DevTools
 DuplicateWithTranslationsAction.displayName = 'DuplicateWithTranslationsAction'
-
-function useI18nMetadata(
-  id: Id
-): {_id: Id; translations: {locale: string; documentId: Id}[]} | null {
-  const documentStore = useDocumentStore()
-  const metadataDocument = useObservable(
-    useMemo(
-      () =>
-        documentStore
-          .listenQuery(
-            // `*[_type == $type && references($id)][0]._id`,
-            `*[_type == $type && references($id)][0]{
-        _id,
-        ${TRANSLATIONS_ARRAY_NAME}[]{
-          "locale": _key,
-          "documentId": value._ref,
-        }
-      }`,
-            {id, type: METADATA_SCHEMA_NAME},
-            {tag: 'use-i18n-metadata'}
-          )
-          .pipe(),
-      [documentStore, id]
-    ),
-    null
-  )
-
-  return metadataDocument
-}
