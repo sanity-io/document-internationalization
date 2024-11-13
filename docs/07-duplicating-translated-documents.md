@@ -16,6 +16,7 @@ export default defineConfig({
   // ...all other config
   document: {
     actions(prev, { schemaType }) {
+      // these will be the schema types you're passing to the plugin configuration
       return schemaTypes.includes(schemaType)
         ? prev.map((action) =>
             action.action === "duplicate"
