@@ -1,4 +1,4 @@
-import {CopyIcon, TranslateIcon} from '@sanity/icons'
+import {CopyIcon} from '@sanity/icons'
 import {useToast} from '@sanity/ui'
 import {uuid} from '@sanity/uuid'
 import {useCallback, useMemo, useState} from 'react'
@@ -196,7 +196,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
     if (!isMetadataDocumentLoading && !metadataDocument) {
       return {
-        icon: TranslateIcon,
+        icon: CopyIcon,
         disabled: true,
         label: documenti18nT('action.duplicate.label'),
         title: documenti18nT(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
@@ -205,7 +205,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
     if (!hasOneMetadataDocument) {
       return {
-        icon: TranslateIcon,
+        icon: CopyIcon,
         disabled: true,
         label: documenti18nT('action.duplicate.label'),
         title: documenti18nT(DISABLED_REASON_KEY.MULTIPLE_METADATA),
@@ -213,7 +213,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     }
 
     return {
-      icon: TranslateIcon,
+      icon: CopyIcon,
       disabled:
         isDuplicating ||
         Boolean(duplicate.disabled) ||
