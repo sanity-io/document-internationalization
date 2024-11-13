@@ -51,8 +51,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
   const metadataDocument = Array.isArray(data) && data.length ? data[0] : null
   const client = useClient(DEFAULT_STUDIO_CLIENT_OPTIONS)
   const toast = useToast()
-  const {t: structureT} = useTranslation(structureLocaleNamespace)
-  const {t: documenti18nT} = useTranslation(documenti18nLocaleNamespace)
+  const {t: tStructure} = useTranslation(structureLocaleNamespace)
+  const {t: tPlugin} = useTranslation(documenti18nLocaleNamespace)
   const currentUser = useCurrentUser()
 
   const handle = useCallback(async () => {
@@ -184,7 +184,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: documenti18nT('action.duplicate.label'),
+        label: tPlugin('action.duplicate.label'),
         title: (
           <InsufficientPermissionsMessage
             context="duplicate-document"
@@ -198,8 +198,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: documenti18nT('action.duplicate.label'),
-        title: documenti18nT(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
+        label: tPlugin('action.duplicate.label'),
+        title: tPlugin(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
       }
     }
 
@@ -207,8 +207,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: documenti18nT('action.duplicate.label'),
-        title: documenti18nT(DISABLED_REASON_KEY.MULTIPLE_METADATA),
+        label: tPlugin('action.duplicate.label'),
+        title: tPlugin(DISABLED_REASON_KEY.MULTIPLE_METADATA),
       }
     }
 
@@ -220,16 +220,16 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
         isPermissionsLoading ||
         isMetadataDocumentLoading,
       label: isDuplicating
-        ? structureT('action.duplicate.running.label')
-        : documenti18nT('action.duplicate.label'),
+        ? tStructure('action.duplicate.running.label')
+        : tPlugin('action.duplicate.label'),
       title: duplicate.disabled
-        ? structureT(DISABLED_REASON_KEY[duplicate.disabled])
+        ? tStructure(DISABLED_REASON_KEY[duplicate.disabled])
         : '',
       onHandle: handle,
     }
   }, [
     currentUser,
-    documenti18nT,
+    tPlugin,
     duplicate.disabled,
     handle,
     hasOneMetadataDocument,
@@ -238,7 +238,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     isPermissionsLoading,
     metadataDocument,
     permissions?.granted,
-    structureT,
+    tStructure,
   ])
 }
 
