@@ -51,8 +51,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
   const metadataDocument = Array.isArray(data) && data.length ? data[0] : null
   const client = useClient(DEFAULT_STUDIO_CLIENT_OPTIONS)
   const toast = useToast()
-  const {t: tStructure} = useTranslation(structureLocaleNamespace)
-  const {t: tPlugin} = useTranslation(documenti18nLocaleNamespace)
+  const {t} = useTranslation(structureLocaleNamespace)
+  const {t: u} = useTranslation(documenti18nLocaleNamespace)
   const currentUser = useCurrentUser()
 
   const handle = useCallback(async () => {
@@ -120,21 +120,27 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
       // 3. Patch the duplicated metadata document to update the references
       // TODO: use document store
-      // const { patch } = await firstValueFrom(
+      // const {patch: patchMetadata} = await firstValueFrom(
       //   documentStore.pair
       //     .editOperations(dupeId, METADATA_SCHEMA_NAME)
-      //     .pipe(filter((op) => op.patch.disabled !== "NOT_READY")),
-      // );
+      //     .pipe(filter((op) => op.patch.disabled !== 'NOT_READY'))
+      // )
 
-      // if (patch.disabled) {
-      //   throw new Error("Cannot patch document");
+      // if (patchMetadata.disabled) {
+      //   throw new Error('Cannot patch document')
       // }
 
-      // const patchSuccess = firstValueFrom(
+      // await firstValueFrom(
+      //   documentStore.pair
+      //     .consistencyStatus(dupeId, METADATA_SCHEMA_NAME)
+      //     .pipe(filter((isConsistant) => isConsistant))
+      // )
+
+      // const patchMetadataSuccess = firstValueFrom(
       //   documentStore.pair
       //     .operationEvents(dupeId, METADATA_SCHEMA_NAME)
-      //     .pipe(filter((e) => e.op === "patch" && e.type === "success")),
-      // );
+      //     .pipe(filter((e) => e.op === 'patch' && e.type === 'success'))
+      // )
 
       const patch: PatchOperations = {
         set: Object.fromEntries(
@@ -145,8 +151,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
         ),
       }
 
-      // patch.execute(patches);
-      // await patchSuccess;
+      // patchMetadata.execute([patch])
+      // await patchMetadataSuccess
       await client.transaction().patch(dupeId, patch).commit()
 
       // 4. Navigate to the duplicated document
@@ -184,7 +190,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: tPlugin('action.duplicate.label'),
+        label: u('action.duplicate.label'),
         title: (
           <InsufficientPermissionsMessage
             context="duplicate-document"
@@ -198,8 +204,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: tPlugin('action.duplicate.label'),
-        title: tPlugin(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
+        label: u('action.duplicate.label'),
+        title: u(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
       }
     }
 
@@ -207,8 +213,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: tPlugin('action.duplicate.label'),
-        title: tPlugin(DISABLED_REASON_KEY.MULTIPLE_METADATA),
+        label: u('action.duplicate.label'),
+        title: u(DISABLED_REASON_KEY.MULTIPLE_METADATA),
       }
     }
 
@@ -220,16 +226,16 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
         isPermissionsLoading ||
         isMetadataDocumentLoading,
       label: isDuplicating
-        ? tStructure('action.duplicate.running.label')
-        : tPlugin('action.duplicate.label'),
+        ? t('action.duplicate.running.label')
+        : u('action.duplicate.label'),
       title: duplicate.disabled
-        ? tStructure(DISABLED_REASON_KEY[duplicate.disabled])
+        ? t(DISABLED_REASON_KEY[duplicate.disabled])
         : '',
       onHandle: handle,
     }
   }, [
     currentUser,
-    tPlugin,
+    u,
     duplicate.disabled,
     handle,
     hasOneMetadataDocument,
@@ -238,7 +244,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     isPermissionsLoading,
     metadataDocument,
     permissions?.granted,
-    tStructure,
+    t,
   ])
 }
 
