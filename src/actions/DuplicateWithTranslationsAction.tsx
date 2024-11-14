@@ -65,36 +65,38 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 
       // 1. Duplicate the document and its localized versions
       const translations = new Map<string, Id>()
-      for (const translation of metadataDocument[TRANSLATIONS_ARRAY_NAME]) {
-        const dupeId = uuid()
-        const translationLocale = translation._key
-        const translationId = translation.value?._ref
+      await Promise.all(
+        metadataDocument[TRANSLATIONS_ARRAY_NAME].map(async (translation) => {
+          const dupeId = uuid()
+          const locale = translation._key
+          const docId = translation.value?._ref
 
-        if (!translationId) {
-          throw new Error('Translation document not found')
-        }
+          if (!docId) {
+            throw new Error('Translation document not found')
+          }
 
-        const {duplicate: duplicateTranslation} = await firstValueFrom(
-          documentStore.pair
-            .editOperations(translationId, type)
-            .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
-        )
+          const {duplicate: duplicateTranslation} = await firstValueFrom(
+            documentStore.pair
+              .editOperations(docId, type)
+              .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
+          )
 
-        if (duplicateTranslation.disabled) {
-          throw new Error('Cannot duplicate document')
-        }
+          if (duplicateTranslation.disabled) {
+            throw new Error('Cannot duplicate document')
+          }
 
-        const duplicateTranslationSuccess = firstValueFrom(
-          documentStore.pair
-            .operationEvents(translationId, type)
-            .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
-        )
+          const duplicateTranslationSuccess = firstValueFrom(
+            documentStore.pair
+              .operationEvents(docId, type)
+              .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
+          )
 
-        duplicateTranslation.execute(dupeId)
-        await duplicateTranslationSuccess
+          duplicateTranslation.execute(dupeId)
+          await duplicateTranslationSuccess
 
-        translations.set(translationLocale, dupeId)
-      }
+          translations.set(locale, dupeId)
+        })
+      )
 
       // 2. Duplicate the metadata document
       const {duplicate: duplicateMetadata} = await firstValueFrom(
