@@ -51,8 +51,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
   const metadataDocument = Array.isArray(data) && data.length ? data[0] : null
   const client = useClient(DEFAULT_STUDIO_CLIENT_OPTIONS)
   const toast = useToast()
-  const {t} = useTranslation(structureLocaleNamespace)
-  const {t: u} = useTranslation(documenti18nLocaleNamespace)
+  const {t: s} = useTranslation(structureLocaleNamespace)
+  const {t: d} = useTranslation(documenti18nLocaleNamespace)
   const currentUser = useCurrentUser()
 
   const handle = useCallback(async () => {
@@ -90,7 +90,6 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
               .operationEvents(docId, type)
               .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
           )
-
           duplicateTranslation.execute(dupeId)
           await duplicateTranslationSuccess
 
@@ -114,9 +113,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
           .operationEvents(metadataDocument._id, METADATA_SCHEMA_NAME)
           .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
       )
-
       const dupeId = uuid()
-
       duplicateMetadata.execute(dupeId)
       await duplicateMetadataSuccess
 
@@ -192,7 +189,7 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: u('action.duplicate.label'),
+        label: d('action.duplicate.label'),
         title: (
           <InsufficientPermissionsMessage
             context="duplicate-document"
@@ -206,8 +203,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: u('action.duplicate.label'),
-        title: u(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
+        label: d('action.duplicate.label'),
+        title: d(DISABLED_REASON_KEY.METADATA_NOT_FOUND),
       }
     }
 
@@ -215,8 +212,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       return {
         icon: CopyIcon,
         disabled: true,
-        label: u('action.duplicate.label'),
-        title: u(DISABLED_REASON_KEY.MULTIPLE_METADATA),
+        label: d('action.duplicate.label'),
+        title: d(DISABLED_REASON_KEY.MULTIPLE_METADATA),
       }
     }
 
@@ -228,16 +225,15 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
         isPermissionsLoading ||
         isMetadataDocumentLoading,
       label: isDuplicating
-        ? t('action.duplicate.running.label')
-        : u('action.duplicate.label'),
+        ? s('action.duplicate.running.label')
+        : d('action.duplicate.label'),
       title: duplicate.disabled
-        ? t(DISABLED_REASON_KEY[duplicate.disabled])
+        ? s(DISABLED_REASON_KEY[duplicate.disabled])
         : '',
       onHandle: handle,
     }
   }, [
     currentUser,
-    u,
     duplicate.disabled,
     handle,
     hasOneMetadataDocument,
@@ -246,7 +242,8 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
     isPermissionsLoading,
     metadataDocument,
     permissions?.granted,
-    t,
+    s,
+    d,
   ])
 }
 
