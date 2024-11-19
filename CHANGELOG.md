@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.0](https://github.com/sanity-io/document-internationalization/compare/v3.1.0...v3.2.0) (2024-11-19)
+
+### Features
+
+- add duplicate document action ([#194](https://github.com/sanity-io/document-internationalization/issues/194)) ([087415d](https://github.com/sanity-io/document-internationalization/commit/087415dd7258c7ded77ef8e0135069fe6e584868))
+
 ## [3.1.0](https://github.com/sanity-io/document-internationalization/compare/v3.0.1...v3.1.0) (2024-09-27)
 
 ### Features
