@@ -9,6 +9,7 @@ import {DocumentInternationalizationProvider} from './components/DocumentInterna
 import {DocumentInternationalizationMenu} from './components/DocumentInternationalizationMenu'
 import OptimisticallyStrengthen from './components/OptimisticallyStrengthen'
 import {API_VERSION, DEFAULT_CONFIG, METADATA_SCHEMA_NAME} from './constants'
+import {documentInternationalizationUsEnglishLocaleBundle} from './i18n'
 import metadata from './schema/translation/metadata'
 import type {PluginConfig, TranslationReference} from './types'
 
@@ -37,6 +38,10 @@ export const documentInternationalization = definePlugin<PluginConfig>(
           layout: (props) =>
             DocumentInternationalizationProvider({...props, pluginConfig}),
         },
+      },
+
+      i18n: {
+        bundles: [documentInternationalizationUsEnglishLocaleBundle],
       },
 
       // Adds:
