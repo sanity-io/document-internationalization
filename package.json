@@ -51,6 +51,7 @@
     "@sanity/incompatible-plugin": "^1.0.4",
     "@sanity/ui": "^2.1.0",
     "@sanity/uuid": "^3.0.2",
+    "just-safe-get": "^4.2.0",
     "sanity-plugin-internationalized-array": "^2.0.0",
     "sanity-plugin-utils": "^1.6.4"
   },
