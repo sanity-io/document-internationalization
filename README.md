@@ -131,8 +131,8 @@ export const createConfig({
       languageField: `language` // defauts to "language"
 
       // Optional
-      // Keep translation.metadata references weak
-      weakReferences: true // defaults to false
+      // Keep translation.metadata references strong
+      weakReferences: false // defaults to true
 
       // Optional
       // Adds UI for publishing all translations at once. Requires access to the Scheduling API

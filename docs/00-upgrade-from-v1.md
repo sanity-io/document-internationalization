@@ -164,7 +164,7 @@ documentI18n({
     { "title": "Dutch (NL)", "id": "nl-nl" }
   ],
   // Change to `weakReferences`, example:
-  // weakReferences: true | false (default false)
+  // weakReferences: true | false (default true)
   "referenceBehavior": "strong",
   // Change to `languageField`, example:
   // languageField: 'language' (default 'language')
