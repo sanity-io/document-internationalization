@@ -76,10 +76,10 @@ The only required configuration is:
 ```ts
 // sanity.config.ts
 
-import {createConfig} from 'sanity'
+import {defineConfig} from 'sanity'
 import {documentInternationalization} from '@sanity/document-internationalization'
 
-export const createConfig({
+export const defineConfig({
   // ... all other config
   plugins: [
     // ... all other plugins
@@ -102,10 +102,10 @@ The plugin also supports asynchronously retrieving languages from the dataset, m
 ```ts
 // sanity.config.ts
 
-import {createConfig} from 'sanity'
+import {defineConfig} from 'sanity'
 import {documentInternationalization} from '@sanity/document-internationalization'
 
-export const createConfig({
+export const defineConfig({
   // ... all other config
   plugins: [
     // ... all other plugins
