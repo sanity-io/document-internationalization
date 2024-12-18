@@ -58,7 +58,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
     .length
     ? metadata.translations.find((t) => t._key === language.id)
     : undefined
-  const {apiVersion, languageField, weakReferences} =
+  const {apiVersion, languageField, weakReferences, callback} =
     useDocumentInternationalizationContext()
   const client = useClient({apiVersion})
   const toast = useToast()
@@ -146,6 +146,8 @@ export default function LanguageOption(props: LanguageOptionProps) {
       .then(() => {
         const metadataExisted = Boolean(metadata?._createdAt)
 
+        callback?.(newTranslationDocument, client)
+
         return toast.push({
           status: 'success',
           title: `Created "${language.title}" translation`,
@@ -179,6 +181,7 @@ export default function LanguageOption(props: LanguageOptionProps) {
     sourceLanguageId,
     toast,
     weakReferences,
+    callback,
   ])
 
   let message

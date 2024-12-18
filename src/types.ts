@@ -6,6 +6,7 @@ import type {
   ObjectSchemaType,
   Reference,
   SanityClient,
+  SanityDocument,
 } from 'sanity'
 
 export type Language = {
@@ -26,6 +27,9 @@ export type PluginConfig = {
   metadataFields?: FieldDefinition[]
   apiVersion?: string
   allowCreateMetaDoc?: boolean
+  callback?:
+    | ((document: SanityDocument, client: SanityClient) => Promise<void>)
+    | null
 }
 
 // Context version of config
