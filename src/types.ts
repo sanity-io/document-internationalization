@@ -28,7 +28,7 @@ export type PluginConfig = {
   apiVersion?: string
   allowCreateMetaDoc?: boolean
   callback?:
-    | ((document: SanityDocument, client: SanityClient) => Promise<void>)
+    | ((document: SanityDocument, metadataDocument: MetadataDocument, client: SanityClient) => Promise<void>)
     | null
 }
 
@@ -47,6 +47,11 @@ export type TranslationReference = KeyedObject & {
 export type Metadata = {
   _id: string
   _createdAt: string
+  translations: TranslationReference[]
+}
+
+export type MetadataDocument = SanityDocument & {
+  schemaTypes: string[]
   translations: TranslationReference[]
 }
 
