@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/sanity-io/document-internationalization/compare/v3.2.0...v3.2.1) (2024-12-18)
+
+### Bug Fixes
+
+- support react 19 ([#197](https://github.com/sanity-io/document-internationalization/issues/197)) ([913558a](https://github.com/sanity-io/document-internationalization/commit/913558a30522d7ed2220359013d7ce1f17d62db3)), closes [#196](https://github.com/sanity-io/document-internationalization/issues/196)
+
 ## [3.2.0](https://github.com/sanity-io/document-internationalization/compare/v3.1.0...v3.2.0) (2024-11-19)
 
 ### Features
