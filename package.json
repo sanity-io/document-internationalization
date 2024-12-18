@@ -47,12 +47,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@sanity/icons": "^2.11.7",
-    "@sanity/incompatible-plugin": "^1.0.4",
-    "@sanity/ui": "^2.1.0",
+    "@sanity/icons": "^3.5.3",
+    "@sanity/incompatible-plugin": "^1.0.5",
+    "@sanity/ui": "^2.10.11",
     "@sanity/uuid": "^3.0.2",
-    "sanity-plugin-internationalized-array": "^2.0.0",
-    "sanity-plugin-utils": "^1.6.4"
+    "sanity-plugin-internationalized-array": "^3.0.3",
+    "sanity-plugin-utils": "^1.6.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
@@ -79,15 +79,12 @@
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
     "rimraf": "^4.4.1",
-    "sanity": "^3.40.0",
+    "sanity": "^3.67.1",
     "semantic-release": "^23.0.7",
     "typescript": "5.4.2"
   },
   "peerDependencies": {
-    "@sanity/mutator": "^3.40.0",
-    "@sanity/ui": "^2.1",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18 || ^19",
     "sanity": "^3.40.0",
     "styled-components": "^6.1"
   },
