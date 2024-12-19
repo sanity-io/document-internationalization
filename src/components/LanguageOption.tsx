@@ -146,8 +146,22 @@ export default function LanguageOption(props: LanguageOptionProps) {
       .then(() => {
         const metadataExisted = Boolean(metadata?._createdAt)
 
-        callback?.(newTranslationDocument, newMetadataDocument, client)
-
+        try {
+          callback?.({
+            newTranslationDocument,
+            client,
+            metadataId,
+            sourceLanguageId, 
+            destinationLanguageId: language.id
+          })
+        } catch (err) {
+          toast.push({
+            status: 'error',
+            title: `Callback`,
+            description: `Error while running callback - ${err}.`,
+          })
+        }
+        
         return toast.push({
           status: 'success',
           title: `Created "${language.title}" translation`,
