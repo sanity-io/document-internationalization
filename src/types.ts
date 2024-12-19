@@ -6,6 +6,8 @@ import type {
   ObjectSchemaType,
   Reference,
   SanityClient,
+  SanityDocument,
+  SanityDocumentLike,
 } from 'sanity'
 
 export type Language = {
@@ -17,6 +19,15 @@ export type SupportedLanguages =
   | Language[]
   | ((client: SanityClient) => Promise<Language[]>)
 
+export type PluginCallbackArgs = {
+  sourceDocument: SanityDocument
+  newDocument: SanityDocument
+  sourceLanguageId: string
+  destinationLanguageId: string
+  metaDocumentId: string
+  client: SanityClient
+}
+
 export type PluginConfig = {
   supportedLanguages: SupportedLanguages
   schemaTypes: string[]
@@ -26,6 +37,7 @@ export type PluginConfig = {
   metadataFields?: FieldDefinition[]
   apiVersion?: string
   allowCreateMetaDoc?: boolean
+  callback?: ((args: PluginCallbackArgs) => Promise<void>) | null
 }
 
 // Context version of config
@@ -43,6 +55,11 @@ export type TranslationReference = KeyedObject & {
 export type Metadata = {
   _id: string
   _createdAt: string
+  translations: TranslationReference[]
+}
+
+export type MetadataDocument = SanityDocumentLike & {
+  schemaTypes: string[]
   translations: TranslationReference[]
 }
 

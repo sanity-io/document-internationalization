@@ -154,6 +154,10 @@ export const defineConfig({
       // Enable "manage translations" button without creating a translated version. Helpful if you have
       // pre-existing documents that you need to tie together through the metadata document
       allowCreateMetaDoc: true // defaults to false
+
+      // Optional
+      // Callback function that runs after a translation document has been created
+      callback: ({...args}) => {} // defaults to null
     })
   ]
 })

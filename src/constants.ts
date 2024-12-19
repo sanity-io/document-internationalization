@@ -12,4 +12,5 @@ export const DEFAULT_CONFIG: PluginConfigContext = {
   metadataFields: [],
   apiVersion: API_VERSION,
   allowCreateMetaDoc: false,
+  callback: null,
 }
