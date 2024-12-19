@@ -15,7 +15,12 @@ import {type ObjectSchemaType, type SanityDocument, useClient} from 'sanity'
 
 import {METADATA_SCHEMA_NAME} from '../constants'
 import {useOpenInNewPane} from '../hooks/useOpenInNewPane'
-import type {Language, Metadata, MetadataDocument, TranslationReference} from '../types'
+import type {
+  Language,
+  Metadata,
+  MetadataDocument,
+  TranslationReference,
+} from '../types'
 import {createReference} from '../utils/createReference'
 import {removeExcludedPaths} from '../utils/excludePaths'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
@@ -146,22 +151,21 @@ export default function LanguageOption(props: LanguageOptionProps) {
       .then(() => {
         const metadataExisted = Boolean(metadata?._createdAt)
 
-        try {
-          callback?.({
-            newTranslationDocument,
-            client,
-            metadataId,
-            sourceLanguageId, 
-            destinationLanguageId: language.id
-          })
-        } catch (err) {
+        callback?.({
+          client,
+          sourceLanguageId,
+          sourceDocument: source,
+          newDocument: newTranslationDocument,
+          destinationLanguageId: language.id,
+          metaDocumentId: metadataId,
+        }).catch((err) => {
           toast.push({
             status: 'error',
             title: `Callback`,
             description: `Error while running callback - ${err}.`,
           })
-        }
-        
+        })
+
         return toast.push({
           status: 'success',
           title: `Created "${language.title}" translation`,
