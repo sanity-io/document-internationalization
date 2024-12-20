@@ -128,21 +128,21 @@ export const defineConfig({
 
       // Optional
       // Customizes the name of the language field
-      languageField: `language` // defauts to "language"
+      languageField: `language`, // defauts to "language"
 
       // Optional
       // Keep translation.metadata references weak
-      weakReferences: true // defaults to false
+      weakReferences: true, // defaults to false
 
       // Optional
       // Adds UI for publishing all translations at once. Requires access to the Scheduling API
       // https://www.sanity.io/docs/scheduling-api
-      bulkPublish: true // defaults to false
+      bulkPublish: true, // defaults to false
 
       // Optional
       // Adds additional fields to the metadata document
       metadataFields: [
-        defineField({ name: 'slug', type: 'slug' })
+        defineField({ name: 'slug', type: 'slug' }),
       ],
 
       // Optional
@@ -153,11 +153,21 @@ export const defineConfig({
       // Optional
       // Enable "manage translations" button without creating a translated version. Helpful if you have
       // pre-existing documents that you need to tie together through the metadata document
-      allowCreateMetaDoc: true // defaults to false
+      allowCreateMetaDoc: true, // defaults to false
 
       // Optional
       // Callback function that runs after a translation document has been created
-      callback: ({...args}) => {} // defaults to null
+      // Note: Defaults to null
+      callback: ({
+        sourceDocument, // The document in the original language
+        newDocument, // The newly created translation of the source document
+        sourceLanguageId, // The id of the original language
+        destinationLanguageId, // The id of the destination language
+        metaDocumentId, // The id of the meta document referencing the document translations
+        client // Sanity client
+      }) {
+        // Your function implementation
+      }
     })
   ]
 })
