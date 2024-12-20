@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.0](https://github.com/sanity-io/document-internationalization/compare/v3.2.1...v3.3.0) (2024-12-20)
+
+### Features
+
+- adds callback function ([#198](https://github.com/sanity-io/document-internationalization/issues/198)) ([67bd80a](https://github.com/sanity-io/document-internationalization/commit/67bd80a477552a16f0ee3c382e997fe8d237dd1c))
+
 ## [3.2.1](https://github.com/sanity-io/document-internationalization/compare/v3.2.0...v3.2.1) (2024-12-18)
 
 ### Bug Fixes
