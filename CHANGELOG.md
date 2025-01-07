@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/sanity-io/document-internationalization/compare/v3.3.0...v3.3.1) (2025-01-07)
+
+### Bug Fixes
+
+- re-add mutator to dependencies ([#202](https://github.com/sanity-io/document-internationalization/issues/202)) ([9a26ec9](https://github.com/sanity-io/document-internationalization/commit/9a26ec91fe48c3513c180e8fd3fb747f96014074))
+
 ## [3.3.0](https://github.com/sanity-io/document-internationalization/compare/v3.2.1...v3.3.0) (2024-12-20)
 
 ### Features
