@@ -14,7 +14,7 @@ defineField({
 
 // Create the function
 // This checks that there are no other documents
-// With this published or draft _id
+// With this published, draft or version _id
 // Or this schema type
 // With the same slug and language
 export async function isUniqueOtherThanLanguage(slug: string, context: SlugValidationContext) {
@@ -25,13 +25,12 @@ export async function isUniqueOtherThanLanguage(slug: string, context: SlugValid
   const client = getClient({apiVersion: '2023-04-24'})
   const id = document._id.replace(/^drafts\./, '')
   const params = {
-    draft: `drafts.${id}`,
-    published: id,
+    id,
     language: document.language,
     slug,
   }
   const query = `!defined(*[
-    !(_id in [$draft, $published]) &&
+    !(sanity::versionOf($id)) &&
     slug.current == $slug &&
     language == $language
   ][0]._id)`
