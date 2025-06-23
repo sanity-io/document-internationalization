@@ -22,7 +22,7 @@ export async function isUniqueOtherThanLanguage(slug: string, context: SlugValid
   if (!document?.language) {
     return true
   }
-  const client = getClient({apiVersion: '2023-04-24'})
+  const client = getClient({apiVersion: '2025-02-19'})
   const id = document._id.replace(/^drafts\./, '')
   const params = {
     id,
