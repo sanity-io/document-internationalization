@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.2](https://github.com/sanity-io/document-internationalization/compare/v3.3.1...v3.3.2) (2025-06-23)
+
+### Bug Fixes
+
+- bump API version ([#204](https://github.com/sanity-io/document-internationalization/issues/204)) ([9cd8f67](https://github.com/sanity-io/document-internationalization/commit/9cd8f6760551bed1cb0aae0a6e79c5ca2741fa74))
+
 ## [3.3.1](https://github.com/sanity-io/document-internationalization/compare/v3.3.0...v3.3.1) (2025-01-07)
 
 ### Bug Fixes
