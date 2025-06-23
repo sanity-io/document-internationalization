@@ -148,7 +148,7 @@ export const defineConfig({
       // Optional
       // Define API Version for all queries
       // https://www.sanity.io/docs/api-versioning
-      apiVersion: '2023-05-22',
+      apiVersion: '2025-02-19',
 
       // Optional
       // Enable "manage translations" button without creating a translated version. Helpful if you have
