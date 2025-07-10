@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.3](https://github.com/sanity-io/document-internationalization/compare/v3.3.2...v3.3.3) (2025-07-10)
+
+### Bug Fixes
+
+- **deps:** allow studio v4 in peer dep ranges + update main.yml ([#206](https://github.com/sanity-io/document-internationalization/issues/206)) ([0d15452](https://github.com/sanity-io/document-internationalization/commit/0d15452e85c0aef00a82f65e1541ee600e0705d5))
+
 ## [3.3.2](https://github.com/sanity-io/document-internationalization/compare/v3.3.1...v3.3.2) (2025-06-23)
 
 ### Bug Fixes
