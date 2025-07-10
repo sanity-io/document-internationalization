@@ -42,9 +42,9 @@
     "format": "prettier --write --cache --ignore-unknown .",
     "link-watch": "plugin-kit link-watch",
     "lint": "eslint .",
+    "prepare": "husky install",
     "prepublishOnly": "run-s build",
-    "watch": "pkg-utils watch --strict",
-    "prepare": "husky install"
+    "watch": "pkg-utils watch --strict"
   },
   "dependencies": {
     "@sanity/icons": "^3.5.3",
@@ -86,7 +86,7 @@
   },
   "peerDependencies": {
     "react": "^18 || ^19",
-    "sanity": "^3.40.0",
+    "sanity": "^3.40.0 || ^4.0.0-0",
     "styled-components": "^6.1"
   },
   "engines": {
