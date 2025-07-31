@@ -5,6 +5,16 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/sanity-io/document-internationalization/compare/v3.3.3...v4.0.0) (2025-07-31)
+
+### ⚠ BREAKING CHANGES
+
+- **deps:** update dependency @sanity/ui to v3 (#207)
+
+### Bug Fixes
+
+- **deps:** update dependency @sanity/ui to v3 ([#207](https://github.com/sanity-io/document-internationalization/issues/207)) ([2f90981](https://github.com/sanity-io/document-internationalization/commit/2f90981d7aeb1355d64229ee024c81aefd45e1d4))
+
 ## [3.3.3](https://github.com/sanity-io/document-internationalization/compare/v3.3.2...v3.3.3) (2025-07-10)
 
 ### Bug Fixes
