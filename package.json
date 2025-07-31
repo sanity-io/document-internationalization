@@ -50,7 +50,7 @@
     "@sanity/icons": "^3.5.3",
     "@sanity/incompatible-plugin": "^1.0.5",
     "@sanity/mutator": "^3.67.1",
-    "@sanity/ui": "^2.10.11",
+    "@sanity/ui": "^3.0.5",
     "@sanity/uuid": "^3.0.2",
     "sanity-plugin-internationalized-array": "^3.0.3",
     "sanity-plugin-utils": "^1.6.7"
