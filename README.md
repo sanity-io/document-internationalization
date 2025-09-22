@@ -31,12 +31,10 @@ There are two popular methods of internationalization in Sanity Studio:
   - A unique document version for every language
   - Joined together by references in a `translation.metadata` document
   - Best for documents that have unique, language-specific fields and no common content across languages
-  - Best for translating content using Portable Text
 - **Field-level translation**
   - A single document with many languages of content
   - Achieved by mapping over languages on each field
   - Best for documents that have a mix of language-specific and common fields
-  - Not recommended for Portable Text
 
 This plugin adds features to the Studio to improve handling **document-level translations**.
 
