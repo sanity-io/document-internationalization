@@ -17,8 +17,8 @@ type TranslationReference = TypedObject &
   }
 
 export const DeleteMetadataAction: DocumentActionComponent = (props) => {
-  const {id: documentId, published, draft, onComplete} = props
-  const doc = draft || published
+  const {id: documentId, published, draft, version, onComplete} = props
+  const doc = version || draft || published
 
   const [isDialogOpen, setDialogOpen] = useState(false)
   const onClose = useCallback(() => setDialogOpen(false), [])

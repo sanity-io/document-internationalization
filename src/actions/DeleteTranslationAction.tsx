@@ -13,8 +13,8 @@ import {useDocumentInternationalizationContext} from '../components/DocumentInte
 import {API_VERSION, TRANSLATIONS_ARRAY_NAME} from '../constants'
 
 export const DeleteTranslationAction: DocumentActionComponent = (props) => {
-  const {id: documentId, published, draft} = props
-  const doc = draft || published
+  const {id: documentId, published, draft, version} = props
+  const doc = version || draft || published
   const {languageField} = useDocumentInternationalizationContext()
 
   const [isDialogOpen, setDialogOpen] = useState(false)

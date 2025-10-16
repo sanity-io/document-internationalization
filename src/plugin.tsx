@@ -182,14 +182,29 @@ export const documentInternationalization = definePlugin<PluginConfig>(
                       return true
                     }
 
-                    const client = context.getClient({apiVersion: API_VERSION})
-                    const valueLanguage = await client.fetch(
-                      `*[_id in [$ref, $draftRef]][0].${languageField}`,
-                      {
-                        ref: item.value._ref,
-                        draftRef: `drafts.${item.value._ref}`,
-                      }
-                    )
+                    const ref = item.value._ref
+                    const client = context
+                      .getClient({
+                        apiVersion: API_VERSION,
+                      })
+                      .withConfig({perspective: 'raw'})
+
+                    // Query for the language field across multiple possible document IDs:
+                    // 1. The base ref (published)
+                    // 2. The draft ref
+                    // 3. Any versioned documents with this base ref
+                    const query = `*[
+                      _id in [$ref, $draftRef] || 
+                      _id match $versionPattern
+                    ][0].${languageField}`
+
+                    const params = {
+                      ref,
+                      draftRef: `drafts.${ref}`,
+                      versionPattern: `versions.*.${ref}`,
+                    }
+
+                    const valueLanguage = await client.fetch(query, params)
 
                     if (valueLanguage && valueLanguage === item._key) {
                       return true

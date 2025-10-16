@@ -23,6 +23,7 @@ import type {
 } from '../types'
 import {createReference} from '../utils/createReference'
 import {removeExcludedPaths} from '../utils/excludePaths'
+import {getBaseId} from '../utils/getBaseId'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 
 type LanguageOptionProps = {
@@ -114,9 +115,10 @@ export default function LanguageOption(props: LanguageOptionProps) {
     transaction.create(newTranslationDocument)
 
     // 3. Maybe create the metadata document
+    const sourceBaseId = getBaseId(documentId)
     const sourceReference = createReference(
       sourceLanguageId,
-      documentId,
+      sourceBaseId,
       schemaType.name,
       !weakReferences
     )

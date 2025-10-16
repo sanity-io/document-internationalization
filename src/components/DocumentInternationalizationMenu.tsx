@@ -14,7 +14,9 @@ import {type FormEvent, useCallback, useMemo, useState} from 'react'
 import {useEditState} from 'sanity'
 
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
+import type {TranslationReference} from '../types'
 import type {DocumentInternationalizationMenuProps} from '../types'
+import {getBaseId} from '../utils/getBaseId'
 import {useDocumentInternationalizationContext} from './DocumentInternationalizationContext'
 import LanguageManage from './LanguageManage'
 import LanguageOption from './LanguageOption'
@@ -64,8 +66,11 @@ export function DocumentInternationalizationMenu(
   }, [loading, metadata?._id])
 
   // Duplicate a new language version from the most recent version of this document
-  const {draft, published} = useEditState(documentId, schemaType.name)
-  const source = draft || published
+  const {draft, published, version} = useEditState(documentId, schemaType.name)
+  const source = version || draft || published
+
+  // Extract base ID from documentId (for comparing with references)
+  const baseDocumentId = getBaseId(documentId)
 
   // Check for data issues
   const documentIsInOneMetadataDocument = useMemo(() => {
@@ -153,8 +158,21 @@ export function DocumentInternationalizationMenu(
                   }
                   return true
                 })
-                .map((language) =>
-                  !loading && sourceLanguageId && sourceLanguageIsValid ? (
+                .map((language) => {
+                  const isLanguageInOtherDocuments =
+                    metadata?.translations
+                      .filter(
+                        (t: TranslationReference) =>
+                          t?.value?._ref !== baseDocumentId
+                      )
+                      .some(
+                        (t: TranslationReference) => t._key === language.id
+                      ) ?? false
+
+                  const shouldShowLanguageOption =
+                    !loading && sourceLanguageId && sourceLanguageIsValid
+
+                  return shouldShowLanguageOption ? (
                     // Button to duplicate this document to a new translation
                     // And either create or update the metadata document
                     <LanguageOption
@@ -179,16 +197,13 @@ export function DocumentInternationalizationMenu(
                       // - Keys not in metadata
                       // - The key of this document in the metadata
                       disabled={
-                        (loading ||
-                          !allLanguagesAreValid ||
-                          metadata?.translations
-                            .filter((t) => t?.value?._ref !== documentId)
-                            .some((t) => t._key === language.id)) ??
-                        false
+                        loading ||
+                        !allLanguagesAreValid ||
+                        isLanguageInOtherDocuments
                       }
                     />
                   )
-                )}
+                })}
             </>
           ) : null}
         </Stack>
