@@ -22,5 +22,5 @@ export function useTranslationMetadata(id: string): {
     params: {id, translationSchema: METADATA_SCHEMA_NAME},
   })
 
-  return {data, loading, error}
+  return {data: data as Metadata[] | null, loading, error}
 }
