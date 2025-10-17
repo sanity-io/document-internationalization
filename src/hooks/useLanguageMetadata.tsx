@@ -31,5 +31,5 @@ export function useTranslationMetadata(id: string): {
     },
   })
 
-  return {data, loading, error}
+  return {data: data as Metadata[] | null, loading, error}
 }
