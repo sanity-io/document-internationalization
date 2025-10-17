@@ -22,6 +22,7 @@ import {structureLocaleNamespace} from 'sanity/structure'
 import {METADATA_SCHEMA_NAME, TRANSLATIONS_ARRAY_NAME} from '../constants'
 import {useTranslationMetadata} from '../hooks/useLanguageMetadata'
 import {documenti18nLocaleNamespace} from '../i18n'
+import {TranslationReference} from '../types'
 
 const DISABLED_REASON_KEY = {
   METADATA_NOT_FOUND: 'action.duplicate.disabled.missing-metadata',
@@ -66,42 +67,50 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       // 1. Duplicate the document and its localized versions
       const translations = new Map<string, Id>()
       await Promise.all(
-        metadataDocument[TRANSLATIONS_ARRAY_NAME].map(async (translation) => {
-          const dupeId = uuid()
-          const locale = translation._key
-          const docId = translation.value?._ref
+        metadataDocument[TRANSLATIONS_ARRAY_NAME].map(
+          async (translation: TranslationReference) => {
+            const dupeId = uuid()
+            const locale = translation._key
+            const docId = translation.value?._ref
 
-          if (!docId) {
-            throw new Error('Translation document not found')
+            if (!docId) {
+              throw new Error('Translation document not found')
+            }
+
+            const {duplicate: duplicateTranslation} = await firstValueFrom(
+              documentStore.pair
+                .editOperations(docId, type)
+                .pipe(
+                  filter((op: any) => op.duplicate.disabled !== 'NOT_READY')
+                )
+            )
+
+            if (duplicateTranslation.disabled) {
+              throw new Error('Cannot duplicate document')
+            }
+
+            const duplicateTranslationSuccess = firstValueFrom(
+              documentStore.pair
+                .operationEvents(docId, type)
+                .pipe(
+                  filter(
+                    (e: any) => e.op === 'duplicate' && e.type === 'success'
+                  )
+                )
+            )
+            duplicateTranslation.execute(dupeId)
+            await duplicateTranslationSuccess
+
+            translations.set(locale, dupeId)
           }
-
-          const {duplicate: duplicateTranslation} = await firstValueFrom(
-            documentStore.pair
-              .editOperations(docId, type)
-              .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
-          )
-
-          if (duplicateTranslation.disabled) {
-            throw new Error('Cannot duplicate document')
-          }
-
-          const duplicateTranslationSuccess = firstValueFrom(
-            documentStore.pair
-              .operationEvents(docId, type)
-              .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
-          )
-          duplicateTranslation.execute(dupeId)
-          await duplicateTranslationSuccess
-
-          translations.set(locale, dupeId)
-        })
+        )
       )
 
       // 2. Duplicate the metadata document
       const {duplicate: duplicateMetadata} = await firstValueFrom(
         documentStore.pair
           .editOperations(metadataDocument._id, METADATA_SCHEMA_NAME)
-          .pipe(filter((op) => op.duplicate.disabled !== 'NOT_READY'))
+          .pipe(filter((op: any) => op.duplicate.disabled !== 'NOT_READY'))
       )
 
       if (duplicateMetadata.disabled) {
@@ -111,7 +120,9 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
       const duplicateMetadataSuccess = firstValueFrom(
         documentStore.pair
           .operationEvents(metadataDocument._id, METADATA_SCHEMA_NAME)
-          .pipe(filter((e) => e.op === 'duplicate' && e.type === 'success'))
+          .pipe(
+            filter((e: any) => e.op === 'duplicate' && e.type === 'success')
+          )
       )
       const dupeId = uuid()
       duplicateMetadata.execute(dupeId)

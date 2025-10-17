@@ -25,7 +25,9 @@ export function DocumentInternationalizationProvider(
 ) {
   const {pluginConfig} = props
 
-  const client = useClient({apiVersion: pluginConfig.apiVersion})
+  const client = useClient({apiVersion: pluginConfig.apiVersion}).withConfig({
+    perspective: 'raw',
+  })
   const workspace = useWorkspace()
   const supportedLanguages = Array.isArray(pluginConfig.supportedLanguages)
     ? pluginConfig.supportedLanguages

@@ -5,7 +5,7 @@ import {useDocumentInternationalizationContext} from '../components/DocumentInte
 export function LanguageBadge(
   props: DocumentBadgeProps
 ): DocumentBadgeDescription | null {
-  const source = props?.draft || props?.published
+  const source = props?.version || props?.draft || props?.published
   const {languageField, supportedLanguages} =
     useDocumentInternationalizationContext()
   const languageId = source?.[languageField]
