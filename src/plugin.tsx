@@ -166,6 +166,7 @@ export const documentInternationalization = definePlugin<PluginConfig>(
         // Translation metadata stores its references using this plugin
         // It cuts down on attribute usage and gives UI conveniences to add new translations
         internationalizedArray({
+          apiVersion: pluginConfig.apiVersion,
           languages: supportedLanguages,
           fieldTypes: [
             defineField(

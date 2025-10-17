@@ -23,7 +23,7 @@ export default function DeleteTranslationDialog(
     {params: {id: documentId}, initialValue: []}
   )
   const {translations, otherReferences} = useMemo(
-    () => separateReferences(data),
+    () => separateReferences(data as SanityDocument[] | null),
     [data]
   )
 

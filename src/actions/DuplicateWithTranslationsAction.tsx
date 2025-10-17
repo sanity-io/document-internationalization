@@ -248,5 +248,4 @@ export const DuplicateWithTranslationsAction: DocumentActionComponent = ({
 }
 
 DuplicateWithTranslationsAction.action = 'duplicate'
-// @ts-expect-error `displayName` is used by React DevTools
 DuplicateWithTranslationsAction.displayName = 'DuplicateWithTranslationsAction'
