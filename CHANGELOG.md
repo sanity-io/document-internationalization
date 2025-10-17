@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/sanity-io/document-internationalization/compare/v4.0.0...v4.1.0) (2025-10-17)
+
+### Features
+
+- bump internationalized-array plugin version to 3.2.0 ([#210](https://github.com/sanity-io/document-internationalization/issues/210)) ([ac72d56](https://github.com/sanity-io/document-internationalization/commit/ac72d56e437486cfcd37f4a9dec3222000d79cef))
+
 ## [4.0.0](https://github.com/sanity-io/document-internationalization/compare/v3.3.3...v4.0.0) (2025-07-31)
 
 ### ⚠ BREAKING CHANGES
