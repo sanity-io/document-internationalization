@@ -80,8 +80,7 @@ declare module 'sanity' {
   interface ArrayOptions extends DocumentInternationalizationSchemaOpts {}
   interface BlockOptions extends DocumentInternationalizationSchemaOpts {}
   interface BooleanOptions extends DocumentInternationalizationSchemaOpts {}
-  interface CrossDatasetReferenceOptions
-    extends DocumentInternationalizationSchemaOpts {}
+  interface CrossDatasetReferenceOptions extends DocumentInternationalizationSchemaOpts {}
   interface DateOptions extends DocumentInternationalizationSchemaOpts {}
   interface DatetimeOptions extends DocumentInternationalizationSchemaOpts {}
   interface FileOptions extends DocumentInternationalizationSchemaOpts {}
@@ -89,8 +88,7 @@ declare module 'sanity' {
   interface ImageOptions extends DocumentInternationalizationSchemaOpts {}
   interface NumberOptions extends DocumentInternationalizationSchemaOpts {}
   interface ObjectOptions extends DocumentInternationalizationSchemaOpts {}
-  interface ReferenceBaseOptions
-    extends DocumentInternationalizationSchemaOpts {}
+  interface ReferenceBaseOptions extends DocumentInternationalizationSchemaOpts {}
   interface SlugOptions extends DocumentInternationalizationSchemaOpts {}
   interface StringOptions extends DocumentInternationalizationSchemaOpts {}
   interface TextOptions extends DocumentInternationalizationSchemaOpts {}
