@@ -47,13 +47,13 @@
     "watch": "pkg-utils watch --strict"
   },
   "dependencies": {
-    "@sanity/icons": "^3.5.3",
+    "@sanity/icons": "^3.7.4",
     "@sanity/incompatible-plugin": "^1.0.5",
-    "@sanity/mutator": "^3.67.1",
-    "@sanity/ui": "^3.0.5",
+    "@sanity/mutator": "^5.0.1",
+    "@sanity/ui": "^3.1.11",
     "@sanity/uuid": "^3.0.2",
-    "sanity-plugin-internationalized-array": "^3.2.0",
-    "sanity-plugin-utils": "^1.6.7"
+    "sanity-plugin-internationalized-array": "^3.2.1",
+    "sanity-plugin-utils": "^1.7.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
@@ -61,7 +61,7 @@
     "@sanity/pkg-utils": "6.1.0",
     "@sanity/plugin-kit": "^3.1.10",
     "@sanity/semantic-release-preset": "^4.1.7",
-    "@types/react": "^18.2.75",
+    "@types/react": "^19.2.7",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
     "eslint": "^8.57.0",
@@ -76,11 +76,11 @@
     "npm-run-all2": "^5.0.0",
     "prettier": "^3.2.5",
     "prettier-plugin-packagejson": "^2.4.14",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-is": "^19.2.3",
     "rimraf": "^4.4.1",
-    "sanity": "^3.67.1",
+    "sanity": "^4.0.0",
     "semantic-release": "^23.0.7",
     "typescript": "5.4.2"
   },
