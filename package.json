@@ -86,7 +86,7 @@
   },
   "peerDependencies": {
     "react": "^18 || ^19",
-    "sanity": "^3.40.0 || ^4.0.0-0",
+    "sanity": "^3.40.0 || ^4.0.0-0 || ^5",
     "styled-components": "^6.1"
   },
   "engines": {
