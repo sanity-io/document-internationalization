@@ -5,6 +5,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/sanity-io/document-internationalization/compare/v4.1.0...v4.1.1) (2025-12-17)
+
+### Bug Fixes
+
+- **deps:** allow sanity v5 as peer dependency ([#212](https://github.com/sanity-io/document-internationalization/issues/212)) ([4aea849](https://github.com/sanity-io/document-internationalization/commit/4aea8493b2fa4d2b315c6a0a1eee2db679b00e84))
+
 ## [4.1.0](https://github.com/sanity-io/document-internationalization/compare/v4.0.0...v4.1.0) (2025-10-17)
 
 ### Features
