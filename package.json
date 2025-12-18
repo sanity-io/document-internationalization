@@ -52,8 +52,8 @@
     "@sanity/mutator": "^5.0.1",
     "@sanity/ui": "^3.1.11",
     "@sanity/uuid": "^3.0.2",
-    "sanity-plugin-internationalized-array": "^3.2.1",
-    "sanity-plugin-utils": "^1.7.0"
+    "sanity-plugin-internationalized-array": "^3.2.2",
+    "sanity-plugin-utils": "^1.8.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
