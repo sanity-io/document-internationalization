@@ -59,7 +59,7 @@
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
     "@sanity/pkg-utils": "6.1.0",
-    "@sanity/plugin-kit": "^3.1.10",
+    "@sanity/plugin-kit": "^4.0.20",
     "@sanity/semantic-release-preset": "^4.1.7",
     "@types/react": "^19.2.7",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
